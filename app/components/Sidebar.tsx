@@ -2,10 +2,10 @@ import Link from 'next/link'
 
 const Sidebar = () => {
   return (
-    <div className="hidden lg:flex flex-col w-64 border-r bg-muted/40">
-        <div className="flex h-14 items-center border-b px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-            <span>EduConsult</span>
+    <div className="w-64 border-r">
+        <div className="flex h-14 border-b px-4">
+        <Link href="/" className="flex items-center font-semibold">
+            EduConsult
         </Link>
         </div>
         <nav className="flex-1 p-4">
