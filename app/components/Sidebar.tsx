@@ -8,7 +8,7 @@ const Sidebar = () => {
             EduConsult
         </Link>
         </div>
-        <nav className="flex-1 p-4">
+        <nav className="p-4">
             <div className="grid gap-1">
                 <Link href="/dashboard">
                 <button className="w-full justify-start gap-2">
