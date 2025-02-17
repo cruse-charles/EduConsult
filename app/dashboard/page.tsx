@@ -5,6 +5,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import Sidebar from "../components/Sidebar";
 import AddStudentModal from "../components/AddStudentModal";
+import Link from "next/link";
 
 const page = () => {
     const [students, setStudents] = useState([]);
@@ -27,20 +28,20 @@ const page = () => {
         fetchStudents();
     }, [students])
 
-  return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 bg-white">
-        <h1>Students</h1>
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>{student.name}</li>
-          ))}
-        </ul>
-      </div>
-      <AddStudentModal />
-    </div>
-  );
+    return (
+        <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 bg-white">
+            <h1>Students</h1>
+            <ul>
+            {students.map((student) => (
+                <Link href={`studentprofile/${student.id}`} key={student.id}>{student.name}</Link>
+            ))}
+            </ul>
+        </div>
+        <AddStudentModal />
+        </div>
+    );
 };
 
 export default page;
