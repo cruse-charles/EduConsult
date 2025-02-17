@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import Sidebar from "../components/Sidebar";
+import AddStudentModal from "../components/AddStudentModal";
 
 const page = () => {
     const [students, setStudents] = useState([]);
@@ -24,7 +25,7 @@ const page = () => {
         }
 
         fetchStudents();
-    }, [])
+    }, [students])
 
   return (
     <div className="flex min-h-screen">
@@ -37,6 +38,7 @@ const page = () => {
           ))}
         </ul>
       </div>
+      <AddStudentModal />
     </div>
   );
 };
