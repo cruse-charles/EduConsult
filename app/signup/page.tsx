@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
-import { addDoc, collection } from "firebase/firestore"
+import { setDoc, collection, doc } from "firebase/firestore"
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
@@ -35,8 +35,9 @@ const page = () => {
             // Firebase function to create a new user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password)
             const user = userCredential.user;
-            await addDoc(collection(db, "consultantUsers"), {
+            await setDoc(doc(db, "consultantUsers", user.uid), {
                 email: user.email,
+                students: [],
             })
             console.log('Consultant Created')
         } catch (error) {
