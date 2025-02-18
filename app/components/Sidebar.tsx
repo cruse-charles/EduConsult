@@ -1,6 +1,19 @@
+import { app } from '@/lib/firebaseConfig'
+import { getAuth, signOut } from 'firebase/auth'
 import Link from 'next/link'
 
 const Sidebar = () => {
+    const auth = getAuth(app)
+    
+    const handleSignOut = () => {
+        signOut(auth)
+            .then(() => {
+                console.log("User signed out successfully");
+            }).catch((error) => {
+                console.error("Error signing out: ", error);
+            })
+    }
+
   return (
     <div className="w-64 border-r">
         <div className="flex h-14 border-b px-4">
@@ -40,8 +53,8 @@ const Sidebar = () => {
                     Settings
                 </button>
                 </Link>
-                <Link href="/logout">
-                <button className="w-full justify-start gap-2">
+                <Link href="/">
+                <button onClick={handleSignOut} className="w-full justify-start gap-2">
                     Logout
                 </button>
                 </Link>

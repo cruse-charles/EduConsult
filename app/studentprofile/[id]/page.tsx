@@ -24,6 +24,10 @@ function page({params} : {params: {id: string}}) {
         fetchStudentData()
     })
 
+    // TODO: add monitor uploading process, use these links: 
+        // https://firebase.google.com/docs/storage/web/upload-files
+        // https://www.youtube.com/watch?v=fgdpvwEWJ9M start at around 30:00
+
     const handleFileUpload = (event) => {
         const files = event?.target.files
         console.log(files);
