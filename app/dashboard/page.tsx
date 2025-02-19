@@ -10,81 +10,62 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const page = () => {
     
+    // State to manage students and current user (consultant)
     const [students, setStudents] = useState([]);
-    
-    // useEffect(() => {
-        
-    //     const fetchStudents = async () => {
-    //         try {
-            
-    //             let auth = getAuth(app);
-    //             const user = auth.currentUser;
-    //             if (!user) console.log("No user is currently signed in.");
-                
-    //             // const querySanpshot = await getDocs(collection(db, "studentUsers"))
-    //             const collectionRef = collection(db, "studentUsers");
-    //             const query = (collectionRef, where("students", "==", `${}`));
-    //             const querySanpshot = await getDocs(query);       
-    //             const data = querySanpshot.docs.map(doc => ({
-    //                 id: doc.id,
-    //                 ...doc.data(),
-    //             }))
+    const [currentUser, setCurrentUser] = useState(null);
 
-    //             setStudents(data);
-    //         } catch (error) {
-    //             console.log("Error fetching students:", error);
-    //         }
-    //     }
-
-    //     fetchStudents();
-    // }, [students])
-
+    // 1. Listen for auth state changes and set user
     useEffect(() => {
         const auth = getAuth(app);
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                setStudents([]);
-                return;
-            }
-            try {
-                // Get consultant's document
-                const consultantDocRef = doc(db, "consultantUsers", user.uid);
-                console.log("Consultant Doc Ref:", consultantDocRef);
-                const consultantDocSnap = await getDoc(consultantDocRef);
-                console.log("Consultant Doc Snap:", consultantDocSnap);
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user);
+        });
+        return () => unsubscribe();
+    }, []);
 
+    // 2. Fetch students when user is available
+    useEffect(() => {
+
+        // Function to fetch students for the current consultant user
+        const fetchStudents = async (user: User) => {
+            try {
+                // Get the consultant's document reference and snapshot
+                const consultantDocRef = doc(db, "consultantUsers", user.uid);
+                const consultantDocSnap = await getDoc(consultantDocRef);
+
+                // If the consultant document does not exist, set students to an empty array
                 if (!consultantDocSnap.exists()) {
                     setStudents([]);
-                    console.log("No consultant document found for the user.");
                     return;
                 }
 
+                // Extract student references from the consultant document
                 const consultantData = consultantDocSnap.data();
-                console.log("Consultant Data:", consultantData);
                 const studentRefs = consultantData.students || [];
 
-                // Fetch student documents by reference
+                // Fetch each student's document data
                 const studentDocs = await Promise.all(
                     studentRefs.map(async (studentRef) => {
-                        // If your array is references, use getDoc(studentRef)
                         const studentDocSnap = await getDoc(studentRef);
-                        console.log("Student Doc Snap:", studentDocSnap);
                         return studentDocSnap.exists()
                             ? { id: studentDocSnap.id, ...studentDocSnap.data() }
                             : null;
                     })
                 );
-                console.log("Student Docs:", studentDocs);
+
+                // Filter out any null values due to possible deleted students or missing data
                 setStudents(studentDocs.filter(Boolean));
             } catch (error) {
                 console.log("Error fetching students:", error);
                 setStudents([]);
             }
-        });
+        };
 
-        return () => unsubscribe();
-    }, []);
-
+        if (currentUser) {
+            fetchStudents(currentUser);
+        }
+    }, [currentUser]);
+    
     return (
         <div className="flex min-h-screen">
         <Sidebar />
