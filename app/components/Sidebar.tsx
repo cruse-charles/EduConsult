@@ -5,13 +5,14 @@ import Link from 'next/link'
 const Sidebar = () => {
     const auth = getAuth(app)
     
-    const handleSignOut = () => {
-        signOut(auth)
-            .then(() => {
-                console.log("User signed out successfully");
-            }).catch((error) => {
-                console.error("Error signing out: ", error);
-            })
+    // Handle user sign out
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth)
+            console.log("User signed out successfully");
+        } catch (error) {
+            console.error("Error signing out: ", error);
+        }
     }
 
   return (
