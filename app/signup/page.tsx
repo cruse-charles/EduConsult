@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
-import { setDoc, collection, doc } from "firebase/firestore"
+import { setDoc, doc } from "firebase/firestore"
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
@@ -15,33 +15,23 @@ const page = () => {
         password: '',
     })
 
-    // Handles form submission and user creation in Firebase Auth
-    // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault()
-        
-    //     // Firebase function to create a new user with email and password
-    //     createUserWithEmailAndPassword(auth, userData.email, userData.password)
-    //         .then((userCredential) => {
-    //             console.log(userCredential)
-    //         })
-    //         .catch((error) => {
-    //             console.group(error.message)
-    //         })
-    // }
-
+    // Handles form submission for user creation in Firebase Auth
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
         try {
-            // Firebase function to create a new user with email and password
+            // Firebase function to create a new user with email and password in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password)
             const user = userCredential.user;
+
+            // Create a new document with user's UID in Firestore database
             await setDoc(doc(db, "consultantUsers", user.uid), {
                 email: user.email,
                 students: [],
             })
             console.log('Consultant Created')
         } catch (error) {
-            console.log('Error creating consultant', error.message)
+            console.log('Error creating consultant', (error as Error).message)
         }
             
     }
