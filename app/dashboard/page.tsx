@@ -1,18 +1,24 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { collection, getDocs, where, getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, DocumentReference, DocumentData } from "firebase/firestore";
 import { db, app } from "@/lib/firebaseConfig";
 import Sidebar from "../components/Sidebar";
 import AddStudentModal from "../components/AddStudentModal";
 import Link from "next/link";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+
+interface Student {
+    id: string;
+    name: string;
+    gpa: number;
+}
 
 const page = () => {
     
     // State to manage students and current user (consultant)
-    const [students, setStudents] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [students, setStudents] = useState<Student[]>([]);
+    const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
 
     // 1. Listen for auth state changes and set user
     useEffect(() => {
@@ -27,7 +33,7 @@ const page = () => {
     useEffect(() => {
 
         // Function to fetch students for the current consultant user
-        const fetchStudents = async (user: User) => {
+        const fetchStudents = async (user: FirebaseUser) => {
             try {
                 // Get the consultant's document reference and snapshot
                 const consultantDocRef = doc(db, "consultantUsers", user.uid);
@@ -45,7 +51,7 @@ const page = () => {
 
                 // Fetch each student's document data
                 const studentDocs = await Promise.all(
-                    studentRefs.map(async (studentRef) => {
+                    studentRefs.map(async (studentRef: DocumentReference<DocumentData>) => {
                         const studentDocSnap = await getDoc(studentRef);
                         return studentDocSnap.exists()
                             ? { id: studentDocSnap.id, ...studentDocSnap.data() }
