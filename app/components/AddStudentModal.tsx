@@ -6,10 +6,12 @@ import { collection, addDoc } from "firebase/firestore";
 
 
 function AddStudentModal() {
+    // State to manage form input data for student
     const [formData, setformData] = useState({
         name: '',
     })
 
+    // Handles form submission and adds a new student document to Firestore
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -22,6 +24,7 @@ function AddStudentModal() {
         }
     }
 
+    // Handles input changes and updates state accordingly
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
         setformData((prevData) => ({
