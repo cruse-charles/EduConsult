@@ -5,11 +5,7 @@ import { db, storage } from "@/lib/firebaseConfig";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
-
-interface Student {
-    name: string;
-    gpa: number;
-}
+import { Student } from "@/lib/types/types";
 
 function page() {
     // retrieve the student ID from URL and create state to hold student data
@@ -58,8 +54,8 @@ function page() {
 
     return (
         <div>
-            <div>Name: {studentData?.name}</div>
-            <div>GPA: {studentData?.gpa}</div>
+            <div>Name: {studentData?.personalInformation.name}</div>
+            <div>GPA: {studentData?.academicInformation.gpa}</div>
             <input onChange={handleFileUpload} type='file' multiple/>
         </div>
     )

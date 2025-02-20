@@ -4,23 +4,16 @@ import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
 import { Timestamp } from "firebase/firestore"
 
-interface Student {
-    id: string;
-    name: string;
-    gpa: number;
-    pendingTasks: number;
-    nextDeadline: Timestamp | null;
-    progress: number;
-}
+import { Student } from "@/lib/types/types"
 
 function StudentCard({student}: {student: Student}) {
     // Destructure student properties and format nextDeadline to a readable date string
-    const { name, gpa, pendingTasks, nextDeadline, progress} = student
+    const { personalInformation, academicInformation, pendingTasks, nextDeadline, progress} = student
     let nextDeadlineFormatted = nextDeadline ? nextDeadline.toDate().toLocaleDateString() : "No deadline set"
   
     return (
         // Card Container
-        <Card>
+        <Card className="overflow-hidden">
             {/* Styled Header */}
             <CardHeader className="p-0">
                 <div className="h-2 bg-black" />
@@ -31,7 +24,7 @@ function StudentCard({student}: {student: Student}) {
                 
                 {/* Student Name Container */}
                 <div className="grid gap-1">
-                    <h3 className="font-semibold">{name}</h3>
+                    <h3 className="font-semibold">{personalInformation.name}</h3>
                 </div>
 
                 {/* Student Task Detail Container */}

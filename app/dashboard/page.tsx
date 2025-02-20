@@ -5,16 +5,10 @@ import { getDoc, doc, DocumentReference, DocumentData } from "firebase/firestore
 import { db, app } from "@/lib/firebaseConfig";
 import Sidebar from "../components/Sidebar";
 import AddStudentModal from "../components/AddStudentModal";
-import Link from "next/link";
 import { getAuth, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import StudentCard from "../components/StudentCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-interface Student {
-    id: string;
-    name: string;
-    gpa: number;
-}
+import { Student } from "@/lib/types/types";
 
 const page = () => {
     
