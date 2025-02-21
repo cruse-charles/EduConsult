@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { app, db } from "@/lib/firebaseConfig";
-import { collection, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { collection, addDoc, updateDoc, arrayUnion, DocumentReference, DocumentData } from "firebase/firestore";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { User } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -11,9 +11,12 @@ import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
 
+interface AddStudentModalProps {
+    consultantDocRef: DocumentReference<DocumentData>;
+    onStudentAdded: () => void;
+}
 
-
-function AddStudentModal({consultantDocRef, onStudentAdded}) {
+function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
     // State to manage dialog open/close state`
     const [open, setOpen] = useState(false);
 
