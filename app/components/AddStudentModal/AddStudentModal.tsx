@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { app, db } from "@/lib/firebaseConfig";
 import { collection, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { User } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,8 @@ function AddStudentModal({consultantDocRef, onStudentAdded}) {
     // Handles form submission, adds a new student document to Firestore
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // Create a new student document in the "studentUsers" collection
         try {
             const docRef = await addDoc(collection(db, "studentUsers"), {
                 personalInformation: formData.personalInformation,
@@ -70,6 +72,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded}) {
         }
     }
 
+    // Handles changes in personal information fields
     const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -81,6 +84,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded}) {
         }))
     }
 
+    // Handles changes in academic information fields
     const handleAcademicInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value} = e.target;
         setFormData((prevData) => ({
