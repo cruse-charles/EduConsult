@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { app, db } from "@/lib/firebaseConfig";
 import { collection, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { User } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,9 @@ import GoalsAndNotesSection from "./GoalsAndNotesSection";
 
 
 function AddStudentModal({consultantDocRef, onStudentAdded}) {
+    // State to manage dialog open/close state`
+    const [open, setOpen] = useState(false);
+
     // State to manage form input data for student
     const [formData, setFormData] = useState({
         personalInformation: {
@@ -56,7 +59,10 @@ function AddStudentModal({consultantDocRef, onStudentAdded}) {
             })
 
             // Callback to refresh student list or perform any other action after adding a student
-            onStudentAdded(); 
+            onStudentAdded();
+            
+            // Close the dialog after submission
+            setOpen(false);
 
             console.log("Document written with ID: ", docRef.id);
         } catch (error) {
@@ -87,7 +93,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded}) {
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                     <User className="mr-2 h-4 w-4" />
