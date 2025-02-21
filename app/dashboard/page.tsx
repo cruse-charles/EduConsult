@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getDoc, doc, DocumentReference, DocumentData } from "firebase/firestore";
 import { db, app } from "@/lib/firebaseConfig";
 import Sidebar from "../components/Sidebar";
-import AddStudentModal from "../components/AddStudentModal";
+import AddStudentModal from "../components/AddStudentModal/AddStudentModal";
 import { getAuth, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import StudentCard from "../components/StudentCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
