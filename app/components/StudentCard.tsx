@@ -24,7 +24,7 @@ function StudentCard({student}: {student: Student}) {
                 
                 {/* Student Name Container */}
                 <div className="grid gap-1">
-                    <h3 className="font-semibold">{personalInformation.name}</h3>
+                    <h3 className="font-semibold">{personalInformation.firstName}</h3>
                 </div>
 
                 {/* Student Task Detail Container */}

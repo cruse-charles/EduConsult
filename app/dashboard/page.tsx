@@ -15,6 +15,7 @@ const page = () => {
     // State to manage students and current user (consultant)
     const [students, setStudents] = useState<Student[]>([]);
     const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+    const [consultantDocRef, setConsultantDocRef] = useState<DocumentReference<DocumentData> | null>(null);
 
     // 1. Listen for auth state changes and set user
     useEffect(() => {
@@ -32,8 +33,9 @@ const page = () => {
         const fetchStudents = async (user: FirebaseUser) => {
             try {
                 // Get the consultant's document reference and snapshot
-                const consultantDocRef = doc(db, "consultantUsers", user.uid);
-                const consultantDocSnap = await getDoc(consultantDocRef);
+                const ref = doc(db, "consultantUsers", user.uid);
+                setConsultantDocRef(ref);
+                const consultantDocSnap = await getDoc(ref);
 
                 // If the consultant document does not exist, set students to an empty array
                 if (!consultantDocSnap.exists()) {
@@ -76,7 +78,7 @@ const page = () => {
             {/* Main Content Container */}
             <div className="container p-4 md:p-6 space-y-6">
                 {/* Add Student Container */}
-                <AddStudentModal />
+                <AddStudentModal consultantDocRef={consultantDocRef} />
 
                 {/* Tabs Container */}
                 <div className="">

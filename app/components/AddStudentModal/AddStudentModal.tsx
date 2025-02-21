@@ -7,16 +7,13 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { User } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
 
 
 
-function AddStudentModal() {
+function AddStudentModal({consultantDocRef}) {
     // State to manage form input data for student
     const [formData, setFormData] = useState({
         personalInformation: {
@@ -40,7 +37,7 @@ function AddStudentModal() {
         nextDeadline: '',
     });
 
-    // Handles form submission and adds a new student document to Firestore
+    // Handles form submission, adds a new student document to Firestore
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -50,22 +47,13 @@ function AddStudentModal() {
                 pendingTasks: formData.pendingTasks,
                 progress: formData.progress,
                 nextDeadline: formData.nextDeadline,
-                notes: formData.personalInformation.notes
+                consultant: consultantDocRef,
             })
             console.log("Document written with ID: ", docRef.id);
         } catch (error) {
             console.error("Error adding document: ", error);
         }
     }
-
-    // Handles input changes and updates state accordingly
-    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //     const {name, value} = e.target
-    //     setFormData((prevData) => ({
-    //         ...prevData,
-    //         [name]: value,
-    //     }))
-    // }
 
     const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
