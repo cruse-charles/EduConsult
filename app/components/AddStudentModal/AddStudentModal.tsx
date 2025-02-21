@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { app, db } from "@/lib/firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { User } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -13,7 +13,7 @@ import GoalsAndNotesSection from "./GoalsAndNotesSection";
 
 
 
-function AddStudentModal({consultantDocRef}) {
+function AddStudentModal({consultantDocRef, onStudentAdded}) {
     // State to manage form input data for student
     const [formData, setFormData] = useState({
         personalInformation: {
@@ -49,6 +49,15 @@ function AddStudentModal({consultantDocRef}) {
                 nextDeadline: formData.nextDeadline,
                 consultant: consultantDocRef,
             })
+
+            // Update the consultant's document to include the new student
+            await updateDoc(consultantDocRef, {
+                students: arrayUnion(docRef)
+            })
+
+            // Callback to refresh student list or perform any other action after adding a student
+            onStudentAdded(); 
+
             console.log("Document written with ID: ", docRef.id);
         } catch (error) {
             console.error("Error adding document: ", error);

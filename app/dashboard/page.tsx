@@ -17,6 +17,43 @@ const page = () => {
     const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
     const [consultantDocRef, setConsultantDocRef] = useState<DocumentReference<DocumentData> | null>(null);
 
+    // Function to fetch students for the current consultant user
+    const fetchStudents = async (user: FirebaseUser) => {
+        try {
+            // Get the consultant's document reference and snapshot
+            const ref = doc(db, "consultantUsers", user.uid);
+            setConsultantDocRef(ref);
+            const consultantDocSnap = await getDoc(ref);
+
+            // If the consultant document does not exist, set students to an empty array
+            if (!consultantDocSnap.exists()) {
+                setStudents([]);
+                return;
+            }
+
+            // Extract student references from the consultant document
+            const consultantData = consultantDocSnap.data();
+            const studentRefs = consultantData.students || [];
+
+            // Fetch each student's document data
+            const studentDocs = await Promise.all(
+                studentRefs.map(async (studentRef: DocumentReference<DocumentData>) => {
+                    const studentDocSnap = await getDoc(studentRef);
+                    return studentDocSnap.exists()
+                        ? { id: studentDocSnap.id, ...studentDocSnap.data() }
+                        : null;
+                })
+            );
+
+            // Filter out any null values due to possible deleted students or missing data
+            setStudents(studentDocs.filter(Boolean));
+        } catch (error) {
+            console.log("Error fetching students:", error);
+            setStudents([]);
+        }
+    };
+
+
     // 1. Listen for auth state changes and set user
     useEffect(() => {
         const auth = getAuth(app);
@@ -28,47 +65,14 @@ const page = () => {
 
     // 2. Fetch students when user is available
     useEffect(() => {
-
-        // Function to fetch students for the current consultant user
-        const fetchStudents = async (user: FirebaseUser) => {
-            try {
-                // Get the consultant's document reference and snapshot
-                const ref = doc(db, "consultantUsers", user.uid);
-                setConsultantDocRef(ref);
-                const consultantDocSnap = await getDoc(ref);
-
-                // If the consultant document does not exist, set students to an empty array
-                if (!consultantDocSnap.exists()) {
-                    setStudents([]);
-                    return;
-                }
-
-                // Extract student references from the consultant document
-                const consultantData = consultantDocSnap.data();
-                const studentRefs = consultantData.students || [];
-
-                // Fetch each student's document data
-                const studentDocs = await Promise.all(
-                    studentRefs.map(async (studentRef: DocumentReference<DocumentData>) => {
-                        const studentDocSnap = await getDoc(studentRef);
-                        return studentDocSnap.exists()
-                            ? { id: studentDocSnap.id, ...studentDocSnap.data() }
-                            : null;
-                    })
-                );
-
-                // Filter out any null values due to possible deleted students or missing data
-                setStudents(studentDocs.filter(Boolean));
-            } catch (error) {
-                console.log("Error fetching students:", error);
-                setStudents([]);
-            }
-        };
-
         if (currentUser) {
             fetchStudents(currentUser);
         }
     }, [currentUser]);
+
+    const handleStudentAdded = () => {
+        fetchStudents(currentUser);
+    }
     
     return (
         <div className="flex min-h-screen">
@@ -78,7 +82,7 @@ const page = () => {
             {/* Main Content Container */}
             <div className="container p-4 md:p-6 space-y-6">
                 {/* Add Student Container */}
-                <AddStudentModal consultantDocRef={consultantDocRef} />
+                <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/>
 
                 {/* Tabs Container */}
                 <div className="">
