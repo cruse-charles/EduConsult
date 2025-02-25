@@ -71,7 +71,7 @@ function page() {
 
                 <div className="grid gap-6 md:grid-cols-3">
                     {/* Student Details Card */}
-                    <StudentProfileCard student={student} />
+                    <StudentProfileCard student={student} setStudent={setStudent} />
 
                     {/* Main Content Container */}
                     <div className="md:col-span-2 space-y-6">

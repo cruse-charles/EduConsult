@@ -6,13 +6,17 @@ import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { db } from '@/lib/firebaseConfig'
 import { Student } from '@/lib/types/types'
-import { deleteDoc, doc, getDoc } from 'firebase/firestore'
-import { Edit, Router } from 'lucide-react'
+import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { Edit } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Input } from '@/components/ui/input'
+import StudentCardContent from './StudentCardContent'
+import EditStudentCardContent from './EditStudentCardContent'
 
-function StudentProfileCard({student} : {student: Student}) {
+function StudentProfileCard({student, setStudent} : {student: Student}) {
     const [editMode, setEditMode] = useState(false)
+    const [editStudent, setEditStudent] = useState(student)
     const router = useRouter();
 
     const handleDelete = async () => {
@@ -22,6 +26,40 @@ function StudentProfileCard({student} : {student: Student}) {
             router.push('/dashboard');
         } catch (error) {
             console.error("Error deleting student:", error);
+        }
+    }
+
+    const handleSave = async (e) => {
+        e.preventDefault()
+
+        try {
+            const studentRef = doc(db, "studentUsers", student.id);
+            await updateDoc(studentRef, {
+                personalInformation: {
+                    firstName: editStudent.personalInformation.firstName,
+                    lastName: editStudent.personalInformation.lastName,
+                    email: editStudent.personalInformation.email,
+                    phone: editStudent.personalInformation.phone,
+                    other: editStudent.personalInformation.other,
+                    notes: editStudent.personalInformation.notes
+                },
+                academicInformation: {
+                    currentSchool: editStudent.academicInformation.currentSchool,
+                    grade: editStudent.academicInformation.grade,
+                    gpa: editStudent.academicInformation.gpa,
+                    sat: editStudent.academicInformation.sat,
+                    toefl: editStudent.academicInformation.toefl,
+                    targetSchools: editStudent.academicInformation.targetSchools
+                },
+                pendingTasks: editStudent.pendingTasks,
+                progress: editStudent.progress,
+                nextDeadline: editStudent.nextDeadline
+            })
+            setEditMode(false);
+            setStudent(editStudent)
+            console.log("Student updated:", student.id);
+        } catch (error) {
+            console.error("Error updating student:", error);
         }
     }
     
@@ -38,63 +76,17 @@ function StudentProfileCard({student} : {student: Student}) {
                 </Button>}
                 {editMode && 
                 <div className='flex flex-row gap-2 self-start md:self-auto'>
-                    <Button variant="outline" onClick={() => setEditMode(false)}>Save</Button>
+                    <Button variant="outline" onClick={handleSave}>Save</Button>
                     <Button variant="outline" onClick={handleDelete}>Delete</Button>
                 </div>}
             </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-            <div className="space-y-2">
-                <div className="text-sm font-medium">Contact Information</div>
-                <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
-                <div className="text-muted-foreground">Email:</div>
-                <div>{student?.personalInformation.email}</div>
-                <div className="text-muted-foreground">Phone:</div>
-                <div>{student?.personalInformation.phone}</div>
-                </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-2">
-                <div className="text-sm font-medium">Academic Information</div>
-                <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
-                <div className="text-muted-foreground">School:</div>
-                <div>{student?.academicInformation.currentSchool}</div>
-                <div className="text-muted-foreground">Grade:</div>
-                {/* <div>{student?.academicInformation.grade}</div> */}
-                <div className="text-muted-foreground">GPA:</div>
-                <div>{student?.academicInformation.gpa}</div>
-                </div>
-            </div>
-
-            <Separator />
-
-            {/* <div className="space-y-2">
-                <div className="text-sm font-medium">Target School</div>
-                <div className="flex items-center gap-2">
-                <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                <span>{student.targetSchool}</span>
-                </div>
-            </div> */}
-
-            <Separator />
-
-            <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                <div className="text-sm font-medium">Application Progress</div>
-                <span className="text-sm">{student?.progress}%</span>
-                </div>
-                <Progress value={student?.progress} className="h-2" />
-            </div>
-
-            <Separator />
-
-            <div className="space-y-2">
-                <div className="text-sm font-medium">Notes</div>
-                {/* <p className="text-sm text-muted-foreground">{student.notes}</p> */}
-            </div>
-            </CardContent>
+            { editMode ? (
+                    <EditStudentCardContent editStudent={editStudent} setEditStudent={setEditStudent}/>
+                ) : (
+                    <StudentCardContent student={student} />
+                )
+            }
         </Card>
     )
 }

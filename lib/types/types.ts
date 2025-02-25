@@ -9,6 +9,7 @@ export interface Student {
         sat: number;
         toefl: number;
         targetSchools: string;
+        grade: string;
     };
     personalInformation: {
         firstName: string;
