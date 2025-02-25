@@ -12,6 +12,7 @@ import { ArrowLeft, Edit, GraduationCap, Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StudentProfileCard from "./StudentProfileCard";
+import TaskSummary from "./TaskSummary";
 
 function page() {
     // retrieve the student ID from URL and create state to hold student data
@@ -91,39 +92,10 @@ function page() {
 
                     {/* Main Content Container */}
                     <div className="md:col-span-2 space-y-6">
-                        <div className="grid gap-4 md:grid-cols-3">
-                        <Card>
-                            <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                            <div className="text-2xl font-bold">{student.pendingTasks}</div>
-                            {/* <p className="text-xs text-muted-foreground">Next due: {student.nextDeadline}</p> */}
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Completed Tasks</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                            {/* <div className="text-2xl font-bold">{student.completedTasks}</div>
-                            <p className="text-xs text-muted-foreground">
-                            {Math.round((student.completedTasks / (student.completedTasks + student.pendingTasks)) * 100)}%
-                            completion rate
-                            </p> */}
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Next Deadline</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                            {/* <div className="text-xl font-bold">{student.nextDeadline}</div> */}
-                            <p className="text-xs text-muted-foreground">Stanford Application Essay</p>
-                            </CardContent>
-                        </Card>
-                        </div>
+                        {/* Task Summary Section */}
+                        <TaskSummary student={student} />
 
+                        {/* Student Details Section */}
                         <Tabs defaultValue="assignments">
                         <TabsList>
                             <TabsTrigger value="assignments">Assignments</TabsTrigger>
