@@ -1,8 +1,13 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { StudentFormData } from '@/lib/types/types';
 
+interface AcademicInfoSectionProps {
+    formData: StudentFormData;
+    handleAcademicInfoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-function AcademicInfoSection({formData, handleAcademicInfoChange}) {
+function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoSectionProps) {
   return (
     <>
         <div className="space-y-4">

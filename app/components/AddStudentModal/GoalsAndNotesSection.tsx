@@ -1,9 +1,15 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import React from 'react'
+import { StudentFormData } from '@/lib/types/types';
 
-function GoalsAndNotesSection({formData, handleAcademicInfoChange, handlePersonalInfoChange}) {
+interface GoalsAndNotesSectionProps {
+    formData: StudentFormData;
+    handleAcademicInfoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handlePersonalInfoChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+function GoalsAndNotesSection({formData, handleAcademicInfoChange, handlePersonalInfoChange} : GoalsAndNotesSectionProps) {
     return (
         <>
             <div className="space-y-4">
@@ -13,7 +19,7 @@ function GoalsAndNotesSection({formData, handleAcademicInfoChange, handlePersona
                     <Input
                     id="targetSchools"
                     placeholder="Stanford University, Harvard University, MIT"
-                    value={formData.targetSchools}
+                    value={formData.academicInformation.targetSchools}
                     name="targetSchools"
                     onChange={handleAcademicInfoChange}
                     />
@@ -24,7 +30,7 @@ function GoalsAndNotesSection({formData, handleAcademicInfoChange, handlePersona
                     <Textarea
                     id="notes"
                     placeholder="Any additional information about the student..."
-                    value={formData.notes}
+                    value={formData.personalInformation.notes}
                     name="notes"
                     onChange={handlePersonalInfoChange}
                     rows={3}

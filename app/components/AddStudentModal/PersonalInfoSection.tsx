@@ -1,7 +1,13 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { StudentFormData } from "@/lib/types/types";
 
-function PersonalInfoSection({formData, handlePersonalInfoChange}) {
+interface PersonalInfoSectionProps {
+    formData: StudentFormData;
+    handlePersonalInfoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoSectionProps) {
     return (
         <>
             <div className="space-y-4">
