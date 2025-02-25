@@ -54,7 +54,7 @@ const page = () => {
     };
 
 
-    // 1. Listen for auth state changes and set user
+    // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
     useEffect(() => {
         const auth = getAuth(app);
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -65,13 +65,11 @@ const page = () => {
 
     // 2. Fetch students when user is available
     useEffect(() => {
-        if (currentUser) {
-            fetchStudents(currentUser);
-        }
+        if (currentUser) fetchStudents(currentUser);
     }, [currentUser]);
 
     const handleStudentAdded = () => {
-        fetchStudents(currentUser);
+        if (currentUser) fetchStudents(currentUser);
     }
     
     return (

@@ -12,7 +12,7 @@ import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
 
 interface AddStudentModalProps {
-    consultantDocRef: DocumentReference<DocumentData>;
+    consultantDocRef: DocumentReference<DocumentData> | null;
     onStudentAdded: () => void;
 }
 
@@ -46,6 +46,12 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
     // Handles form submission, adds a new student document to Firestore
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // Check if consultantDocRef is provided
+        if (!consultantDocRef) {
+            console.error("Consultant is not provided.");
+            return;
+        }
 
         // Create a new student document in the "studentUsers" collection
         try {

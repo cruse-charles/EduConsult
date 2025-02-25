@@ -10,7 +10,8 @@ export interface Student {
         toefl: number;
     };
     personalInformation: {
-        name: string;
+        firstName: string;
+        lastName: string;
         email: string;
         phone: string;
         wechat: string;
