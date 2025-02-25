@@ -12,12 +12,12 @@ function StudentProfileHeader() {
                 </Link>
             </Button>
             <h1 className="text-2xl font-bold">Student Profile</h1>
-            <div className="ml-auto flex items-center gap-2">
+            {/* <div className="ml-auto flex items-center gap-2">
                 <Button variant="outline">
                     <Edit className="mr-2 h-4 w-4" />
                     Edit Profile
                 </Button>
-            </div>
+            </div> */}
         </div>
     )
 }

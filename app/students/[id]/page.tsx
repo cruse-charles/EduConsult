@@ -6,15 +6,10 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
 import { Student } from "@/lib/types/types";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowLeft, Edit, GraduationCap, Plus } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StudentProfileCard from "./StudentProfileCard";
 import TaskSummary from "./TaskSummary";
 import StudentDetails from "./StudentDetails";
-import StudentProfileHeader from "../StudentProfileHeader";
+import StudentProfileHeader from "./StudentProfileHeader";
 
 function page() {
     // retrieve the student ID from URL and create state to hold student data
@@ -27,9 +22,8 @@ function page() {
             const docRef = doc(db, "studentUsers", id);
             const docSnap = await getDoc(docRef);
             // console.log(docSnap.data())
-            setStudent(docSnap.data() as Student | null);
+            setStudent({id: docSnap.id, ...docSnap.data()} as Student | null);
         }
-
         fetchstudent()
     }, [])
 
