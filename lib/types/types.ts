@@ -1,7 +1,7 @@
 import { Timestamp, DocumentReference, DocumentData } from "firebase/firestore";
 
 
-export interface Student {
+export interface StudentBase {
     id: string;
     academicInformation: {
         currentSchool: string;
@@ -25,25 +25,8 @@ export interface Student {
     progress: number;
 }
 
-export interface StudentFormData {
-    personalInformation: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        phone: string;
-        other: string;
-        notes: string;
-    };
-    academicInformation: {
-        currentSchool: string;
-        grade: string;
-        gpa: string;
-        sat: string;
-        toefl: string;
-        targetSchools: string;
-    };
-    pendingTasks: string;
-    progress: string;
-    nextDeadline: string;
-    consultant: any;
+export interface Student extends StudentBase {
+    id: string;
 }
+
+export interface StudentFormData extends StudentBase {}

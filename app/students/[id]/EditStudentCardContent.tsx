@@ -3,11 +3,17 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { StudentFormData } from '@/lib/types/types'
 import React from 'react'
 
-function EditStudentCardContent({editStudent, setEditStudent}) {
+interface EditStudentCardContentProps {
+    editStudent: StudentFormData;
+    setEditStudent: React.Dispatch<React.SetStateAction<StudentFormData>>;
+}
 
-    const handlePersonalInfoChange = (e) => {
+function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardContentProps) {
+
+    const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target
 
         setEditStudent((prev) => (
@@ -21,7 +27,7 @@ function EditStudentCardContent({editStudent, setEditStudent}) {
         ))
     }
 
-    const handleAcademicInfoChange = (e) => {
+    const handleAcademicInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
 
         setEditStudent((prev) => (
