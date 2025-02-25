@@ -4,7 +4,6 @@ import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { StudentFormData } from '@/lib/types/types'
-import React from 'react'
 
 interface EditStudentCardContentProps {
     editStudent: StudentFormData;
