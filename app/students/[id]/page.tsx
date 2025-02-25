@@ -13,6 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StudentProfileCard from "./StudentProfileCard";
 import TaskSummary from "./TaskSummary";
+import StudentDetails from "./StudentDetails";
+import StudentProfileHeader from "../StudentProfileHeader";
 
 function page() {
     // retrieve the student ID from URL and create state to hold student data
@@ -69,22 +71,9 @@ function page() {
 
     return (
         // Page Containers
-        <div className="flex min-h-screen flex-col">
+        // <div className="flex min-h-screen flex-col">
             <div className="container flex-1 p-4 md:p-6 space-y-6">
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" asChild>
-                        <Link href="/dashboard/">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Link>
-                    </Button>
-                    <h1 className="text-2xl font-bold">Student Profile</h1>
-                    <div className="ml-auto flex items-center gap-2">
-                        <Button variant="outline">
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit Profile
-                        </Button>
-                    </div>
-                </div>
+                <StudentProfileHeader />
 
                 <div className="grid gap-6 md:grid-cols-3">
                     {/* Student Details Card */}
@@ -96,45 +85,11 @@ function page() {
                         <TaskSummary student={student} />
 
                         {/* Student Details Section */}
-                        <Tabs defaultValue="assignments">
-                        <TabsList>
-                            <TabsTrigger value="assignments">Assignments</TabsTrigger>
-                            <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                            <TabsTrigger value="school-info">School Information</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="assignments" className="space-y-4">
-                            <div className="flex justify-between items-center">
-                            <h3 className="text-lg font-medium">Student Assignments</h3>
-                            <Button>
-                                <Plus className="mr-2 h-4 w-4" />
-                                New Assignment
-                            </Button>
-                            </div>
-                            {/* <AssignmentList studentId={student.id} /> */}
-                        </TabsContent>
-                        <TabsContent value="calendar">
-                            <Card>
-                            <CardHeader>
-                                <CardTitle>Student Calendar</CardTitle>
-                                <CardDescription>View and manage deadlines for {student?.personalInformation.firstName} {student?.personalInformation.lastName}</CardDescription>
-                            </CardHeader>
-                            {/* <CardContent>
-                                <CalendarView studentId={student.id} />
-                                </CardContent> */}
-                            </Card>
-                        </TabsContent>
-                        {/* <TabsContent value="school-info">
-                            <SchoolInfo schoolName={student.targetSchool} />
-                            </TabsContent> */}
-                        </Tabs>
+                        <StudentDetails student={student} />
                     </div>
                 </div>
-
-
-                {/* Upload files */}
-                {/* <input onChange={handleFileUpload} type='file' multiple/> */}
             </div>
-        </div>
+        // </div>
     )
 }
 
