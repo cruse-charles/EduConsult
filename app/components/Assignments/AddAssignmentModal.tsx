@@ -12,6 +12,12 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import TypeTitlePriority from "./TypeTitlePriority"
 import FileUploadView from "./FileUploadView"
+import { Textarea } from "@/components/ui/textarea"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { Calendar } from "@/components/ui/calendar"
+import AssignmentCalendar from "./AssignmentCalendar"
 
 
 function AddAssignmentModal() {
@@ -88,8 +94,66 @@ function AddAssignmentModal() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-4">
+
+
+
+
                     <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
+                    
+
+
+
+
+
+
+                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label>Due Date</Label>
+                            <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                variant="outline"
+                                className={cn(
+                                    "w-full justify-start text-left font-normal",
+                                    !dueDate && "text-muted-foreground",
+                                )}
+                                >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {dueDate ? format(dueDate, "PPP") : "Pick a date"}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                                <Calendar mode="single" selected={dueDate} onSelect={setDueDate} />
+                            </PopoverContent>
+                            </Popover>
+                        </div>
+                    </div> */}
+
+                    <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
+                    
+
+
+
+
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="notes">Assignment Notes</Label>
+                            <Textarea id="notes" placeholder="Add any instructions, requirements, or additional notes for this assignment..." value={formData.notes} onChange={(e) => handleInputChange("notes", e.target.value)} rows={4} />
+                        </div>
+                    </div>
+
+
+
+
+
+
+
                     <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
+
+
+
+
+
                 </div>
             </form>
             <DialogFooter className="sm:justify-start">
