@@ -10,6 +10,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import StudentCardContent from './StudentCardContent'
 import EditStudentCardContent from './EditStudentCardContent'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 interface StudentProfileCardProps {
     student: Student;
@@ -74,6 +76,18 @@ function StudentProfileCard({student, setStudent} : StudentProfileCardProps) {
             console.error("Error updating student:", error);
         }
     }
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        setEditStudent((prev) => ({
+            ...prev,
+            personalInformation: {
+                ...prev.personalInformation,
+                [name]: value
+            }
+        }))
+    }
     
     return (
         <Card className="md:col-span-1">
@@ -81,18 +95,32 @@ function StudentProfileCard({student, setStudent} : StudentProfileCardProps) {
                 <div className="flex flex-col-reverse md:flex-row w-full justify-between items-start md:items-center gap-2">
     
                     {/* Student Name and Edit Section */}
-                    <CardTitle className="text-xl">
-                        {student?.personalInformation.firstName} {student?.personalInformation.lastName}
-                    </CardTitle>
-                    {!editMode && <Button onClick={ ()=> setEditMode(true)} variant="outline" className="self-start md:self-auto">
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit
-                    </Button>}
+                    {!editMode && 
+                        <>
+                            <CardTitle className="text-xl">
+                                {student?.personalInformation.firstName} {student?.personalInformation.lastName}
+                            </CardTitle>
+                            <Button onClick={ ()=> setEditMode(true)} variant="outline" className="self-start md:self-auto">
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit
+                            </Button>
+                        </>
+                    }
                     {editMode && 
-                    <div className='flex flex-row gap-2 self-start md:self-auto'>
-                        <Button variant="outline" onClick={handleSave}>Save</Button>
-                        <Button variant="outline" onClick={handleDelete}>Delete</Button>
-                    </div>}
+                        <>
+                            <div className='flex flex-col gap-2'>
+                                <Label className='text-muted-foreground'>First Name</Label>
+                                <Input className='h-7' name='firstName' value={editStudent.personalInformation.firstName} onChange={handleNameChange}/>
+                                <Label className='text-muted-foreground'>Last Name</Label>
+                                <Input className='h-7' name='lastName' value={editStudent.personalInformation.lastName} onChange={handleNameChange}/>   
+                            </div>
+                            <div className='flex flex-col gap-1'>
+                                <Button variant="outline" onClick={handleSave}>Save</Button>
+                                <Button variant="outline" onClick={() => setEditMode(false)}>Cancel</Button>
+                                <Button variant="outline" onClick={handleDelete}>Delete</Button>
+                            </div>
+                        </>
+                    }
                 </div>
             </CardHeader>
             

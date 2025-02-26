@@ -46,9 +46,9 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
             <div className="text-sm font-medium">Contact Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">Email:</div>
-                <Input name='email' value={editStudent?.personalInformation.email} onChange={handlePersonalInfoChange}/>
+                <Input className='h-7' name='email' value={editStudent?.personalInformation.email} onChange={handlePersonalInfoChange}/>
                 <div className="text-muted-foreground">Phone:</div>
-                <Input name='phone' value={editStudent?.personalInformation.phone} onChange={handlePersonalInfoChange}/>
+                <Input className='h-7' name='phone' value={editStudent?.personalInformation.phone} onChange={handlePersonalInfoChange}/>
             </div>
         </div>
 
@@ -58,12 +58,11 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
             <div className="text-sm font-medium">Academic Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">School:</div>
-                <Input name='currentSchool' value={editStudent?.academicInformation.currentSchool} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='currentSchool' value={editStudent?.academicInformation.currentSchool} onChange={handleAcademicInfoChange}/>
                 <div className="text-muted-foreground">Grade:</div>
-                <div>{editStudent?.academicInformation.grade}</div>
-                <Input name='grade' value={editStudent?.academicInformation.grade} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='grade' value={editStudent?.academicInformation.grade} onChange={handleAcademicInfoChange}/>
                 <div className="text-muted-foreground">GPA:</div>
-                <Input name='gpa' value={editStudent?.academicInformation.gpa} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='gpa' value={editStudent?.academicInformation.gpa} onChange={handleAcademicInfoChange}/>
             </div>
         </div>
 
