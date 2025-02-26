@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { CalendarIcon, FileText, Plus, Upload } from "lucide-react"
+import { CalendarIcon, FileText, Plus, Upload, X } from "lucide-react"
 import { useState } from "react"
 import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "@/lib/firebaseConfig";
@@ -27,7 +27,7 @@ function AddAssignmentModal() {
     })
 
     const removeFile = (index) => {
-
+        setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
     }
 
     // handle file upload, upload each file to Firebase Storage
@@ -39,6 +39,8 @@ function AddAssignmentModal() {
             console.error('No files selected');
             return;
         }
+
+        setFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
 
         for (const file of Array.from(files) as File[]) {
             // Create a storage reference
@@ -58,7 +60,7 @@ function AddAssignmentModal() {
 
     }
 
-    const handleInputChange = (value, type) => {
+    const handleInputChange = (name, value) => {
 
     }
 
@@ -84,29 +86,83 @@ function AddAssignmentModal() {
                     <Label htmlFor="title">
                         Assignment Title <span className="text-red-500">*</span>
                       </Label>
-                      <Input id="title" placeholder="e.g., Stanford Application Essay" name='title' value={formData.title} onChange={handleInputChange} required   />
+                      <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={handleInputChange} required   />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="type">
-                          Assignment Type <span className="text-red-500">*</span>
-                        </Label>
-                        <Select value={formData.type} onValueChange={(value) => console.log("type", value)}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="essay">Essay</SelectItem>
-                            <SelectItem value="application">Application</SelectItem>
-                            <SelectItem value="document">Document</SelectItem>
-                            <SelectItem value="portfolio">Portfolio</SelectItem>
-                            <SelectItem value="test-prep">Test Preparation</SelectItem>
-                            <SelectItem value="recommendation">Recommendation Letter</SelectItem>
-                            <SelectItem value="interview-prep">Interview Preparation</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="type">
+                            Assignment Type <span className="text-red-500">*</span>
+                            </Label>
+                            <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="essay">Essay</SelectItem>
+                                <SelectItem value="application">Application</SelectItem>
+                                <SelectItem value="document">Document</SelectItem>
+                                <SelectItem value="portfolio">Portfolio</SelectItem>
+                                <SelectItem value="test-prep">Test Preparation</SelectItem>
+                                <SelectItem value="recommendation">Recommendation Letter</SelectItem>
+                                <SelectItem value="interview-prep">Interview Preparation</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
+
+
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                            <Label>Attach Files</Label>
+                            <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6">
+                                <div className="text-center">
+                                <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
+                                    <div className="mt-2">
+                                        <Label htmlFor="file-upload" className="cursor-pointer">
+                                        <span className="text-sm font-medium text-primary hover:text-primary/80">
+                                            Click to upload files
+                                        </span>
+                                        <span className="text-sm text-muted-foreground"> or drag and drop</span>
+                                        </Label>
+                                        <Input
+                                        id="file-upload"
+                                        type="file"
+                                        multiple
+                                        className="hidden"
+                                        onChange={handleFileUpload}
+                                        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {files.length > 0 && (
+                                <div className="space-y-2">
+                                <Label className="text-sm font-medium">Attached Files:</Label>
+                                <div className="space-y-2">
+                                    {files.map((file, index) => (
+                                    <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-md">
+                                        <div className="flex items-center gap-2">
+                                        <FileText className="h-4 w-4 text-muted-foreground" />
+                                        <span className="text-sm">{file.name}</span>
+                                        <span className="text-xs text-muted-foreground">
+                                            ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                                        </span>
+                                        </div>
+                                        <Button type="button" variant="ghost" size="sm" onClick={() => removeFile(index)}>
+                                            <X className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    ))}
+                                </div>
+                                </div>
+                            )}
+                            </div>
+                        </div>
+
+
+
+                        
                     </div>
                 </div>
             </form>
