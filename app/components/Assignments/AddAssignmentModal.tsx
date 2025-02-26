@@ -7,6 +7,9 @@ import { useState } from "react"
 import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "@/lib/firebaseConfig";
 import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 
 function AddAssignmentModal() {
@@ -76,7 +79,36 @@ function AddAssignmentModal() {
               <DialogDescription>Create a new assignment for a student. Fill out the details below.</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-6">
-
+                <div className="space-y-4">
+                    <div className="space-y-2">
+                    <Label htmlFor="title">
+                        Assignment Title <span className="text-red-500">*</span>
+                      </Label>
+                      <Input id="title" placeholder="e.g., Stanford Application Essay" name='title' value={formData.title} onChange={handleInputChange} required   />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="type">
+                          Assignment Type <span className="text-red-500">*</span>
+                        </Label>
+                        <Select value={formData.type} onValueChange={(value) => console.log("type", value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="essay">Essay</SelectItem>
+                            <SelectItem value="application">Application</SelectItem>
+                            <SelectItem value="document">Document</SelectItem>
+                            <SelectItem value="portfolio">Portfolio</SelectItem>
+                            <SelectItem value="test-prep">Test Preparation</SelectItem>
+                            <SelectItem value="recommendation">Recommendation Letter</SelectItem>
+                            <SelectItem value="interview-prep">Interview Preparation</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                </div>
             </form>
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
