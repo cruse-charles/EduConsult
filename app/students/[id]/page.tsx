@@ -8,7 +8,7 @@ import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
 import { Student } from "@/lib/types/types";
 import StudentProfileCard from "./StudentProfileCard";
 import TaskSummary from "./TaskSummary";
-import StudentDetails from "./StudentDetails";
+import StudentDetails from "./StudentAssignments";
 import StudentProfileHeader from "./StudentProfileHeader";
 
 function page() {

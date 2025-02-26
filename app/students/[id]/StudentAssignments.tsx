@@ -1,10 +1,11 @@
+import AddAssignmentModal from "@/app/components/Assignments/AddAssignmentModal"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Student } from "@/lib/types/types"
 import { Plus } from "lucide-react"
 
-function StudentDetails({student} : {student: Student}) {
+function StudentAssignments({student} : {student: Student}) {
     return (
         <Tabs defaultValue="assignments">
             <TabsList>
@@ -14,11 +15,12 @@ function StudentDetails({student} : {student: Student}) {
             </TabsList>
             <TabsContent value="assignments" className="space-y-4">
                 <div className="flex justify-between items-center">
-                <h3 className="text-lg font-medium">Student Assignments</h3>
+                {/* <h3 className="text-lg font-medium">Student Assignments</h3>
                 <Button>
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
-                </Button>
+                </Button> */}
+                <AddAssignmentModal />
                 </div>
                 {/* <AssignmentList studentId={student.id} /> */}
             </TabsContent>
@@ -40,4 +42,4 @@ function StudentDetails({student} : {student: Student}) {
     )
 }
 
-export default StudentDetails
+export default StudentAssignments
