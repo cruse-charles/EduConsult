@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { FileText, Plus } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { db, storage } from "@/lib/firebaseConfig";
 import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebase/storage";
 import { Label } from "@/components/ui/label"
@@ -15,7 +15,11 @@ import { addDoc, collection } from "firebase/firestore"
 import { useParams } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import FolderSelection from "./FolderSelection"
 
+// TODO: get all folders from student and have them render as select items when creating an assignment
+// link a student id and consultant id to an assignment, which will have those two fields and an array 
+// of objects that are assignments holding the info from the other file and folder location
 
 function AddAssignmentModal() {
     const [dueDate, setDueDate] = useState(null)
@@ -138,25 +142,12 @@ function AddAssignmentModal() {
                     {/* Type, Title, Priority Input Container */}
                     <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
                     
+                    {/* Folder Selection Container */}
+                    <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
+
                     {/* Calendar Due Date Container */}
-                    <div className="space-y-2">
-                        <Label htmlFor="priority">Folder</Label>
-                        <Select value={formData.folderName} onValueChange={(value) => value === 'create-new' ? setNewFolder(true) : handleInputChange("folderName", value)}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select or create folder" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="create-new">+ Create New Folder</SelectItem>
-                        </SelectContent>
-                        </Select>
-                    </div>
-                    { newFolder && (
-                        <div className="space-y-2">
-                            <Label htmlFor="folder-name">New Folder Name</Label>
-                            <Input id="folder-name" placeholder="Enter new folder name" value={formData.folderName} onChange={(e) => handleInputChange("folderName", e.target.value)} />
-                        </div>
-                    )}
                     <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
+                    
                     {/* Notes Container */}
                     <div className="space-y-4">
                         <div className="space-y-2">
