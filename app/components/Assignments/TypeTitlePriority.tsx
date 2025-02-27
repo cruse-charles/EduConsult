@@ -9,10 +9,10 @@ function TypeTitlePriority({formData, handleInputChange}) {
             <div className="space-y-2">
                 <Label htmlFor="title">
                     Assignment Title <span className="text-red-500">*</span>
-                  </Label>
-                  <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={(e) => handleInputChange("title", e.target.value)} required   />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                </Label>
+                <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={(e) => handleInputChange("title", e.target.value)} required   />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="type">
                     Assignment Type <span className="text-red-500">*</span>
@@ -36,17 +36,17 @@ function TypeTitlePriority({formData, handleInputChange}) {
                 <div className="space-y-2">
                     <Label htmlFor="priority">Priority Level</Label>
                     <Select value={formData.priority} onValueChange={(value) => handleInputChange("priority", value)}>
-                      <SelectTrigger>
+                    <SelectTrigger>
                         <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                      <SelectContent>
+                    </SelectTrigger>
+                    <SelectContent>
                         <SelectItem value="low">Low</SelectItem>
                         <SelectItem value="medium">Medium</SelectItem>
                         <SelectItem value="high">High</SelectItem>
                         <SelectItem value="urgent">Urgent</SelectItem>
-                      </SelectContent>
+                    </SelectContent>
                     </Select>
-                </div>                   
+                </div>
             </div>
         </>
     )

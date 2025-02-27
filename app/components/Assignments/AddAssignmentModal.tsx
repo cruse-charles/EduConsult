@@ -13,12 +13,15 @@ import { Textarea } from "@/components/ui/textarea"
 import AssignmentCalendar from "./AssignmentCalendar"
 import { addDoc, collection } from "firebase/firestore"
 import { useParams } from "next/navigation"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 
 
 function AddAssignmentModal() {
     const [dueDate, setDueDate] = useState(null)
     const [files, setFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [newFolder, setNewFolder] = useState(false)
     const { id: studentId } = useParams()
 
     const [formData, setFormData] = useState({
@@ -46,24 +49,7 @@ function AddAssignmentModal() {
 
         setFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
 
-        // for (const file of Array.from(files) as File[]) {
-        //     // Generate a unique file name to avoid conflicts
-        //     const uniqueName = `${Date.now()}-${file.name}`;
-
-        //     // Create a storage reference
-        //     // const storageRef = ref(storage, `${file.name}`);
-        //     const storageRef = ref(storage, `${uniqueName}`);
-            
-        //     // Upload the file to the storage reference
-        //     try {
-        //         const snapshot = uploadBytes(storageRef, file)
-        //         console.log('Uploaded a blob or file!', snapshot);
-        //     } catch (error) {
-        //         console.error('Error uploading file:', error);
-        //     }
-        // }
-
-        // Reset the input so the same file can be selected again
+        // Reset the input value to allow re-uploading the same file
         event.target.value = "";
     }
 
@@ -79,6 +65,7 @@ function AddAssignmentModal() {
             files: [],
             createdAt: new Date(),
             student: studentId,
+            folderName: '',
         }
 
         for (const file of Array.from(files) as File[]) {
@@ -152,8 +139,24 @@ function AddAssignmentModal() {
                     <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
                     
                     {/* Calendar Due Date Container */}
+                    <div className="space-y-2">
+                        <Label htmlFor="priority">Folder</Label>
+                        <Select value={formData.folderName} onValueChange={(value) => value === 'create-new' ? setNewFolder(true) : handleInputChange("folderName", value)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select or create folder" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="create-new">+ Create New Folder</SelectItem>
+                        </SelectContent>
+                        </Select>
+                    </div>
+                    { newFolder && (
+                        <div className="space-y-2">
+                            <Label htmlFor="folder-name">New Folder Name</Label>
+                            <Input id="folder-name" placeholder="Enter new folder name" value={formData.folderName} onChange={(e) => handleInputChange("folderName", e.target.value)} />
+                        </div>
+                    )}
                     <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
-                    
                     {/* Notes Container */}
                     <div className="space-y-4">
                         <div className="space-y-2">

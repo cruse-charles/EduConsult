@@ -10,7 +10,7 @@ import React from 'react'
 function AssignmentCalendar({dueDate, setDueDate}) {
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
                 <div className="space-y-2">
                     <Label>Due Date</Label>
                     <Popover>
@@ -31,7 +31,7 @@ function AssignmentCalendar({dueDate, setDueDate}) {
                     </PopoverContent>
                     </Popover>
                 </div>
-            </div>
+            {/* </div> */}
         </>
     )
 }
