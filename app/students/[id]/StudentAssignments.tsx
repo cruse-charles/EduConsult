@@ -1,9 +1,7 @@
 import AddAssignmentModal from "@/app/components/Assignments/AddAssignmentModal"
-import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Student } from "@/lib/types/types"
-import { Plus } from "lucide-react"
 
 function StudentAssignments({student} : {student: Student}) {
     return (

@@ -10,7 +10,7 @@ function TypeTitlePriority({formData, handleInputChange}) {
                 <Label htmlFor="title">
                     Assignment Title <span className="text-red-500">*</span>
                   </Label>
-                  <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={handleInputChange} required   />
+                  <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={(e) => handleInputChange("title", e.target.value)} required   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">

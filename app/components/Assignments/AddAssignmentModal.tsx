@@ -3,20 +3,23 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { FileText, Plus } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { db, storage } from "@/lib/firebaseConfig";
-import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
+import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebase/storage";
 import { Label } from "@/components/ui/label"
 import TypeTitlePriority from "./TypeTitlePriority"
 import FileUploadView from "./FileUploadView"
 import { Textarea } from "@/components/ui/textarea"
 import AssignmentCalendar from "./AssignmentCalendar"
+import { addDoc, collection } from "firebase/firestore"
+import { useParams } from "next/navigation"
 
 
 function AddAssignmentModal() {
     const [dueDate, setDueDate] = useState(null)
     const [files, setFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const { id: studentId } = useParams()
 
     const [formData, setFormData] = useState({
         title: "",
@@ -43,22 +46,74 @@ function AddAssignmentModal() {
 
         setFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
 
+        // for (const file of Array.from(files) as File[]) {
+        //     // Generate a unique file name to avoid conflicts
+        //     const uniqueName = `${Date.now()}-${file.name}`;
+
+        //     // Create a storage reference
+        //     // const storageRef = ref(storage, `${file.name}`);
+        //     const storageRef = ref(storage, `${uniqueName}`);
+            
+        //     // Upload the file to the storage reference
+        //     try {
+        //         const snapshot = uploadBytes(storageRef, file)
+        //         console.log('Uploaded a blob or file!', snapshot);
+        //     } catch (error) {
+        //         console.error('Error uploading file:', error);
+        //     }
+        // }
+
+        // Reset the input so the same file can be selected again
+        event.target.value = "";
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const assignmentData = {
+            title: formData.title,
+            type: formData.type,
+            priority: formData.priority,
+            dueDate: dueDate,
+            notes: formData.notes,
+            files: [],
+            createdAt: new Date(),
+            student: studentId,
+        }
+
         for (const file of Array.from(files) as File[]) {
+            // Generate a unique file name to avoid conflicts
+            const uniqueName = `${Date.now()}-${file.name}`;
+
+            const storagePath = `assignments/${studentId}/${uniqueName}`
+            
             // Create a storage reference
-            const storageRef = ref(storage, `${file.name}`);
+            const storageRef = ref(storage, storagePath);
+
             
             // Upload the file to the storage reference
             try {
-                const snapshot = uploadBytes(storageRef, file)
+                const snapshot = await uploadBytes(storageRef, file)
+                const downloadURL = await getDownloadURL(storageRef)
+
+                assignmentData.files.push({
+                    storagePath,
+                    downloadURL,
+                    originalName: file.name,
+                    uploadedAt: new Date(),
+                })
+
                 console.log('Uploaded a blob or file!', snapshot);
             } catch (error) {
                 console.error('Error uploading file:', error);
             }
         }
-    }
 
-    const handleSubmit = () => {
-
+        try {
+            await addDoc(collection(db, "assignments"), assignmentData)
+        } catch (error) {
+            console.log("Error adding assignment: ", error)
+        }
     }
 
     const handleInputChange = (name, value) => {
@@ -99,7 +154,6 @@ function AddAssignmentModal() {
                     {/* Calendar Due Date Container */}
                     <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
                     
-
                     {/* Notes Container */}
                     <div className="space-y-4">
                         <div className="space-y-2">
@@ -111,6 +165,10 @@ function AddAssignmentModal() {
                     {/* File Upload Container */}
                     <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
                 </div>
+            {/* Submit Button */}
+                <Button type="submit" className="w-full mt-4" disabled={isLoading}>
+                    {isLoading ? "Creating..." : "Create Assignment"}
+                </Button>
             </form>
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
