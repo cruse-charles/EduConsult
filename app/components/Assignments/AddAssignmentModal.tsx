@@ -16,6 +16,7 @@ import { useParams } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import FolderSelection from "./FolderSelection"
+import Notes from "./Notes"
 
 // TODO: get all folders from student and have them render as select items when creating an assignment
 // link a student id and consultant id to an assignment, which will have those two fields and an array 
@@ -115,65 +116,61 @@ function AddAssignmentModal() {
         console.log(formData)
     }
 
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            New Assignment
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button>
+                    <Plus className="mr-2 h-4 w-4" />
+                    New Assignment
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
 
-        {/* Dialog Header */}
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                Create New Assignment
-              </DialogTitle>
-              <DialogDescription>Create a new assignment for a student. Fill out the details below.</DialogDescription>
-            </DialogHeader>
+                {/* Dialog Header */}
+                    <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                        <FileText className="h-5 w-5" />
+                        Create New Assignment
+                    </DialogTitle>
+                    <DialogDescription>Create a new assignment for a student. Fill out the details below.</DialogDescription>
+                    </DialogHeader>
 
-            {/* Form to submit assignments */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Form Container */}
-                <div className="space-y-4">
+                    {/* Form to submit assignments */}
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Form Container */}
+                        <div className="space-y-4">
 
-                    {/* Type, Title, Priority Input Container */}
-                    <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
-                    
-                    {/* Folder Selection Container */}
-                    <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
+                            {/* Type, Title, Priority Input Container */}
+                            <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
+                            
+                            {/* Folder Selection Container */}
+                            <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
 
-                    {/* Calendar Due Date Container */}
-                    <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
-                    
-                    {/* Notes Container */}
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="notes">Assignment Notes</Label>
-                            <Textarea id="notes" placeholder="Add any instructions, requirements, or additional notes for this assignment..." value={formData.notes} onChange={(e) => handleInputChange("notes", e.target.value)} rows={4} />
+                            {/* Calendar Due Date Container */}
+                            <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
+                            
+                            {/* Notes Container */}
+                            <Notes formData={formData} handleInputChange={handleInputChange} />
+
+                            {/* File Upload Container */}
+                            <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
                         </div>
-                    </div>
 
-                    {/* File Upload Container */}
-                    <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
-                </div>
-            {/* Submit Button */}
-                <Button type="submit" className="w-full mt-4" disabled={isLoading}>
-                    {isLoading ? "Creating..." : "Create Assignment"}
-                </Button>
-            </form>
-            <DialogFooter className="sm:justify-start">
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">
-                  Close
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
+                        {/* Submit Button */}
+                        <Button type="submit" className="w-full mt-4" disabled={isLoading}>
+                            {isLoading ? "Creating..." : "Create Assignment"}
+                        </Button>
+                    </form>
+                    <DialogFooter className="sm:justify-start">
+                    <DialogClose asChild>
+                        <Button type="button" variant="secondary">
+                        Close
+                        </Button>
+                    </DialogClose>
+                    </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
 }
 
 export default AddAssignmentModal
