@@ -2,21 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { CalendarIcon, FileText, Plus, Upload, X } from "lucide-react"
+import { FileText, Plus } from "lucide-react"
 import { useState } from "react"
-import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "@/lib/firebaseConfig";
 import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
 import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import TypeTitlePriority from "./TypeTitlePriority"
 import FileUploadView from "./FileUploadView"
 import { Textarea } from "@/components/ui/textarea"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { format } from "date-fns"
-import { Calendar } from "@/components/ui/calendar"
 import AssignmentCalendar from "./AssignmentCalendar"
 
 
@@ -85,6 +78,8 @@ function AddAssignmentModal() {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
+
+        {/* Dialog Header */}
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
@@ -92,49 +87,20 @@ function AddAssignmentModal() {
               </DialogTitle>
               <DialogDescription>Create a new assignment for a student. Fill out the details below.</DialogDescription>
             </DialogHeader>
+
+            {/* Form to submit assignments */}
             <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Form Container */}
                 <div className="space-y-4">
 
-
-
-
+                    {/* Type, Title, Priority Input Container */}
                     <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
                     
-
-
-
-
-
-
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label>Due Date</Label>
-                            <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                variant="outline"
-                                className={cn(
-                                    "w-full justify-start text-left font-normal",
-                                    !dueDate && "text-muted-foreground",
-                                )}
-                                >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {dueDate ? format(dueDate, "PPP") : "Pick a date"}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                                <Calendar mode="single" selected={dueDate} onSelect={setDueDate} />
-                            </PopoverContent>
-                            </Popover>
-                        </div>
-                    </div> */}
-
+                    {/* Calendar Due Date Container */}
                     <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
                     
 
-
-
-
+                    {/* Notes Container */}
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="notes">Assignment Notes</Label>
@@ -142,18 +108,8 @@ function AddAssignmentModal() {
                         </div>
                     </div>
 
-
-
-
-
-
-
+                    {/* File Upload Container */}
                     <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
-
-
-
-
-
                 </div>
             </form>
             <DialogFooter className="sm:justify-start">
