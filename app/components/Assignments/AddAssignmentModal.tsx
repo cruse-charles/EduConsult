@@ -13,7 +13,7 @@ import { addDoc, collection } from "firebase/firestore"
 import { useParams } from "next/navigation"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
-import { AssignmentFile } from "@/lib/types/types"
+import { Assignment, AssignmentFile } from "@/lib/types/types"
 
 // TODO: get all folders from student and have them render as select items when creating an assignment
 // link a student id and consultant id to an assignment, which will have those two fields and an array 
@@ -21,21 +21,30 @@ import { AssignmentFile } from "@/lib/types/types"
 
 
 function AddAssignmentModal() {
+    // Retrieve the student ID from URL parameters
+    const { id: studentId } = useParams<{id:string}>()
+    
+    // State to manage assignment details
     const [dueDate, setDueDate] = useState<Date | null>(null)
     const [files, setFiles] = useState<File[]>([])
-    const [isLoading, setIsLoading] = useState(false)
     const [newFolder, setNewFolder] = useState(false)
-    const { id: studentId } = useParams<{id:string}>()
 
-    const [formData, setFormData] = useState({
+    // State to manage loading state and formData for form submission
+    const [isLoading, setIsLoading] = useState(false)
+    const [formData, setFormData] = useState<Assignment>({
         title: "",
-        type: "essay",
-        priority: "medium",
-        assignedStudent: "",
+        type: "",
+        priority: "",
+        folderName: "",
+        student: studentId,
         dueDate: null,
         notes: "",
+        files: [],
+        createdAt: null,
     })
 
+    // Function to remove a file from the files array
+    // TODO: Remove from storage and select based on file name
     const removeFile = (index: number) => {
         setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
     }
@@ -43,22 +52,25 @@ function AddAssignmentModal() {
     // handle file upload, upload each file to Firebase Storage
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event?.target.files
-        console.log(files);
 
+        // Check if files are uploaded
         if (!files) {
             console.error('No files selected');
             return;
         }
 
+        // Add the selected files to the state
         setFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
 
         // Reset the input value to allow re-uploading the same file
         event.target.value = "";
     }
 
+    // Handles form submission, adds a new assignment document to Firestore
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        // Data to create a new assignment
         const assignmentData = {
             title: formData.title,
             type: formData.type,
@@ -71,17 +83,17 @@ function AddAssignmentModal() {
             folderName: '',
         }
 
+        // Iterate through the files and upload each one to Firebase Storage
         for (const file of Array.from(files) as File[]) {
-            // Generate a unique file name to avoid conflicts
+            // Generate a unique file name to avoid naming conflicts
             const uniqueName = `${Date.now()}-${file.name}`;
-
-            const storagePath = `assignments/${studentId}/${uniqueName}`
             
-            // Create a storage reference
+            // Create a storage reference and define the path where the file will be stored
+            const storagePath = `assignments/${studentId}/${uniqueName}`
             const storageRef = ref(storage, storagePath);
 
             
-            // Upload the file to the storage reference
+            // Upload file to the storage reference, create a downloadable URL, and store the file metadata
             try {
                 const snapshot = await uploadBytes(storageRef, file)
                 const downloadURL = await getDownloadURL(storageRef)
@@ -99,6 +111,7 @@ function AddAssignmentModal() {
             }
         }
 
+        // Add the assignment document to the Firestore collection
         try {
             await addDoc(collection(db, "assignments"), assignmentData)
         } catch (error) {

@@ -37,3 +37,15 @@ export interface AssignmentFile {
     originalName: string;
     uploadedAt: Date;
 }
+
+export interface Assignment {
+    title: string;
+    type: string;
+    priority: string;
+    dueDate: Date | null;
+    notes: string;
+    files: AssignmentFile[];
+    createdAt: Date | null;
+    student: string;
+    folderName: string;
+}

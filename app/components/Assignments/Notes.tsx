@@ -1,8 +1,13 @@
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import React from 'react'
+import { Assignment } from '@/lib/types/types';
 
-function Notes({formData, handleInputChange}) {
+interface NotesProps {
+    formData: Assignment
+    handleInputChange: (field: string, value: string) => void;
+}
+
+function Notes({formData, handleInputChange}: NotesProps) {
     return (
         <>
             <div className="space-y-4">
