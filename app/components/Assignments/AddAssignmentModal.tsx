@@ -6,28 +6,26 @@ import { FileText, Plus } from "lucide-react"
 import { useState } from "react"
 import { db, storage } from "@/lib/firebaseConfig";
 import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebase/storage";
-import { Label } from "@/components/ui/label"
 import TypeTitlePriority from "./TypeTitlePriority"
 import FileUploadView from "./FileUploadView"
-import { Textarea } from "@/components/ui/textarea"
 import AssignmentCalendar from "./AssignmentCalendar"
 import { addDoc, collection } from "firebase/firestore"
 import { useParams } from "next/navigation"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
+import { AssignmentFile } from "@/lib/types/types"
 
 // TODO: get all folders from student and have them render as select items when creating an assignment
 // link a student id and consultant id to an assignment, which will have those two fields and an array 
 // of objects that are assignments holding the info from the other file and folder location
 
+
 function AddAssignmentModal() {
-    const [dueDate, setDueDate] = useState(null)
-    const [files, setFiles] = useState([])
+    const [dueDate, setDueDate] = useState<Date | null>(null)
+    const [files, setFiles] = useState<File[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [newFolder, setNewFolder] = useState(false)
-    const { id: studentId } = useParams()
+    const { id: studentId } = useParams<{id:string}>()
 
     const [formData, setFormData] = useState({
         title: "",
@@ -38,7 +36,7 @@ function AddAssignmentModal() {
         notes: "",
     })
 
-    const removeFile = (index) => {
+    const removeFile = (index: number) => {
         setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
     }
 
@@ -58,7 +56,7 @@ function AddAssignmentModal() {
         event.target.value = "";
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const assignmentData = {
@@ -67,7 +65,7 @@ function AddAssignmentModal() {
             priority: formData.priority,
             dueDate: dueDate,
             notes: formData.notes,
-            files: [],
+            files: [] as AssignmentFile[],
             createdAt: new Date(),
             student: studentId,
             folderName: '',
@@ -108,7 +106,7 @@ function AddAssignmentModal() {
         }
     }
 
-    const handleInputChange = (name, value) => {
+    const handleInputChange = (name: string, value: string) => {
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,

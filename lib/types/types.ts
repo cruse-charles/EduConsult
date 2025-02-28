@@ -30,3 +30,10 @@ export interface Student extends StudentBase {
 }
 
 export interface StudentFormData extends StudentBase {}
+
+export interface AssignmentFile {
+    storagePath: string;
+    downloadURL: string;
+    originalName: string;
+    uploadedAt: Date;
+}
