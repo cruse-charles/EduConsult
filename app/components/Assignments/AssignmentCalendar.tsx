@@ -5,9 +5,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
-import React from 'react'
 
-function AssignmentCalendar({dueDate, setDueDate}) {
+interface AssignmentCalendarProps {
+    dueDate: Date | undefined;
+    setDueDate: (date: Date | undefined) => void;
+}
+
+function AssignmentCalendar({dueDate, setDueDate}: AssignmentCalendarProps) {
     return (
         <>
             {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}

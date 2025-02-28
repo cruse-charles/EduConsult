@@ -25,7 +25,7 @@ function AddAssignmentModal() {
     const { id: studentId } = useParams<{id:string}>()
     
     // State to manage assignment details
-    const [dueDate, setDueDate] = useState<Date | null>(null)
+    const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
     const [files, setFiles] = useState<File[]>([])
     const [newFolder, setNewFolder] = useState(false)
 
@@ -37,7 +37,7 @@ function AddAssignmentModal() {
         priority: "",
         folderName: "",
         student: studentId,
-        dueDate: null,
+        dueDate: undefined,
         notes: "",
         files: [],
         createdAt: null,

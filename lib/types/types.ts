@@ -42,7 +42,7 @@ export interface Assignment {
     title: string;
     type: string;
     priority: string;
-    dueDate: Date | null;
+    dueDate: Date | undefined;
     notes: string;
     files: AssignmentFile[];
     createdAt: Date | null;
