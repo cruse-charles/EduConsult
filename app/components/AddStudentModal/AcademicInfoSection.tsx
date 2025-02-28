@@ -23,21 +23,21 @@ function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoS
                     <Label htmlFor="grade">
                         Grade Level <span className="text-red-500">*</span>
                     </Label>
-                    <Input id="grade" placeholder="12th Grade" value={formData.academicInformation.grade} name="grade" onChange={handleAcademicInfoChange} required />
+                    <Input id="grade" placeholder="12th Grade" value={Number(formData.academicInformation.grade)} name="grade" onChange={handleAcademicInfoChange} required />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="gpa">GPA</Label>
-                    <Input id="gpa" placeholder="3.85" value={formData.academicInformation.gpa} name="gpa" onChange={handleAcademicInfoChange} />
+                    <Input id="gpa" placeholder="3.85" value={Number(formData.academicInformation.gpa)} name="gpa" onChange={handleAcademicInfoChange} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="satScore">SAT Score</Label>
-                    <Input id="satScore" placeholder="1450" value={formData.academicInformation.sat} name="sat" onChange={handleAcademicInfoChange} />
+                    <Input id="satScore" placeholder="1450" value={Number(formData.academicInformation.sat)} name="sat" onChange={handleAcademicInfoChange} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="toeflScore">TOEFL Score</Label>
-                    <Input id="toeflScore" placeholder="105" value={formData.academicInformation.toefl} name="toefl" onChange={handleAcademicInfoChange} />
+                    <Input id="toeflScore" placeholder="105" value={Number(formData.academicInformation.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
                 </div>
             </div>
         </div>

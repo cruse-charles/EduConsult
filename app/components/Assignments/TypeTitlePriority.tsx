@@ -1,9 +1,14 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Assignment } from '@/lib/types/types'
 
+interface TypeTitlePriorityProps {
+    formData: Assignment;
+    handleInputChange: (field: string, value: string) => void;
+}
 
-function TypeTitlePriority({formData, handleInputChange}) {
+function TypeTitlePriority({formData, handleInputChange}: TypeTitlePriorityProps) {
     return (
         <>
             <div className="space-y-2">

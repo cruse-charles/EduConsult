@@ -1,9 +1,16 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import React from 'react'
+import { Assignment } from '@/lib/types/types';
 
-function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}) {
+interface FolderSelectionProps {
+    formData: Assignment;
+    handleInputChange: (field: string, value: string) => void;
+    setNewFolder: (value: boolean) => void;
+    newFolder: boolean;
+}
+
+function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}: FolderSelectionProps) {
     return (
         <>
             <div className="space-y-2">

@@ -32,15 +32,15 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         },
         academicInformation: {
             currentSchool: '',
-            grade: '',
-            gpa: '',
-            sat: '',
-            toefl: '',
+            grade: null,
+            gpa: null,
+            sat: null,
+            toefl: null,
             targetSchools: '',
         },
-        pendingTasks: '',
-        progress: '',
-        nextDeadline: '',
+        pendingTasks: null,
+        progress: null,
+        nextDeadline: null,
         consultant: null
     });
 

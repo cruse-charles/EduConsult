@@ -2,14 +2,14 @@ import { Timestamp, DocumentReference, DocumentData } from "firebase/firestore";
 
 
 export interface StudentBase {
-    id: string;
+    // id: string;
     academicInformation: {
         currentSchool: string;
-        gpa: number;
-        sat: number;
-        toefl: number;
+        gpa: number | null;
+        sat: number | null;
+        toefl: number | null;
         targetSchools: string;
-        grade: string;
+        grade: number | null;
     };
     personalInformation: {
         firstName: string;
@@ -19,10 +19,10 @@ export interface StudentBase {
         other: string;
         notes: string;
     };
-    consultant: DocumentReference<DocumentData>;
-    pendingTasks: number;
+    consultant: DocumentReference<DocumentData> | null;
+    pendingTasks: number | null;
     nextDeadline: Timestamp | null;
-    progress: number;
+    progress: number | null;
 }
 
 export interface Student extends StudentBase {

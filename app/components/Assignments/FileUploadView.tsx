@@ -6,7 +6,13 @@ import { FileText, Upload, X } from 'lucide-react'
 // TODO: Error with uploading a file, then deleting it, then uploading another file with the same name. 
 // If I upload a different file then the first file again, it's fine. Also, files that are uploaded
 // that are the same name, are not being uploaded again to firebase storage
-function FileUploadView({handleFileUpload, removeFile, files}) {
+interface FileUploadViewProps {
+    handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+    removeFile: (index: number) => void;
+    files: File[];
+}
+
+function FileUploadView({handleFileUpload, removeFile, files}: FileUploadViewProps) {
     return (
         <>
             <div className="space-y-4">
