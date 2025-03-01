@@ -10,22 +10,20 @@ import StudentProfileCard from "./StudentProfileCard";
 import TaskSummary from "./TaskSummary";
 import StudentDetails from "./StudentAssignments";
 import StudentProfileHeader from "./StudentProfileHeader";
+import { useStudent } from "@/hooks/useStudent";
 
 function page() {
     // retrieve the student ID from URL and create state to hold student data
     const { id } = useParams<{id: string}>();
-    const [student, setStudent] = useState<Student | null>(null);
 
     // fetch student data from Firestore when the component mounts and set it to state
+    const studentFromHook = useStudent(id)
+    const [student, setStudent] = useState<Student | null>(null);
+
     useEffect(() => {
-        const fetchstudent = async () => {
-            const docRef = doc(db, "studentUsers", id);
-            const docSnap = await getDoc(docRef);
-            // console.log(docSnap.data())
-            setStudent({id: docSnap.id, ...docSnap.data()} as Student | null);
-        }
-        fetchstudent()
-    }, [])
+        if (studentFromHook) setStudent(studentFromHook);
+    }, [studentFromHook]);
+
 
     // TODO: add monitor uploading process, use these links: 
         // https://firebase.google.com/docs/storage/web/upload-files

@@ -41,7 +41,8 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         pendingTasks: null,
         progress: null,
         nextDeadline: null,
-        consultant: null
+        consultant: null,
+        folders: []
     });
 
     // Handles form submission, adds a new student document to Firestore
@@ -63,6 +64,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
                 progress: formData.progress,
                 nextDeadline: formData.nextDeadline,
                 consultant: consultantDocRef,
+                folders: formData.folders,
             })
 
             // Update the consultant's document to include the new student

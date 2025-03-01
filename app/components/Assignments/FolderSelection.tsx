@@ -28,6 +28,7 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
                 <SelectTrigger>
                     <SelectValue placeholder="Select or create folder" />
                 </SelectTrigger>
+                {/* TODO: Map over folder locations for items */}
                 <SelectContent>
                     <SelectItem value="create-new">+ Create New Folder</SelectItem>
                 </SelectContent>

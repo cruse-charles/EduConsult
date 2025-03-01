@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { db, app } from "@/lib/firebaseConfig";
 
 // TODO: Rename to just useCurrentUser or similar, as this is not just for consultants
-export const useConsultantId = () => {
+export const useConsultant = () => {
     const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
 
     useEffect(() => {

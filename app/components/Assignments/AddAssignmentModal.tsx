@@ -9,18 +9,15 @@ import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebas
 import TypeTitlePriority from "./TypeTitlePriority"
 import FileUploadView from "./FileUploadView"
 import AssignmentCalendar from "./AssignmentCalendar"
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore"
+import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore"
 import { useParams } from "next/navigation"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 import { Assignment, AssignmentFile } from "@/lib/types/types"
-import { useConsultantId } from "@/hooks/useConsultantId"
-
-// TODO: get all folders from student and have them render as select items when creating an assignment
-// link a student id and consultant id to an assignment, which will have those two fields and an array 
-// of objects that are assignments holding the info from the other file and folder location
+import { useConsultantId } from "@/hooks/useConsultant"
 
 
+// TODO: Make modal scrollable
 function AddAssignmentModal() {
     // Retrieve the student ID from URL parameters
     const { id: studentId } = useParams<{id:string}>()
@@ -68,6 +65,7 @@ function AddAssignmentModal() {
         event.target.value = "";
     }
 
+    // TODO: Close modal when submission is successful, and provide error handling
     // Handles form submission, adds a new assignment document to Firestore
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -122,7 +120,8 @@ function AddAssignmentModal() {
             })
 
             await updateDoc(doc(db, "studentUsers", studentId), {
-                assignmentDocId: assignmentDocRef.id
+                assignmentsDocId: assignmentDocRef.id,
+                folders: arrayUnion(formData.folderName)
             })
         } catch (error) {
             console.log("Error adding assignment: ", error)
