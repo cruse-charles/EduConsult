@@ -49,3 +49,9 @@ export interface Assignment {
     student: string;
     folderName: string;
 }
+
+export interface AssignmentDoc {
+    student: string;
+    consultant: string;
+    assignments: Assignment[];
+}

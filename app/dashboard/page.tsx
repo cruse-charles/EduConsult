@@ -9,12 +9,11 @@ import { getAuth, onAuthStateChanged, User as FirebaseUser } from "firebase/auth
 import StudentCard from "../components/StudentCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Student } from "@/lib/types/types";
+import { useConsultantId } from "@/hooks/useConsultantId";
 
 const page = () => {
-    
-    // State to manage students and current user (consultant)
+    // State to manage students and set reference to the consultant document
     const [students, setStudents] = useState<Student[]>([]);
-    const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
     const [consultantDocRef, setConsultantDocRef] = useState<DocumentReference<DocumentData> | null>(null);
 
     // Function to fetch students for the current consultant user
@@ -55,13 +54,8 @@ const page = () => {
 
 
     // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
-    useEffect(() => {
-        const auth = getAuth(app);
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user);
-        });
-        return () => unsubscribe();
-    }, []);
+    const currentUser = useConsultantId();
+    
 
     // 2. Fetch students when user is available
     useEffect(() => {

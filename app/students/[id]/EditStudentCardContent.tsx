@@ -60,9 +60,9 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
                 <div className="text-muted-foreground">School:</div>
                 <Input className='h-7' name='currentSchool' value={editStudent?.academicInformation.currentSchool} onChange={handleAcademicInfoChange}/>
                 <div className="text-muted-foreground">Grade:</div>
-                <Input className='h-7' name='grade' value={editStudent?.academicInformation.grade} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='grade' value={Number(editStudent?.academicInformation.grade)} onChange={handleAcademicInfoChange}/>
                 <div className="text-muted-foreground">GPA:</div>
-                <Input className='h-7' name='gpa' value={editStudent?.academicInformation.gpa} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='gpa' value={Number(editStudent?.academicInformation.gpa)} onChange={handleAcademicInfoChange}/>
             </div>
         </div>
 
