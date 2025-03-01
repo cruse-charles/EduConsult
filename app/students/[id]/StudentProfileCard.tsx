@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { db } from '@/lib/firebaseConfig'
 import { Student } from '@/lib/types/types'
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore'

@@ -3,11 +3,11 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { StudentFormData } from '@/lib/types/types'
+import { Student } from '@/lib/types/types'
 
 interface EditStudentCardContentProps {
-    editStudent: StudentFormData;
-    setEditStudent: React.Dispatch<React.SetStateAction<StudentFormData>>;
+    editStudent: Student;
+    setEditStudent: React.Dispatch<React.SetStateAction<Student>>;
 }
 
 function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardContentProps) {

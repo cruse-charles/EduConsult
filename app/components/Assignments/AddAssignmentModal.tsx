@@ -14,14 +14,17 @@ import { useParams } from "next/navigation"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 import { Assignment, AssignmentFile } from "@/lib/types/types"
-import { useConsultantId } from "@/hooks/useConsultant"
+import { useConsultant } from "@/hooks/useConsultant"
+import { useStudent } from "@/hooks/useStudent"
 
 
 // TODO: Make modal scrollable
 function AddAssignmentModal() {
     // Retrieve the student ID from URL parameters
     const { id: studentId } = useParams<{id:string}>()
-    const consultant = useConsultantId()
+    const consultant = useConsultant()
+    // Making multiple fetches, maybe get redux
+    const student = useStudent(studentId)
     
     // State to manage assignment details
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
@@ -165,7 +168,7 @@ function AddAssignmentModal() {
                             <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
                             
                             {/* Folder Selection Container */}
-                            <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
+                            <FolderSelection student={student} newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
 
                             {/* Calendar Due Date Container */}
                             <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
@@ -183,11 +186,11 @@ function AddAssignmentModal() {
                         </Button>
                     </form>
                     <DialogFooter className="sm:justify-start">
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                        Close
-                        </Button>
-                    </DialogClose>
+                        <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                                Close
+                            </Button>
+                        </DialogClose>
                     </DialogFooter>
             </DialogContent>
         </Dialog>

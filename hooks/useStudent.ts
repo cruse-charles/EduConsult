@@ -3,7 +3,7 @@ import { Student } from "@/lib/types/types";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export const useStudent = (id) => {
+export const useStudent = (id: string) => {
     const [student, setStudent] = useState<Student | null>(null);
 
     useEffect(() => {

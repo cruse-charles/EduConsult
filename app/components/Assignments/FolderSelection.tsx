@@ -1,16 +1,19 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Assignment } from '@/lib/types/types';
+import { useStudent } from '@/hooks/useStudent';
+import { Assignment, Student } from '@/lib/types/types';
 
 interface FolderSelectionProps {
     formData: Assignment;
     handleInputChange: (field: string, value: string) => void;
     setNewFolder: (value: boolean) => void;
     newFolder: boolean;
+    student: Student | null;
 }
 
-function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}: FolderSelectionProps) {
+function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, student}: FolderSelectionProps) {
+    
     return (
         <>
             <div className="space-y-2">
@@ -28,8 +31,10 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
                 <SelectTrigger>
                     <SelectValue placeholder="Select or create folder" />
                 </SelectTrigger>
-                {/* TODO: Map over folder locations for items */}
                 <SelectContent>
+                    {student?.folders.map((folder) => (
+                        <SelectItem key={folder} value={folder}>{folder}</SelectItem>
+                    ))}
                     <SelectItem value="create-new">+ Create New Folder</SelectItem>
                 </SelectContent>
                 </Select>

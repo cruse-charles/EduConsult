@@ -23,6 +23,7 @@ export interface StudentBase {
     pendingTasks: number | null;
     nextDeadline: Timestamp | null;
     progress: number | null;
+    folders: string[]
 }
 
 export interface Student extends StudentBase {
