@@ -9,11 +9,12 @@ import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebas
 import TypeTitlePriority from "./TypeTitlePriority"
 import FileUploadView from "./FileUploadView"
 import AssignmentCalendar from "./AssignmentCalendar"
-import { addDoc, collection } from "firebase/firestore"
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore"
 import { useParams } from "next/navigation"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 import { Assignment, AssignmentFile } from "@/lib/types/types"
+import { useConsultantId } from "@/hooks/useConsultantId"
 
 // TODO: get all folders from student and have them render as select items when creating an assignment
 // link a student id and consultant id to an assignment, which will have those two fields and an array 
@@ -23,6 +24,7 @@ import { Assignment, AssignmentFile } from "@/lib/types/types"
 function AddAssignmentModal() {
     // Retrieve the student ID from URL parameters
     const { id: studentId } = useParams<{id:string}>()
+    const consultant = useConsultantId()
     
     // State to manage assignment details
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
@@ -80,7 +82,7 @@ function AddAssignmentModal() {
             files: [] as AssignmentFile[],
             createdAt: new Date(),
             student: studentId,
-            folderName: '',
+            folderName: formData.folderName,
         }
 
         // Iterate through the files and upload each one to Firebase Storage
@@ -113,7 +115,15 @@ function AddAssignmentModal() {
 
         // Add the assignment document to the Firestore collection
         try {
-            await addDoc(collection(db, "assignments"), assignmentData)
+            const assignmentDocRef = await addDoc(collection(db, "assignments"), {
+                student: studentId,
+                consultant: consultant?.uid,
+                assignments: assignmentData
+            })
+
+            await updateDoc(doc(db, "studentUsers", studentId), {
+                assignmentDocId: assignmentDocRef.id
+            })
         } catch (error) {
             console.log("Error adding assignment: ", error)
         }
@@ -125,6 +135,7 @@ function AddAssignmentModal() {
             [name]: value,
         }))
         console.log(formData)
+        // console.log(consultant)
     }
 
     return (

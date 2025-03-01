@@ -15,7 +15,16 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
         <>
             <div className="space-y-2">
                 <Label htmlFor="priority">Folder</Label>
-                <Select value={formData.folderName} onValueChange={(value) => value === 'create-new' ? setNewFolder(true) : handleInputChange("folderName", value)}>
+                <Select value={newFolder ? "create-new" : formData.folderName} 
+                    onValueChange={(value) => {
+                        if (value === 'create-new') {
+                            setNewFolder(true)
+                            handleInputChange("folderName", "")
+                        } else {
+                            setNewFolder(false)
+                            handleInputChange("folderName", value)
+                        }
+                    }}>
                 <SelectTrigger>
                     <SelectValue placeholder="Select or create folder" />
                 </SelectTrigger>
