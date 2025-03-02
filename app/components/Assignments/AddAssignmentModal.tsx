@@ -36,6 +36,7 @@ function AddAssignmentModal() {
 
     // State to manage loading state and formData for form submission
     const [isLoading, setIsLoading] = useState(false)
+    const [open, setOpen] = useState(false)
     const [formData, setFormData] = useState<Assignment>({
         title: "",
         type: "",
@@ -71,10 +72,13 @@ function AddAssignmentModal() {
         event.target.value = "";
     }
 
-    // TODO: Close modal when submission is successful, and provide error handling
-    // Handles form submission, adds a new assignment document to Firestore
+    // TODO: Provide error handling
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setIsLoading(true)
+
+        // Retreive the ref to the student's assigments
+        let assignmentsDocId = student?.assignmentsDocId
 
         // Data to create a new assignment
         const assignmentData = {
@@ -97,7 +101,6 @@ function AddAssignmentModal() {
             // Create a storage reference and define the path where the file will be stored
             const storagePath = `assignments/${studentId}/${uniqueName}`
             const storageRef = ref(storage, storagePath);
-
             
             // Upload file to the storage reference, create a downloadable URL, and store the file metadata
             try {
@@ -117,21 +120,40 @@ function AddAssignmentModal() {
             }
         }
 
-        // Add the assignment document to the Firestore collection
+        // Add assignment to Firestore and connect ref with studentUser
         try {
-            const assignmentDocRef = await addDoc(collection(db, "assignments"), {
-                student: studentId,
-                consultant: consultant?.uid,
-                assignments: assignmentData
-            })
+            let newAssignmentsDocId = assignmentsDocId;
 
+            // If we have a ref for the student alraedy, just update this doc
+            if (assignmentsDocId) {
+                const assignmentsDocRef = doc(db, 'assignments', assignmentsDocId);
+                await updateDoc(assignmentsDocRef, {
+                    assignments: arrayUnion(assignmentData)
+                }) 
+            } else {
+                // If we don't have a ref, create a new Doc
+                const assignmentDocRef = await addDoc(collection(db, "assignments"), {
+                    student: studentId,
+                    consultant: consultant?.uid,
+                    assignments: assignmentData
+                })
+
+                // Create an assignment doc id with the new assignment doc 
+                newAssignmentsDocId = assignmentDocRef.id
+            }
+
+            // Update folder names in student's doc
             await updateDoc(doc(db, "studentUsers", studentId), {
-                assignmentsDocId: assignmentDocRef.id,
+                assignmentsDocId: newAssignmentsDocId,
                 folders: arrayUnion(formData.folderName)
             })
+
         } catch (error) {
             console.log("Error adding assignment: ", error)
         }
+
+        setIsLoading(false)
+        setOpen(false)
     }
 
     const handleInputChange = (name: string, value: string) => {
@@ -144,9 +166,9 @@ function AddAssignmentModal() {
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={() => setOpen(true)}>
             <DialogTrigger asChild>
-                <Button>
+                <Button onClick={() => setOpen(true)}>
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
                 </Button>

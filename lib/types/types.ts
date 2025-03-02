@@ -20,14 +20,15 @@ export interface StudentBase {
         notes: string;
     };
     consultant: DocumentReference<DocumentData> | null;
-    pendingTasks: number | null;
-    nextDeadline: Timestamp | null;
-    progress: number | null;
-    folders: string[]
 }
 
 export interface Student extends StudentBase {
     id: string;
+    assignmentsDocId?: string;
+    pendingTasks: number | null;
+    nextDeadline: Timestamp | null;
+    progress: number | null;
+    folders: string[]
 }
 
 export interface StudentFormData extends StudentBase {}
