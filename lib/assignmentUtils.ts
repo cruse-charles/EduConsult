@@ -1,6 +1,8 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
+import { Assignment } from "./types/types";
+import { User } from "firebase/auth";
 
 export const fileUpload = async (files: File[], studentId: string) => {
     const filesData = []
@@ -36,7 +38,7 @@ export const fileUpload = async (files: File[], studentId: string) => {
 }
 
 
-export const uploadAssignment = async (assignmentData, assignmentsDocId, studentId, consultant) => {
+export const uploadAssignment = async (assignmentData: Assignment, assignmentsDocId: string | undefined, studentId: string, consultant: User | null) => {
     try {
         let newAssignmentsDocId = assignmentsDocId;
     
