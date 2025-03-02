@@ -12,14 +12,13 @@ import Notes from "./Notes"
 
 import { useState } from "react"
 import { useParams } from "next/navigation"
-import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebase/storage";
-import { db, storage } from "@/lib/firebaseConfig";
+import { db } from "@/lib/firebaseConfig";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore"
 
 import { Assignment, AssignmentFile } from "@/lib/types/types"
 import { useConsultant } from "@/hooks/useConsultant"
 import { useStudent } from "@/hooks/useStudent"
-import { fileUpload } from "@/lib/assignmentUtils"
+import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 
 
@@ -90,7 +89,7 @@ function AddAssignmentModal() {
         event.target.value = "";
     }
 
-    // TODO: Provide error handling
+    // TODO: Improve error handling
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
@@ -99,7 +98,7 @@ function AddAssignmentModal() {
             !formData.title ||
             !formData.type ||
             !formData.folderName ||
-            dueDate
+            !dueDate
         ) {
             alert ("Please fill out all required fields")
             setIsLoading(false)
@@ -123,40 +122,42 @@ function AddAssignmentModal() {
         }
 
         // Upload files to Firebase Storage
-        const filesData = await fileUpload(files, studentId, storage)
+        const filesData = await fileUpload(files, studentId)
         assignmentData.files = filesData
 
         // Add assignment to Firestore and connect ref with studentUser
-        try {
-            let newAssignmentsDocId = assignmentsDocId;
+        // try {
+        //     let newAssignmentsDocId = assignmentsDocId;
 
-            // If we have a ref for the student alraedy, just update this doc
-            if (assignmentsDocId) {
-                const assignmentsDocRef = doc(db, 'assignments', assignmentsDocId);
-                await updateDoc(assignmentsDocRef, {
-                    assignments: arrayUnion(assignmentData)
-                }) 
-            } else {
-                // If we don't have a ref, create a new Doc
-                const assignmentDocRef = await addDoc(collection(db, "assignments"), {
-                    student: studentId,
-                    consultant: consultant?.uid,
-                    assignments: assignmentData
-                })
+        //     // If we have a ref for the student alraedy, just update this doc
+        //     if (assignmentsDocId) {
+        //         const assignmentsDocRef = doc(db, 'assignments', assignmentsDocId);
+        //         await updateDoc(assignmentsDocRef, {
+        //             assignments: arrayUnion(assignmentData)
+        //         }) 
+        //     } else {
+        //         // If we don't have a ref, create a new Doc
+        //         const assignmentDocRef = await addDoc(collection(db, "assignments"), {
+        //             student: studentId,
+        //             consultant: consultant?.uid,
+        //             assignments: assignmentData
+        //         })
 
-                // Create an assignment doc id with the new assignment doc 
-                newAssignmentsDocId = assignmentDocRef.id
-            }
+        //         // Create an assignment doc id with the new assignment doc 
+        //         newAssignmentsDocId = assignmentDocRef.id
+        //     }
 
-            // Update folder names in student's doc
-            await updateDoc(doc(db, "studentUsers", studentId), {
-                assignmentsDocId: newAssignmentsDocId,
-                folders: arrayUnion(formData.folderName)
-            })
+        //     // Update folder names in student's doc
+        //     await updateDoc(doc(db, "studentUsers", studentId), {
+        //         assignmentsDocId: newAssignmentsDocId,
+        //         folders: arrayUnion(formData.folderName)
+        //     })
 
-        } catch (error) {
-            console.log("Error adding assignment: ", error)
-        }
+        // } catch (error) {
+        //     console.log("Error adding assignment: ", error)
+        // }
+
+        await uploadAssignment(assignmentData, assignmentsDocId, studentId, consultant)
 
         setIsLoading(false)
         setOpen(false)
