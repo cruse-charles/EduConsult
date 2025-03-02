@@ -22,7 +22,7 @@ function TypeTitlePriority({formData, handleInputChange}: TypeTitlePriorityProps
                     <Label htmlFor="type">
                     Assignment Type <span className="text-red-500">*</span>
                     </Label>
-                    <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
+                    <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)} required>
                     <SelectTrigger>
                         <SelectValue placeholder="Select type" />
                     </SelectTrigger>
@@ -40,7 +40,7 @@ function TypeTitlePriority({formData, handleInputChange}: TypeTitlePriorityProps
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="priority">Priority Level</Label>
-                    <Select value={formData.priority} onValueChange={(value) => handleInputChange("priority", value)}>
+                    <Select value={formData.priority} onValueChange={(value) => handleInputChange("priority", value)} required>
                     <SelectTrigger>
                         <SelectValue placeholder="Select priority" />
                     </SelectTrigger>

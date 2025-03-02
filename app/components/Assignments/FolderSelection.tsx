@@ -17,8 +17,8 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
     return (
         <>
             <div className="space-y-2">
-                <Label htmlFor="priority">Folder</Label>
-                <Select value={newFolder ? "create-new" : formData.folderName} 
+                <Label htmlFor="priority">Folder  <span className="text-red-500">*</span></Label>
+                <Select required value={newFolder ? "create-new" : formData.folderName} 
                     onValueChange={(value) => {
                         if (value === 'create-new') {
                             setNewFolder(true)

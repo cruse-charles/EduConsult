@@ -52,7 +52,6 @@ const page = () => {
         }
     };
 
-    // TODO: This should be changed to just useCurrentUser or similar, as this is not just for consultants
     // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
     const currentUser = useConsultant();
     
