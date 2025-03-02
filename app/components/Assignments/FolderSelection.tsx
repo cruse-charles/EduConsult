@@ -32,7 +32,7 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
                     <SelectValue placeholder="Select or create folder" />
                 </SelectTrigger>
                 <SelectContent>
-                    {student?.folders.map((folder) => (
+                    {student?.folders?.map((folder) => (
                         <SelectItem key={folder} value={folder}>{folder}</SelectItem>
                     ))}
                     <SelectItem value="create-new">+ Create New Folder</SelectItem>

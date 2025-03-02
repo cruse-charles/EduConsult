@@ -1,24 +1,27 @@
 'use client'
 
+import { FileText, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { FileText, Plus } from "lucide-react"
-import { useState } from "react"
-import { db, storage } from "@/lib/firebaseConfig";
-import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebase/storage";
+
 import TypeTitlePriority from "./TypeTitlePriority"
 import FileUploadView from "./FileUploadView"
 import AssignmentCalendar from "./AssignmentCalendar"
-import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore"
-import { useParams } from "next/navigation"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
+
+import { useState } from "react"
+import { useParams } from "next/navigation"
+import { ref, uploadBytesResumable, uploadBytes, getDownloadURL  } from "firebase/storage";
+import { db, storage } from "@/lib/firebaseConfig";
+import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore"
+
 import { Assignment, AssignmentFile } from "@/lib/types/types"
 import { useConsultant } from "@/hooks/useConsultant"
 import { useStudent } from "@/hooks/useStudent"
 
 
-// TODO: Make modal scrollable
+
 function AddAssignmentModal() {
     // Retrieve the student ID from URL parameters
     const { id: studentId } = useParams<{id:string}>()
@@ -148,7 +151,7 @@ function AddAssignmentModal() {
                     New Assignment
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
 
                 {/* Dialog Header */}
                     <DialogHeader>
@@ -180,18 +183,19 @@ function AddAssignmentModal() {
                             <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
                         </div>
 
-                        {/* Submit Button */}
-                        <Button type="submit" className="w-full mt-4" disabled={isLoading}>
-                            {isLoading ? "Creating..." : "Create Assignment"}
-                        </Button>
-                    </form>
-                    <DialogFooter className="sm:justify-start">
-                        <DialogClose asChild>
+                    <DialogFooter>
+                        <DialogClose asChild>    
                             <Button type="button" variant="secondary">
-                                Close
+                                Cancel
                             </Button>
                         </DialogClose>
+                        {/* Submit Button */}
+                        {/* TODO: Make button close when succssful, disable when loading */}
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? "Creating..." : "Create Assignment"}
+                        </Button>
                     </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )
