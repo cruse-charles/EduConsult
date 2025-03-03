@@ -33,7 +33,16 @@ function AssignmentsList({student}) {
     }
 }, [assignments]);
 
+    const getAssignments = (folder) => {
+        if (!assignments) return []
+        return assignments.filter((assignment) => assignment.folderName === folder)
+    }
 
+    const getCompletedAssignments = (assignmentsInFolder) => {
+        let count = 0
+        assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
+        return count
+    }
 
     return (
         <>
@@ -58,16 +67,18 @@ function AssignmentsList({student}) {
                                             )}
                                             <div className="text-left">
                                                 <h3 className="font-medium">{folder}</h3>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {/* TODO: Add handling for just 1 assignment or no completed assignments */}
+                                                    {getAssignments(folder).length} assignments • {getCompletedAssignments(getAssignments(folder))} completed
+                                                </p>
                                             </div>
                                         </div>
                                     </Button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                    {assignments
-                                        ?.filter((assignment) => assignment.folderName === folder)
-                                        .map((assignment) => (
+                                    {getAssignments(folder).map((assignment) => (
                                         <div key={assignment.title}>{assignment.title}</div>
-                                        ))}
+                                    ))}
                                 </CollapsibleContent>
                             </Collapsible>
                         ))}      

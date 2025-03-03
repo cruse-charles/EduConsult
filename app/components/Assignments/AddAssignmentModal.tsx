@@ -44,6 +44,7 @@ function AddAssignmentModal() {
         notes: "",
         files: [],
         createdAt: null,
+        status: 'pending',
     })
 
     const resetForm = () => {
@@ -57,6 +58,7 @@ function AddAssignmentModal() {
             notes: "",
             files: [],
             createdAt: null,
+            status: 'pending'
         });
         setFiles([]);
         setDueDate(undefined);
@@ -116,6 +118,7 @@ function AddAssignmentModal() {
             createdAt: new Date(),
             student: studentId,
             folderName: formData.folderName,
+            status: formData.status,
         }
 
         // Upload files to Firebase Storage

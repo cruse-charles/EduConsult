@@ -50,6 +50,7 @@ export interface Assignment {
     createdAt: Date | null;
     student: string;
     folderName: string;
+    status: string;
 }
 
 export interface AssignmentDoc {
