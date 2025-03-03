@@ -10,6 +10,7 @@ import TaskSummary from "./TaskSummary";
 import StudentDetails from "./StudentAssignments";
 import StudentProfileHeader from "./StudentProfileHeader";
 import { useStudent } from "@/hooks/useStudent";
+import AssignmentsList from "./AssignmentsList";
 
 function page() {
     // retrieve the student ID from URL and create state to hold student data
@@ -77,6 +78,7 @@ function page() {
 
                         {/* Student Details Section */}
                         <StudentDetails student={student} />
+                        <AssignmentsList student={student} />
                     </div>
                 </div>
             </div>
