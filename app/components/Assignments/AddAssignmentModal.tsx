@@ -71,6 +71,10 @@ function AddAssignmentModal() {
         setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
     }
 
+    // TODO: add monitor uploading process, use these links: 
+    // https://firebase.google.com/docs/storage/web/upload-files
+    // https://www.youtube.com/watch?v=fgdpvwEWJ9M start at around 30:00
+
     // handle file upload, upload each file to Firebase Storage
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event?.target.files

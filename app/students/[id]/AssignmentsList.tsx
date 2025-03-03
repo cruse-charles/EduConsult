@@ -6,7 +6,8 @@ import { db, app } from "@/lib/firebaseConfig";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { Folder, FolderOpen } from "lucide-react";
+import { ChevronDown, ChevronRight, Folder, FolderOpen } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 function AssignmentsList({student}) {
     const [assignments, setAssignments]  = useState(null)
@@ -38,7 +39,7 @@ function AssignmentsList({student}) {
         return assignments.filter((assignment) => assignment.folderName === folder)
     }
 
-    const getCompletedAssignments = (assignmentsInFolder) => {
+    const getCompletedCount = (assignmentsInFolder) => {
         let count = 0
         assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
         return count
@@ -51,7 +52,6 @@ function AssignmentsList({student}) {
                     <div className="space-y-2">
                         {folders?.map((folder) => (
                             <Collapsible
-                                // open={openedFolders.includes(folder)}
                                 onOpenChange={() => setOpenedFolders((prev) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
                             >
                                 <CollapsibleTrigger asChild>
@@ -69,9 +69,19 @@ function AssignmentsList({student}) {
                                                 <h3 className="font-medium">{folder}</h3>
                                                 <p className="text-sm text-muted-foreground">
                                                     {/* TODO: Add handling for just 1 assignment or no completed assignments */}
-                                                    {getAssignments(folder).length} assignments • {getCompletedAssignments(getAssignments(folder))} completed
+                                                    {getAssignments(folder).length} assignments • {getCompletedCount(getAssignments(folder))} completed
                                                 </p>
                                             </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                        <Badge variant="outline">
+                                            {getCompletedCount(getAssignments(folder))}/{getAssignments(folder).length}
+                                        </Badge>
+                                        {openedFolders.includes(folder) ? (
+                                            <ChevronDown className="h-4 w-4" />
+                                        ) : (
+                                            <ChevronRight className="h-4 w-4" />
+                                        )}
                                         </div>
                                     </Button>
                                 </CollapsibleTrigger>

@@ -24,35 +24,6 @@ function page() {
         if (studentFromHook) setStudent(studentFromHook);
     }, [studentFromHook]);
 
-
-    // TODO: add monitor uploading process, use these links: 
-        // https://firebase.google.com/docs/storage/web/upload-files
-        // https://www.youtube.com/watch?v=fgdpvwEWJ9M start at around 30:00
-
-    // handle file upload, upload each file to Firebase Storage
-    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event?.target.files
-        console.log(files);
-
-        if (!files) {
-            console.error('No files selected');
-            return;
-        }
-
-        for (const file of Array.from(files) as File[]) {
-            // Create a storage reference
-            const storageRef = ref(storage, `${file.name}`);
-            
-            // Upload the file to the storage reference
-            try {
-                const snapshot = uploadBytes(storageRef, file)
-                console.log('Uploaded a blob or file!', snapshot);
-            } catch (error) {
-                console.error('Error uploading file:', error);
-            }
-        }
-    }
-
     if (!student) {
         return (
             <div className="flex items-center justify-center min-h-screen">
