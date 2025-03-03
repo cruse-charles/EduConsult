@@ -5,6 +5,7 @@ import { use, useEffect, useState } from "react"
 import { db, app } from "@/lib/firebaseConfig";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 
 function AssignmentsList({student}) {
     const [assignments, setAssignments]  = useState(null)
@@ -38,11 +39,20 @@ function AssignmentsList({student}) {
                     <div className="space-y-2">
                         {folders?.map((folder) => (
                             <Collapsible>
-                                <CollapsibleTrigger>
-                                    {folder}
+                                <CollapsibleTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto"
+                                    >
+                                        {folder}
+                                    </Button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                    <div>Inside Folder</div>
+                                    {assignments
+                                        ?.filter((assignment) => assignment.folderName === folder)
+                                        .map((assignment) => (
+                                        <div key={assignment.title}>{assignment.title}</div>
+                                        ))}
                                 </CollapsibleContent>
                             </Collapsible>
                         ))}      
