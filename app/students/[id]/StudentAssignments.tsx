@@ -3,7 +3,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Student } from "@/lib/types/types"
 
-function StudentAssignments({student} : {student: Student}) {
+function StudentAssignments({student, onAssignmentAdded} : {student: Student}) {
     return (
         <Tabs defaultValue="assignments">
             <TabsList>
@@ -18,7 +18,7 @@ function StudentAssignments({student} : {student: Student}) {
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
                 </Button> */}
-                <AddAssignmentModal />
+                <AddAssignmentModal onAssignmentAdded={onAssignmentAdded}/>
                 </div>
                 {/* <AssignmentList studentId={student.id} /> */}
             </TabsContent>

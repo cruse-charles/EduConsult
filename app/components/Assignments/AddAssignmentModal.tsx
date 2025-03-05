@@ -10,7 +10,7 @@ import AssignmentCalendar from "./AssignmentCalendar"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 
 import { Assignment, AssignmentFile } from "@/lib/types/types"
@@ -20,7 +20,7 @@ import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 
 
-function AddAssignmentModal() {
+function AddAssignmentModal({onAssignmentAdded}) {
     // Retrieve student and consultant
     const { id: studentId } = useParams<{id:string}>()
     const consultant = useConsultant()
@@ -30,6 +30,13 @@ function AddAssignmentModal() {
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
     const [files, setFiles] = useState<File[]>([])
     const [newFolder, setNewFolder] = useState(false)
+    const [folders, setFolders] = useState(student?.folders || [])
+
+    useEffect(() => {
+        if (student?.folders) {
+            setFolders(student.folders);
+        }
+    }, [student?.folders]);
 
     // State to manage loading state and formData for form submission
     const [isLoading, setIsLoading] = useState(false)
@@ -134,6 +141,8 @@ function AddAssignmentModal() {
         setIsLoading(false)
         setOpen(false)
         resetForm()
+        onAssignmentAdded()
+        setFolders((prev) => prev.includes(formData.folderName) ? prev : [...prev, formData.folderName]);
     }
 
     const handleInputChange = (name: string, value: string) => {
@@ -173,7 +182,7 @@ function AddAssignmentModal() {
                         <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
                             
                         {/* Folder Selection Container */}
-                        <FolderSelection student={student} newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
+                        <FolderSelection student={student} folders={folders} newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
 
                         {/* Calendar Due Date Container */}
                         <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>

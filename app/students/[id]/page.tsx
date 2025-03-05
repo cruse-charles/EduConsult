@@ -7,7 +7,7 @@ import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
 import { Student } from "@/lib/types/types";
 import StudentProfileCard from "./StudentProfileCard";
 import TaskSummary from "./TaskSummary";
-import StudentDetails from "./StudentAssignments";
+import StudentAssignments from "./StudentAssignments";
 import StudentProfileHeader from "./StudentProfileHeader";
 import { useStudent } from "@/hooks/useStudent";
 import AssignmentsList from "./AssignmentsList";
@@ -15,6 +15,8 @@ import AssignmentsList from "./AssignmentsList";
 function page() {
     // retrieve the student ID from URL and create state to hold student data
     const { id } = useParams<{id: string}>();
+
+    const [refreshKey, setRefreshKey] = useState(0)
 
     // fetch student data from Firestore when the component mounts and set it to state
     const studentFromHook = useStudent(id)
@@ -48,8 +50,8 @@ function page() {
                         <TaskSummary student={student} />
 
                         {/* Student Details Section */}
-                        <StudentDetails student={student} />
-                        <AssignmentsList student={student} />
+                        <StudentAssignments student={student} onAssignmentAdded={() => setRefreshKey(k => k + 1)}/>
+                        <AssignmentsList student={student} refreshKey={refreshKey}/>
                     </div>
                 </div>
             </div>

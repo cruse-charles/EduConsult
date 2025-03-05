@@ -11,7 +11,7 @@ interface FolderSelectionProps {
     student: Student | null;
 }
 
-function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, student}: FolderSelectionProps) {
+function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, student, folders}: FolderSelectionProps) {
     
     return (
         <>
@@ -31,7 +31,8 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
                     <SelectValue placeholder="Select or create folder" />
                 </SelectTrigger>
                 <SelectContent>
-                    {student?.folders?.map((folder) => (
+                    {/* {student?.folders?.map((folder) => ( */}
+                    {folders?.map((folder) => (
                         <SelectItem key={folder} value={folder}>{folder}</SelectItem>
                     ))}
                     <SelectItem value="create-new">+ Create New Folder</SelectItem>

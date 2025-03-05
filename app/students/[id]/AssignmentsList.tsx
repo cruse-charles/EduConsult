@@ -6,10 +6,11 @@ import { db, app } from "@/lib/firebaseConfig";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight, Folder, FolderOpen } from "lucide-react";
+import { BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 
-function AssignmentsList({student}) {
+function AssignmentsList({student, refreshKey}) {
     const [assignments, setAssignments]  = useState(null)
     const [folders, setFolders] = useState(student.folders)
 
@@ -17,15 +18,28 @@ function AssignmentsList({student}) {
     
     useEffect(() => {
         const fetchAssignments = async () => {
-            const ref = doc(db, "assignments", student.assignmentsDocId)
-            const snapshot = await getDoc(ref)
-            setAssignments(snapshot.data().assignments || [])
+            const assignmentRef = doc(db, "assignments", student.assignmentsDocId)
+            const assignmentSnapshot = await getDoc(assignmentRef)
+            setAssignments(assignmentSnapshot.data().assignments || [])
+
+            // const studentRef = doc(db, "studentUsers", student.id)
+            // const studentSnapshot = await getDoc(studentRef)
+            // setFolders(studentSnapshot.data().folders)
         }
 
         fetchAssignments()
         
         console.log('student', student)
-    }, [student])
+    }, [refreshKey])
+
+    useEffect(() => {
+        const fetchFolders = async () => {
+            const studentRef = doc(db, "studentUsers", student.id)
+            const studentSnapshot = await getDoc(studentRef)
+            setFolders(studentSnapshot.data().folders)
+        }
+        fetchFolders()
+    }, [refreshKey])
 
     useEffect(() => {
     if (assignments) {
@@ -86,9 +100,23 @@ function AssignmentsList({student}) {
                                     </Button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
+                                <div className="space-y-1">
                                     {getAssignments(folder).map((assignment) => (
-                                        <div key={assignment.title}>{assignment.title}</div>
+                                        <div className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
+                                            <div className="flex items-center gap-3 flex-1">    
+                                                <div className="flex items-center gap-2">
+                                                    {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
+                                                    {assignment.type === "document" && <BookOpen className="h-4 w-4 text-green-500" />}
+                                                    {assignment.type === "portfolio" && <Upload className="h-4 w-4 text-purple-500" />}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <div className="font-medium">{assignment.title}</div>
+                                                    <div className="text-sm text-muted-foreground">Due: {format(assignment.dueDate.toDate(), "MMM d, yyyy")}</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     ))}
+                                </div>
                                 </CollapsibleContent>
                             </Collapsible>
                         ))}      
