@@ -14,7 +14,7 @@ export const useStudent = (id: string) => {
             setStudent({id: docSnap.id, ...docSnap.data()} as Student | null);
         }
         fetchstudent()
-    }, [])
+    }, [id])
 
     return student
 }

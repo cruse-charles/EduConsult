@@ -18,13 +18,25 @@ import { useConsultant } from "@/hooks/useConsultant"
 import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
+import { useDispatch, useSelector } from "react-redux"
+import { addFolder, fetchStudent, setStudent } from "@/redux/slices/studentSlice"
+import { RootState } from "@/redux/store";
 
 
 function AddAssignmentModal({onAssignmentAdded}) {
+
+    const dispatch = useDispatch()
+    
     // Retrieve student and consultant
     const { id: studentId } = useParams<{id:string}>()
     const consultant = useConsultant()
     const student = useStudent(studentId)
+
+    useEffect(() => {
+        if (student) {
+            dispatch(setStudent(student));
+        }
+    }, [student, dispatch]);
     
     // State to manage assignment details
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
