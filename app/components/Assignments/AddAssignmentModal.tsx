@@ -19,7 +19,7 @@ import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
-import { addFolder, fetchStudent, setStudent, updateFolders } from "@/redux/slices/studentSlice"
+import { setStudent, updateFolders } from "@/redux/slices/studentSlice"
 import { RootState } from "@/redux/store";
 
 
@@ -43,13 +43,6 @@ function AddAssignmentModal({onAssignmentAdded}) {
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
     const [files, setFiles] = useState<File[]>([])
     const [newFolder, setNewFolder] = useState(false)
-    const [folders, setFolders] = useState(student?.folders || [])
-
-    useEffect(() => {
-        if (student?.folders) {
-            setFolders(student.folders);
-        }
-    }, [student?.folders]);
 
     // State to manage loading state and formData for form submission
     const [isLoading, setIsLoading] = useState(false)
@@ -155,7 +148,6 @@ function AddAssignmentModal({onAssignmentAdded}) {
         setOpen(false)
         resetForm()
         onAssignmentAdded()
-        // setFolders((prev) => prev.includes(formData.folderName) ? prev : [...prev, formData.folderName]);
         dispatch(updateFolders(formData.folderName))
     }
 

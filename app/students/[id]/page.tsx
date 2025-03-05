@@ -51,6 +51,7 @@ function page() {
 
                         {/* Student Details Section */}
                         <StudentAssignments student={student} onAssignmentAdded={() => setRefreshKey(k => k + 1)}/>
+                        {/* <StudentAssignments onAssignmentAdded={() => setRefreshKey(k => k + 1)}/> */}
                         <AssignmentsList student={student} refreshKey={refreshKey}/>
                     </div>
                 </div>

@@ -2,8 +2,28 @@ import AddAssignmentModal from "@/app/components/Assignments/AddAssignmentModal"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Student } from "@/lib/types/types"
+import { fetchStudent } from "@/redux/slices/studentSlice"
+import { useParams } from "next/navigation"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
-function StudentAssignments({student, onAssignmentAdded} : {student: Student}) {
+// function StudentAssignments({student, onAssignmentAdded} : {student: Student}) {
+function StudentAssignments({onAssignmentAdded}) {
+
+    const {id: studentId} = useParams()
+    const dispatch = useDispatch()
+    // const student = fetchStudent(studentId)
+
+        // Dispatch fetchStudent when component mounts
+    useEffect(() => {
+        if (studentId) {
+            dispatch(fetchStudent(studentId));
+        }
+    }, [studentId, dispatch]);
+
+    // Access student from store
+    const student = useSelector((state: RootState) => state.student);
+
     return (
         <Tabs defaultValue="assignments">
             <TabsList>
@@ -26,7 +46,7 @@ function StudentAssignments({student, onAssignmentAdded} : {student: Student}) {
                 <Card>
                 <CardHeader>
                     <CardTitle>Student Calendar</CardTitle>
-                    <CardDescription>View and manage deadlines for {student?.personalInformation.firstName} {student?.personalInformation.lastName}</CardDescription>
+                    <CardDescription>View and manage deadlines for {student?.personalInformation?.firstName} {student?.personalInformation?.lastName}</CardDescription>
                 </CardHeader>
                 {/* <CardContent>
                     <CalendarView studentId={student.id} />

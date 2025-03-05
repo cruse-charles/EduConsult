@@ -10,16 +10,10 @@ interface FolderSelectionProps {
     handleInputChange: (field: string, value: string) => void;
     setNewFolder: (value: boolean) => void;
     newFolder: boolean;
-    student: Student | null;
 }
 
-// function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, student, folders}: FolderSelectionProps) {
 function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}: FolderSelectionProps) {
     const student = useSelector((state) => state.student)
-
-    useEffect(() => {
-        console.log('folder selection', student.folders)
-    }, [])
 
     return (
         <>
@@ -39,7 +33,6 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
                     <SelectValue placeholder="Select or create folder" />
                 </SelectTrigger>
                 <SelectContent>
-                    {/* {student?.folders?.map((folder) => ( */}
                     {student.folders?.map((folder) => (
                         <SelectItem key={folder} value={folder}>{folder}</SelectItem>
                     ))}
