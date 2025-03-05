@@ -19,7 +19,7 @@ import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
-import { addFolder, fetchStudent, setStudent } from "@/redux/slices/studentSlice"
+import { addFolder, fetchStudent, setStudent, updateFolders } from "@/redux/slices/studentSlice"
 import { RootState } from "@/redux/store";
 
 
@@ -32,6 +32,7 @@ function AddAssignmentModal({onAssignmentAdded}) {
     const consultant = useConsultant()
     const student = useStudent(studentId)
 
+    // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
     useEffect(() => {
         if (student) {
             dispatch(setStudent(student));
@@ -154,7 +155,8 @@ function AddAssignmentModal({onAssignmentAdded}) {
         setOpen(false)
         resetForm()
         onAssignmentAdded()
-        setFolders((prev) => prev.includes(formData.folderName) ? prev : [...prev, formData.folderName]);
+        // setFolders((prev) => prev.includes(formData.folderName) ? prev : [...prev, formData.folderName]);
+        dispatch(updateFolders(formData.folderName))
     }
 
     const handleInputChange = (name: string, value: string) => {
@@ -194,7 +196,8 @@ function AddAssignmentModal({onAssignmentAdded}) {
                         <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
                             
                         {/* Folder Selection Container */}
-                        <FolderSelection student={student} folders={folders} newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
+                        {/* <FolderSelection student={student} folders={folders} newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/> */}
+                        <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
 
                         {/* Calendar Due Date Container */}
                         <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>

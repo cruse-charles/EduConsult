@@ -49,7 +49,13 @@ const studentSlice = createSlice({
       if (state) state.assignments = action.payload;
     },
     updateFolders(state, action) {
-      if (state) state.folders = action.payload;
+    //   if (state) state.folders = action.payload;
+
+        if (state.folders.includes(action.payload)) {
+            state.folders = state.folders
+        } else {
+            state.folders = [...state.folders, action.payload]
+        }
     },
   },
 });

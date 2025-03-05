@@ -2,6 +2,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Assignment, Student } from '@/lib/types/types';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 interface FolderSelectionProps {
     formData: Assignment;
@@ -11,8 +13,14 @@ interface FolderSelectionProps {
     student: Student | null;
 }
 
-function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, student, folders}: FolderSelectionProps) {
-    
+// function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, student, folders}: FolderSelectionProps) {
+function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}: FolderSelectionProps) {
+    const student = useSelector((state) => state.student)
+
+    useEffect(() => {
+        console.log('folder selection', student.folders)
+    }, [])
+
     return (
         <>
             <div className="space-y-2">
@@ -32,7 +40,7 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
                 </SelectTrigger>
                 <SelectContent>
                     {/* {student?.folders?.map((folder) => ( */}
-                    {folders?.map((folder) => (
+                    {student.folders?.map((folder) => (
                         <SelectItem key={folder} value={folder}>{folder}</SelectItem>
                     ))}
                     <SelectItem value="create-new">+ Create New Folder</SelectItem>
