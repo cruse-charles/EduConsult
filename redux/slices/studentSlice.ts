@@ -36,7 +36,34 @@ export const fetchStudent = createAsyncThunk(
 //   },
 // });
 
+
 const initialState = {}
+
+// const studentSlice = createSlice({
+//   name: 'student',
+//   initialState,
+//   reducers: {
+//     setStudent(state, action) {
+//       return action.payload;
+//     },
+//     updateFolders(state, action) {
+//     //   if (state) state.folders = action.payload;
+
+//         if (state.folders.includes(action.payload)) {
+//             state.folders = state.folders
+//         } else {
+//             state.folders = [...state.folders, action.payload]
+//         }
+//     },  // Add extraReducers to handle the async thunk
+//     extraReducers: (builder) => {
+//         builder
+//         .addCase(fetchStudent.fulfilled, (state, action) => {
+//             return action.payload;
+//         });
+//     },
+//   },
+// });
+
 
 const studentSlice = createSlice({
   name: 'student',
@@ -45,26 +72,21 @@ const studentSlice = createSlice({
     setStudent(state, action) {
       return action.payload;
     },
-    updateAssignments(state, action) {
-      if (state) state.assignments = action.payload;
-    },
     updateFolders(state, action) {
-    //   if (state) state.folders = action.payload;
-
-        if (state.folders.includes(action.payload)) {
-            state.folders = state.folders
-        } else {
-            state.folders = [...state.folders, action.payload]
-        }
-    },  // Add extraReducers to handle the async thunk
-    extraReducers: (builder) => {
-        builder
-        .addCase(fetchStudent.fulfilled, (state, action) => {
-            return action.payload;
-        });
+      if (state.folders.includes(action.payload)) {
+        state.folders = state.folders;
+      } else {
+        state.folders = [...state.folders, action.payload];
+      }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchStudent.fulfilled, (state, action) => {
+      return action.payload;
+    });
+  },
 });
+
 
 export const { setStudent, updateFolders } = studentSlice.actions;
 export default studentSlice.reducer;

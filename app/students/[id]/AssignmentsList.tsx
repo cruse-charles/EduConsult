@@ -9,8 +9,15 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
 
-function AssignmentsList({student, refreshKey}) {
+// function AssignmentsList({student, refreshKey}) {
+function AssignmentsList() {
+    const dispatch = useDispatch()
+
+    const student = useSelector(state => state.student)
+
     const [assignments, setAssignments]  = useState(null)
     const [folders, setFolders] = useState(student.folders)
 
@@ -21,16 +28,17 @@ function AssignmentsList({student, refreshKey}) {
             const assignmentRef = doc(db, "assignments", student.assignmentsDocId)
             const assignmentSnapshot = await getDoc(assignmentRef)
             setAssignments(assignmentSnapshot.data().assignments || [])
-
-            // const studentRef = doc(db, "studentUsers", student.id)
-            // const studentSnapshot = await getDoc(studentRef)
-            // setFolders(studentSnapshot.data().folders)
         }
 
-        fetchAssignments()
+        if (student?.assignmentsDocId) {
+            fetchAssignments();
+        }
+
+        // fetchAssignments()
         
         console.log('student', student)
-    }, [refreshKey])
+    }, [student])
+    //     }, [student, refreshKey])
 
     useEffect(() => {
         const fetchFolders = async () => {
@@ -38,15 +46,37 @@ function AssignmentsList({student, refreshKey}) {
             const studentSnapshot = await getDoc(studentRef)
             setFolders(studentSnapshot.data().folders)
         }
-        fetchFolders()
-    }, [refreshKey])
+
+        if (student?.id) {
+            fetchFolders();
+        }
+
+        // fetchFolders()
+    }, [student])
+        //     }, [student, refreshKey])
+
+
+
+    // Dispatch fetchStudent when component mounts
+    useEffect(() => {
+        if (student?.assignmentsDocId) {
+            dispatch(fetchAssignments(student.assignmentsDocId));
+        }
+    }, [student?.assignmentsDocId, dispatch]);
+
+        // useEffect(() => {
+        //     if (student) {
+        //         dispatch(setAssignments(student));
+        //     }
+        // }, [student, dispatch]);
+
 
     useEffect(() => {
-    if (assignments) {
-        console.log('assignments', assignments);
-        console.log('folders', folders)
-    }
-}, [assignments]);
+        if (assignments) {
+            console.log('assignments', assignments);
+            console.log('folders', folders)
+        }
+    }, [assignments]);
 
     const getAssignments = (folder) => {
         if (!assignments) return []

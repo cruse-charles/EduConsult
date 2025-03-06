@@ -11,15 +11,27 @@ import StudentAssignments from "./StudentAssignments";
 import StudentProfileHeader from "./StudentProfileHeader";
 import { useStudent } from "@/hooks/useStudent";
 import AssignmentsList from "./AssignmentsList";
+import { useDispatch } from "react-redux";
+import { fetchStudent } from "@/redux/slices/studentSlice";
 
 function page() {
     // retrieve the student ID from URL and create state to hold student data
-    const { id } = useParams<{id: string}>();
+    const { id: studentId } = useParams<{id: string}>();
+        // const {id: studentId} = useParams()
+    const dispatch = useDispatch()
+    // const student = fetchStudent(studentId)
+
+    // Dispatch fetchStudent when component mounts
+    useEffect(() => {
+        if (studentId) {
+            dispatch(fetchStudent(studentId));
+        }
+    }, [studentId, dispatch]);
 
     const [refreshKey, setRefreshKey] = useState(0)
 
     // fetch student data from Firestore when the component mounts and set it to state
-    const studentFromHook = useStudent(id)
+    const studentFromHook = useStudent(studentId)
     const [student, setStudent] = useState<Student | null>(null);
 
     useEffect(() => {
@@ -50,8 +62,7 @@ function page() {
                         <TaskSummary student={student} />
 
                         {/* Student Details Section */}
-                        <StudentAssignments student={student} onAssignmentAdded={() => setRefreshKey(k => k + 1)}/>
-                        {/* <StudentAssignments onAssignmentAdded={() => setRefreshKey(k => k + 1)}/> */}
+                        <StudentAssignments onAssignmentAdded={() => setRefreshKey(k => k + 1)}/>
                         <AssignmentsList student={student} refreshKey={refreshKey}/>
                     </div>
                 </div>
