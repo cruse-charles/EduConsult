@@ -59,15 +59,10 @@ function AssignmentsList() {
 
 
     // Dispatch fetchAssignment
-    // TODO: Might need to double check if we are fetching correctly because I think we aren't 
-    // updating state to the new student for assignments when switching profiles
-    // especially check if it's for a new student too cuz then student doesnt even have assignmentDocId
-    // which may violate this if statement and then we aren't even fetching at all
     useEffect(() => {
-        if (student?.assignmentsDocId) {
-            dispatch(fetchAssignments(student.assignmentsDocId));
-        }
-    }, [student?.assignmentsDocId, dispatch]);
+        dispatch(fetchAssignments(student.assignmentsDocId));
+    }, [student?.id, dispatch]);
+
 
     useEffect(() => {
         if (assignments) {
