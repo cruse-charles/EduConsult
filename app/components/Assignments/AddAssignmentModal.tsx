@@ -21,6 +21,9 @@ import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { setStudent, updateFolders } from "@/redux/slices/studentSlice"
 import { RootState } from "@/redux/store";
+import { addAssignment } from "@/redux/slices/assignmentsSlice"
+import { Timestamp } from "firebase/firestore";
+
 
 
 function AddAssignmentModal({onAssignmentAdded}) {
@@ -129,7 +132,8 @@ function AddAssignmentModal({onAssignmentAdded}) {
             title: formData.title,
             type: formData.type,
             priority: formData.priority,
-            dueDate: dueDate,
+            // dueDate: dueDate,
+            dueDate: Timestamp.fromDate(dueDate),
             notes: formData.notes,
             files: [] as AssignmentFile[],
             createdAt: new Date(),
@@ -143,6 +147,9 @@ function AddAssignmentModal({onAssignmentAdded}) {
         assignmentData.files = filesData
 
         await uploadAssignment(assignmentData, assignmentsDocId, studentId, consultant)
+        
+        // What about it's ID?
+        dispatch(addAssignment(assignmentData))
 
         setIsLoading(false)
         setOpen(false)

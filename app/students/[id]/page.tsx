@@ -22,6 +22,7 @@ function page() {
     // const student = fetchStudent(studentId)
 
     // Dispatch fetchStudent when component mounts
+    // TODO: For some reason, I'm not seeing the redux state update when i switch between profiles
     useEffect(() => {
         if (studentId) {
             dispatch(fetchStudent(studentId));

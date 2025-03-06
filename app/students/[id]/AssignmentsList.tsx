@@ -15,29 +15,30 @@ import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
 // function AssignmentsList({student, refreshKey}) {
 function AssignmentsList() {
     const dispatch = useDispatch()
+    const assignments = useSelector(state => state.assignments.assignments)
 
     const student = useSelector(state => state.student)
 
-    const [assignments, setAssignments]  = useState(null)
+    // const [assignments, setAssignments]  = useState(null)
     const [folders, setFolders] = useState(student.folders)
 
     const [openedFolders, setOpenedFolders] = useState([])
     
-    useEffect(() => {
-        const fetchAssignments = async () => {
-            const assignmentRef = doc(db, "assignments", student.assignmentsDocId)
-            const assignmentSnapshot = await getDoc(assignmentRef)
-            setAssignments(assignmentSnapshot.data().assignments || [])
-        }
+    // useEffect(() => {
+    //     const fetchAssignments = async () => {
+    //         const assignmentRef = doc(db, "assignments", student.assignmentsDocId)
+    //         const assignmentSnapshot = await getDoc(assignmentRef)
+    //         setAssignments(assignmentSnapshot.data().assignments || [])
+    //     }
 
-        if (student?.assignmentsDocId) {
-            fetchAssignments();
-        }
+    //     if (student?.assignmentsDocId) {
+    //         fetchAssignments();
+    //     }
 
-        // fetchAssignments()
+    //     // fetchAssignments()
         
-        console.log('student', student)
-    }, [student])
+    //     console.log('student', student)
+    // }, [student])
     //     }, [student, refreshKey])
 
     useEffect(() => {
@@ -57,19 +58,16 @@ function AssignmentsList() {
 
 
 
-    // Dispatch fetchStudent when component mounts
+    // Dispatch fetchAssignment
+    // TODO: Might need to double check if we are fetching correctly because I think we aren't 
+    // updating state to the new student for assignments when switching profiles
+    // especially check if it's for a new student too cuz then student doesnt even have assignmentDocId
+    // which may violate this if statement and then we aren't even fetching at all
     useEffect(() => {
         if (student?.assignmentsDocId) {
             dispatch(fetchAssignments(student.assignmentsDocId));
         }
     }, [student?.assignmentsDocId, dispatch]);
-
-        // useEffect(() => {
-        //     if (student) {
-        //         dispatch(setAssignments(student));
-        //     }
-        // }, [student, dispatch]);
-
 
     useEffect(() => {
         if (assignments) {

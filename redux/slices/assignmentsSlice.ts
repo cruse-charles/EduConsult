@@ -12,7 +12,15 @@ export const fetchAssignments = createAsyncThunk(
 );
 
 
-const initialState = {}
+// const initialState = {}
+
+const initialState = {
+  assignments: [],
+  id: null,
+  student: null,
+  consultant: null,
+}
+
 
 const assignmentsSlice = createSlice({
   name: 'assignments',
@@ -21,8 +29,8 @@ const assignmentsSlice = createSlice({
     setAssignments(state, action) {
       return action.payload;
     },
-    updateAssignments(state, action) {
-      if (state) state.assignments = action.payload;
+    addAssignment(state, action) {
+      if (state) state.assignments = [...state.assignments, action.payload];
     },
   },
   extraReducers: (builder) => {
@@ -34,5 +42,5 @@ const assignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, updateAssignments } = assignmentsSlice.actions;
+export const { setAssignments, addAssignment } = assignmentsSlice.actions;
 export default assignmentsSlice.reducer;
