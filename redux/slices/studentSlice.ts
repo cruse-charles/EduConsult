@@ -1,6 +1,10 @@
 import { db } from '@/lib/firebaseConfig';
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { doc, getDoc } from 'firebase/firestore';
+
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+
+import { Student } from '@/lib/types/types';
+
 
 export const fetchStudent = createAsyncThunk(
     'student/fetchStudent',
@@ -21,10 +25,10 @@ const studentSlice = createSlice({
       return action.payload;
     },
     updateFolders(state, action) {
-      if (state.folders.includes(action.payload)) {
-        state.folders = state.folders;
-      } else {
-        state.folders = [...state.folders, action.payload];
+      if (!state) return
+      const student = state as Student
+      if (!student.folders.includes(action.payload)) {
+        student.folders.push(action.payload)
       }
     },
   },
