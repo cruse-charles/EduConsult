@@ -5,8 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { useSelector } from "react-redux"
 
-// function StudentAssignments({student, onAssignmentAdded} : {student: Student}) {
-function StudentAssignments({onAssignmentAdded}) {
+function StudentAssignments() {
 
     // Access student from store
     const student = useSelector((state: RootState) => state.student);
@@ -25,7 +24,7 @@ function StudentAssignments({onAssignmentAdded}) {
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
                 </Button> */}
-                <AddAssignmentModal onAssignmentAdded={onAssignmentAdded}/>
+                <AddAssignmentModal/>
                 </div>
                 {/* <AssignmentList studentId={student.id} /> */}
             </TabsContent>

@@ -1,9 +1,7 @@
 'use client'
 
-import { db, storage } from "@/lib/firebaseConfig";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ref, uploadBytesResumable, uploadBytes  } from "firebase/storage";
 import { Student } from "@/lib/types/types";
 import StudentProfileCard from "./StudentProfileCard";
 import TaskSummary from "./TaskSummary";
@@ -11,33 +9,34 @@ import StudentAssignments from "./StudentAssignments";
 import StudentProfileHeader from "./StudentProfileHeader";
 import { useStudent } from "@/hooks/useStudent";
 import AssignmentsList from "./AssignmentsList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
+import { AppDispatch } from "@/redux/store";
 
 function page() {
-    // retrieve the student ID from URL and create state to hold student data
+    // retrieve the student ID from URL and initialize dispatch for data retrieval and state management
     const { id: studentId } = useParams<{id: string}>();
-        // const {id: studentId} = useParams()
-    const dispatch = useDispatch()
-    // const student = fetchStudent(studentId)
+    const dispatch = useDispatch<AppDispatch>()
 
-    // Dispatch fetchStudent when component mounts
-    // TODO: For some reason, I'm not seeing the redux state update when i switch between profiles
+    // Dispatch fetchStudent, retrieving student information from Firebase
     useEffect(() => {
         if (studentId) {
             dispatch(fetchStudent(studentId));
         }
     }, [studentId, dispatch]);
 
-    const [refreshKey, setRefreshKey] = useState(0)
-
     // fetch student data from Firestore when the component mounts and set it to state
     const studentFromHook = useStudent(studentId)
     const [student, setStudent] = useState<Student | null>(null);
 
+    // TODO: Remove using hook to set student and use Redux. Will need to adjust the StudentProfileCard
+    // and EditStudentCardContent components. They are using the local state here, so need to migrate
+    // logic to reducer
     useEffect(() => {
         if (studentFromHook) setStudent(studentFromHook);
     }, [studentFromHook]);
+
+    // const student = useSelector((state) => state.student);
 
     if (!student) {
         return (
@@ -63,8 +62,8 @@ function page() {
                         <TaskSummary student={student} />
 
                         {/* Student Details Section */}
-                        <StudentAssignments onAssignmentAdded={() => setRefreshKey(k => k + 1)}/>
-                        <AssignmentsList student={student} refreshKey={refreshKey}/>
+                        <StudentAssignments />
+                        <AssignmentsList />
                     </div>
                 </div>
             </div>

@@ -26,7 +26,7 @@ import { Timestamp } from "firebase/firestore";
 
 
 
-function AddAssignmentModal({onAssignmentAdded}) {
+function AddAssignmentModal() {
 
     const dispatch = useDispatch()
     
@@ -154,7 +154,6 @@ function AddAssignmentModal({onAssignmentAdded}) {
         setIsLoading(false)
         setOpen(false)
         resetForm()
-        onAssignmentAdded()
         dispatch(updateFolders(formData.folderName))
     }
 

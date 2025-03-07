@@ -12,66 +12,20 @@ import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
 
-// function AssignmentsList({student, refreshKey}) {
 function AssignmentsList() {
     const dispatch = useDispatch()
     const assignments = useSelector(state => state.assignments.assignments)
-
+    const folders = useSelector(state => state.student.folders)
     const student = useSelector(state => state.student)
 
-    // const [assignments, setAssignments]  = useState(null)
-    const [folders, setFolders] = useState(student.folders)
-
     const [openedFolders, setOpenedFolders] = useState([])
-    
-    // useEffect(() => {
-    //     const fetchAssignments = async () => {
-    //         const assignmentRef = doc(db, "assignments", student.assignmentsDocId)
-    //         const assignmentSnapshot = await getDoc(assignmentRef)
-    //         setAssignments(assignmentSnapshot.data().assignments || [])
-    //     }
-
-    //     if (student?.assignmentsDocId) {
-    //         fetchAssignments();
-    //     }
-
-    //     // fetchAssignments()
-        
-    //     console.log('student', student)
-    // }, [student])
-    //     }, [student, refreshKey])
-
-    useEffect(() => {
-        const fetchFolders = async () => {
-            const studentRef = doc(db, "studentUsers", student.id)
-            const studentSnapshot = await getDoc(studentRef)
-            setFolders(studentSnapshot.data().folders)
-        }
-
-        if (student?.id) {
-            fetchFolders();
-        }
-
-        // fetchFolders()
-    }, [student])
-        //     }, [student, refreshKey])
-
-
 
     // Dispatch fetchAssignment
     useEffect(() => {
         dispatch(fetchAssignments(student.assignmentsDocId));
     }, [student?.id, dispatch]);
 
-
-    useEffect(() => {
-        if (assignments) {
-            console.log('assignments', assignments);
-            console.log('folders', folders)
-        }
-    }, [assignments]);
-
-    const getAssignments = (folder) => {
+    const getFilteredAssignments = (folder) => {
         if (!assignments) return []
         return assignments.filter((assignment) => assignment.folderName === folder)
     }
@@ -106,13 +60,13 @@ function AssignmentsList() {
                                                 <h3 className="font-medium">{folder}</h3>
                                                 <p className="text-sm text-muted-foreground">
                                                     {/* TODO: Add handling for just 1 assignment or no completed assignments */}
-                                                    {getAssignments(folder).length} assignments • {getCompletedCount(getAssignments(folder))} completed
+                                                    {getFilteredAssignments(folder).length} assignments • {getCompletedCount(getFilteredAssignments(folder))} completed
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
                                         <Badge variant="outline">
-                                            {getCompletedCount(getAssignments(folder))}/{getAssignments(folder).length}
+                                            {getCompletedCount(getFilteredAssignments(folder))}/{getFilteredAssignments(folder).length}
                                         </Badge>
                                         {openedFolders.includes(folder) ? (
                                             <ChevronDown className="h-4 w-4" />
@@ -124,7 +78,7 @@ function AssignmentsList() {
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
                                 <div className="space-y-1">
-                                    {getAssignments(folder).map((assignment) => (
+                                    {getFilteredAssignments(folder).map((assignment) => (
                                         <div className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
                                             <div className="flex items-center gap-3 flex-1">    
                                                 <div className="flex items-center gap-2">
