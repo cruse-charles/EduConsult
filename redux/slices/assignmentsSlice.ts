@@ -2,6 +2,8 @@ import { db } from "@/lib/firebaseConfig";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, getDoc } from "firebase/firestore";
 
+import { AssignmentDoc } from "@/lib/types/types";
+
 export const fetchAssignments = createAsyncThunk(
     'student/fetchAssignments',
     async (assignmentsDocId: string) => {
@@ -11,15 +13,7 @@ export const fetchAssignments = createAsyncThunk(
     }
 );
 
-
-// const initialState = {}
-
-const initialState = {
-  assignments: [],
-  id: null,
-  student: null,
-  consultant: null,
-}
+const initialState = {}
 
 
 const assignmentsSlice = createSlice({
@@ -30,7 +24,8 @@ const assignmentsSlice = createSlice({
       return action.payload;
     },
     addAssignment(state, action) {
-      if (state) state.assignments = [...state.assignments, action.payload];
+        const assignments = state as AssignmentDoc
+        if (state) assignments.assignments = [...assignments.assignments, action.payload];
     },
   },
   extraReducers: (builder) => {
