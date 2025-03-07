@@ -2,13 +2,15 @@ import AddAssignmentModal from "@/app/components/Assignments/AddAssignmentModal"
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Student } from "@/lib/types/types";
+import { RootState } from "@/redux/store";
 
 import { useSelector } from "react-redux"
 
 function StudentAssignments() {
 
     // Access student from store
-    const student = useSelector((state: RootState) => state.student);
+    const student = useSelector((state: RootState) => state.student) as Student;
 
     return (
         <Tabs defaultValue="assignments">
