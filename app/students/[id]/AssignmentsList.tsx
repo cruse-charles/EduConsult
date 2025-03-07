@@ -1,6 +1,6 @@
 'use client'
 
-import { collection, doc, getDoc } from "firebase/firestore"
+import { collection, doc, getDoc, Timestamp } from "firebase/firestore"
 import { use, useEffect, useState } from "react"
 import { db, app } from "@/lib/firebaseConfig";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,29 +11,50 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
+import { Assignment, AssignmentDoc, Student } from "@/lib/types/types";
+import { AppDispatch, RootState } from "@/redux/store";
 
 function AssignmentsList() {
-    const dispatch = useDispatch()
-    const assignments = useSelector(state => state.assignments.assignments)
-    const folders = useSelector(state => state.student.folders)
-    const student = useSelector(state => state.student)
+    const dispatch = useDispatch<AppDispatch>()
+    // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
+    // const folders = useSelector((state: RootState) => state.student.folders) as string[]
 
-    const [openedFolders, setOpenedFolders] = useState([])
+    const assignments = useSelector((state: RootState) => {
+        const assignmentsState = state.assignments as AssignmentDoc
+        return assignmentsState?.assignments || []
+    })
+
+    const folders = useSelector((state: RootState) => {
+        const studentState = state.student as Student
+        return studentState?.folders || []
+    })
+    const student = useSelector((state: RootState) => state.student)
+
+    const [openedFolders, setOpenedFolders] = useState<string[]>([])
 
     // Dispatch fetchAssignment
     useEffect(() => {
-        dispatch(fetchAssignments(student.assignmentsDocId));
-    }, [student?.id, dispatch]);
+        const studentState = student as Student
+        if (studentState?.assignmentsDocId) {
+            dispatch(fetchAssignments(studentState.assignmentsDocId));
+        }
+    }, [student, dispatch]);
 
-    const getFilteredAssignments = (folder) => {
+    const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
         return assignments.filter((assignment) => assignment.folderName === folder)
     }
 
-    const getCompletedCount = (assignmentsInFolder) => {
+    const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
         let count = 0
         assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
         return count
+    }
+
+    const formatDueDate = (dueDate: Date | Timestamp | undefined) => {
+        if (!dueDate || dueDate === undefined) return "No due date";
+        const date = dueDate instanceof Date ? dueDate : dueDate.toDate();
+        return format(date, "MMM d, yyyy");
     }
 
     return (
@@ -43,7 +64,7 @@ function AssignmentsList() {
                     <div className="space-y-2">
                         {folders?.map((folder) => (
                             <Collapsible
-                                onOpenChange={() => setOpenedFolders((prev) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
+                                onOpenChange={() => setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
                             >
                                 <CollapsibleTrigger asChild>
                                     <Button
@@ -88,7 +109,7 @@ function AssignmentsList() {
                                                 </div>
                                                 <div className="flex-1">
                                                     <div className="font-medium">{assignment.title}</div>
-                                                    <div className="text-sm text-muted-foreground">Due: {format(assignment.dueDate.toDate(), "MMM d, yyyy")}</div>
+                                                    <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
                                                 </div>
                                             </div>
                                         </div>

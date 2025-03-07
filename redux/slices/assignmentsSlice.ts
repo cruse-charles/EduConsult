@@ -30,8 +30,6 @@ const assignmentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAssignments.fulfilled, (state, action) => {
-        console.log("REDUCER HIT: fetchAssignments.fulfilled");
-        console.log("Payload:", action.payload);
       return action.payload;
     });
   },
