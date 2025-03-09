@@ -14,6 +14,7 @@ import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
 import { Assignment, AssignmentDoc, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
 import AssignmentDetailModal from "./AssignmentDetailModal";
+import { formatDueDate } from "@/lib/utils";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
@@ -54,11 +55,11 @@ function AssignmentsList() {
         return count
     }
 
-    const formatDueDate = (dueDate: Date | Timestamp | undefined) => {
-        if (!dueDate || dueDate === undefined) return "No due date";
-        const date = dueDate instanceof Date ? dueDate : dueDate.toDate();
-        return format(date, "MMM d, yyyy");
-    }
+    // const formatDueDate = (dueDate: Date | Timestamp | undefined) => {
+    //     if (!dueDate || dueDate === undefined) return "No due date";
+    //     const date = dueDate instanceof Date ? dueDate : dueDate.toDate();
+    //     return format(date, "MMM d, yyyy");
+    // }
 
     return (
         <>
