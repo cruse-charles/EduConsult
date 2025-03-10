@@ -17,6 +17,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}) {
         </DialogHeader>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Assignment Details */}
             <div className="lg:col-span-1 space-y-4">
                 <div className="space-y-3">
                     <h4 className="font-medium">Assignment Overview</h4>
@@ -53,6 +54,13 @@ function AssignmentDetailModal({assignment, open, onOpenChange}) {
                     <div className="p-3 bg-muted/50 rounded-md">
                         <p className="text-sm">{assignment?.instructions}</p>
                     </div>
+                </div>
+            </div>
+
+             {/* Timeline */}
+            <div className="lg:col-span-2 space-y-4">
+                <div className="flex items-center justify-between">
+                    <h4 className="font-medium">Assignment Timeline</h4>
                 </div>
             </div>
         </div>

@@ -23,9 +23,16 @@ function AssignmentsList() {
 
     const [selectedAssignment, setSelectedAssignment] = useState(null)
 
+    // old
+    // const assignments = useSelector((state: RootState) => {
+    //     const assignmentsState = state.assignments as AssignmentDoc
+    //     return assignmentsState?.assignments || []
+    // })
+    // old
+
     const assignments = useSelector((state: RootState) => {
         const assignmentsState = state.assignments as AssignmentDoc
-        return assignmentsState?.assignments || []
+        return assignmentsState || []
     })
 
     const folders = useSelector((state: RootState) => {
@@ -36,24 +43,70 @@ function AssignmentsList() {
 
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
 
+    // old
     // Dispatch fetchAssignment
+    // useEffect(() => {
+    //     const studentState = student as Student
+    //     if (studentState?.assignmentsDocId) {
+    //         dispatch(fetchAssignments(studentState.assignmentsDocId));
+    //     }
+    // }, [student, dispatch]);
+    // old
+
+    // new
     useEffect(() => {
         const studentState = student as Student
-        if (studentState?.assignmentsDocId) {
-            dispatch(fetchAssignments(studentState.assignmentsDocId));
+        if (studentState?.assignmentDocIds) {
+            dispatch(fetchAssignments(studentState.assignmentDocIds));
         }
+
+
+
+        const testGet = async () => {
+            const ref1 = await getDoc(doc(db, "assignments", "timelineTest"));
+            const ref2 = await getDoc(doc(db, "assignments", "timelineTest2"));
+            console.log("Exists:", ref1.data(), ref2.data());
+        };
+        testGet()
     }, [student, dispatch]);
 
+
+    // new
+
+    // old function
+    // const getFilteredAssignments = (folder: string) => {
+    //     if (!assignments) return []
+    //     return assignments.filter((assignment) => assignment.folderName === folder)
+    // }
+    // old
+
+    // new function
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
-        return assignments.filter((assignment) => assignment.folderName === folder)
+        return assignments.filter((assignment) => assignment.folder === folder)
+        // return assignments
     }
+    // new
 
+    // old
+    // const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
+    //     let count = 0
+    //     assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
+    //     return count
+    // }
+    // old
+
+    // new
     const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
         let count = 0
-        assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
+        // assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
         return count
     }
+    // new
+
+    useEffect(() => {
+        console.log(assignments)
+    },[assignments])
 
     // const formatDueDate = (dueDate: Date | Timestamp | undefined) => {
     //     if (!dueDate || dueDate === undefined) return "No due date";
