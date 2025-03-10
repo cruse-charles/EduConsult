@@ -61,7 +61,7 @@ const assignmentsSlice = createSlice({
       return action.payload;
     },
     addAssignment(state, action) {
-        const assignments = state as AssignmentDoc
+        const assignments = state
         if (state) assignments.assignments = [...assignments.assignments, action.payload];
     },
   },

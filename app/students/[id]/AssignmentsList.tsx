@@ -59,15 +59,6 @@ function AssignmentsList() {
         if (studentState?.assignmentDocIds) {
             dispatch(fetchAssignments(studentState.assignmentDocIds));
         }
-
-
-
-        const testGet = async () => {
-            const ref1 = await getDoc(doc(db, "assignments", "timelineTest"));
-            const ref2 = await getDoc(doc(db, "assignments", "timelineTest2"));
-            console.log("Exists:", ref1.data(), ref2.data());
-        };
-        testGet()
     }, [student, dispatch]);
 
 
