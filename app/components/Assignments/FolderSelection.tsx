@@ -19,14 +19,17 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
         <>
             <div className="space-y-2">
                 <Label htmlFor="priority">Folder  <span className="text-red-500">*</span></Label>
-                <Select required value={newFolder ? "create-new" : formData.folderName} 
+                {/* <Select required value={newFolder ? "create-new" : formData.folderName}  */}
+                <Select required value={newFolder ? "create-new" : formData.folder}
                     onValueChange={(value) => {
                         if (value === 'create-new') {
                             setNewFolder(true)
-                            handleInputChange("folderName", "")
+                            // handleInputChange("folderName", "")
+                            handleInputChange("folder", "")
                         } else {
                             setNewFolder(false)
-                            handleInputChange("folderName", value)
+                            // handleInputChange("folderName", value)
+                            handleInputChange("folder", value)
                         }
                     }}>
                 <SelectTrigger>
@@ -43,7 +46,8 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
             { newFolder && (
                 <div className="space-y-2">
                     <Label htmlFor="folder-name">New Folder Name</Label>
-                    <Input id="folder-name" placeholder="Enter new folder name" value={formData.folderName} onChange={(e) => handleInputChange("folderName", e.target.value)} />
+                    {/* <Input id="folder-name" placeholder="Enter new folder name" value={formData.folderName} onChange={(e) => handleInputChange("folderName", e.target.value)} /> */}
+                    <Input id="folder" placeholder="Enter new folder name" value={formData.folder} onChange={(e) => handleInputChange("folder", e.target.value)} />
                 </div>
             )}
         </>

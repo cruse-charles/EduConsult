@@ -94,7 +94,8 @@ export const uploadAssignment = async (assignmentData: Assignment, studentId: st
             consultant: consultant?.uid,
             createdAt: assignmentData.createdAt,
             dueDate: assignmentData.dueDate,
-            folder: assignmentData.folderName,
+            // folder: assignmentData.folderName,
+            folder: assignmentData.folder,
             title: assignmentData.title,
             type: assignmentData.type,
             timeline: [{
@@ -109,7 +110,8 @@ export const uploadAssignment = async (assignmentData: Assignment, studentId: st
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {
             assignmentDocIds: arrayUnion(assignmentDocId),
-            folders: arrayUnion(assignmentData.folderName)
+            // folders: arrayUnion(assignmentData.folderName)
+            folders: arrayUnion(assignmentData.folder)
         })
     
         return assignmentDocId

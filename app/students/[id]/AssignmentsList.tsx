@@ -67,7 +67,8 @@ function AssignmentsList() {
         if (studentState?.assignmentDocIds) {
             dispatch(fetchAssignments(studentState.assignmentDocIds));
         }
-    }, [student, dispatch]);
+    // }, [student, dispatch]);
+    }, [dispatch]);
 
 
     // new
@@ -104,8 +105,15 @@ function AssignmentsList() {
     // new
 
     useEffect(() => {
-        console.log(assignments)
-    },[assignments])
+        console.log('=== DEBUGGING ASSIGNMENTS ===');
+        console.log('All assignments:', assignments);
+        console.log('All folders:', folders);
+        
+        folders?.forEach(folder => {
+            const filteredAssignments = getFilteredAssignments(folder);
+            console.log(`Folder "${folder}" has ${filteredAssignments.length} assignments:`, filteredAssignments);
+        });
+    }, [assignments, folders]);
 
     // const formatDueDate = (dueDate: Date | Timestamp | undefined) => {
     //     if (!dueDate || dueDate === undefined) return "No due date";

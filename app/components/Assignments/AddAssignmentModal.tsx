@@ -169,7 +169,8 @@ function AddAssignmentModal() {
         if (
             !formData.title ||
             !formData.type ||
-            !formData.folderName ||
+            // !formData.folderName ||
+            !formData.folder ||
             !dueDate
         ) {
             alert ("Please fill out all required fields")
@@ -191,7 +192,8 @@ function AddAssignmentModal() {
             files: [] as AssignmentFile[],
             createdAt: new Date(),
             student: studentId,
-            folderName: formData.folderName,
+            // folderName: formData.folderName,
+            folder: formData.folder,
             status: formData.status,
         }
 
@@ -207,7 +209,8 @@ function AddAssignmentModal() {
         setIsLoading(false)
         setOpen(false)
         resetForm()
-        dispatch(updateFolders(formData.folderName))
+        // dispatch(updateFolders(formData.folderName))
+        dispatch(updateFolders(formData.folder))
         // new
         dispatch(updateAssignmentDocIds(assignmentDocId))
         // new
