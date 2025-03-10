@@ -19,7 +19,7 @@ import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
-import { setStudent, updateFolders } from "@/redux/slices/studentSlice"
+import { setStudent, updateFolders, updateAssignmentDocIds } from "@/redux/slices/studentSlice"
 import { RootState } from "@/redux/store";
 import { addAssignment } from "@/redux/slices/assignmentsSlice"
 import { Timestamp } from "firebase/firestore";
@@ -108,7 +108,60 @@ function AddAssignmentModal() {
         event.target.value = "";
     }
 
-    // TODO: Improve error handling
+    // OLD
+    // // TODO: Improve error handling
+    // const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    //     e.preventDefault()
+    //     setIsLoading(true)
+
+    //     if (
+    //         !formData.title ||
+    //         !formData.type ||
+    //         !formData.folderName ||
+    //         !dueDate
+    //     ) {
+    //         alert ("Please fill out all required fields")
+    //         setIsLoading(false)
+    //         return
+    //     }
+
+    //     // Retreive the ref to the student's assigments
+    //     let assignmentsDocId = student?.assignmentsDocId
+
+    //     // Data to create a new assignment
+    //     const assignmentData = {
+    //         title: formData.title,
+    //         type: formData.type,
+    //         priority: formData.priority,
+    //         // dueDate: dueDate,
+    //         dueDate: Timestamp.fromDate(dueDate),
+    //         notes: formData.notes,
+    //         files: [] as AssignmentFile[],
+    //         createdAt: new Date(),
+    //         student: studentId,
+    //         folderName: formData.folderName,
+    //         status: formData.status,
+    //     }
+
+    //     // Upload files to Firebase Storage
+    //     const filesData = await fileUpload(files, studentId)
+    //     assignmentData.files = filesData
+
+    //     await uploadAssignment(assignmentData, assignmentsDocId, studentId, consultant)
+        
+    //     // What about it's ID?
+    //     dispatch(addAssignment(assignmentData))
+
+    //     setIsLoading(false)
+    //     setOpen(false)
+    //     resetForm()
+    //     dispatch(updateFolders(formData.folderName))
+    // }
+    // OLD
+
+
+    // NEW
+        // TODO: Improve error handling
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
@@ -125,7 +178,7 @@ function AddAssignmentModal() {
         }
 
         // Retreive the ref to the student's assigments
-        let assignmentsDocId = student?.assignmentsDocId
+        // let assignmentDocId = student?.assignmentsDocId
 
         // Data to create a new assignment
         const assignmentData = {
@@ -146,7 +199,7 @@ function AddAssignmentModal() {
         const filesData = await fileUpload(files, studentId)
         assignmentData.files = filesData
 
-        await uploadAssignment(assignmentData, assignmentsDocId, studentId, consultant)
+        const assignmentDocId = await uploadAssignment(assignmentData, studentId, consultant)
         
         // What about it's ID?
         dispatch(addAssignment(assignmentData))
@@ -155,7 +208,14 @@ function AddAssignmentModal() {
         setOpen(false)
         resetForm()
         dispatch(updateFolders(formData.folderName))
+        // new
+        dispatch(updateAssignmentDocIds(assignmentDocId))
+        // new
     }
+    // NEW
+
+
+
 
     const handleInputChange = (name: string, value: string) => {
         setFormData((prevData) => ({

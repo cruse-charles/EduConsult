@@ -30,10 +30,18 @@ function AssignmentsList() {
     // })
     // old
 
-    const assignments = useSelector((state: RootState) => {
-        const assignmentsState = state.assignments as AssignmentDoc
-        return assignmentsState || []
-    })
+
+    // old
+    // const assignments = useSelector((state: RootState) => {
+    //     const assignmentsState = state.assignments as AssignmentDoc
+    //     return assignmentsState || []
+    // })
+    // old
+
+    // new
+    const assignments = useSelector((state: RootState) => state.assignments)
+
+    // new
 
     const folders = useSelector((state: RootState) => {
         const studentState = state.student as Student
@@ -112,6 +120,7 @@ function AssignmentsList() {
                     <div className="space-y-2">
                         {folders?.map((folder) => (
                             <Collapsible
+                                key={folder}
                                 onOpenChange={() => setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
                             >
                                 <CollapsibleTrigger asChild>
@@ -149,7 +158,7 @@ function AssignmentsList() {
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
                                         // <div className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
-                                        <div onClick={() => setSelectedAssignment(assignment)} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
+                                        <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
                                             <div className="flex items-center gap-3 flex-1">    
                                                 <div className="flex items-center gap-2">
                                                     {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}

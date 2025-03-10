@@ -28,7 +28,8 @@ function AssignmentDetailModal({assignment, open, onOpenChange}) {
         }
     }
 
-
+// TODO: DUE DATE ISN'T SHOWING UP, CHECK DATA STRUCTURE AND HOW I KEY INTO IT
+// TODO: GET FILES SHOWN FOR DOWNLOAD
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">

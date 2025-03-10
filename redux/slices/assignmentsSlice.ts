@@ -52,7 +52,34 @@ export const fetchAssignments = createAsyncThunk(
 const initialState = []
 // new
 
+// OLD
+// const assignmentsSlice = createSlice({
+//   name: 'assignments',
+//   initialState,
+//   reducers: {
+//     setAssignments(state, action) {
+//       return action.payload;
+//     },
+//     addAssignment(state, action) {
+//         const assignments = state
+//         if (state) assignments.assignments = [...assignments.assignments, action.payload];
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder.addCase(fetchAssignments.fulfilled, (state, action) => {
+//       return action.payload;
+//     }) 
+//     .addCase(fetchAssignments.rejected, (state, action) => {
+//       console.error("fetchAssignments rejected:", action.payload);
+//       return [];
+//   });;
+//   },
+// });
+// OLD
 
+
+
+// NEW
 const assignmentsSlice = createSlice({
   name: 'assignments',
   initialState,
@@ -61,8 +88,9 @@ const assignmentsSlice = createSlice({
       return action.payload;
     },
     addAssignment(state, action) {
-        const assignments = state
-        if (state) assignments.assignments = [...assignments.assignments, action.payload];
+        // const assignments = state
+        // if (state) assignments.assignments = [...assignments.assignments, action.payload];
+        return [...state, action.payload]
     },
   },
   extraReducers: (builder) => {
@@ -75,6 +103,8 @@ const assignmentsSlice = createSlice({
   });;
   },
 });
+
+// NEW
 
 export const { setAssignments, addAssignment } = assignmentsSlice.actions;
 export default assignmentsSlice.reducer;

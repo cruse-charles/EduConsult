@@ -29,8 +29,13 @@ const studentSlice = createSlice({
       const student = state as Student
       if (!student.folders.includes(action.payload)) {
         student.folders.push(action.payload)
+        // student.folders = [...student.folders, action.payload]
       }
     },
+    updateAssignmentDocIds(state, action) {
+      const student = state
+      student.assignmentDocIds.push(action.payload)
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchStudent.fulfilled, (state, action) => {
@@ -40,5 +45,5 @@ const studentSlice = createSlice({
 });
 
 
-export const { setStudent, updateFolders } = studentSlice.actions;
+export const { setStudent, updateFolders, updateAssignmentDocIds } = studentSlice.actions;
 export default studentSlice.reducer;
