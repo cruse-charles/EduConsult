@@ -1,8 +1,10 @@
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { formatDueDate } from '@/lib/utils'
-import { CalendarIcon, Clock, FileText, User } from 'lucide-react'
+import { format } from 'date-fns'
+import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 import React, { useEffect } from 'react'
 
 function AssignmentDetailModal({assignment, open, onOpenChange}) {
@@ -10,6 +12,21 @@ function AssignmentDetailModal({assignment, open, onOpenChange}) {
     useEffect(() => {
         console.log(assignment)
     }, [assignment])
+
+    const getTimelineIcon = (type: string) => {
+        switch (type) {
+        case "submission":
+            return <Upload className="h-4 w-4 text-blue-500" />
+        case "feedback":
+            return <MessageSquare className="h-4 w-4 text-orange-500" />
+        case "edit":
+            return <Settings className="h-4 w-4 text-purple-500" />
+        case "creation":
+            return <FileText className="h-4 w-4 text-green-500" />
+        default:
+            return <Clock className="h-4 w-4 text-gray-500" />
+        }
+    }
 
 
     return (
@@ -70,7 +87,34 @@ function AssignmentDetailModal({assignment, open, onOpenChange}) {
                         </div>
                         <div className="space-y-4 max-h-96 overflow-y-auto">
                             {assignment?.timeline.map((entry, index) => (
-                                <div>Hello</div>
+                                <div key={entry.id} className="flex gap-3">
+                                    <div className="flex flex-col items-center">
+                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-background border-2 border-muted">
+                                            {getTimelineIcon(entry.type)}
+                                        </div>
+                                            {index < assignment?.timeline.length - 1 && <div className="w-px h-12 bg-muted mt-2" />}
+                                    </div>
+                                    <div className="flex-1 space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            {/* <div className="flex items-center gap-1">
+                                                {entry.authorType === "consultant" ? (
+                                                <UserCheck className="h-3 w-3 text-blue-500" />
+                                                ) : (
+                                                <User className="h-3 w-3 text-green-500" />
+                                                )}   */}
+                                                <span className="text-sm font-medium">{entry.author}</span>
+                                            {/* </div> */}
+                                            <Badge variant="outline" className="text-xs">
+                                                {entry.type}
+                                            </Badge>
+                                            <span className="text-xs text-muted-foreground">
+                                                {formatDueDate(entry.dueDate)}
+                                            </span>
+                                        </div>
+                                        
+                                        {entry.note && <p className="text-sm text-muted-foreground">{entry.note}</p>}
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </div>
