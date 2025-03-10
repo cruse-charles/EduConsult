@@ -13,11 +13,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
 import { Assignment, AssignmentDoc, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
+import AssignmentDetailModal from "./AssignmentDetailModal";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
     // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
     // const folders = useSelector((state: RootState) => state.student.folders) as string[]
+
+    const [selectedAssignment, setSelectedAssignment] = useState(null)
 
     const assignments = useSelector((state: RootState) => {
         const assignmentsState = state.assignments as AssignmentDoc
@@ -100,7 +103,8 @@ function AssignmentsList() {
                                 <CollapsibleContent>
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
-                                        <div className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
+                                        // <div className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
+                                        <div onClick={() => setSelectedAssignment(assignment)} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
                                             <div className="flex items-center gap-3 flex-1">    
                                                 <div className="flex items-center gap-2">
                                                     {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
@@ -121,6 +125,7 @@ function AssignmentsList() {
                     </div>  
                 </CardContent>
             </Card>
+            <AssignmentDetailModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open) => !open && setSelectedAssignment(null)} />
         </>
     )
 }
