@@ -15,12 +15,16 @@ interface FolderSelectionProps {
 }
 
 function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}: FolderSelectionProps) {
+    
+    // Retrieve student state from redux
     const student = useSelector((state: RootState) => state.student)
 
     return (
         <>
             <div className="space-y-2">
                 <Label htmlFor="priority">Folder  <span className="text-red-500">*</span></Label>
+                
+                {/* Handle form data for a user using an existing folder or creating one */}
                 <Select required value={newFolder ? "create-new" : formData.folder}
                     onValueChange={(value) => {
                         if (value === 'create-new') {
@@ -42,6 +46,8 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
                 </SelectContent>
                 </Select>
             </div>
+            
+            {/* If user is creating a new folder, render input tags */}
             { newFolder && (
                 <div className="space-y-2">
                     <Label htmlFor="folder-name">New Folder Name</Label>
