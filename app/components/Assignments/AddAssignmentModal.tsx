@@ -13,7 +13,7 @@ import Notes from "./Notes"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 
-import { Assignment, AssignmentFile, AssignmentFormData } from "@/lib/types/types"
+import { AssignmentFile, AssignmentFormData } from "@/lib/types/types"
 import { useConsultant } from "@/hooks/useConsultant"
 import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
@@ -91,7 +91,7 @@ function AddAssignmentModal() {
     // https://firebase.google.com/docs/storage/web/upload-files
     // https://www.youtube.com/watch?v=fgdpvwEWJ9M start at around 30:00
 
-    // handle file upload, upload each file to Firebase Storage
+    // Handle file upload, upload each file to Firebase Storage
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event?.target.files
 
@@ -108,60 +108,7 @@ function AddAssignmentModal() {
         event.target.value = "";
     }
 
-    // OLD
-    // // TODO: Improve error handling
-    // const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    //     e.preventDefault()
-    //     setIsLoading(true)
-
-    //     if (
-    //         !formData.title ||
-    //         !formData.type ||
-    //         !formData.folderName ||
-    //         !dueDate
-    //     ) {
-    //         alert ("Please fill out all required fields")
-    //         setIsLoading(false)
-    //         return
-    //     }
-
-    //     // Retreive the ref to the student's assigments
-    //     let assignmentsDocId = student?.assignmentsDocId
-
-    //     // Data to create a new assignment
-    //     const assignmentData = {
-    //         title: formData.title,
-    //         type: formData.type,
-    //         priority: formData.priority,
-    //         // dueDate: dueDate,
-    //         dueDate: Timestamp.fromDate(dueDate),
-    //         notes: formData.notes,
-    //         files: [] as AssignmentFile[],
-    //         createdAt: new Date(),
-    //         student: studentId,
-    //         folderName: formData.folderName,
-    //         status: formData.status,
-    //     }
-
-    //     // Upload files to Firebase Storage
-    //     const filesData = await fileUpload(files, studentId)
-    //     assignmentData.files = filesData
-
-    //     await uploadAssignment(assignmentData, assignmentsDocId, studentId, consultant)
-        
-    //     // What about it's ID?
-    //     dispatch(addAssignment(assignmentData))
-
-    //     setIsLoading(false)
-    //     setOpen(false)
-    //     resetForm()
-    //     dispatch(updateFolders(formData.folderName))
-    // }
-    // OLD
-
-
-    // NEW
-        // TODO: Improve error handling
+    // TODO: Improve error handling
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
@@ -169,7 +116,6 @@ function AddAssignmentModal() {
         if (
             !formData.title ||
             !formData.type ||
-            // !formData.folderName ||
             !formData.folder ||
             !dueDate
         ) {
@@ -178,21 +124,16 @@ function AddAssignmentModal() {
             return
         }
 
-        // Retreive the ref to the student's assigments
-        // let assignmentDocId = student?.assignmentsDocId
-
         // Data to create a new assignment
         const assignmentData = {
             title: formData.title,
             type: formData.type,
             priority: formData.priority,
-            // dueDate: dueDate,
             dueDate: Timestamp.fromDate(dueDate),
             note: formData.note,
             files: [] as AssignmentFile[],
             createdAt: new Date(),
             student: studentId,
-            // folderName: formData.folderName,
             folder: formData.folder,
             status: formData.status,
         }
@@ -209,16 +150,9 @@ function AddAssignmentModal() {
         setIsLoading(false)
         setOpen(false)
         resetForm()
-        // dispatch(updateFolders(formData.folderName))
         dispatch(updateFolders(formData.folder))
-        // new
         dispatch(updateAssignmentDocIds(assignmentDocId))
-        // new
     }
-    // NEW
-
-
-
 
     const handleInputChange = (name: string, value: string) => {
         setFormData((prevData) => ({
@@ -257,7 +191,6 @@ function AddAssignmentModal() {
                         <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
                             
                         {/* Folder Selection Container */}
-                        {/* <FolderSelection student={student} folders={folders} newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/> */}
                         <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
 
                         {/* Calendar Due Date Container */}
