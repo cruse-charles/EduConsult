@@ -46,6 +46,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                 </DialogHeader>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
                     {/* Assignment Details */}
                     <div className="lg:col-span-1 space-y-4">
                         <div className="space-y-3">
@@ -98,8 +99,12 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-background border-2 border-muted">
                                             {getTimelineIcon(entry.type)}
                                         </div>
-                                            {index < assignment?.timeline.length - 1 && <div className="w-px h-12 bg-muted mt-2" />}
+                                        
+                                        {/* Bar on leftside for timeline styling */}
+                                        {index < assignment?.timeline.length - 1 && <div className="w-px h-12 bg-muted mt-2" />}
                                     </div>
+
+                                    {/* Entry Details */}
                                     <div className="flex-1 space-y-2">
                                         <div className="flex items-center gap-2">
                                             {/* <div className="flex items-center gap-1">
