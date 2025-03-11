@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Assignment } from '@/lib/types/types'
-import { formatDueDate } from '@/lib/utils'
+import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
 import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 import React, { useEffect } from 'react'
 
@@ -64,7 +64,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                                 <div className="flex items-center gap-2">
                                     <Clock className="h-4 w-4 text-muted-foreground" />
                                     <span className="text-sm font-medium">Status:</span>
-                                    <Badge variant={assignment?.status === "completed" ? "success" : "outline"}>
+                                    <Badge variant={assignment?.status === "completed" ? "default" : "outline"}>
                                         {assignment?.status === "completed" ? "Completed" : assignment?.status}
                                     </Badge>
                                 </div>
@@ -93,7 +93,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                         </div>
                         <div className="space-y-4 max-h-96 overflow-y-auto">
                             {assignment?.timeline.map((entry, index) => (
-                                <div key={entry.id} className="flex gap-3">
+                                <div key={index} className="flex gap-3">
                                     <div className="flex flex-col items-center">
                                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-background border-2 border-muted">
                                             {getTimelineIcon(entry.type)}
@@ -108,13 +108,13 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                                                 ) : (
                                                 <User className="h-3 w-3 text-green-500" />
                                                 )}   */}
-                                                <span className="text-sm font-medium">{entry.author}</span>
+                                                <span className="text-sm font-medium">{entry.uploadedBy}</span>
                                             {/* </div> */}
                                             <Badge variant="outline" className="text-xs">
                                                 {entry.type}
                                             </Badge>
                                             <span className="text-xs text-muted-foreground">
-                                                {formatDueDate(entry.dueDate)}
+                                                {formatDueDateAndTime(entry.uploadedAt)}
                                             </span>
                                         </div>
                                         
