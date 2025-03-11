@@ -1,8 +1,10 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Assignment, Student } from '@/lib/types/types';
-import { useEffect } from 'react';
+
+import { Assignment } from '@/lib/types/types';
+import { RootState } from '@/redux/store';
+
 import { useSelector } from 'react-redux';
 
 interface FolderSelectionProps {
@@ -13,22 +15,19 @@ interface FolderSelectionProps {
 }
 
 function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}: FolderSelectionProps) {
-    const student = useSelector((state) => state.student)
+    const student = useSelector((state: RootState) => state.student)
 
     return (
         <>
             <div className="space-y-2">
                 <Label htmlFor="priority">Folder  <span className="text-red-500">*</span></Label>
-                {/* <Select required value={newFolder ? "create-new" : formData.folderName}  */}
                 <Select required value={newFolder ? "create-new" : formData.folder}
                     onValueChange={(value) => {
                         if (value === 'create-new') {
                             setNewFolder(true)
-                            // handleInputChange("folderName", "")
                             handleInputChange("folder", "")
                         } else {
                             setNewFolder(false)
-                            // handleInputChange("folderName", value)
                             handleInputChange("folder", value)
                         }
                     }}>
@@ -36,7 +35,7 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
                     <SelectValue placeholder="Select or create folder" />
                 </SelectTrigger>
                 <SelectContent>
-                    {student.folders?.map((folder) => (
+                    {student.folders?.map((folder: string) => (
                         <SelectItem key={folder} value={folder}>{folder}</SelectItem>
                     ))}
                     <SelectItem value="create-new">+ Create New Folder</SelectItem>
@@ -46,7 +45,6 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder}:
             { newFolder && (
                 <div className="space-y-2">
                     <Label htmlFor="folder-name">New Folder Name</Label>
-                    {/* <Input id="folder-name" placeholder="Enter new folder name" value={formData.folderName} onChange={(e) => handleInputChange("folderName", e.target.value)} /> */}
                     <Input id="folder" placeholder="Enter new folder name" value={formData.folder} onChange={(e) => handleInputChange("folder", e.target.value)} />
                 </div>
             )}

@@ -49,7 +49,7 @@ export interface Assignment {
     files: AssignmentFile[];
     createdAt: Date | null;
     student: string;
-    folderName: string;
+    folder: string;
     status: string;
 }
 

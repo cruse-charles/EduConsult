@@ -15,7 +15,7 @@ export const fetchStudent = createAsyncThunk(
     }
 );
 
-const initialState = {}
+const initialState: Partial<Student> = {}
 
 const studentSlice = createSlice({
   name: 'student',
