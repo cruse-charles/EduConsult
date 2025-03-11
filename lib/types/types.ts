@@ -24,7 +24,7 @@ export interface StudentBase {
 
 export interface Student extends StudentBase {
     id: string;
-    assignmentsDocId?: string;
+    assignmentDocIds?: string[];
     pendingTasks: number | null;
     nextDeadline: Timestamp | null;
     progress: number | null;

@@ -1,7 +1,7 @@
 import { db } from '@/lib/firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
 
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Student } from '@/lib/types/types';
 
@@ -25,16 +25,14 @@ const studentSlice = createSlice({
       return action.payload;
     },
     updateFolders(state, action) {
-      if (!state) return
-      const student = state as Student
-      if (!student.folders.includes(action.payload)) {
-        student.folders.push(action.payload)
-        // student.folders = [...student.folders, action.payload]
+      if (!state.folders) return
+      if (!state.folders.includes(action.payload)) {
+        state.folders = [...state.folders, action.payload];
       }
     },
     updateAssignmentDocIds(state, action) {
-      const student = state
-      student.assignmentDocIds.push(action.payload)
+      if (!state.assignmentDocIds) return;
+      state.assignmentDocIds = [...state.assignmentDocIds, action.payload];
     }
   },
   extraReducers: (builder) => {
