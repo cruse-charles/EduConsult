@@ -2,13 +2,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-import { Assignment } from '@/lib/types/types';
+import { AssignmentFormData } from '@/lib/types/types';
 import { RootState } from '@/redux/store';
 
 import { useSelector } from 'react-redux';
 
 interface FolderSelectionProps {
-    formData: Assignment;
+    formData: AssignmentFormData;
     handleInputChange: (field: string, value: string) => void;
     setNewFolder: (value: boolean) => void;
     newFolder: boolean;

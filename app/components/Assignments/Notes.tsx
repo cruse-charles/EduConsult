@@ -1,9 +1,9 @@
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Assignment } from '@/lib/types/types';
+import { AssignmentFormData } from '@/lib/types/types';
 
 interface NotesProps {
-    formData: Assignment
+    formData: AssignmentFormData
     handleInputChange: (field: string, value: string) => void;
 }
 

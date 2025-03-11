@@ -1,10 +1,10 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Assignment } from '@/lib/types/types'
+import { AssignmentFormData } from '@/lib/types/types'
 
 interface TypeTitlePriorityProps {
-    formData: Assignment;
+    formData: AssignmentFormData;
     handleInputChange: (field: string, value: string) => void;
 }
 

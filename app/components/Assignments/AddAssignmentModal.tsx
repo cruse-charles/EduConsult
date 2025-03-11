@@ -13,7 +13,7 @@ import Notes from "./Notes"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 
-import { Assignment, AssignmentFile } from "@/lib/types/types"
+import { Assignment, AssignmentFile, AssignmentFormData } from "@/lib/types/types"
 import { useConsultant } from "@/hooks/useConsultant"
 import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
@@ -50,7 +50,7 @@ function AddAssignmentModal() {
     // State to manage loading state and formData for form submission
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
-    const [formData, setFormData] = useState<Assignment>({
+    const [formData, setFormData] = useState<AssignmentFormData>({
         title: "",
         type: "",
         priority: "",
@@ -188,7 +188,7 @@ function AddAssignmentModal() {
             priority: formData.priority,
             // dueDate: dueDate,
             dueDate: Timestamp.fromDate(dueDate),
-            notes: formData.note,
+            note: formData.note,
             files: [] as AssignmentFile[],
             createdAt: new Date(),
             student: studentId,
