@@ -45,7 +45,7 @@ export interface Assignment {
     type: string;
     priority: string;
     dueDate: Date | undefined | Timestamp;
-    notes: string;
+    note: string;
     files: AssignmentFile[];
     createdAt: Date | null;
     student: string;

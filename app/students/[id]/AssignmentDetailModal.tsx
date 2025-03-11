@@ -1,13 +1,18 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import { Assignment } from '@/lib/types/types'
 import { formatDueDate } from '@/lib/utils'
-import { format } from 'date-fns'
 import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 import React, { useEffect } from 'react'
 
-function AssignmentDetailModal({assignment, open, onOpenChange}) {
+interface AssignmentDetailModalProps {
+    assignment: Assignment;
+    open: boolean;
+    onOpenChange: () => void;
+}
+
+function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {
 
     useEffect(() => {
         console.log(assignment)
@@ -76,7 +81,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}) {
                         <div className="space-y-3">
                             <h4 className="font-medium">Instructions</h4>
                             <div className="p-3 bg-muted/50 rounded-md">
-                                <p className="text-sm">{assignment?.instructions}</p>
+                                <p className="text-sm">{assignment?.note}</p>
                             </div>
                         </div>
                     </div>
