@@ -40,17 +40,32 @@ export interface AssignmentFile {
     uploadedAt: Date;
 }
 
-export interface Assignment {
+export interface AssignmentBase {
     title: string;
     type: string;
     priority: string;
     dueDate: Date | undefined | Timestamp;
     note: string;
-    files: AssignmentFile[];
     createdAt: Date | null;
     student: string;
     folder: string;
     status: string;
+}
+
+export interface AssignmentFormData extends AssignmentBase {
+    files: AssignmentFile[];
+}
+
+export interface Assignment extends AssignmentBase {
+    timeline: Entry[];
+}
+
+interface Entry {
+    files: AssignmentFile[];
+    note: string;
+    type: string;
+    uploadedAt: Date | Timestamp;
+    uploadedBy: string;
 }
 
 export interface AssignmentDoc {

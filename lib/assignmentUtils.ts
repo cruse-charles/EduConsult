@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
 import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
-import { Assignment } from "./types/types";
+import { AssignmentFormData } from "./types/types";
 import { User } from "firebase/auth";
 import { nanoid } from "@reduxjs/toolkit";
 
@@ -82,7 +82,7 @@ export const fileUpload = async (files: File[], studentId: string) => {
 // NEW
 // TODO: ADDING AN ASSIGNMENT TO A NEW FOLDER
 
-export const uploadAssignment = async (assignmentData: Assignment, studentId: string, consultant: User | null) => {
+export const uploadAssignment = async (assignmentData: AssignmentFormData, studentId: string, consultant: User | null) => {
     try {
         const assignmentDocId = nanoid()
     
@@ -94,14 +94,14 @@ export const uploadAssignment = async (assignmentData: Assignment, studentId: st
             consultant: consultant?.uid,
             createdAt: assignmentData.createdAt,
             dueDate: assignmentData.dueDate,
-            // folder: assignmentData.folderName,
+            priority: assignmentData.priority,
             folder: assignmentData.folder,
             title: assignmentData.title,
             type: assignmentData.type,
             timeline: [{
                 uploadedBy: consultant?.uid,
                 files: assignmentData.files,
-                note: assignmentData.notes,
+                note: assignmentData.note,
                 type: 'Assignment Created',
                 uploadedAt: assignmentData.createdAt
             }]
