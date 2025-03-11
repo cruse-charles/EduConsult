@@ -1,6 +1,6 @@
 import { Timestamp, DocumentReference, DocumentData } from "firebase/firestore";
 
-
+// Base to create/use a student
 export interface StudentBase {
     // id: string;
     academicInformation: {
@@ -22,6 +22,7 @@ export interface StudentBase {
     consultant: DocumentReference<DocumentData> | null;
 }
 
+// Interface to add additional information about student
 export interface Student extends StudentBase {
     id: string;
     assignmentDocIds?: string[];
@@ -31,8 +32,10 @@ export interface Student extends StudentBase {
     folders: string[]
 }
 
+// Naming for creating students
 export interface StudentFormData extends StudentBase {}
 
+// Structure for files for an assignment
 export interface AssignmentFile {
     storagePath: string;
     downloadURL: string;
@@ -40,6 +43,7 @@ export interface AssignmentFile {
     uploadedAt: Date;
 }
 
+// Base to create/use an assignment
 export interface AssignmentBase {
     title: string;
     type: string;
@@ -52,15 +56,18 @@ export interface AssignmentBase {
     status: string;
 }
 
+// FormData version of an assignment
 export interface AssignmentFormData extends AssignmentBase {
     files: AssignmentFile[];
 }
 
+// Structure for using assignments
 export interface Assignment extends AssignmentBase {
     timeline: Entry[];
 }
 
-interface Entry {
+// Structure for timeline entries
+export interface Entry {
     files: AssignmentFile[];
     note: string;
     type: string;
@@ -68,6 +75,7 @@ interface Entry {
     uploadedBy: string;
 }
 
+// structure of assignemtnts in database
 export interface AssignmentDoc {
     student: string;
     consultant: string;
