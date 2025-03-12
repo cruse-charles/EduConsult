@@ -1,25 +1,11 @@
 import { db } from "@/lib/firebaseConfig";
+import { Assignment } from "@/lib/types/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, getDoc } from "firebase/firestore";
 
-import { AssignmentDoc } from "@/lib/types/types";
-
-// old
-// export const fetchAssignments = createAsyncThunk(
-//     'student/fetchAssignments',
-//     async (assignmentsDocId: string) => {
-//         const assignmentRef = doc(db, "assignments", assignmentsDocId)
-//         const assignmentSnapshot = await getDoc(assignmentRef)
-//         return {id: assignmentSnapshot.id, ...assignmentSnapshot.data()};
-//     }
-// );
-// old
-
-
-// new
 export const fetchAssignments = createAsyncThunk(
-  "student/fetchAssignments",
-  async (assignmentsDocIds: string[]) => {
+  "assignments/fetchAssignments",
+  async (assignmentsDocIds: string[], {rejectWithValue}) => {
     try {
       const assignments = await Promise.all(
         assignmentsDocIds.map(async (assignmentDocId) => {
@@ -30,56 +16,40 @@ export const fetchAssignments = createAsyncThunk(
             throw new Error(`Assignment with ID ${assignmentDocId} not found`);
           }
 
+          // return {
+          //   id: assignmentSnapshot.id,
+          //   ...assignmentSnapshot.data(),
+          // };
+
+          const data = assignmentSnapshot.data();
+          
+          // Ensure all required Assignment fields are present
           return {
             id: assignmentSnapshot.id,
-            ...assignmentSnapshot.data(),
-          };
+            title: data?.title || '',
+            type: data?.type || '',
+            priority: data?.priority || '',
+            dueDate: data?.dueDate || undefined,
+            note: data?.note || '',
+            createdAt: data?.createdAt || null,
+            student: data?.student || '',
+            folder: data?.folder || '',
+            status: data?.status || '',
+            timeline: data?.timeline || [],
+            ...data, // Spread any additional fields
+          } as Assignment;
         })
       );
       return assignments;
     } catch (error) {
-      return console.error(error.message);
+      return rejectWithValue((error as Error).message);
     }
   }
 );
-// new
-
-// old
-// const initialState = {}
-// old
-
-// new
-const initialState = []
-// new
-
-// OLD
-// const assignmentsSlice = createSlice({
-//   name: 'assignments',
-//   initialState,
-//   reducers: {
-//     setAssignments(state, action) {
-//       return action.payload;
-//     },
-//     addAssignment(state, action) {
-//         const assignments = state
-//         if (state) assignments.assignments = [...assignments.assignments, action.payload];
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder.addCase(fetchAssignments.fulfilled, (state, action) => {
-//       return action.payload;
-//     }) 
-//     .addCase(fetchAssignments.rejected, (state, action) => {
-//       console.error("fetchAssignments rejected:", action.payload);
-//       return [];
-//   });;
-//   },
-// });
-// OLD
 
 
+const initialState: Assignment[] = []
 
-// NEW
 const assignmentsSlice = createSlice({
   name: 'assignments',
   initialState,
@@ -88,8 +58,6 @@ const assignmentsSlice = createSlice({
       return action.payload;
     },
     addAssignment(state, action) {
-        // const assignments = state
-        // if (state) assignments.assignments = [...assignments.assignments, action.payload];
         return [...state, action.payload]
     },
   },
@@ -99,12 +67,10 @@ const assignmentsSlice = createSlice({
     }) 
     .addCase(fetchAssignments.rejected, (state, action) => {
       console.error("fetchAssignments rejected:", action.payload);
-      return [];
+      return state;
   });;
   },
 });
-
-// NEW
 
 export const { setAssignments, addAssignment } = assignmentsSlice.actions;
 export default assignmentsSlice.reducer;

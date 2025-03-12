@@ -75,9 +75,9 @@ export interface Entry {
     uploadedBy: string;
 }
 
-// structure of assignemtnts in database
-export interface AssignmentDoc {
-    student: string;
-    consultant: string;
-    assignments: Assignment[];
-}
+// // structure of assignemtnts in database
+// export interface AssignmentDoc {
+//     student: string;
+//     consultant: string;
+//     assignments: Assignment[];
+// }
