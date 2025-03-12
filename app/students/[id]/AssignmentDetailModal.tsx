@@ -1,11 +1,14 @@
+import FileUploadView from '@/app/components/Assignments/FileUploadView'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
+import { uploadEntry } from '@/lib/assignmentUtils'
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
 import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
-import React, { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface AssignmentDetailModalProps {
     assignment: Assignment | null;
@@ -14,6 +17,13 @@ interface AssignmentDetailModalProps {
 }
 
 function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {
+
+    const [formData, setFormData] = useState({
+        note: '',
+        files: []
+    })
+
+    const [files, setFiles] = useState([])
 
     useEffect(() => {
         console.log(assignment)
@@ -46,6 +56,59 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    const handleInputChange = (e) =>{
+        const {name, value} = e.target
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    // TODO: EXTRACT THIS TO UTILS WITH THE ADDASSIGNMENTS AS WELL
+    // Function to remove a file from the files array
+    // TODO: Remove from storage and select based on file name
+    const removeFile = (index: number) => {
+        setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
+    }
+
+    // TODO: add monitor uploading process, use these links: 
+    // https://firebase.google.com/docs/storage/web/upload-files
+    // https://www.youtube.com/watch?v=fgdpvwEWJ9M start at around 30:00
+
+    // Handle file upload, upload each file to Firebase Storage
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event?.target.files
+
+        // Check if files are uploaded
+        if (!files) {
+            console.error('No files selected');
+            return;
+        }
+
+        // Add the selected files to the state
+        setFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
+
+        // Reset the input value to allow re-uploading the same file
+        event.target.value = "";
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        console.log('submitting...')
+
+        const entryData = {
+            files: formData.files,
+            note: formData.note,
+            uploadedAt: new Date(),
+            // TODO: Adjust below to be user name and feedback/submission based on user
+            uploadedBy: 'User',
+            type: 'Feedback'
+        }
+
+        await uploadEntry(entryData, assignment?.id)
     }
 
     return (
@@ -161,6 +224,27 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                                 </div>
                             ))}
                         </div>
+
+                        <Separator />
+                        
+                        {/* Send Feedback Section */}
+                        <form onSubmit={handleSubmit}>
+                            <div className="space-y-3">
+                                <h4 className="font-medium">Send Feedback</h4>
+                                <Textarea
+                                    placeholder="Add feedback or comments for the student..."
+                                    name='note'
+                                    value={formData.note}
+                                    onChange={(e) => handleInputChange(e)}
+                                    rows={3}
+                                />
+                            </div>
+                            <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={formData.files}/>
+                            <Button type='submit' className='mt-2'>
+                                {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
+                                Send Feedback
+                            </Button>   
+                        </form>
                     </div>
                 </div>
             </DialogContent>

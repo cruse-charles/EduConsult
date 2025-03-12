@@ -123,3 +123,14 @@ export const uploadAssignment = async (assignmentData: AssignmentFormData, stude
 
 
 // NEW
+
+
+export const uploadEntry = async (entryData, assignmentDocId) => {
+    try {
+        await updateDoc(doc(db, "assignments", assignmentDocId), {
+            timeline: arrayUnion(entryData)
+        })
+    } catch (error) {
+        console.log("Error updating assignment", error)
+    }
+}
