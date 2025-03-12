@@ -10,7 +10,6 @@ import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
 import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 interface AssignmentDetailModalProps {
     assignment: Assignment | null;
@@ -25,7 +24,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         files: []
     })
 
-    const [files, setFiles] = useState([])
+    const [files, setFiles] = useState<File[]>([])
     const { id: studentId } = useParams<{id:string}>()
 
     useEffect(() => {
@@ -47,10 +46,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         }
     }
 
-// TODO: DUE DATE ISN'T SHOWING UP, CHECK DATA STRUCTURE AND HOW I KEY INTO IT
-// TODO: GET FILES SHOWN FOR DOWNLOAD
-
-    // TODO: Currently file name downloaded is from storage path, need to conver to blob to download
+    // TODO: Currently file name downloaded is from storage path, need to convert to blob to download
     // it as the same name
     const downloadFile = (file: AssignmentFile) => {
         const link = document.createElement('a');
@@ -61,7 +57,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         document.body.removeChild(link);
     }
 
-    const handleInputChange = (e) =>{
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
         const {name, value} = e.target
 
         setFormData((prev) => ({
@@ -98,12 +94,12 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         event.target.value = "";
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log('submitting...')
 
         const entryData = {
-            files: [],
+            files: [] as AssignmentFile[],
             note: formData.note,
             uploadedAt: new Date(),
             // TODO: Adjust below to be user name and feedback/submission based on user
