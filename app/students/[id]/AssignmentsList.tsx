@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
-import { Assignment, AssignmentDoc, Student } from "@/lib/types/types";
+import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
 import AssignmentDetailModal from "./AssignmentDetailModal";
 import { formatDueDate } from "@/lib/utils";
@@ -21,27 +21,9 @@ function AssignmentsList() {
     // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
     // const folders = useSelector((state: RootState) => state.student.folders) as string[]
 
-    const [selectedAssignment, setSelectedAssignment] = useState(null)
+    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
 
-    // old
-    // const assignments = useSelector((state: RootState) => {
-    //     const assignmentsState = state.assignments as AssignmentDoc
-    //     return assignmentsState?.assignments || []
-    // })
-    // old
-
-
-    // old
-    // const assignments = useSelector((state: RootState) => {
-    //     const assignmentsState = state.assignments as AssignmentDoc
-    //     return assignmentsState || []
-    // })
-    // old
-
-    // new
     const assignments = useSelector((state: RootState) => state.assignments)
-
-    // new
 
     const folders = useSelector((state: RootState) => {
         const studentState = state.student as Student
@@ -51,42 +33,17 @@ function AssignmentsList() {
 
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
 
-    // old
-    // Dispatch fetchAssignment
-    // useEffect(() => {
-    //     const studentState = student as Student
-    //     if (studentState?.assignmentsDocId) {
-    //         dispatch(fetchAssignments(studentState.assignmentsDocId));
-    //     }
-    // }, [student, dispatch]);
-    // old
-
-    // new
     useEffect(() => {
         const studentState = student as Student
         if (studentState?.assignmentDocIds) {
             dispatch(fetchAssignments(studentState.assignmentDocIds));
         }
-    // }, [student, dispatch]);
     }, [dispatch]);
 
-
-    // new
-
-    // old function
-    // const getFilteredAssignments = (folder: string) => {
-    //     if (!assignments) return []
-    //     return assignments.filter((assignment) => assignment.folderName === folder)
-    // }
-    // old
-
-    // new function
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
         return assignments.filter((assignment) => assignment.folder === folder)
-        // return assignments
     }
-    // new
 
     // old
     // const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
@@ -114,12 +71,6 @@ function AssignmentsList() {
             console.log(`Folder "${folder}" has ${filteredAssignments.length} assignments:`, filteredAssignments);
         });
     }, [assignments, folders]);
-
-    // const formatDueDate = (dueDate: Date | Timestamp | undefined) => {
-    //     if (!dueDate || dueDate === undefined) return "No due date";
-    //     const date = dueDate instanceof Date ? dueDate : dueDate.toDate();
-    //     return format(date, "MMM d, yyyy");
-    // }
 
     return (
         <>
@@ -165,7 +116,6 @@ function AssignmentsList() {
                                 <CollapsibleContent>
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
-                                        // <div className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
                                         <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
                                             <div className="flex items-center gap-3 flex-1">    
                                                 <div className="flex items-center gap-2">
@@ -187,7 +137,7 @@ function AssignmentsList() {
                     </div>  
                 </CardContent>
             </Card>
-            <AssignmentDetailModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open) => !open && setSelectedAssignment(null)} />
+            <AssignmentDetailModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
         </>
     )
 }

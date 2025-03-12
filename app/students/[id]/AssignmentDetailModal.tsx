@@ -7,9 +7,9 @@ import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Uploa
 import React, { useEffect } from 'react'
 
 interface AssignmentDetailModalProps {
-    assignment: Assignment;
+    assignment: Assignment | null;
     open: boolean;
-    onOpenChange: () => void;
+    onOpenChange: (open: boolean) => void;
 }
 
 function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {

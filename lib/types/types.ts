@@ -63,6 +63,7 @@ export interface AssignmentFormData extends AssignmentBase {
 
 // Structure for using assignments
 export interface Assignment extends AssignmentBase {
+    id: string;
     timeline: Entry[];
 }
 
