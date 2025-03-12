@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { uploadEntry } from '@/lib/assignmentUtils'
+import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
 import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 interface AssignmentDetailModalProps {
     assignment: Assignment | null;
@@ -24,6 +26,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
     })
 
     const [files, setFiles] = useState([])
+    const { id: studentId } = useParams<{id:string}>()
 
     useEffect(() => {
         console.log(assignment)
@@ -100,7 +103,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         console.log('submitting...')
 
         const entryData = {
-            files: formData.files,
+            files: [],
             note: formData.note,
             uploadedAt: new Date(),
             // TODO: Adjust below to be user name and feedback/submission based on user
@@ -108,6 +111,9 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
             type: 'Feedback'
         }
 
+        const filesData = await fileUpload(files, studentId)
+        entryData.files = filesData
+        
         await uploadEntry(entryData, assignment?.id)
     }
 
@@ -239,11 +245,11 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                                     rows={3}
                                 />
                             </div>
-                            <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={formData.files}/>
+                            <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
                             <Button type='submit' className='mt-2'>
                                 {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
                                 Send Feedback
-                            </Button>   
+                            </Button>
                         </form>
                     </div>
                 </div>
