@@ -38,7 +38,7 @@ export interface StudentFormData extends StudentBase {}
 // Structure for files for an assignment
 export interface AssignmentFile {
     storagePath: string;
-    downloadURL: string;
+    downloadUrl: string;
     originalName: string;
     uploadedAt: Date;
 }

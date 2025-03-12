@@ -13,7 +13,7 @@ function Notes({formData, handleInputChange}: NotesProps) {
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="notes">Assignment Notes</Label>
-                    <Textarea id="notes" placeholder="Add any instructions, requirements, or additional notes for this assignment..." value={formData.note} onChange={(e) => handleInputChange("notes", e.target.value)} rows={4} />
+                    <Textarea id="notes" placeholder="Add any instructions, requirements, or additional notes for this assignment..." value={formData.note} onChange={(e) => handleInputChange("note", e.target.value)} rows={4} />
                 </div>
             </div>
         </>

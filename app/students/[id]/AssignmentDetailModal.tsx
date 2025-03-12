@@ -1,7 +1,8 @@
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { Assignment } from '@/lib/types/types'
+import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
 import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 import React, { useEffect } from 'react'
@@ -35,6 +36,18 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
 
 // TODO: DUE DATE ISN'T SHOWING UP, CHECK DATA STRUCTURE AND HOW I KEY INTO IT
 // TODO: GET FILES SHOWN FOR DOWNLOAD
+
+    // TODO: Currently file name downloaded is from storage path, need to conver to blob to download
+    // it as the same name
+    const downloadFile = (file: AssignmentFile) => {
+        const link = document.createElement('a');
+        link.href = file.downloadUrl;
+        link.download = file.originalName; // Suggests filename to save as
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -124,6 +137,26 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                                         </div>
                                         
                                         {entry.note && <p className="text-sm text-muted-foreground">{entry.note}</p>}
+                                    
+                                        {entry.files.length > 0 && (
+                                            <div className="space-y-2">
+                                                {entry.files.map((file, fileIndex) => (
+                                                <div
+                                                    key={fileIndex}
+                                                    className="flex items-center justify-between p-2 border rounded-md bg-background"
+                                                >
+                                                    <div className="flex items-center gap-2">
+                                                        <FileText className="h-4 w-4 text-muted-foreground" />
+                                                        <div className="text-sm font-medium">{file.originalName}</div>
+                                                    </div>
+                                                    <Button variant="outline" size="sm" className="gap-1" onClick={() => downloadFile(file)}>
+                                                        <Download className="h-3 w-3" />
+                                                        Download
+                                                    </Button>
+                                                </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}

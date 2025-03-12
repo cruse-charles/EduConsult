@@ -20,11 +20,11 @@ export const fileUpload = async (files: File[], studentId: string) => {
         // Upload file to the storage reference, create a downloadable URL, and store the file metadata
         try {
             const snapshot = await uploadBytes(storageRef, file)
-            const downloadURL = await getDownloadURL(storageRef)
+            const downloadUrl = await getDownloadURL(storageRef)
     
             filesData.push({
                 storagePath,
-                downloadURL,
+                downloadUrl,
                 originalName: file.name,
                 uploadedAt: new Date(),
             })
