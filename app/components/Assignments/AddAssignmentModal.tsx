@@ -119,17 +119,23 @@ function AddAssignmentModal() {
 
         // Upload files to Firebase Storage
         const filesData = await fileUpload(files, studentId)
-        // assignmentData.files = filesData
         assignmentData.timeline[0].files = filesData
 
         const assignmentDocId = await uploadAssignment(assignmentData, studentId, consultant)
         
-        // What about it's ID?
-        dispatch(addAssignment(assignmentData))
+        // Create assignment with ID to add to redux for peroper ordering
+        const assignmentWithId = {
+            id: assignmentDocId,
+            ...assignmentData,
+        }
+        dispatch(addAssignment(assignmentWithId))
 
+        // Clean up UI
         setIsLoading(false)
         setOpen(false)
         resetForm()
+
+        // Update redux to include new folder if any and add assignment to student's profile
         dispatch(updateFolders(formData.folder))
         dispatch(updateAssignmentDocIds(assignmentDocId))
     }

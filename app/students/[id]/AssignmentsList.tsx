@@ -1,21 +1,22 @@
 'use client'
 
-import { collection, doc, getDoc, Timestamp } from "firebase/firestore"
-import { use, useEffect, useState } from "react"
-import { db, app } from "@/lib/firebaseConfig";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
-import { useDispatch, useSelector } from "react-redux";
+
+import AssignmentDetailModal from "./AssignmentDetailModal";
+
 import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
-import AssignmentDetailModal from "./AssignmentDetailModal";
 import { formatDueDate } from "@/lib/utils";
 
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
+
+// NEED TO REFERENCE ASSIGNMENT ID FOR KEYS, IT IS MESSING UP ORDER WHEN I ADD ASSIGNMENT
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
     // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
@@ -117,7 +118,7 @@ function AssignmentsList() {
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
                                         <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
-                                            <div className="flex items-center gap-3 flex-1">    
+                                            <div className="flex items-center gap-3 flex-1">
                                                 <div className="flex items-center gap-2">
                                                     {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
                                                     {assignment.type === "document" && <BookOpen className="h-4 w-4 text-green-500" />}
@@ -138,7 +139,7 @@ function AssignmentsList() {
                 </CardContent>
             </Card>
             {/* <AssignmentDetailModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} /> */}
-                    <AssignmentDetailModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            <AssignmentDetailModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
         </>
     )
 }
