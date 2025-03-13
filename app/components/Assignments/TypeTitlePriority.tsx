@@ -27,14 +27,14 @@ function TypeTitlePriority({formData, handleInputChange}: TypeTitlePriorityProps
                         <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="essay">Essay</SelectItem>
-                        <SelectItem value="application">Application</SelectItem>
-                        <SelectItem value="document">Document</SelectItem>
-                        <SelectItem value="portfolio">Portfolio</SelectItem>
-                        <SelectItem value="test-prep">Test Preparation</SelectItem>
-                        <SelectItem value="recommendation">Recommendation Letter</SelectItem>
-                        <SelectItem value="interview-prep">Interview Preparation</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="Essay">Essay</SelectItem>
+                        <SelectItem value="Application">Application</SelectItem>
+                        <SelectItem value="Document">Document</SelectItem>
+                        <SelectItem value="Portfolio">Portfolio</SelectItem>
+                        <SelectItem value="Test Prep">Test Preparation</SelectItem>
+                        <SelectItem value="Recommendation Letter">Recommendation Letter</SelectItem>
+                        <SelectItem value="Interview Prep">Interview Preparation</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                     </Select>
                 </div>
@@ -45,10 +45,10 @@ function TypeTitlePriority({formData, handleInputChange}: TypeTitlePriorityProps
                         <SelectValue placeholder="Select priority" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
-                        <SelectItem value="urgent">Urgent</SelectItem>
+                        <SelectItem value="Low">Low</SelectItem>
+                        <SelectItem value="Medium">Medium</SelectItem>
+                        <SelectItem value="High">High</SelectItem>
+                        <SelectItem value="Urgent">Urgent</SelectItem>
                     </SelectContent>
                     </Select>
                 </div>
