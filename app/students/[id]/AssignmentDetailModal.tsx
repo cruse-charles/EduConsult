@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { useFiles } from '@/hooks/useFiles'
 import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
@@ -18,13 +19,13 @@ interface AssignmentDetailModalProps {
 }
 
 function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {
+    const { files, handleFileUpload, removeFile} = useFiles();
 
     const [formData, setFormData] = useState({
         note: '',
         files: []
     })
 
-    const [files, setFiles] = useState<File[]>([])
     const { id: studentId } = useParams<{id:string}>()
 
     useEffect(() => {
@@ -51,7 +52,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
     const downloadFile = (file: AssignmentFile) => {
         const link = document.createElement('a');
         link.href = file.downloadUrl;
-        link.download = file.originalName; // Suggests filename to save as
+        link.download = file.originalName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -64,34 +65,6 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
             ...prev,
             [name]: value
         }))
-    }
-
-    // TODO: EXTRACT THIS TO UTILS WITH THE ADDASSIGNMENTS AS WELL
-    // Function to remove a file from the files array
-    // TODO: Remove from storage and select based on file name
-    const removeFile = (index: number) => {
-        setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
-    }
-
-    // TODO: add monitor uploading process, use these links: 
-    // https://firebase.google.com/docs/storage/web/upload-files
-    // https://www.youtube.com/watch?v=fgdpvwEWJ9M start at around 30:00
-
-    // Handle file upload, upload each file to Firebase Storage
-    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event?.target.files
-
-        // Check if files are uploaded
-        if (!files) {
-            console.error('No files selected');
-            return;
-        }
-
-        // Add the selected files to the state
-        setFiles((prevFiles) => [...prevFiles, ...Array.from(files)]);
-
-        // Reset the input value to allow re-uploading the same file
-        event.target.value = "";
     }
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -171,7 +144,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
                             <h4 className="font-medium">Assignment Timeline</h4>
                         </div>
                         <div className="space-y-4 max-h-96 overflow-y-auto">
-                            {assignment?.timeline.map((entry, index) => (
+                            {assignment?.timeline?.map((entry, index) => (
                                 <div key={index} className="flex gap-3">
                                     <div className="flex flex-col items-center">
                                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-background border-2 border-muted">
