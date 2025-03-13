@@ -13,25 +13,29 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 interface AssignmentDetailModalProps {
-    assignment: Assignment | null;
+    assignment: Assignment;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
+// TODO: View doesn't update when sending feedback or right after creating an assignment, needs refresh
 
 function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {
+    // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile} = useFiles();
+    const { id: studentId } = useParams<{id:string}>()
 
+    // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
         note: '',
         files: []
     })
 
-    const { id: studentId } = useParams<{id:string}>()
 
     useEffect(() => {
         console.log(assignment)
     }, [assignment])
 
+    // TODO: make status appear properly for icon usage here
     const getTimelineIcon = (type: string) => {
         switch (type) {
         case "submission":
@@ -69,7 +73,6 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('submitting...')
 
         const entryData = {
             files: [] as AssignmentFile[],
@@ -79,11 +82,14 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
             uploadedBy: 'User',
             type: 'Feedback'
         }
-
+        
+        // Upload files to firebase storage and attach files for entry form upload
         const filesData = await fileUpload(files, studentId)
         entryData.files = filesData
         
         await uploadEntry(entryData, assignment?.id)
+        // TODO: ADD THIS INFORMATION TO OUR REDUX STATE AS WELL
+        
     }
 
     return (
