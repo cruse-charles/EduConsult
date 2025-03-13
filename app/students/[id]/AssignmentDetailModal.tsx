@@ -1,39 +1,36 @@
-import FileUploadView from '@/app/components/Assignments/FileUploadView'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { useFiles } from '@/hooks/useFiles'
+import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
+
+import FileUploadView from '@/app/components/Assignments/FileUploadView'
+
 import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
-import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
+import { AssignmentFile } from '@/lib/types/types'
+import { useFiles } from '@/hooks/useFiles'
+
 import { addEntry } from '@/redux/slices/assignmentsSlice'
 import { RootState } from '@/redux/store'
-import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
-// interface AssignmentDetailModalProps {
-//     assignment: Assignment;
-//     open: boolean;
-//     onOpenChange: (open: boolean) => void;
-// }
 
 interface AssignmentDetailModalProps {
     assignmentId: string;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
-// TODO: View doesn't update when sending feedback or right after creating an assignment, needs refresh
-    // TODO: PASS ASSIGNMENT ID AS PROP THEN USE SELECTOR TO GET ASSIGNMENT
-// function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {
+// TODO: View doesn't update right after creating an assignment, needs refresh
 function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDetailModalProps) {
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     const { id: studentId } = useParams<{id:string}>()
+    const dispatch = useDispatch();
 
+    // Find assignment from state by matching with selected assignment ID
     const assignment = useSelector((state: RootState) => state.assignments.find((a) => a.id === assignmentId))
 
     // Form data for user to submit feedback 
@@ -42,7 +39,6 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
         files: []
     })
 
-    const dispatch = useDispatch();
 
     useEffect(() => {
         console.log('assignmentId', assignmentId)
@@ -100,10 +96,10 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
         const filesData = await fileUpload(files, studentId)
         entryData.files = filesData
         
-        // await uploadEntry(entryData, assignment?.id)
+        // Upload entry to firestore
         await uploadEntry(entryData, assignmentId)
-        // TODO: ADD THIS INFORMATION TO OUR REDUX STATE AS WELL
-        // dispatch(addEntry({ entryData, assignmentId: assignment.id }))
+        
+        // update redux state and reset form data
         dispatch(addEntry({ entryData, assignmentId }))
         setFormData({
             note: '',

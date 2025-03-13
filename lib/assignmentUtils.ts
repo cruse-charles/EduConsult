@@ -47,23 +47,25 @@ export const uploadAssignment = async (assignmentData: AssignmentFormData, stude
 
         // Create a new Doc
         const assignmentDocRef = doc(db, "assignments", assignmentDocId)
-        await setDoc(assignmentDocRef, {
-            student: studentId,
-            consultant: consultant?.uid,
-            createdAt: assignmentData.createdAt,
-            dueDate: assignmentData.dueDate,
-            priority: assignmentData.priority,
-            folder: assignmentData.folder,
-            title: assignmentData.title,
-            type: assignmentData.type,
-            timeline: [{
-                uploadedBy: consultant?.uid,
-                files: assignmentData.files,
-                note: assignmentData.note,
-                type: 'Assignment Created',
-                uploadedAt: assignmentData.createdAt
-            }]
-        })    
+        // await setDoc(assignmentDocRef, {
+        //     student: studentId,
+        //     consultant: consultant?.uid,
+        //     createdAt: assignmentData.createdAt,
+        //     dueDate: assignmentData.dueDate,
+        //     priority: assignmentData.priority,
+        //     folder: assignmentData.folder,
+        //     title: assignmentData.title,
+        //     type: assignmentData.type,
+        //     note: assignmentData.note,
+        //     timeline: [{
+        //         uploadedBy: consultant?.uid,
+        //         files: assignmentData.files,
+        //         // note: assignmentData.note,
+        //         type: 'Assignment Created',
+        //         uploadedAt: assignmentData.createdAt
+        //     }]
+        // })
+        await setDoc(assignmentDocRef, assignmentData)    
     
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {

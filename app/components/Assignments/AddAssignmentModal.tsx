@@ -106,16 +106,21 @@ function AddAssignmentModal() {
             priority: formData.priority,
             dueDate: Timestamp.fromDate(dueDate),
             note: formData.note,
-            files: [] as AssignmentFile[],
-            createdAt: new Date(),
+            createdAt: Timestamp.fromDate(new Date()),
             student: studentId,
             folder: formData.folder,
             status: formData.status,
+            timeline: [{
+                files: [] as AssignmentFile[],
+                type: 'Assignment Created',
+                uploadedAt: Timestamp.fromDate(new Date())
+            }]
         }
 
         // Upload files to Firebase Storage
         const filesData = await fileUpload(files, studentId)
-        assignmentData.files = filesData
+        // assignmentData.files = filesData
+        assignmentData.timeline[0].files = filesData
 
         const assignmentDocId = await uploadAssignment(assignmentData, studentId, consultant)
         
