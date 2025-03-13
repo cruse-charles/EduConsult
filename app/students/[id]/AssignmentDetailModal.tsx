@@ -8,21 +8,33 @@ import { useFiles } from '@/hooks/useFiles'
 import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
+import { addEntry } from '@/redux/slices/assignmentsSlice'
+import { RootState } from '@/redux/store'
 import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+// interface AssignmentDetailModalProps {
+//     assignment: Assignment;
+//     open: boolean;
+//     onOpenChange: (open: boolean) => void;
+// }
 
 interface AssignmentDetailModalProps {
-    assignment: Assignment;
+    assignmentId: string;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 // TODO: View doesn't update when sending feedback or right after creating an assignment, needs refresh
-
-function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {
+    // TODO: PASS ASSIGNMENT ID AS PROP THEN USE SELECTOR TO GET ASSIGNMENT
+// function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetailModalProps) {
+function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDetailModalProps) {
     // Hook to manage file state, fetching studentId
-    const { files, handleFileUpload, removeFile} = useFiles();
+    const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     const { id: studentId } = useParams<{id:string}>()
+
+    const assignment = useSelector((state: RootState) => state.assignments.find((a) => a.id === assignmentId))
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
@@ -30,10 +42,11 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         files: []
     })
 
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log(assignment)
-    }, [assignment])
+        console.log('assignmentId', assignmentId)
+    }, [assignmentId])
 
     // TODO: make status appear properly for icon usage here
     const getTimelineIcon = (type: string) => {
@@ -71,7 +84,7 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         }))
     }
 
-    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const entryData = {
@@ -87,9 +100,16 @@ function AssignmentDetailModal({assignment, open, onOpenChange}: AssignmentDetai
         const filesData = await fileUpload(files, studentId)
         entryData.files = filesData
         
-        await uploadEntry(entryData, assignment?.id)
+        // await uploadEntry(entryData, assignment?.id)
+        await uploadEntry(entryData, assignmentId)
         // TODO: ADD THIS INFORMATION TO OUR REDUX STATE AS WELL
-        
+        // dispatch(addEntry({ entryData, assignmentId: assignment.id }))
+        dispatch(addEntry({ entryData, assignmentId }))
+        setFormData({
+            note: '',
+            files: []
+        })
+        clearFiles()
     }
 
     return (

@@ -58,7 +58,16 @@ const assignmentsSlice = createSlice({
       return action.payload;
     },
     addAssignment(state, action) {
-        return [...state, action.payload]
+      return [...state, action.payload]
+    },
+    addEntry(state, action) {
+      const { entryData, assignmentId } = action.payload;
+      const assignmentIndex = state.findIndex(assignment => assignment.id === assignmentId);
+      
+      if (assignmentIndex !== -1) {
+        // Add the new entry to the timeline array
+        state[assignmentIndex].timeline.push(entryData);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -72,5 +81,5 @@ const assignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment } = assignmentsSlice.actions;
+export const { setAssignments, addAssignment, addEntry } = assignmentsSlice.actions;
 export default assignmentsSlice.reducer;
