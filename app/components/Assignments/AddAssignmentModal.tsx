@@ -113,7 +113,9 @@ function AddAssignmentModal() {
             timeline: [{
                 files: [] as AssignmentFile[],
                 type: 'Assignment Created',
-                uploadedAt: Timestamp.fromDate(new Date())
+                uploadedAt: Timestamp.fromDate(new Date()),
+                uploadedBy: 'user',
+                note: ''
             }]
         }
 

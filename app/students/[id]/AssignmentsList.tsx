@@ -138,8 +138,7 @@ function AssignmentsList() {
                     </div>  
                 </CardContent>
             </Card>
-            {/* <AssignmentDetailModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} /> */}
-            <AssignmentDetailModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            <AssignmentDetailModal assignmentId={selectedAssignment!.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
         </>
     )
 }

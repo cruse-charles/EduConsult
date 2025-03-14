@@ -50,7 +50,7 @@ export interface AssignmentBase {
     priority: string;
     dueDate: Date | undefined | Timestamp;
     note: string;
-    createdAt: Date | null;
+    createdAt: Date | null | Timestamp;
     student: string;
     folder: string;
     status: string;
@@ -59,6 +59,11 @@ export interface AssignmentBase {
 // FormData version of an assignment
 export interface AssignmentFormData extends AssignmentBase {
     files: AssignmentFile[];
+}
+
+// Structure for uploading assignments
+export interface AssignmentUpload extends AssignmentBase {
+    timeline: Entry[]
 }
 
 // Structure for using assignments

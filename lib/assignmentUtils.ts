@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
 import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
-import { AssignmentFormData, Entry } from "./types/types";
+import { AssignmentUpload, Entry } from "./types/types";
 import { User } from "firebase/auth";
 import { nanoid } from "@reduxjs/toolkit";
 
@@ -40,31 +40,13 @@ export const fileUpload = async (files: File[], studentId: string) => {
 
 // TODO: ADDING AN ASSIGNMENT TO A NEW FOLDER
 
-export const uploadAssignment = async (assignmentData: AssignmentFormData, studentId: string, consultant: User | null) => {
+export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultant: User | null) => {
     try {
         const assignmentDocId = nanoid()
     
 
         // Create a new Doc
         const assignmentDocRef = doc(db, "assignments", assignmentDocId)
-        // await setDoc(assignmentDocRef, {
-        //     student: studentId,
-        //     consultant: consultant?.uid,
-        //     createdAt: assignmentData.createdAt,
-        //     dueDate: assignmentData.dueDate,
-        //     priority: assignmentData.priority,
-        //     folder: assignmentData.folder,
-        //     title: assignmentData.title,
-        //     type: assignmentData.type,
-        //     note: assignmentData.note,
-        //     timeline: [{
-        //         uploadedBy: consultant?.uid,
-        //         files: assignmentData.files,
-        //         // note: assignmentData.note,
-        //         type: 'Assignment Created',
-        //         uploadedAt: assignmentData.createdAt
-        //     }]
-        // })
         await setDoc(assignmentDocRef, assignmentData)    
     
         // Update folder names in student's doc
@@ -80,10 +62,6 @@ export const uploadAssignment = async (assignmentData: AssignmentFormData, stude
     }
 
 }
-
-
-// NEW
-
 
 export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => {
     try {
