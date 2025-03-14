@@ -18,6 +18,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AssignmentDetails from './AssignmentDetails'
+import AssignmentTimeline from './AssignmentTimeline'
 
 interface AssignmentDetailModalProps {
     assignmentId: string;
@@ -47,32 +48,32 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
         console.log('assignmentId', assignmentId)
     }, [assignmentId])
 
-    // TODO: make status appear properly for icon usage here
-    const getTimelineIcon = (type: string) => {
-        switch (type) {
-        case "submission":
-            return <Upload className="h-4 w-4 text-blue-500" />
-        case "feedback":
-            return <MessageSquare className="h-4 w-4 text-orange-500" />
-        case "edit":
-            return <Settings className="h-4 w-4 text-purple-500" />
-        case "creation":
-            return <FileText className="h-4 w-4 text-green-500" />
-        default:
-            return <Clock className="h-4 w-4 text-gray-500" />
-        }
-    }
+    // // TODO: make status appear properly for icon usage here
+    // const getTimelineIcon = (type: string) => {
+    //     switch (type) {
+    //     case "submission":
+    //         return <Upload className="h-4 w-4 text-blue-500" />
+    //     case "feedback":
+    //         return <MessageSquare className="h-4 w-4 text-orange-500" />
+    //     case "edit":
+    //         return <Settings className="h-4 w-4 text-purple-500" />
+    //     case "creation":
+    //         return <FileText className="h-4 w-4 text-green-500" />
+    //     default:
+    //         return <Clock className="h-4 w-4 text-gray-500" />
+    //     }
+    // }
 
-    // TODO: Currently file name downloaded is from storage path, need to convert to blob to download
-    // it as the same name
-    const downloadFile = (file: AssignmentFile) => {
-        const link = document.createElement('a');
-        link.href = file.downloadUrl;
-        link.download = file.originalName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+    // // TODO: Currently file name downloaded is from storage path, need to convert to blob to download
+    // // it as the same name
+    // const downloadFile = (file: AssignmentFile) => {
+    //     const link = document.createElement('a');
+    //     link.href = file.downloadUrl;
+    //     link.download = file.originalName;
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    // }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
         const {name, value} = e.target
@@ -136,9 +137,9 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
                         <AssignmentDetails assignment={assignment}/>
                     </div>
 
-                    {/* Timeline */}
+                    {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
-                        <div className="flex items-center justify-between">
+                        {/* <div className="flex items-center justify-between">
                             <h4 className="font-medium">Assignment Timeline</h4>
                         </div>
                         <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -149,21 +150,21 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
                                             {getTimelineIcon(entry.type)}
                                         </div>
                                         
-                                        {/* Bar on leftside for timeline styling */}
+                                        Bar on leftside for timeline styling
                                         {index < assignment?.timeline.length - 1 && <div className="w-px h-12 bg-muted mt-2" />}
                                     </div>
 
-                                    {/* Entry Details */}
+                                    Entry Details
                                     <div className="flex-1 space-y-2">
                                         <div className="flex items-center gap-2">
-                                            {/* <div className="flex items-center gap-1">
+                                            <div className="flex items-center gap-1">
                                                 {entry.authorType === "consultant" ? (
                                                 <UserCheck className="h-3 w-3 text-blue-500" />
                                                 ) : (
                                                 <User className="h-3 w-3 text-green-500" />
-                                                )}   */}
+                                                )}  
                                                 <span className="text-sm font-medium">{entry.uploadedBy}</span>
-                                            {/* </div> */}
+                                            </div>
                                             <Badge variant="outline" className="text-xs">
                                                 {entry.type}
                                             </Badge>
@@ -196,7 +197,8 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
                                     </div>
                                 </div>
                             ))}
-                        </div>
+                        </div> */}
+                        <AssignmentTimeline assignment={assignment}/>
 
                         <Separator />
                         
