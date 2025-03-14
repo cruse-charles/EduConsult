@@ -17,6 +17,7 @@ import { RootState } from '@/redux/store'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import AssignmentDetails from '../AssignmentDetails'
 
 interface AssignmentDetailModalProps {
     assignmentId: string;
@@ -38,6 +39,8 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
         note: '',
         files: []
     })
+
+    const [isLoading, setIsLoading] = useState(false)
 
 
     useEffect(() => {
@@ -82,6 +85,7 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setIsLoading(true)
 
         const entryData = {
             files: [] as AssignmentFile[],
@@ -95,6 +99,12 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
         // Upload files to firebase storage and attach files for entry form upload
         const filesData = await fileUpload(files, studentId)
         entryData.files = filesData
+
+        // TODO: Improve error handling
+        if (entryData.note.trim() === '') {
+            alert('Please add a note to submit feedback.')
+            setIsLoading(false)
+        }
         
         // Upload entry to firestore
         await uploadEntry(entryData, assignmentId)
@@ -106,6 +116,7 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
             files: []
         })
         clearFiles()
+        setIsLoading(false)
     }
 
     return (
@@ -122,13 +133,13 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
 
                     {/* Assignment Details */}
                     <div className="lg:col-span-1 space-y-4">
-                        <div className="space-y-3">
+                        {/* <div className="space-y-3">
                             <h4 className="font-medium">Assignment Overview</h4>
                             <div className="space-y-2">
                                 <div className="flex items-center gap-2">
                                     <User className="h-4 w-4 text-muted-foreground" />
                                     <span className="text-sm font-medium">Student:</span>
-                                    {/* <span className="text-sm">{assignment.student}</span> */}
+                                    <span className="text-sm">{assignment?.student}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <FileText className="h-4 w-4 text-muted-foreground" />
@@ -148,7 +159,8 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
                                     <span className="text-sm">{formatDueDate(assignment?.dueDate)}</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
+                        <AssignmentDetails assignment={assignment}/>
 
                         <Separator />
 
@@ -237,9 +249,8 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
                                 />
                             </div>
                             <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
-                            <Button type='submit' className='mt-2'>
-                                {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
-                                Send Feedback
+                            <Button type='submit' className='mt-2' disabled={isLoading}>
+                                {!isLoading ? 'Send Feedback' : 'Sending Feedback...'}
                             </Button>
                         </form>
                     </div>

@@ -62,7 +62,7 @@ function AddAssignmentModal() {
         note: "",
         files: [],
         createdAt: null,
-        status: 'pending',
+        status: 'Pending',
     })
 
     const resetForm = () => {
@@ -76,7 +76,7 @@ function AddAssignmentModal() {
             note: "",
             files: [],
             createdAt: null,
-            status: 'pending'
+            status: 'Pending'
         });
         clearFiles()
         setDueDate(undefined);
@@ -94,7 +94,7 @@ function AddAssignmentModal() {
             !formData.folder ||
             !dueDate
         ) {
-            alert ("Please fill out all required fields")
+            alert("Please fill out all required fields")
             setIsLoading(false)
             return
         }
@@ -115,7 +115,7 @@ function AddAssignmentModal() {
                 type: 'Assignment Created',
                 uploadedAt: Timestamp.fromDate(new Date()),
                 uploadedBy: 'user',
-                note: ''
+                note: 'Assignment created and assigned to student.'
             }]
         }
 
