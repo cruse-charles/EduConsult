@@ -63,6 +63,18 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
 
 }
 
+export const updateAssignment = async (assignmentData, assignmentId) => {
+    try {
+        // Get reference to the assignment document
+        const assignmentDocRef = doc(db, "assignments", assignmentId);
+
+        // Update doc
+        await updateDoc(assignmentDocRef, assignmentData);
+    } catch (error) {
+        console.log('Error updating assignment', error)
+    }
+}
+
 export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => {
     try {
         await updateDoc(doc(db, "assignments", assignmentDocId), {
