@@ -19,7 +19,6 @@ import { useParams } from 'next/navigation'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;
-    open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
@@ -28,7 +27,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const [edit, setEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     
-    const { id: studentId } = useParams();
+    const { id: studentId } = useParams<{id:string}>();
 
     const [formData, setFormData] = useState({
         type: assignment?.type,
@@ -51,7 +50,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         console.log(assignment)
     }, [])
 
-    const handleSelectChange = (name, value) => {
+    const handleSelectChange = (name: string, value: string) => {
         setFormData((prev) => ({
             ...prev,
             [name]: value
@@ -61,7 +60,13 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        if (!assignment?.id || !formData.type || !formData.status || !formData.dueDate || !formData.note) {
+            alert("Please fill out all fields.");
+            return;
+        }
+
         dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: formData }))
+        // @ts-ignore
         await updateAssignment(formData, assignment?.id)
 
         setEdit(false)
@@ -79,7 +84,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         setEdit(false)
     }
 
-    const handleDateChange = (date) => {
+    const handleDateChange = (date: Date) => {
         setFormData((prev) => ({
             ...prev,
             dueDate: date
@@ -87,6 +92,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     }
 
     const handleDelete = async () => {
+        if (!assignment?.id) return;
         setEdit(false)
         await deleteAssignment(assignment?.id, studentId)
         dispatch(deleteAssignmentSlice(assignment?.id))
@@ -168,6 +174,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0">
+                                    {/* @ts-ignore */}
                                     <Calendar mode="single" selected={assignment?.dueDate} onSelect={handleDateChange} />
                                 </PopoverContent>
                             </Popover>

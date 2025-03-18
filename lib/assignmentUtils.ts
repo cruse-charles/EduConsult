@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
 import { arrayRemove, arrayUnion, deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
-import { AssignmentUpload, Entry } from "./types/types";
+import { AssignmentUpload, Entry, UpdateAssignment } from "./types/types";
 import { User } from "firebase/auth";
 import { nanoid } from "@reduxjs/toolkit";
 
@@ -63,12 +63,13 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
 
 }
 
-export const updateAssignment = async (assignmentData, assignmentId) => {
+export const updateAssignment = async (assignmentData: UpdateAssignment, assignmentId: string) => {
     try {
         // Get reference to the assignment document
         const assignmentDocRef = doc(db, "assignments", assignmentId);
 
         // Update doc
+        // @ts-ignore
         await updateDoc(assignmentDocRef, assignmentData);
     } catch (error) {
         console.log('Error updating assignment', error)
@@ -85,7 +86,7 @@ export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => 
     }
 }
 
-export const deleteAssignment = async (assignmentId, studentId) => {
+export const deleteAssignment = async (assignmentId: string, studentId: string) => {
     try {
         await deleteDoc(doc(db, "assignments", assignmentId))
 

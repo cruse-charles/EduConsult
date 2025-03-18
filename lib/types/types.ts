@@ -81,6 +81,13 @@ export interface Entry {
     uploadedBy: string;
 }
 
+export interface UpdateAssignment {
+    status: string;
+    note: string;
+    type: string;
+    dueDate: Date | Timestamp;    
+}
+
 // // structure of assignemtnts in database
 // export interface AssignmentDoc {
 //     student: string;
