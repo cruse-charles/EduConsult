@@ -107,7 +107,7 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
 
                     {/* Assignment Details Container*/}
                     <div className="lg:col-span-1 space-y-4">
-                        <AssignmentDetails assignment={assignment}/>
+                        <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} />
                     </div>
 
                     {/* Timeline & Feedback Submission Container*/}

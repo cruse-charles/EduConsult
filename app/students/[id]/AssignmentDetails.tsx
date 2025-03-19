@@ -1,26 +1,28 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { updateAssignment } from '@/lib/assignmentUtils'
+import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'lucide-react'
+
+import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
 import { Assignment } from '@/lib/types/types'
 import { cn, formatDueDate } from '@/lib/utils'
 import { updateAssignmentSlice } from '@/redux/slices/assignmentsSlice'
-import { format } from 'date-fns'
-import { CalendarIcon, Clock, FileText, Pencil, Save, User, X } from 'lucide-react'
+
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 interface AssignmentDetailProps {
-    assignment?: Assignment
+    assignment?: Assignment;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
-function AssignmentDetails({assignment}: AssignmentDetailProps) {
+function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const dispatch = useDispatch();
     const [edit, setEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -80,6 +82,12 @@ function AssignmentDetails({assignment}: AssignmentDetailProps) {
             dueDate: date
         }))
     }
+
+    const handleDelete = async () => {
+        setEdit(false)
+        await deleteAssignment(assignment?.id)
+        onOpenChange(false);
+    }
     
     return (
 
@@ -87,10 +95,22 @@ function AssignmentDetails({assignment}: AssignmentDetailProps) {
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
                     <h4 className="font-medium">Assignment Overview</h4>
-                    {!edit && (
+                    {/* {!edit && (
                         <Button variant="outline" size="sm" onClick={() => setEdit(true)}className="gap-2">
                             <Pencil className="h-4 w-4" />
                             Edit
+                        </Button>
+                    )} */}
+
+                    {!edit ? (
+                        <Button variant="outline" size="sm" onClick={() => setEdit(true)} className="gap-2">
+                            <Pencil className="h-4 w-4" />
+                            Edit
+                        </Button>
+                    ) : (
+                        <Button variant='destructive' size="sm" onClick={() => handleDelete()} className="gap-2">
+                            <Trash />
+                            Delete
                         </Button>
                     )}
                 </div>
@@ -130,12 +150,6 @@ function AssignmentDetails({assignment}: AssignmentDetailProps) {
 
                         <div className="space-y-2">
                             <Label htmlFor="dueDate">Due Date</Label>
-                            {/* <Input
-                                type="date"
-                                name="dueDate"
-                                value={formData.dueDate}
-                                onChange={handleInputChange}
-                            /> */}
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Button
@@ -146,7 +160,6 @@ function AssignmentDetails({assignment}: AssignmentDetailProps) {
                                     )}
                                     >
                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {/* {assignment?.dueDate ? format(assignment?.dueDate, "PPP") : "Pick a date"} */}
                                     {formatDueDate(formData?.dueDate)}
                                     </Button>
                                 </PopoverTrigger>
@@ -158,13 +171,7 @@ function AssignmentDetails({assignment}: AssignmentDetailProps) {
 
                         <div className="space-y-2">
                             <Label htmlFor="note">Instructions</Label>
-                            <Textarea
-                                name="note"
-                                value={formData.note}
-                                onChange={handleInputChange}
-                                rows={3}
-                                placeholder="Assignment instructions..."
-                            />
+                            <Textarea name="note" value={formData.note} onChange={handleInputChange} rows={3} placeholder="Assignment instructions..." />
                         </div>
 
                         <div className="flex gap-2">
@@ -217,61 +224,6 @@ function AssignmentDetails({assignment}: AssignmentDetailProps) {
                 </div>
             )}
         </>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // <>
-        //     <div className="space-y-3">
-        //         <h4 className="font-medium">Assignment Overview</h4>
-        //         <Button className='h-5 w-5' onClick={() => setEdit(true)}><Pencil /></Button>
-        //         <div className="space-y-2">
-        //             <div className="flex items-center gap-2">
-        //                 <User className="h-4 w-4 text-muted-foreground" />
-        //                 <span className="text-sm font-medium">Student:</span>
-        //                 <span className="text-sm">{assignment?.student}</span>
-        //             </div>
-        //             <div className="flex items-center gap-2">
-        //                 <FileText className="h-4 w-4 text-muted-foreground" />
-        //                 <span className="text-sm font-medium">Type:</span>
-        //                 <Badge variant="outline">{assignment?.type}</Badge>
-        //             </div>
-        //             <div className="flex items-center gap-2">
-        //                 <Clock className="h-4 w-4 text-muted-foreground" />
-        //                 <span className="text-sm font-medium">Status:</span>
-        //                 <Badge variant={assignment?.status === "completed" ? "default" : "outline"}>
-        //                     {assignment?.status === "completed" ? "Completed" : assignment?.status}
-        //                 </Badge>
-        //             </div>
-        //             <div className="flex items-center gap-2">
-        //                 <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-        //                 <span className="text-sm font-medium">Due Date:</span>
-        //                 <span className="text-sm">{formatDueDate(assignment?.dueDate)}</span>
-        //             </div>
-        //         </div>
-        //     </div>
-            
-        //     <Separator />
-
-        //     <div className="space-y-3">
-        //         <h4 className="font-medium">Instructions</h4>
-        //         <div className="p-3 bg-muted/50 rounded-md">
-        //             <p className="text-sm">{assignment?.note}</p>
-        //         </div>
-        //     </div>
-        // </>
     )
 }
 

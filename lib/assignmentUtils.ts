@@ -1,6 +1,6 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
-import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import { AssignmentUpload, Entry } from "./types/types";
 import { User } from "firebase/auth";
 import { nanoid } from "@reduxjs/toolkit";
@@ -82,5 +82,14 @@ export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => 
         })
     } catch (error) {
         console.log("Error updating assignment", error)
+    }
+}
+
+export const deleteAssignment = async (assignmentId) => {
+    try {
+        await deleteDoc(doc(db, "assignments", assignmentId))
+        console.log("Assignment deleted successfully")
+    } catch (error) {
+        console.log("Error deleting assignment", error)
     }
 }
