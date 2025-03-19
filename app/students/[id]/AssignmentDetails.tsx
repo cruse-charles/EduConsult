@@ -88,8 +88,8 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
 
     const handleDelete = async () => {
         setEdit(false)
-        await deleteAssignment(assignment?.id)
-        dispatch(deleteAssignmentSlice(assignment?.id, studentId))
+        await deleteAssignment(assignment?.id, studentId)
+        dispatch(deleteAssignmentSlice(assignment?.id))
         onOpenChange(false);
     }
     
