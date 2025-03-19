@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import { app, db } from "@/lib/firebaseConfig";
+import { db } from "@/lib/firebaseConfig";
 import { collection, addDoc, updateDoc, arrayUnion, DocumentReference, DocumentData } from "firebase/firestore";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { User } from "lucide-react";

@@ -20,9 +20,12 @@ const page = () => {
     const fetchStudents = async (user: FirebaseUser) => {
         try {
             // Get the consultant's document reference and snapshot
+            console.log('fetching students...')
             const ref = doc(db, "consultantUsers", user.uid);
+            console.log("Consultant Document Reference:", ref);
             setConsultantDocRef(ref);
             const consultantDocSnap = await getDoc(ref);
+            console.log("Consultant Document Snapshot:", consultantDocSnap);
 
             // If the consultant document does not exist, set students to an empty array
             if (!consultantDocSnap.exists()) {

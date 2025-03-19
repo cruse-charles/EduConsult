@@ -27,6 +27,7 @@ function StudentProfileCard({student, setStudent} : StudentProfileCardProps) {
     const router = useRouter();
 
     // Function to handle student deletion
+    // TODO: DELETE THE STUDENT REF FROM THE CONSULTANT DOCUMENT
     const handleDelete = async () => {
         try {
             // Delete the student document from Firestore

@@ -9,6 +9,7 @@ export const useConsultant = () => {
         const auth = getAuth(app);
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
+            console.log('current User', user)
         });
         return () => unsubscribe();
     }, []);
