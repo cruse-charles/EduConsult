@@ -69,7 +69,6 @@ const assignmentsSlice = createSlice({
         state[assignmentIndex].timeline.push(entryData);
       }
     },
-    // CHECK THIS FOR TESTING
     updateAssignmentSlice(state, action) {
       const { assignmentId, updateData } = action.payload;
       const assignmentIndex = state.findIndex(assignment => assignment.id === assignmentId);
@@ -77,6 +76,10 @@ const assignmentsSlice = createSlice({
       if (assignmentIndex !== -1) {
           state[assignmentIndex] = { ...state[assignmentIndex], ...updateData };
       }
+    },
+    deleteAssignmentSlice(state, action) {
+      const assignmentId = action.payload;
+      return state.filter((assignment) => assignment.id !== assignmentId)
     }
   },
   extraReducers: (builder) => {
@@ -90,5 +93,5 @@ const assignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice } = assignmentsSlice.actions;
+export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteAssignmentSlice } = assignmentsSlice.actions;
 export default assignmentsSlice.reducer;

@@ -11,10 +11,11 @@ import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'luc
 import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
 import { Assignment } from '@/lib/types/types'
 import { cn, formatDueDate } from '@/lib/utils'
-import { updateAssignmentSlice } from '@/redux/slices/assignmentsSlice'
+import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/assignmentsSlice'
 
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useParams } from 'next/navigation'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;
@@ -26,6 +27,8 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const dispatch = useDispatch();
     const [edit, setEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    
+    const { id: studentId } = useParams();
 
     const [formData, setFormData] = useState({
         type: assignment?.type,
@@ -86,6 +89,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const handleDelete = async () => {
         setEdit(false)
         await deleteAssignment(assignment?.id)
+        dispatch(deleteAssignmentSlice(assignment?.id, studentId))
         onOpenChange(false);
     }
     
