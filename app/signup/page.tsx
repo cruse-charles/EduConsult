@@ -77,6 +77,59 @@ const page = () => {
         }))
     }
 
+    const parseDisplayName = (displayName: string | null) => {
+        if (!displayName) {
+            return { firstName: '', lastName: '' }
+        }
+        
+        const nameParts = displayName.trim().split(' ')
+        const firstName = nameParts[0] || ''
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+        
+        return { firstName, lastName }
+    }
+
+    // Handle Google sign-in
+    const handleGoogleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        setIsLoading(false)
+        
+        // Firebase function to sign in with Google
+        signInWithPopup(auth, googleProvider)
+            .then( async (result) => {
+                console.log(result)
+
+                // Check if this is a new user (first time signing in with Google)
+                const user = result.user
+                const userDocRef = doc(db, "consultantUsers", user.uid)
+                const userDoc = await getDoc(userDocRef)
+                
+                // Parse the display name into first and last name
+                const { firstName, lastName } = parseDisplayName(user.displayName)
+                
+                // If user document doesn't exist, create it (new user)
+                if (!userDoc.exists()) {
+                    await setDoc(userDocRef, {
+                        email: user.email,
+                        firstName: firstName,
+                        lastName: lastName,
+                        photoURL: user.photoURL,
+                        students: [],
+                        createdAt: new Date(),
+                        signInMethod: 'google'
+                    })
+                    console.log('New Google user document created with parsed names:', { firstName, lastName })
+                }
+
+
+                router.push('/dashboard');
+                setIsLoading(false)
+            })
+            .catch((error) => {
+                console.group(error.message)
+                setIsLoading(false)
+            })
+    }
 
   return (
 
@@ -93,7 +146,7 @@ const page = () => {
             <div className="grid gap-4">
               <Button
                 variant="outline"
-                // onClick={handleGoogleSignIn}
+                onClick={handleGoogleSignIn}
                 disabled={isLoading}
                 className="w-full"
               >
@@ -168,6 +221,24 @@ const page = () => {
             </div>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    // Form that triggers handleSubmit on submit
+    // <form onSubmit={handleSubmit}>
+    //     <input onChange={handleInputChange} value={userData.email} name='email' placeholder='email' className='border border-black'/>
+    //     <input onChange={handleInputChange} value={userData.password} name='password' placeholder='password' className='border border-black'/>
+    //     <button type='submit' className='border border-black'>Sign up</button>
+    // </form>
   )
 }
 
