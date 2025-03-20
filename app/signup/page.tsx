@@ -62,6 +62,7 @@ const page = () => {
             setIsLoading(false)
         } catch (error) {
             console.log('Error creating consultant', (error as Error).message)
+            setIsLoading(false)
         }
             
     }
@@ -77,6 +78,7 @@ const page = () => {
         }))
     }
 
+    // Function to parse display name into first and last name for users from Google sign-in
     const parseDisplayName = (displayName: string | null) => {
         if (!displayName) {
             return { firstName: '', lastName: '' }
@@ -221,24 +223,6 @@ const page = () => {
             </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-    // Form that triggers handleSubmit on submit
-    // <form onSubmit={handleSubmit}>
-    //     <input onChange={handleInputChange} value={userData.email} name='email' placeholder='email' className='border border-black'/>
-    //     <input onChange={handleInputChange} value={userData.password} name='password' placeholder='password' className='border border-black'/>
-    //     <button type='submit' className='border border-black'>Sign up</button>
-    // </form>
   )
 }
 

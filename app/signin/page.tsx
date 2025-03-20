@@ -1,24 +1,26 @@
 'use client'
 
-import { useState } from "react"
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
+import { doc, getDoc, setDoc } from "firebase/firestore"
+
+import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { GraduationCap } from "lucide-react"
-import { useRouter } from "next/navigation";
-import { doc, getDoc, setDoc } from "firebase/firestore"
 
 // TODO: Redirect signed in users away from signin/signup pages
 const page = () => {
-    // Initialize Firebase Auth instance using the configured app and Google Auth provider
+    // Initialize Firebase Auth instance, Google Auth provider, and router
     let auth = getAuth(app);
     let googleProvider = new GoogleAuthProvider();
     const router = useRouter();
 
-    // State to manage form input data for email and password
+    // State to manage form input data for email and password, and loading state
     const [userData, setuserData] = useState({
         email: '',
         password: '',
@@ -31,7 +33,7 @@ const page = () => {
         e.preventDefault()
         setIsLoading(true)
         
-        // Firebase function to create a new user with email and password
+        // Firebase function to create a new user with email and password then redirect to dashboard
         signInWithEmailAndPassword(auth, userData.email, userData.password)
             .then((userCredential) => {
                 console.log('signed in...', userCredential)
@@ -44,12 +46,24 @@ const page = () => {
             })
     }
 
+    // Function to parse display name into first and last name for users from Google sign-in
+    const parseDisplayName = (displayName: string | null) => {
+        if (!displayName) {
+            return { firstName: '', lastName: '' }
+        }
+        
+        const nameParts = displayName.trim().split(' ')
+        const firstName = nameParts[0] || ''
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+        
+        return { firstName, lastName }
+    }
+
     // Handle Google sign-in
     const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         setIsLoading(false)
 
-        // Firebase function to sign in with Google
         // Firebase function to sign in with Google
         signInWithPopup(auth, googleProvider)
             .then( async (result) => {
@@ -59,14 +73,26 @@ const page = () => {
                 const user = result.user
                 const userDocRef = doc(db, "consultantUsers", user.uid)
                 const userDoc = await getDoc(userDocRef)
+
+                // Parse the display name into first and last name
+                const { firstName, lastName } = parseDisplayName(user.displayName)
                         
                 // If user document doesn't exist, create it (new user)
                 if (!userDoc.exists()) {
-                    router.push('/signup')
-                } else {
-                    router.push('/dashboard');
+                    await setDoc(userDocRef, {
+                        email: user.email,
+                        firstName: firstName,
+                        lastName: lastName,
+                        photoURL: user.photoURL,
+                        students: [],
+                        createdAt: new Date(),
+                        signInMethod: 'google'
+                    })
+                    console.log('New Google user document created with parsed names:', { firstName, lastName })
                 }
-        
+                
+                // Redirect to dashboard after successful sign-in
+                router.push('/dashboard');
                 setIsLoading(false)
             })
             .catch((error) => {
