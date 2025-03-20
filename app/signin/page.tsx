@@ -2,15 +2,16 @@
 
 import { useState } from "react"
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
-import { app } from "@/lib/firebaseConfig"
+import { app, db } from "@/lib/firebaseConfig"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { GraduationCap } from "lucide-react"
 import { useRouter } from "next/navigation";
+import { doc, getDoc, setDoc } from "firebase/firestore"
 
-
+// TODO: Redirect signed in users away from signin/signup pages
 const page = () => {
     // Initialize Firebase Auth instance using the configured app and Google Auth provider
     let auth = getAuth(app);
@@ -46,14 +47,31 @@ const page = () => {
     // Handle Google sign-in
     const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        
+        setIsLoading(false)
+
+        // Firebase function to sign in with Google
         // Firebase function to sign in with Google
         signInWithPopup(auth, googleProvider)
-            .then((result) => {
+            .then( async (result) => {
                 console.log(result)
+        
+                // Check if this is a new user (first time signing in with Google)
+                const user = result.user
+                const userDocRef = doc(db, "consultantUsers", user.uid)
+                const userDoc = await getDoc(userDocRef)
+                        
+                // If user document doesn't exist, create it (new user)
+                if (!userDoc.exists()) {
+                    router.push('/signup')
+                } else {
+                    router.push('/dashboard');
+                }
+        
+                setIsLoading(false)
             })
             .catch((error) => {
                 console.group(error.message)
+                setIsLoading(false)
             })
     }
 
