@@ -1,23 +1,47 @@
 'use client'
 
 import { useState } from "react"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
-import { setDoc, doc } from "firebase/firestore"
+import { setDoc, doc, getDoc } from "firebase/firestore"
+import Link from "next/link"
+import { GraduationCap } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation";
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
     let auth = getAuth(app);
+    const router = useRouter();
+    let googleProvider = new GoogleAuthProvider();
+    
 
     // State to manage form input data for email and password
-    const [userData, setuserData] = useState({
+    const [userData, setUserData] = useState({
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
+        confirmPassword: ''
     })
 
+    const [isLoading, setIsLoading] = useState(false)
+
     // Handles form submission for user creation in Firebase Auth
+    // TODO: Error handling, confirm passwords match
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        // Check if passwords match
+        if (userData.password !== userData.confirmPassword) {
+            alert("Passwords don't match!")
+            return
+        }
+
+        setIsLoading(true)
 
         try {
             // Firebase function to create a new user with email and password in Firebase Auth
@@ -27,9 +51,15 @@ const page = () => {
             // Create a new document with user's UID in Firestore database
             await setDoc(doc(db, "consultantUsers", user.uid), {
                 email: user.email,
+                firstName: userData.firstName,
+                lastName: userData.lastName,
                 students: [],
+                createdAt: new Date(),
+                signInMethod: 'email',
             })
             console.log('Consultant Created')
+            router.push('/dashboard');
+            setIsLoading(false)
         } catch (error) {
             console.log('Error creating consultant', (error as Error).message)
         }
@@ -41,19 +71,103 @@ const page = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
 
-        setuserData((prevData) => ({
+        setUserData((prevData) => ({
             ...prevData,
             [name]: value,
         }))
     }
 
+
   return (
-    // Form that triggers handleSubmit on submit
-    <form onSubmit={handleSubmit}>
-        <input onChange={handleInputChange} value={userData.email} name='email' placeholder='email' className='border border-black'/>
-        <input onChange={handleInputChange} value={userData.password} name='password' placeholder='password' className='border border-black'/>
-        <button type='submit' className='border border-black'>Sign up</button>
-    </form>
+
+    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+      <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
+        <GraduationCap className="h-6 w-6" />
+        <span className="font-bold">EduConsult Pro</span>
+      </Link>
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
+        <div className="flex flex-col space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+          <p className="text-sm text-muted-foreground">Enter your information to get started</p>
+        </div>
+            <div className="grid gap-4">
+              <Button
+                variant="outline"
+                // onClick={handleGoogleSignIn}
+                disabled={isLoading}
+                className="w-full"
+              >
+                Continue With Google
+              </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <Separator className="w-full" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">Or continue with email</span>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit}>
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="first-name">First name</Label>
+                      <Input id="first-name" placeholder="John" disabled={isLoading} required />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="last-name">Last name</Label>
+                      <Input id="last-name" placeholder="Doe" disabled={isLoading} required />
+                    </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                        name="email"
+                        placeholder="name@example.com"
+                        type="email"
+                        disabled={isLoading}
+                        required
+                        onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                        name="password"
+                        placeholder="••••••••"
+                        type="password"
+                        disabled={isLoading}
+                        onChange={handleInputChange}
+                        required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <Input
+                      name="confirm-password"
+                      placeholder="••••••••"
+                      type="password"
+                      disabled={isLoading}
+                      required
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <Button disabled={isLoading}>
+                    {isLoading ? "Creating account..." : "Create Account"}
+                  </Button>
+                </div>
+              </form>
+              <div className="text-center text-sm">
+                Already have an account?{" "}
+                <Link href="/login" className="underline">
+                  Sign in
+                </Link>
+              </div>
+            </div>
+      </div>
+    </div>
   )
 }
 
