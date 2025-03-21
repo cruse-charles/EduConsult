@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, BookOpen, Calendar, GraduationCap, Users } from "lucide-react"
+import { ArrowRight, BookOpen, Calendar, GraduationCap, ShieldUser, Users } from "lucide-react"
 
 export default function Home() {
   return (
@@ -33,7 +33,8 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-1">
-                <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        {/* Main Text and Dashboard View */}
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
               <div className="flex flex-col justify-center space-y-4">
@@ -102,6 +103,100 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Features Section */}
+        <section id="features" className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Features</div>
+                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+                  Everything You Need to Succeed
+                </h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Our platform provides all the tools education consultants need to effectively manage their students
+                  and help them achieve their academic goals.
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
+              <div className="grid gap-6">
+                <div className="grid gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <Users className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-xl font-bold">Student Portfolio Management</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Easily manage student profiles, track their progress, and store important documents in one
+                    centralized location.
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <BookOpen className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-xl font-bold">Assignment Management</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Create, assign, and track assignments for each student. Students can view and submit their work
+                    directly through the platform.
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <Calendar className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-xl font-bold">Integrated Calendar</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Keep track of important deadlines and appointments with our integrated calendar system, customized
+                    for each student.
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-6">
+                <div className="grid gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <GraduationCap className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-xl font-bold">School Information Database</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Access up-to-date information about universities and colleges, automatically scraped from their
+                    websites.
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <Users className="h-4 w-4"/>
+                    </div>
+                    <h3 className="text-xl font-bold">Role-Based Access</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Different views for consultants and students ensure that everyone sees exactly what they need to
+                    see.
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <ShieldUser className="h-4 w-4"/>
+                    </div>
+                    <h3 className="text-xl font-bold">Secure Data Storage</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    All student information and documents are securely stored and protected.
+                  </p>
                 </div>
               </div>
             </div>
