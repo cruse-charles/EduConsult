@@ -196,17 +196,19 @@ const page = () => {
                         disabled={isLoading}
                         onChange={handleInputChange}
                         required
+                        value={userData.password}
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
                     <Input
-                      name="confirm-password"
+                      name="confirmPassword"
                       placeholder="••••••••"
                       type="password"
                       disabled={isLoading}
                       required
                       onChange={handleInputChange}
+                      value={userData.confirmPassword}
                     />
                   </div>
                   <Button disabled={isLoading}>
