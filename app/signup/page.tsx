@@ -168,12 +168,12 @@ const page = () => {
                 <div className="grid gap-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
-                      <Label htmlFor="first-name">First name</Label>
-                      <Input id="first-name" placeholder="John" disabled={isLoading} required />
+                      <Label htmlFor="firstName">First name</Label>
+                      <Input id="firstName" placeholder="John" disabled={isLoading} required />
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="last-name">Last name</Label>
-                      <Input id="last-name" placeholder="Doe" disabled={isLoading} required />
+                      <Label htmlFor="lastName">Last name</Label>
+                      <Input id="lastName" placeholder="Doe" disabled={isLoading} required />
                     </div>
                   </div>
                   <div className="grid gap-2">
