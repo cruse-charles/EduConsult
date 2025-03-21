@@ -12,9 +12,9 @@ export default function Home() {
             <span className="text-xl font-bold">EduConsult Pro</span>
           </div>
           <nav className="hidden md:flex gap-6">
-            <Link href="#features" className="text-sm font-medium hover:underline underline-offset-4">
+            {/* <Link href="#features" className="text-sm font-medium hover:underline underline-offset-4">
               Features
-            </Link>
+            </Link> */}
             {/* <Link href="#testimonials" className="text-sm font-medium hover:underline underline-offset-4">
               Testimonials
             </Link> */}
@@ -203,8 +203,45 @@ export default function Home() {
           </div>
         </section>
       </main>
+      {/* Footer */}
       <footer className="border-t">
-        
+                <div className="container flex flex-col gap-4 py-10 md:flex-row md:gap-8 md:py-12">
+          <div className="flex flex-col gap-2 md:gap-4 lg:gap-6">
+            <div className="flex items-center gap-2">
+              <GraduationCap className="h-6 w-6" />
+              <span className="text-xl font-bold">EduConsult Pro</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Empowering education consultants to help students achieve their dreams.
+            </p>
+          </div>
+          <div className="md:ml-auto grid gap-8 sm:grid-cols-3">
+            <div className="grid gap-3 text-sm">
+              <div className="font-medium">Product</div>
+              <Link href="#" className="text-muted-foreground hover:underline">
+                Features
+              </Link>
+              {/* <Link href="#" className="text-muted-foreground hover:underline">
+                Pricing
+              </Link> */}
+              {/* <Link href="#" className="text-muted-foreground hover:underline">
+                Testimonials
+              </Link> */}
+            </div>
+            <div className="grid gap-3 text-sm">
+              <div className="font-medium">The Developer</div>
+              <Link href="https://charlesnealcruse.netlify.app/" className="text-muted-foreground hover:underline">
+                About
+              </Link>
+              {/* <Link href="#" className="text-muted-foreground hover:underline">
+                Blog
+              </Link> */}
+              {/* <Link href="#" className="text-muted-foreground hover:underline">
+                Careers
+              </Link> */}
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   )
