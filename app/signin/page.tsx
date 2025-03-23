@@ -15,6 +15,14 @@ import { GraduationCap } from "lucide-react"
 import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
 
+interface FirebaseUserInfo {
+  uid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'consultant' | 'student';
+}
+
 // TODO: Redirect signed in users away from signin/signup pages
 const page = () => {
     // Initialize Firebase Auth instance, Google Auth provider, and router
@@ -78,22 +86,26 @@ const page = () => {
     }
 
     // Retrieve user's info
-    const getUserInfo = async (userId) => {
+    const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
       try {
+        // Check if id is for a consultant
         const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
         if (consultantDoc.exists()) {
-          // return "consultant"
-           return {...consultantDoc.data(), role: 'consultant'}
+          const data = consultantDoc.data()
+          return {uid: data.uid, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant'}
         }
 
+        // Check if id is for a student
         const studentDoc = await getDoc(doc(db, "studentUsers", userId))
         if (studentDoc.exists()) {
-          return {...studentDoc.data(), role: 'student'}
+          const data = studentDoc.data()
+          return {uid: data.uid, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'student'}
         }
 
-        return "unknown"
+        throw new Error("User not found")
       } catch (error) {
         console.log(error)
+        throw error
       }
     }
 
@@ -130,7 +142,7 @@ const page = () => {
                 console.log('New Google user document created with parsed names:', { firstName, lastName })
             }
 
-            const userInfo = await getUserInfo(userCredential.user.uid);
+            const userInfo = await getUserInfo(user.uid);
             console.log('user', user)
 
             // Add user info to Redux state
