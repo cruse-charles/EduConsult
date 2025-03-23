@@ -62,34 +62,6 @@ const page = () => {
         } finally {
           setIsLoading(false)
         }
-        
-        // // Firebase function to create a new user with email and password then redirect to dashboard
-        // signInWithEmailAndPassword(auth, userData.email, userData.password)
-        //     .then((userCredential) => {
-        //         console.log('signed in...', userCredential)
-
-        //         // new
-        //         const role = await checkRole(userCredential.uid)
-        //         console.log(role)
-
-        //         dispatch(setUser({
-        //           id: role.uid,
-        //           firstName: role.firstName,
-        //           lastName: role.lastName,
-        //           email: role.email,
-        //           role: role.role
-        //         }))
-
-        //         // new
-
-
-        //         router.push('/dashboard');
-        //         setIsLoading(false)
-        //     })
-        //     .catch((error) => {
-        //         console.group(error.message)
-        //         setIsLoading(false)
-        //     })
     }
 
     // Function to parse display name into first and last name for users from Google sign-in
@@ -105,6 +77,7 @@ const page = () => {
       return { firstName, lastName }
     }
 
+    // Retrieve user's info
     const getUserInfo = async (userId) => {
       try {
         const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
@@ -115,7 +88,7 @@ const page = () => {
 
         const studentDoc = await getDoc(doc(db, "studentUsers", userId))
         if (studentDoc.exists()) {
-          return "student"
+          return {...studentDoc.data(), role: 'student'}
         }
 
         return "unknown"
@@ -157,14 +130,16 @@ const page = () => {
                 console.log('New Google user document created with parsed names:', { firstName, lastName })
             }
 
-            const role = checkRole(user.uid)
+            const userInfo = await getUserInfo(userCredential.user.uid);
+            console.log('user', user)
 
+            // Add user info to Redux state
             dispatch(setUser({
-              id: user.uid,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              role: role
+              id: userInfo.uid,
+              firstName: userInfo.firstName,
+              lastName: userInfo.lastName,
+              email: userInfo.email,
+              role: userInfo.role
             }))
                 
             // Redirect to dashboard after successful sign-in
