@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { GraduationCap } from "lucide-react"
+import { useDispatch } from "react-redux"
+import { setUser } from "@/redux/slices/userSlice"
 
 // TODO: Redirect signed in users away from signin/signup pages
 const page = () => {
@@ -19,6 +21,7 @@ const page = () => {
     let auth = getAuth(app);
     let googleProvider = new GoogleAuthProvider();
     const router = useRouter();
+    const dispatch = useDispatch();
 
     // State to manage form input data for email and password, and loading state
     const [userData, setuserData] = useState({
@@ -29,36 +32,99 @@ const page = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     // Handles form submission and user creation in Firebase Auth
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
+
+        try {
+          // Sign in and get user crednetials
+          const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
+          console.log('signed in...', userCredential)
+
+          // Retrieve user info
+          const user = await getUserInfo(userCredential.user.uid);
+          console.log('user', user)
+
+          // Add user info to Redux state
+          dispatch(setUser({
+            id: user.uid,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role
+          }))
+
+          // Navigate to dashboard
+          router.push('/dashboard')
+
+        } catch (error) {
+          console.log('Error Signing in', error)
+        } finally {
+          setIsLoading(false)
+        }
         
-        // Firebase function to create a new user with email and password then redirect to dashboard
-        signInWithEmailAndPassword(auth, userData.email, userData.password)
-            .then((userCredential) => {
-                console.log('signed in...', userCredential)
-                router.push('/dashboard');
-                setIsLoading(false)
-            })
-            .catch((error) => {
-                console.group(error.message)
-                setIsLoading(false)
-            })
+        // // Firebase function to create a new user with email and password then redirect to dashboard
+        // signInWithEmailAndPassword(auth, userData.email, userData.password)
+        //     .then((userCredential) => {
+        //         console.log('signed in...', userCredential)
+
+        //         // new
+        //         const role = await checkRole(userCredential.uid)
+        //         console.log(role)
+
+        //         dispatch(setUser({
+        //           id: role.uid,
+        //           firstName: role.firstName,
+        //           lastName: role.lastName,
+        //           email: role.email,
+        //           role: role.role
+        //         }))
+
+        //         // new
+
+
+        //         router.push('/dashboard');
+        //         setIsLoading(false)
+        //     })
+        //     .catch((error) => {
+        //         console.group(error.message)
+        //         setIsLoading(false)
+        //     })
     }
 
     // Function to parse display name into first and last name for users from Google sign-in
     const parseDisplayName = (displayName: string | null) => {
-        if (!displayName) {
-            return { firstName: '', lastName: '' }
-        }
+      if (!displayName) {
+        return { firstName: '', lastName: '' }
+      }
         
-        const nameParts = displayName.trim().split(' ')
-        const firstName = nameParts[0] || ''
-        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+      const nameParts = displayName.trim().split(' ')
+      const firstName = nameParts[0] || ''
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
         
-        return { firstName, lastName }
+      return { firstName, lastName }
     }
 
+    const getUserInfo = async (userId) => {
+      try {
+        const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
+        if (consultantDoc.exists()) {
+          // return "consultant"
+           return {...consultantDoc.data(), role: 'consultant'}
+        }
+
+        const studentDoc = await getDoc(doc(db, "studentUsers", userId))
+        if (studentDoc.exists()) {
+          return "student"
+        }
+
+        return "unknown"
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    // TODO: Think this is copy-pasted with signup for googleSignIn, so export it
     // Handle Google sign-in
     const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -66,39 +132,49 @@ const page = () => {
 
         // Firebase function to sign in with Google
         signInWithPopup(auth, googleProvider)
-            .then( async (result) => {
-                console.log(result)
+          .then( async (result) => {
+              console.log(result)
         
-                // Check if this is a new user (first time signing in with Google)
-                const user = result.user
-                const userDocRef = doc(db, "consultantUsers", user.uid)
-                const userDoc = await getDoc(userDocRef)
+            // Check if this is a new user (first time signing in with Google)
+            const user = result.user
+            const userDocRef = doc(db, "consultantUsers", user.uid)
+            const userDoc = await getDoc(userDocRef)
 
-                // Parse the display name into first and last name
-                const { firstName, lastName } = parseDisplayName(user.displayName)
+            // Parse the display name into first and last name
+            const { firstName, lastName } = parseDisplayName(user.displayName)
                         
-                // If user document doesn't exist, create it (new user)
-                if (!userDoc.exists()) {
-                    await setDoc(userDocRef, {
-                        email: user.email,
-                        firstName: firstName,
-                        lastName: lastName,
-                        photoURL: user.photoURL,
-                        students: [],
-                        createdAt: new Date(),
-                        signInMethod: 'google'
-                    })
-                    console.log('New Google user document created with parsed names:', { firstName, lastName })
-                }
+            // If user document doesn't exist, create it (new user)
+            if (!userDoc.exists()) {
+                await setDoc(userDocRef, {
+                    email: user.email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    photoURL: user.photoURL,
+                    students: [],
+                    createdAt: new Date(),
+                    signInMethod: 'google'
+                })
+                console.log('New Google user document created with parsed names:', { firstName, lastName })
+            }
+
+            const role = checkRole(user.uid)
+
+            dispatch(setUser({
+              id: user.uid,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              role: role
+            }))
                 
-                // Redirect to dashboard after successful sign-in
-                router.push('/dashboard');
-                setIsLoading(false)
-            })
-            .catch((error) => {
-                console.group(error.message)
-                setIsLoading(false)
-            })
+            // Redirect to dashboard after successful sign-in
+            router.push('/dashboard');
+            setIsLoading(false)
+          })
+          .catch((error) => {
+              console.group(error.message)
+              setIsLoading(false)
+          })
     }
 
     // Handles input changes and updates state accordingly

@@ -51,26 +51,24 @@ function page() {
 
     return (
         // Page Containers
-        // <div className="flex min-h-screen flex-col">
-            <div className="container flex-1 p-4 md:p-6 space-y-6">
-                <StudentProfileHeader />
+        <div className="container flex-1 p-4 md:p-6 space-y-6">
+            <StudentProfileHeader />
 
-                <div className="grid gap-6 md:grid-cols-3">
-                    {/* Student Details Card */}
-                    <StudentViewCard student={student} setStudent={setStudent} />
+            <div className="grid gap-6 md:grid-cols-3">
+                {/* Student Details Card */}
+                <StudentViewCard student={student} setStudent={setStudent} />
 
-                    {/* Main Content Container */}
-                    <div className="md:col-span-2 space-y-6">
-                        {/* Task Summary Section */}
-                        <AssignmentsOverview student={student} />
+                {/* Main Content Container */}
+                <div className="md:col-span-2 space-y-6">
+                    {/* Task Summary Section */}
+                    <AssignmentsOverview student={student} />
 
-                        {/* Student Details Section */}
-                        <SelectViewTabs />
-                        <AssignmentsList />
-                    </div>
+                    {/* Student Details Section */}
+                    <SelectViewTabs />
+                    <AssignmentsList />
                 </div>
             </div>
-        // </div>
+        </div>
     )
 }
 
