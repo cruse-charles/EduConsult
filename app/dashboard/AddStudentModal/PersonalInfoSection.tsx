@@ -23,14 +23,14 @@ function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoS
                 </div>
             </div>
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-muted-foreground">Contact Information</h3>
+                <h3 className="text-sm font-medium text-muted-foreground">Additional Contact Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <Label htmlFor="email">
                             Email Address <span className="text-red-500">*</span>
                         </Label>
                         <Input id="email" type="email" placeholder="student@example.com" value={formData.personalInformation.email} name="email" onChange={handlePersonalInfoChange} required/>
-                    </div>
+                    </div> */}
                     <div className="space-y-2">
                         <Label htmlFor="phone">Phone Number</Label>
                         <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" value={formData.personalInformation.phone} name="phone" onChange={handlePersonalInfoChange} />

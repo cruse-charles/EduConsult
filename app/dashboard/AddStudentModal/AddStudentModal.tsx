@@ -10,12 +10,16 @@ import { Button } from "@/components/ui/button";
 import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
+import CreateStudentAccount from "./CreateStudentAccount";
+import { clearPreviewData } from "next/dist/server/api-utils";
 
 interface AddStudentModalProps {
     consultantDocRef: DocumentReference<DocumentData> | null;
     onStudentAdded: () => void;
 }
 
+// TODO: NEED TO ADD THE STUDENT TO AUTH AS WELL, NOT JUST DATABASE
+// TODO: Need to clear form data after making a student
 function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
     // State to manage dialog open/close state`
     const [open, setOpen] = useState(false);
@@ -38,9 +42,8 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             toefl: null,
             targetSchools: '',
         },
-        pendingTasks: null,
-        progress: null,
-        nextDeadline: null,
+        email: '',
+        password: '',
         consultant: null,
         folders: []
     });
@@ -60,11 +63,13 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             const docRef = await addDoc(collection(db, "studentUsers"), {
                 personalInformation: formData.personalInformation,
                 academicInformation: formData.academicInformation,
-                pendingTasks: formData.pendingTasks,
-                progress: formData.progress,
-                nextDeadline: formData.nextDeadline,
+                // pendingTasks: formData.pendingTasks,
+                // progress: formData.progress,
+                // nextDeadline: formData.nextDeadline,
                 consultant: consultantDocRef,
                 folders: formData.folders,
+                email: formData.email,
+                password: formData.password,
             })
 
             // Update the consultant's document to include the new student
@@ -108,6 +113,14 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         }))
     }
 
+    const handleInputChange = (e) => {
+        const {name, value} = e.target
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        })) 
+    }
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -127,6 +140,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
                     </DialogDescription>
                 </DialogHeader>
                 <form className="space-y-6" onSubmit={handleSubmit}>
+                    <CreateStudentAccount formData={formData} handleInputChange={handleInputChange}/>
                     <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
                     <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} />
                     <GoalsAndNotesSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} handleAcademicInfoChange={handleAcademicInfoChange} />

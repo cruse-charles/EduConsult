@@ -10,7 +10,7 @@ import { Student } from "@/lib/types/types";
 import { useConsultant } from "@/hooks/useConsultant";
 
 import Sidebar from "../components/Sidebar";
-import AddStudentModal from "../components/AddStudentModal/AddStudentModal";
+import AddStudentModal from "./AddStudentModal/AddStudentModal";
 import StudentCard from "../components/StudentCard";
 
 import { useEffect, useState } from "react";
