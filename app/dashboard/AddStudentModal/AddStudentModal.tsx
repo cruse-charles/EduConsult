@@ -48,6 +48,31 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         folders: []
     });
 
+    const resetFormData = () => {
+        setFormData({
+            personalInformation: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            other: '',
+            notes: '',
+        },
+        academicInformation: {
+            currentSchool: '',
+            grade: null,
+            gpa: null,
+            sat: null,
+            toefl: null,
+            targetSchools: '',
+        },
+        email: '',
+        password: '',
+        consultant: null,
+        folders: []
+        })
+    }
+
     // Handles form submission, adds a new student document to Firestore
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -82,6 +107,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             
             // Close the dialog after submission
             setOpen(false);
+            resetFormData()
 
             console.log("Document written with ID: ", docRef.id);
         } catch (error) {
@@ -122,7 +148,8 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        // <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                     <User className="mr-2 h-4 w-4" />
