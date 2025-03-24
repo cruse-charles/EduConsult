@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Student } from '@/lib/types/types'
 
-function TaskSummary({student}: {student: Student}) {
+function AssignmentsOverview({student}: {student: Student}) {
     return (
         <div className="grid gap-4 md:grid-cols-3">
             <Card>
@@ -38,4 +38,4 @@ function TaskSummary({student}: {student: Student}) {
     )
 }
 
-export default TaskSummary
+export default AssignmentsOverview

@@ -7,7 +7,7 @@ import { RootState } from "@/redux/store";
 
 import { useSelector } from "react-redux"
 
-function StudentAssignments() {
+function SelectViewTabs() {
 
     // Access student from store
     const student = useSelector((state: RootState) => state.student) as Student;
@@ -48,4 +48,4 @@ function StudentAssignments() {
     )
 }
 
-export default StudentAssignments
+export default SelectViewTabs

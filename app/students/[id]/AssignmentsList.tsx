@@ -16,7 +16,6 @@ import { formatDueDate } from "@/lib/utils";
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 
-// NEED TO REFERENCE ASSIGNMENT ID FOR KEYS, IT IS MESSING UP ORDER WHEN I ADD ASSIGNMENT
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
     // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
@@ -46,32 +45,11 @@ function AssignmentsList() {
         return assignments.filter((assignment) => assignment.folder === folder)
     }
 
-    // old
-    // const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
-    //     let count = 0
-    //     assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
-    //     return count
-    // }
-    // old
-
-    // new
     const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
         let count = 0
         // assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
         return count
     }
-    // new
-
-    useEffect(() => {
-        console.log('=== DEBUGGING ASSIGNMENTS ===');
-        console.log('All assignments:', assignments);
-        console.log('All folders:', folders);
-        
-        folders?.forEach(folder => {
-            const filteredAssignments = getFilteredAssignments(folder);
-            console.log(`Folder "${folder}" has ${filteredAssignments.length} assignments:`, filteredAssignments);
-        });
-    }, [assignments, folders]);
 
     return (
         <>

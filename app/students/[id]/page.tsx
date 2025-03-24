@@ -7,8 +7,8 @@ import { Student } from "@/lib/types/types";
 import { useStudent } from "@/hooks/useStudent";
 
 import StudentViewCard from "./StudentViewCard/StudentViewCard";
-import TaskSummary from "./TaskSummary";
-import StudentAssignments from "./StudentAssignments";
+import AssignmentsOverview from "./AssignmentsOverview";
+import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";
 import AssignmentsList from "./AssignmentsList";
 
@@ -62,10 +62,10 @@ function page() {
                     {/* Main Content Container */}
                     <div className="md:col-span-2 space-y-6">
                         {/* Task Summary Section */}
-                        <TaskSummary student={student} />
+                        <AssignmentsOverview student={student} />
 
                         {/* Student Details Section */}
-                        <StudentAssignments />
+                        <SelectViewTabs />
                         <AssignmentsList />
                     </div>
                 </div>
