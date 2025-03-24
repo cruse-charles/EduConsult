@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from "react";
-import { db } from "@/lib/firebaseConfig";
-import { collection, addDoc, updateDoc, arrayUnion, DocumentReference, DocumentData } from "firebase/firestore";
+import { app, db } from "@/lib/firebaseConfig";
+import { collection, addDoc, updateDoc, arrayUnion, DocumentReference, DocumentData, setDoc, doc } from "firebase/firestore";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { User } from "lucide-react";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -12,6 +12,7 @@ import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
 import CreateStudentAccount from "./CreateStudentAccount";
 import { clearPreviewData } from "next/dist/server/api-utils";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 interface AddStudentModalProps {
     consultantDocRef: DocumentReference<DocumentData> | null;
@@ -21,6 +22,8 @@ interface AddStudentModalProps {
 // TODO: NEED TO ADD THE STUDENT TO AUTH AS WELL, NOT JUST DATABASE
 // TODO: Need to clear form data after making a student
 function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
+    let auth = getAuth(app);
+    
     // State to manage dialog open/close state`
     const [open, setOpen] = useState(false);
 
@@ -50,7 +53,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
 
     const resetFormData = () => {
         setFormData({
-            personalInformation: {
+        personalInformation: {
             firstName: '',
             lastName: '',
             email: '',
@@ -85,7 +88,9 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
 
         // Create a new student document in the "studentUsers" collection
         try {
-            const docRef = await addDoc(collection(db, "studentUsers"), {
+            const userCredentials = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+
+            const docRef = await setDoc(doc(db, "studentUsers", userCredentials.user.uid), {
                 personalInformation: formData.personalInformation,
                 academicInformation: formData.academicInformation,
                 // pendingTasks: formData.pendingTasks,
@@ -96,6 +101,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
                 email: formData.email,
                 password: formData.password,
             })
+
 
             // Update the consultant's document to include the new student
             await updateDoc(consultantDocRef, {
