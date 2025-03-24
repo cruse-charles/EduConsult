@@ -1,14 +1,11 @@
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { CalendarIcon, Clock, Download, FileText, MessageSquare, Settings, Upload, User, UserCheck } from 'lucide-react'
 
 import FileUploadView from '@/app/components/Assignments/FileUploadView'
 
 import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
-import { formatDueDate, formatDueDateAndTime } from '@/lib/utils'
 import { AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 
@@ -20,13 +17,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import AssignmentDetails from './AssignmentDetails'
 import AssignmentTimeline from './AssignmentTimeline'
 
-interface AssignmentDetailModalProps {
+interface AssignmentViewModalProps {
     assignmentId: string;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDetailModalProps) {
+function AssignmentViewModal({assignmentId, open, onOpenChange}: AssignmentViewModalProps) {
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     const { id: studentId } = useParams<{id:string}>()
@@ -140,4 +137,4 @@ function AssignmentDetailModal({assignmentId, open, onOpenChange}: AssignmentDet
     )
 }
 
-export default AssignmentDetailModal
+export default AssignmentViewModal

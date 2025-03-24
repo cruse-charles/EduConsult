@@ -2,13 +2,16 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
 import { Student } from "@/lib/types/types";
+import { useStudent } from "@/hooks/useStudent";
+
 import StudentProfileCard from "./StudentProfileCard";
 import TaskSummary from "./TaskSummary";
 import StudentAssignments from "./StudentAssignments";
 import StudentProfileHeader from "./StudentProfileHeader";
-import { useStudent } from "@/hooks/useStudent";
 import AssignmentsList from "./AssignmentsList";
+
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
 import { AppDispatch } from "@/redux/store";

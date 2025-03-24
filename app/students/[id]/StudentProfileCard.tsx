@@ -1,17 +1,20 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { db } from '@/lib/firebaseConfig'
 import { Student } from '@/lib/types/types'
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { Edit } from 'lucide-react'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import StudentCardContent from './StudentCardContent'
-import EditStudentCardContent from './EditStudentCardContent'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+import StudentCardContent from './StudentCardContent'
+import EditStudentCardContent from './EditStudentCardContent'
 
 interface StudentProfileCardProps {
     student: Student;

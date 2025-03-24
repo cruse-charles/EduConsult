@@ -1,16 +1,18 @@
 'use client'
 
-import { useState } from "react"
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
 import { setDoc, doc, getDoc } from "firebase/firestore"
+
+import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation";
+
 import { GraduationCap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { useRouter } from "next/navigation";
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app

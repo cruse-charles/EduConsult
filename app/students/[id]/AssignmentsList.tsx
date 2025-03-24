@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-import AssignmentDetailModal from "./AssignmentDetailModal";
+import AssignmentViewModal from "./AssignmentViewModal/AssignmentViewModal";
 
 import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
@@ -139,7 +139,7 @@ function AssignmentsList() {
                 </CardContent>
             </Card>
             {/* @ts-ignore */}
-            <AssignmentDetailModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            <AssignmentViewModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
         </>
     )
 }
