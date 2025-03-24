@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+
 import { Student } from '@/lib/types/types'
 
 interface EditStudentCardContentProps {
@@ -10,6 +11,7 @@ interface EditStudentCardContentProps {
     setEditStudent: React.Dispatch<React.SetStateAction<Student>>;
 }
 
+// TODO: Need loading state
 function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardContentProps) {
 
     const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

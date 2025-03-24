@@ -16,12 +16,12 @@ import { useRouter } from 'next/navigation'
 import StudentCardContent from './StudentCardContent'
 import EditStudentCardContent from './EditStudentCardContent'
 
-interface StudentProfileCardProps {
+interface StudentViewCardProps {
     student: Student;
     setStudent: (student: Student) => void;
 }
 
-function StudentProfileCard({student, setStudent} : StudentProfileCardProps) {
+function StudentViewCard({student, setStudent} : StudentViewCardProps) {
     // State to manage edit mode and the student being edited
     const [editMode, setEditMode] = useState(false)
     const [editStudent, setEditStudent] = useState(student)
@@ -139,4 +139,4 @@ function StudentProfileCard({student, setStudent} : StudentProfileCardProps) {
     )
 }
 
-export default StudentProfileCard
+export default StudentViewCard
