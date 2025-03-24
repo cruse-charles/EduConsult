@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
-import FileUploadView from '@/app/components/Assignments/FileUploadView'
+import FileUploadView from '@/app/students/[id]/AssignmentCreateModal/FileUploadView'
 
 import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
 import { AssignmentFile } from '@/lib/types/types'

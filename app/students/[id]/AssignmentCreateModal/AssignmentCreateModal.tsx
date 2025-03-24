@@ -27,7 +27,7 @@ import { useFiles } from "@/hooks/useFiles"
 
 
 
-function AddAssignmentModal() {
+function AssignmentCreateModal() {
 
     const dispatch = useDispatch()
 
@@ -149,6 +149,7 @@ function AddAssignmentModal() {
         }))
     }
 
+    // TODO: Currently imported into SelectViewTabs, should be imported into AssignmentsList and moved to top left
     return (
         <Dialog open={open} onOpenChange={(isOpen) => {
             setOpen(isOpen)
@@ -208,4 +209,4 @@ function AddAssignmentModal() {
     )
 }
 
-export default AddAssignmentModal
+export default AssignmentCreateModal

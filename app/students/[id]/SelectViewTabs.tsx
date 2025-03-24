@@ -1,4 +1,4 @@
-import AddAssignmentModal from "@/app/components/Assignments/AddAssignmentModal"
+import AssignmentCreateModal from "@/app/students/[id]/AssignmentCreateModal/AssignmentCreateModal"
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -26,7 +26,7 @@ function SelectViewTabs() {
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
                 </Button> */}
-                <AddAssignmentModal/>
+                <AssignmentCreateModal/>
                 </div>
                 {/* <AssignmentList studentId={student.id} /> */}
             </TabsContent>
