@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 
 import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
 
-import { fetchAssignments } from "@/redux/slices/assignmentsSlice";
+import { fetchAssignments, setAssignments } from "@/redux/slices/assignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
 import { formatDueDate } from "@/lib/utils";
@@ -39,6 +39,8 @@ function AssignmentsList() {
         const studentState = student as Student
         if (studentState?.assignmentDocIds) {
             dispatch(fetchAssignments(studentState.assignmentDocIds));
+        } else {
+            dispatch(setAssignments([]))
         }
     }, [dispatch, studentId]);
 
