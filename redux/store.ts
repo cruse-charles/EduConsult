@@ -5,12 +5,20 @@ import storage from 'redux-persist/lib/storage';
 import studentReducer from './slices/studentSlice';
 import assignmentReducer from './slices/assignmentsSlice';
 import userReducer from './slices/userSlice';
+import { resetStore } from './slices/resetSlice';
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   student: studentReducer,
   assignments: assignmentReducer,
   user: userReducer,
 })
+
+const rootReducer = (state, action) => {
+  if (action.type === resetStore.type) {
+    state = undefined;
+  }
+  return appReducer(state, action);
+}
 
 const persistConfig = {
   key: 'root',

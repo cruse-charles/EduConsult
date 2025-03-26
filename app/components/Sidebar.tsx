@@ -1,14 +1,18 @@
 import { app } from '@/lib/firebaseConfig'
+import { resetStore } from '@/redux/slices/resetSlice'
 import { getAuth, signOut } from 'firebase/auth'
 import Link from 'next/link'
+import { useDispatch } from 'react-redux'
 
 const Sidebar = () => {
     const auth = getAuth(app)
+    const dispatch = useDispatch()
     
     // Handle user sign out
     const handleSignOut = async () => {
         try {
             await signOut(auth)
+            dispatch(resetStore())
             console.log("User signed out successfully");
         } catch (error) {
             console.error("Error signing out: ", error);

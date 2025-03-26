@@ -14,7 +14,7 @@ import AssignmentsList from "./AssignmentsList";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 
 function page() {
     // retrieve the student ID from URL and initialize dispatch for data retrieval and state management
@@ -27,6 +27,14 @@ function page() {
             dispatch(fetchStudent(studentId));
         }
     }, [studentId, dispatch]);
+
+    // DEBUGGING
+    const user = useSelector((state: RootState) => state.user)
+    useEffect(() => {
+        console.log('Student page - Current user state:', user)
+        console.log('Student page - localStorage check:', localStorage.getItem('persist:root'))
+    }, [])
+    // DEBUGGING
 
     // fetch student data from Firestore when the component mounts and set it to state
     const studentFromHook = useStudent(studentId)
