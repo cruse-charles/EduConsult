@@ -15,13 +15,14 @@ import StudentCard from "../components/StudentCard";
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const page = () => {
     // State to manage students and set reference to the consultant document
     const [students, setStudents] = useState<Student[]>([]);
     const [consultantDocRef, setConsultantDocRef] = useState<DocumentReference<DocumentData> | null>(null);
 
-    const role = useSelector((state) => state.user.role)
+    const role = useSelector((state: RootState) => state.user.role)
 
     // Function to fetch students for the current consultant user
     const fetchStudents = async (user: FirebaseUser) => {

@@ -20,15 +20,18 @@ export interface StudentBase {
         notes: string;
     };
     consultant: DocumentReference<DocumentData> | null;
+    email: string;
+    folders: string[];
+    password: string;
 }
 
 // Interface to add additional information about student
 export interface Student extends StudentBase {
     id: string;
     assignmentDocIds?: string[];
-    pendingTasks: number | null;
-    nextDeadline: Timestamp | null;
-    progress: number | null;
+    // pendingTasks: number | null;
+    // nextDeadline: Timestamp | null;
+    // progress: number | null;
     folders: string[]
 }
 

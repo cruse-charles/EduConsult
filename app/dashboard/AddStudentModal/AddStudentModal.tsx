@@ -1,34 +1,36 @@
 'use client'
 
+import { updateDoc, arrayUnion, DocumentReference, DocumentData, setDoc, doc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+
 import { useState } from "react";
+
 import { app, db } from "@/lib/firebaseConfig";
-import { collection, addDoc, updateDoc, arrayUnion, DocumentReference, DocumentData, setDoc, doc } from "firebase/firestore";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { User } from "lucide-react";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { User } from "lucide-react";
+
 import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
 import CreateStudentAccount from "./CreateStudentAccount";
-import { clearPreviewData } from "next/dist/server/api-utils";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { StudentFormData } from "@/lib/types/types";
 
 interface AddStudentModalProps {
     consultantDocRef: DocumentReference<DocumentData> | null;
     onStudentAdded: () => void;
 }
 
-// TODO: NEED TO ADD THE STUDENT TO AUTH AS WELL, NOT JUST DATABASE
-// TODO: Need to clear form data after making a student
+
 function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
     let auth = getAuth(app);
     
-    // State to manage dialog open/close state`
+    // State to manage dialog open/close state
     const [open, setOpen] = useState(false);
 
     // State to manage form input data for student
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<StudentFormData>({
         personalInformation: {
             firstName: '',
             lastName: '',
@@ -93,9 +95,6 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             const docRef = await setDoc(doc(db, "studentUsers", userCredentials.user.uid), {
                 personalInformation: formData.personalInformation,
                 academicInformation: formData.academicInformation,
-                // pendingTasks: formData.pendingTasks,
-                // progress: formData.progress,
-                // nextDeadline: formData.nextDeadline,
                 consultant: consultantDocRef,
                 folders: formData.folders,
                 email: formData.email,
@@ -115,7 +114,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             setOpen(false);
             resetFormData()
 
-            console.log("Document written with ID: ", docRef.id);
+            // console.log("Document written with ID: ", docRef.id);
         } catch (error) {
             console.error("Error adding document: ", error);
         }
@@ -145,7 +144,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         }))
     }
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
         setFormData((prev) => ({
             ...prev,

@@ -1,8 +1,14 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { StudentFormData } from '@/lib/types/types';
 import { UserPlus } from 'lucide-react'
 
-const CreateStudentAccount = ({formData, handleInputChange}) => {
+interface CreateStudentAccountProps {
+    formData: StudentFormData;
+    handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+const CreateStudentAccount = ({formData, handleInputChange}: CreateStudentAccountProps) => {
     return (
         <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
           <div className="flex items-center gap-2">
