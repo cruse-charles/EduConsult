@@ -60,6 +60,7 @@ function CreateAssignmentModal() {
         status: 'Pending',
     })
 
+    // Reset the form data
     const resetForm = () => {
         setFormData({
             title: "",
