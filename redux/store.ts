@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import type { UnknownAction } from 'redux';
 
 import studentReducer from './slices/studentSlice';
 import assignmentReducer from './slices/assignmentsSlice';
@@ -13,7 +14,9 @@ const appReducer = combineReducers({
   user: userReducer,
 })
 
-const rootReducer = (state, action) => {
+type AppState = ReturnType<typeof appReducer>;
+
+const rootReducer = (state: AppState | undefined, action: UnknownAction): AppState => {
   if (action.type === resetStore.type) {
     state = undefined;
   }
@@ -39,16 +42,3 @@ export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-
-
-// export const store = configureStore({
-//   reducer: {
-//     student: studentReducer,
-//     assignments: assignmentReducer,
-//     user: userReducer,
-//   },
-// });
-
-// export type RootState = ReturnType<typeof store.getState>;
-// export type AppDispatch = typeof store.dispatch;
