@@ -8,6 +8,7 @@ import assignmentReducer from './slices/assignmentsSlice';
 import userReducer from './slices/userSlice';
 import { resetStore } from './slices/resetSlice';
 
+// Combine all  individual slice reducers into a single app-level reducer
 const appReducer = combineReducers({
   student: studentReducer,
   assignments: assignmentReducer,
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
 
 type AppState = ReturnType<typeof appReducer>;
 
+// Define a root reducer that listens for the resetStore action to clear all state
 const rootReducer = (state: AppState | undefined, action: UnknownAction): AppState => {
   if (action.type === resetStore.type) {
     state = undefined;
@@ -23,21 +25,25 @@ const rootReducer = (state: AppState | undefined, action: UnknownAction): AppSta
   return appReducer(state, action);
 }
 
+// Configuration for redux-persist
 const persistConfig = {
   key: 'root',
   storage,
 }
 
+// Create a persisted version of the root reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
+// Create and configure the Redux store
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      serializableCheck: false, // Disable serializable check to allow storing non-serializable data like Dates or Firestore refs
     })
 })
 
+// Create a persistor object to control rehydration and persisting
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
