@@ -24,11 +24,12 @@ const page = () => {
 
     const role = useSelector((state: RootState) => state.user.role)
 
+    // TODO: Add students to redux so we dont have to fetch them every time we go to dashboard
     // Function to fetch students for the current consultant user
     const fetchStudents = async (user: FirebaseUser) => {
         try {
             // Get the consultant's document reference and snapshot
-            console.log('fetching students...')
+            console.log('fetching students.....')
             const ref = doc(db, "consultantUsers", user.uid);
             console.log("Consultant Document Reference:", ref);
             setConsultantDocRef(ref);
@@ -113,7 +114,7 @@ const page = () => {
                 </div>
             </div>
         ) : (
-            <div>Hello</div>
+            <Sidebar />
         )
     );
 };

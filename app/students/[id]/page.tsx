@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Student } from "@/lib/types/types";
 import { useStudent } from "@/hooks/useStudent";
 
-import StudentViewCard from "./StudentViewCard/StudentViewCard";
+import ViewStudentCard from "./ViewStudentCard/StudentViewCard";
 import AssignmentsOverview from "./AssignmentsOverview";
 import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";
@@ -56,7 +56,7 @@ function page() {
 
             <div className="grid gap-6 md:grid-cols-3">
                 {/* Student Details Card */}
-                <StudentViewCard student={student} setStudent={setStudent} />
+                <ViewStudentCard student={student} setStudent={setStudent} />
 
                 {/* Main Content Container */}
                 <div className="md:col-span-2 space-y-6">
