@@ -21,9 +21,6 @@ const studentSlice = createSlice({
   name: 'student',
   initialState,
   reducers: {
-    // setStudent(state, action) {
-    //   return action.payload;
-    // },
     updateFolders(state, action) {
       if (!state.folders) return
       if (!state.folders.includes(action.payload)) {
@@ -43,7 +40,5 @@ const studentSlice = createSlice({
 });
 
 
-export const { 
-  // setStudent, 
-  updateFolders, updateAssignmentDocIds } = studentSlice.actions;
+export const { updateFolders, updateAssignmentDocIds } = studentSlice.actions;
 export default studentSlice.reducer;

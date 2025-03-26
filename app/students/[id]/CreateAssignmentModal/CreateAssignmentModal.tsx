@@ -19,9 +19,7 @@ import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
-import { 
-    // setStudent, 
-    updateFolders, updateAssignmentDocIds } from "@/redux/slices/studentSlice"
+import { updateFolders, updateAssignmentDocIds } from "@/redux/slices/studentSlice"
 import { RootState } from "@/redux/store";
 import { addAssignment } from "@/redux/slices/assignmentsSlice"
 import { Timestamp } from "firebase/firestore";
@@ -29,6 +27,7 @@ import { useFiles } from "@/hooks/useFiles"
 
 
 
+// TODO: Error when adding a doc ref to redux, which is the consultant ref in student
 function CreateAssignmentModal() {
 
     const dispatch = useDispatch()
@@ -40,13 +39,7 @@ function CreateAssignmentModal() {
     const consultant = useConsultant()
     const student = useStudent(studentId)
 
-    // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
-    // useEffect(() => {
-    //     if (student) {
-    //         dispatch(setStudent(student));
-    //     }
-    // }, [student, dispatch]);
-    
+
     // State to manage assignment details
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
     const [newFolder, setNewFolder] = useState(false)

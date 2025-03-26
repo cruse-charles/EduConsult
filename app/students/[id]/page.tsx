@@ -15,26 +15,27 @@ import AssignmentsList from "./AssignmentsList";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function page() {
     // retrieve the student ID from URL and initialize dispatch for data retrieval and state management
     const { id: studentId } = useParams<{id: string}>();
     const dispatch = useDispatch<AppDispatch>()
 
-    // Dispatch fetchStudent, retrieving student information from Firebase
+    const [authReady, setAuthReady] = useState(false)
     useEffect(() => {
-        if (studentId) {
-            dispatch(fetchStudent(studentId));
-        }
-    }, [studentId, dispatch]);
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) setAuthReady(true);
+        });
+        return () => unsubscribe();
+    }, []);
 
-    // DEBUGGING
-    const user = useSelector((state: RootState) => state.user)
     useEffect(() => {
-        console.log('Student page - Current user state:', user)
-        console.log('Student page - localStorage check:', localStorage.getItem('persist:root'))
-    }, [])
-    // DEBUGGING
+        if (authReady && studentId) {
+            dispatch(fetchStudent(studentId))
+        }
+    }, [studentId, dispatch, authReady])
 
     // fetch student data from Firestore when the component mounts and set it to state
     const studentFromHook = useStudent(studentId)
@@ -46,8 +47,6 @@ function page() {
     useEffect(() => {
         if (studentFromHook) setStudent(studentFromHook);
     }, [studentFromHook]);
-
-    // const student = useSelector((state) => state.student);
 
     if (!student) {
         return (

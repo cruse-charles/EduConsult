@@ -16,11 +16,6 @@ export const fetchAssignments = createAsyncThunk(
             throw new Error(`Assignment with ID ${assignmentDocId} not found`);
           }
 
-          // return {
-          //   id: assignmentSnapshot.id,
-          //   ...assignmentSnapshot.data(),
-          // };
-
           const data = assignmentSnapshot.data();
           
           // Ensure all required Assignment fields are present
@@ -36,7 +31,7 @@ export const fetchAssignments = createAsyncThunk(
             folder: data?.folder || '',
             status: data?.status || '',
             timeline: data?.timeline || [],
-            ...data, // Spread any additional fields
+            ...data,
           } as Assignment;
         })
       );

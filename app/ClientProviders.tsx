@@ -7,25 +7,8 @@ export default function ClientProviders({ children }: { children: React.ReactNod
   return ( 
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-          {/* {bootstrapped => bootstrapped ? children : null} */}
           {children}
       </PersistGate>
     </Provider>
   )
 }
-
-
-
-
-  // return ( 
-  //   <Provider store={store}>
-  //     <PersistGate loading={null} persistor={persistor}>
-  //       {children}
-  //     </PersistGate>
-  //   </Provider>
-  // )
-
-
-// export default function ClientProviders({ children }: { children: React.ReactNode }) {
-//   return <Provider store={store}>{children}</Provider>
-// }
