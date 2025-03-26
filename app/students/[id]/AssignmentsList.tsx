@@ -15,11 +15,13 @@ import { formatDueDate } from "@/lib/utils";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "next/navigation";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
     // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
     // const folders = useSelector((state: RootState) => state.student.folders) as string[]
+    const {id: studentId} = useParams()
 
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
 
@@ -38,7 +40,7 @@ function AssignmentsList() {
         if (studentState?.assignmentDocIds) {
             dispatch(fetchAssignments(studentState.assignmentDocIds));
         }
-    }, [dispatch]);
+    }, [dispatch, studentId]);
 
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []

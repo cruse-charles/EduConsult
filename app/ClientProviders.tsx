@@ -6,10 +6,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
   return ( 
     <Provider store={store}>
-      {/* <PersistGate loading={null} persistor={persistor}> */}
+      <PersistGate loading={null} persistor={persistor}>
           {/* {bootstrapped => bootstrapped ? children : null} */}
           {children}
-      {/* </PersistGate> */}
+      </PersistGate>
     </Provider>
   )
 }
