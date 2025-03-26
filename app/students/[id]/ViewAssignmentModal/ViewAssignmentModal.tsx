@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
-import FileUploadView from '@/app/students/[id]/AssignmentCreateModal/FileUploadView'
+import FileUploadView from '@/app/students/[id]/CreateAssignmentModal/FileUploadView'
 
 import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
 import { AssignmentFile } from '@/lib/types/types'
@@ -17,13 +17,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import AssignmentDetails from './AssignmentDetails'
 import AssignmentTimeline from './AssignmentTimeline'
 
-interface AssignmentViewModalProps {
+interface ViewAssignmentModalProps {
     assignmentId: string;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-function AssignmentViewModal({assignmentId, open, onOpenChange}: AssignmentViewModalProps) {
+function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentModalProps) {
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     const { id: studentId } = useParams<{id:string}>()
@@ -137,4 +137,4 @@ function AssignmentViewModal({assignmentId, open, onOpenChange}: AssignmentViewM
     )
 }
 
-export default AssignmentViewModal
+export default ViewAssignmentModal

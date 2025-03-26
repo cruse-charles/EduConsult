@@ -27,7 +27,7 @@ import { useFiles } from "@/hooks/useFiles"
 
 
 
-function AssignmentCreateModal() {
+function CreateAssignmentModal() {
 
     const dispatch = useDispatch()
 
@@ -209,4 +209,4 @@ function AssignmentCreateModal() {
     )
 }
 
-export default AssignmentCreateModal
+export default CreateAssignmentModal

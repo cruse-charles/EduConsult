@@ -1,4 +1,4 @@
-import AssignmentCreateModal from "@/app/students/[id]/AssignmentCreateModal/AssignmentCreateModal"
+import AssignmentCreateModal from "@/app/students/[id]/CreateAssignmentModal/CreateAssignmentModal"
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
