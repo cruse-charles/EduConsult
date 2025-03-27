@@ -76,7 +76,6 @@ function page() {
 
                     {/* Student Details Section */}
                     <SelectViewTabs />
-                    <AssignmentsList />
                 </div>
             </div>
         </div>

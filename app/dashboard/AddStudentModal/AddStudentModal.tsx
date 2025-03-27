@@ -1,6 +1,6 @@
 'use client'
 
-import { updateDoc, arrayUnion, DocumentReference, DocumentData, setDoc, doc } from "firebase/firestore";
+import { updateDoc, arrayUnion, DocumentReference, DocumentData, setDoc, doc, getDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 import { useState } from "react";
@@ -22,7 +22,10 @@ interface AddStudentModalProps {
     onStudentAdded: () => void;
 }
 
-
+// TODO: Some sort of error here with creaeting a student. Got this in the logs:
+// Error adding document:  FirebaseError: Function arrayUnion() called with invalid data. Unsupported field value: undefined (found in document consultantUsers/dAZZyiLUrrfEJ8ug6HpgOtDMZ6D3)
+// It does create a student user, but doesn't add the student to the consultant's array of students
+// Even on manually adding the studen in firebase, I don't see it in frontend
 function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
     let auth = getAuth(app);
     
@@ -92,20 +95,37 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
 
-            const docRef = await setDoc(doc(db, "studentUsers", userCredentials.user.uid), {
+            // const docRef = await setDoc(doc(db, "studentUsers", userCredentials.user.uid), {
+            //     personalInformation: formData.personalInformation,
+            //     academicInformation: formData.academicInformation,
+            //     consultant: consultantDocRef,
+            //     folders: formData.folders,
+            //     email: formData.email,
+            //     password: formData.password,
+            // })
+
+
+            // // Update the consultant's document to include the new student
+            // await updateDoc(consultantDocRef, {
+            //     students: arrayUnion(docRef)
+            // })
+
+            const studentId = userCredentials.user.uid;
+            const studentDocRef = doc(db, "studentUsers", studentId);
+
+            await setDoc(studentDocRef, {
                 personalInformation: formData.personalInformation,
                 academicInformation: formData.academicInformation,
                 consultant: consultantDocRef,
                 folders: formData.folders,
                 email: formData.email,
                 password: formData.password,
-            })
+            });
 
-
-            // Update the consultant's document to include the new student
+            // Add the studentDocRef to the consultant's students array
             await updateDoc(consultantDocRef, {
-                students: arrayUnion(docRef)
-            })
+                students: arrayUnion(studentDocRef)
+            });
 
             // Callback to refresh student list or perform any other action after adding a student
             onStudentAdded();

@@ -6,6 +6,10 @@ import { Student } from "@/lib/types/types";
 import { RootState } from "@/redux/store";
 
 import { useSelector } from "react-redux"
+import AssignmentsList from "./AssignmentsList";
+
+// TODO: AssignmentList needs to be added here I think for it to 'render' and not render depending on tab selected
+// Currently, it's always rendering that assigment list
 
 function SelectViewTabs() {
 
@@ -28,7 +32,7 @@ function SelectViewTabs() {
                 </Button> */}
                 <CreateAssignmentModal/>
                 </div>
-                {/* <AssignmentList studentId={student.id} /> */}
+                <AssignmentsList />
             </TabsContent>
             <TabsContent value="calendar">
                 <Card>

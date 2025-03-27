@@ -127,7 +127,7 @@ const page = () => {
                         </div>
                     </div>
                 </header>
-                {/* <Sidebar /> */}
+                <Sidebar />
                 <main className="container p-4 md:p-6 space-y-6">
                   {/* Task Stats */}
                   <div>Task Stats</div>
