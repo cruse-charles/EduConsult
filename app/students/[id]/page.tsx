@@ -18,11 +18,15 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function page() {
-    // retrieve the student ID from URL and initialize dispatch for data retrieval and state management
+    // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
     const { id: studentId } = useParams<{id: string}>();
     const dispatch = useDispatch<AppDispatch>()
 
+    // State to track if authetication is ready
     const [authReady, setAuthReady] = useState(false)
+
+    // Check if the user is authenticated and set authReady to true when the auth state changes
+    // This ensures that the student data is only fetched after the authentication state is confirmed
     useEffect(() => {
         const auth = getAuth();
         const unsubscribe = onAuthStateChanged(auth, (user) => {

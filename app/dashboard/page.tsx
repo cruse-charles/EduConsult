@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
+// TODO: Add protection to this route so that if no one is logged in, they can't get to this page 
+// and are redirected to login
 const page = () => {
     // State to manage students and set reference to the consultant document
     const [students, setStudents] = useState<Student[]>([]);
@@ -114,7 +116,17 @@ const page = () => {
                 </div>
             </div>
         ) : (
-            <Sidebar />
+            <div className="min-h-screen bg-background">
+                <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                    <div className="container flex h-16 items-center justify-between px-4">
+                        <div className="flex items-center gap-4">
+                            <div>
+                                <h1 className="text-lg font-semibold">Welcome back, !</h1>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            </div>
         )
     );
 };
