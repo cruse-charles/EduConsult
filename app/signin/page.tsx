@@ -99,7 +99,7 @@ const page = () => {
         const studentDoc = await getDoc(doc(db, "studentUsers", userId))
         if (studentDoc.exists()) {
           const data = studentDoc.data()
-          return {uid: data.uid, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'student'}
+          return {uid: data.uid, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student'}
         }
 
         throw new Error("User not found")
