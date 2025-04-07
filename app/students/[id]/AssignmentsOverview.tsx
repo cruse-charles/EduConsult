@@ -9,7 +9,7 @@ function AssignmentsOverview({student}: {student: Student}) {
                 <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
                 </CardHeader>
                 <CardContent>
-                <div className="text-2xl font-bold">{student.pendingTasks}</div>
+                {/* <div className="text-2xl font-bold">{student.pendingTasks}</div> */}
                 {/* <p className="text-xs text-muted-foreground">Next due: {student.nextDeadline}</p> */}
                 </CardContent>
             </Card>

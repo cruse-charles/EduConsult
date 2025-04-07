@@ -8,8 +8,8 @@ import { Student } from "@/lib/types/types"
 
 function StudentCard({student}: {student: Student}) {
     // Destructure student properties and format nextDeadline to a readable date string
-    const { personalInformation, academicInformation, pendingTasks, nextDeadline, progress} = student
-    let nextDeadlineFormatted = nextDeadline ? nextDeadline.toDate().toLocaleDateString() : "No deadline set"
+    const { personalInformation, academicInformation} = student
+    // let nextDeadlineFormatted = nextDeadline ? nextDeadline.toDate().toLocaleDateString() : "No deadline set"
   
     return (
         // Card Container
@@ -33,18 +33,18 @@ function StudentCard({student}: {student: Student}) {
                     {/* Progress Container and Bar */}
                     <div className="flex items-center justify-between">
                         <div className="text-sm font-medium">Application Progress</div>
-                        <div className="text-sm text-muted-foreground">{progress}%</div>
+                        {/* <div className="text-sm text-muted-foreground">{progress}%</div> */}
                     </div>
-                    <Progress value={progress} className="h-2" />
+                    {/* <Progress value={progress} className="h-2" /> */}
 
                     {/* Task and Deadline Container */}
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        {/* <div className="flex items-center gap-1 text-sm text-muted-foreground">
                         {pendingTasks} pending tasks
                         </div>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
                         {nextDeadlineFormatted}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </CardContent>
