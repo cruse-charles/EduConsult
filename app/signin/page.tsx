@@ -16,13 +16,8 @@ import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
 import { fetchStudent } from "@/redux/slices/studentSlice"
 
-interface FirebaseUserInfo {
-  uid: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: 'consultant' | 'student';
-}
+import { FirebaseUserInfo } from "@/lib/types/types"
+import { AppDispatch } from "@/redux/store"
 
 // TODO: Redirect signed in users away from signin/signup pages
 const page = () => {
@@ -30,7 +25,7 @@ const page = () => {
     let auth = getAuth(app);
     let googleProvider = new GoogleAuthProvider();
     const router = useRouter();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     // State to manage form input data for email and password, and loading state
     const [userData, setuserData] = useState({
@@ -56,7 +51,7 @@ const page = () => {
 
           // Add user info to Redux state
           dispatch(setUser({
-            id: user.uid,
+            id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
@@ -158,7 +153,7 @@ const page = () => {
 
             // Add user info to Redux state
             dispatch(setUser({
-              id: userInfo.uid,
+              id: userInfo.id,
               firstName: userInfo.firstName,
               lastName: userInfo.lastName,
               email: userInfo.email,
@@ -168,7 +163,7 @@ const page = () => {
             // NEW
             // If the user is a student then set their data in Redux
             if (userInfo.role === 'student') {
-              dispatch(fetchStudent(userInfo.uid))
+              dispatch(fetchStudent(userInfo.id))
             }
                 
             // Redirect to dashboard after successful sign-in

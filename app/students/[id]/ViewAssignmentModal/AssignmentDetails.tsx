@@ -199,9 +199,9 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                 ) : (
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <User className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm font-medium">Student:</span>
-                            <span className="text-sm">{assignment?.student}</span>
+                            {/* <User className="h-4 w-4 text-muted-foreground" /> */}
+                            {/* <span className="text-sm font-medium">Student:</span>
+                            <span className="text-sm">{assignment?.student}</span> */}
                         </div>
                         <div className="flex items-center gap-2">
                             <FileText className="h-4 w-4 text-muted-foreground" />

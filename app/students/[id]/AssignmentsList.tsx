@@ -39,6 +39,7 @@ function AssignmentsList() {
     // TODO NOW: Add student state to redux right away if student log in, this will let us to fetch their assignments
     useEffect(() => {
         const studentState = student as Student
+        // console.log("StudentState", studentState)
         if (studentState?.assignmentDocIds) {
             dispatch(fetchAssignments(studentState.assignmentDocIds));
         } else {

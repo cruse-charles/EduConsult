@@ -91,9 +91,10 @@ export interface UpdateAssignment {
     dueDate: Date | Timestamp;    
 }
 
-// // structure of assignemtnts in database
-// export interface AssignmentDoc {
-//     student: string;
-//     consultant: string;
-//     assignments: Assignment[];
-// }
+export interface FirebaseUserInfo {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'consultant' | 'student';
+}
