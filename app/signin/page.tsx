@@ -60,13 +60,15 @@ const page = () => {
 
           
           // NEW
-          // If the user is a student then set their data in student slice
+          // If the user is a student then set their data in student slice and redirect to student profile
           if (user.role === 'student') {
             dispatch(fetchStudent(user.id))
+            router.push(`/students/${user.id}`)
+          } else {
+            // Navigate to dashboard
+            router.push('/dashboard')
           }
 
-          // Navigate to dashboard
-          router.push('/dashboard')
 
         } catch (error) {
           console.log('Error Signing in', error)

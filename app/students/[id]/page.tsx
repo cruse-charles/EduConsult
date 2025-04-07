@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Sidebar from "@/app/components/Sidebar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
@@ -52,6 +54,13 @@ function page() {
         if (studentFromHook) setStudent(studentFromHook);
     }, [studentFromHook]);
 
+    // NEW
+    const user = useSelector((state: RootState) => state.user);
+    
+
+
+    // NEW
+
     if (!student) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -61,24 +70,55 @@ function page() {
     }
 
     return (
-        // Page Containers
-        <div className="container flex-1 p-4 md:p-6 space-y-6">
-            <StudentProfileHeader />
+        user.role === 'consultant' ? (
+            // Page Containers
+            <div className="container flex-1 p-4 md:p-6 space-y-6">
+                <StudentProfileHeader />
 
-            <div className="grid gap-6 md:grid-cols-3">
-                {/* Student Details Card */}
-                <ViewStudentCard student={student} setStudent={setStudent} />
+                <div className="grid gap-6 md:grid-cols-3">
+                    {/* Student Details Card */}
+                    <ViewStudentCard student={student} setStudent={setStudent} />
 
-                {/* Main Content Container */}
-                <div className="md:col-span-2 space-y-6">
-                    {/* Task Summary Section */}
-                    <AssignmentsOverview student={student} />
+                    {/* Main Content Container */}
+                    <div className="md:col-span-2 space-y-6">
+                        {/* Task Summary Section */}
+                        <AssignmentsOverview student={student} />
 
-                    {/* Student Details Section */}
-                    <SelectViewTabs />
+                        {/* Student Details Section */}
+                        <SelectViewTabs />
+                    </div>
                 </div>
             </div>
-        </div>
+        ) : (
+                        <div className="min-h-screen bg-background">
+                <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                    <div className="container flex h-16 items-center justify-between px-4">
+                        <div className="flex items-center gap-4">
+                            <div>
+                                <h1 className="text-lg font-semibold">Welcome back, {user.firstName} {user.lastName}!</h1>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <Sidebar />
+                <main className="container p-4 md:p-6 space-y-6">
+                  {/* Task Stats */}
+                  <div>Task Stats</div>
+
+                  {/* Select Assignment, Calendar */}
+                  <Tabs defaultValue="assignments" className="space-y-4">
+                    <TabsList>
+                        <TabsTrigger value="assignments">My Assignments</TabsTrigger>
+                        <TabsTrigger value="calendar">Calendar</TabsTrigger>
+                    </TabsList>
+                    {/* JUST ADDED, THIS IS WHERE WORK GOES */}
+                    <TabsContent value="assignments">
+                        <AssignmentsList />
+                    </TabsContent>
+                  </Tabs>
+                </main>
+            </div>
+        )
     )
 }
 
