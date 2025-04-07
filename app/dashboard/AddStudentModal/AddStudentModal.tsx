@@ -9,7 +9,7 @@ import { app, db } from "@/lib/firebaseConfig";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
+import { Plus, User } from "lucide-react";
 
 import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
@@ -176,9 +176,9 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         // <Dialog open={open} onOpenChange={setOpen}>
         <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="w-full">
-                    <User className="mr-2 h-4 w-4" />
-                    Add New Student
+                <Button variant="default" className="w-full">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Student
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

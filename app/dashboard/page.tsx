@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import AssignmentsList from "../students/[id]/AssignmentsList";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 // TODO: Add protection to this route so that if no one is logged in, they can't get to this page 
 // and are redirected to login
@@ -87,8 +89,24 @@ const page = () => {
     
                 {/* Main Content Container */}
                 <div className="container p-4 md:p-6 space-y-6">
-                    {/* Add Student Container */}
-                    <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/>
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-2xl font-bold">Dashboard</h1>
+                        <div className="flex items-center gap-2">
+                             <div className="relative">
+                                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                type="search"
+                                placeholder="Search students..."
+                                className="w-[200px] md:w-[260px] pl-8"
+                                // value={searchQuery}
+                                // onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                             </div>
+                        {/* Add Student Container */}
+                        <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/>
+                        </div>
+                    </div>
+
     
                     {/* Tabs Container */}
                     {/* TODO: Export to another component and use Redux to fetch students needed */}
