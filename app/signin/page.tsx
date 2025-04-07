@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { GraduationCap } from "lucide-react"
 import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
+import { fetchStudent } from "@/redux/slices/studentSlice"
 
 interface FirebaseUserInfo {
   uid: string;
@@ -47,11 +48,11 @@ const page = () => {
         try {
           // Sign in and get user crednetials
           const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
-          console.log('signed in...', userCredential)
+          console.log('signed in with userCredential...', userCredential)
 
           // Retrieve user info
           const user = await getUserInfo(userCredential.user.uid);
-          console.log('user', user)
+          console.log('User from getUserInfo', user)
 
           // Add user info to Redux state
           dispatch(setUser({
@@ -61,6 +62,13 @@ const page = () => {
             email: user.email,
             role: user.role
           }))
+
+          
+          // NEW
+          // If the user is a student then set their data in student slice
+          if (user.role === 'student') {
+            dispatch(fetchStudent(user.id))
+          }
 
           // Navigate to dashboard
           router.push('/dashboard')
@@ -87,19 +95,21 @@ const page = () => {
 
     // Retrieve user's info
     const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
+      console.log('getUserInfo function is called')
       try {
         // Check if id is for a consultant
         const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
         if (consultantDoc.exists()) {
           const data = consultantDoc.data()
-          return {uid: data.uid, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant'}
+          return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant'}
         }
 
         // Check if id is for a student
         const studentDoc = await getDoc(doc(db, "studentUsers", userId))
         if (studentDoc.exists()) {
           const data = studentDoc.data()
-          return {uid: data.uid, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student'}
+          console.log('Student Data:', data)
+          return {id: studentDoc.id, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student'}
         }
 
         throw new Error("User not found")
@@ -111,6 +121,7 @@ const page = () => {
 
     // TODO: Think this is copy-pasted with signup for googleSignIn, so export it
     // Handle Google sign-in
+    // TODO: Double check the id stuff with google sign ins
     const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         setIsLoading(false)
@@ -153,6 +164,12 @@ const page = () => {
               email: userInfo.email,
               role: userInfo.role
             }))
+
+            // NEW
+            // If the user is a student then set their data in Redux
+            if (userInfo.role === 'student') {
+              dispatch(fetchStudent(userInfo.uid))
+            }
                 
             // Redirect to dashboard after successful sign-in
             router.push('/dashboard');

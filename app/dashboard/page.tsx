@@ -16,6 +16,7 @@ import StudentCard from "../components/StudentCard";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import AssignmentsList from "../students/[id]/AssignmentsList";
 
 // TODO: Add protection to this route so that if no one is logged in, they can't get to this page 
 // and are redirected to login
@@ -138,6 +139,10 @@ const page = () => {
                         <TabsTrigger value="assignments">My Assignments</TabsTrigger>
                         <TabsTrigger value="calendar">Calendar</TabsTrigger>
                     </TabsList>
+                    {/* JUST ADDED, THIS IS WHERE WORK GOES */}
+                    <TabsContent value="assignments">
+                        <AssignmentsList />
+                    </TabsContent>
                   </Tabs>
                 </main>
             </div>
@@ -146,3 +151,6 @@ const page = () => {
 };
 
 export default page;
+
+// TODO: COULDN'T UPLOAD A DOC IN AN ASSIGNMENT TO A NEW STUDENT CREATED, WHY NOT?
+// TODO: STUDENT ASSIGNMENTS LIST NO SHOWING UP

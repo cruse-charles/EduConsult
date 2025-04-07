@@ -12,6 +12,7 @@ import { fetchAssignments, setAssignments } from "@/redux/slices/assignmentsSlic
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
 import { formatDueDate } from "@/lib/utils";
+import { fetchStudent } from "@/redux/slices/studentSlice";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
@@ -35,6 +36,7 @@ function AssignmentsList() {
 
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
 
+    // TODO NOW: Add student state to redux right away if student log in, this will let us to fetch their assignments
     useEffect(() => {
         const studentState = student as Student
         if (studentState?.assignmentDocIds) {
