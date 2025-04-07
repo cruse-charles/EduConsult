@@ -83,9 +83,9 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
         <div className="space-y-2">
             <div className="flex items-center justify-between">
             <div className="text-sm font-medium">Application Progress</div>
-            <span className="text-sm">{editStudent?.progress}%</span>
+            {/* <span className="text-sm">{editStudent?.progress}%</span> */}
             </div>
-            <Progress value={editStudent?.progress} className="h-2" />
+            {/* <Progress value={editStudent?.progress} className="h-2" /> */}
         </div>
 
         <Separator />

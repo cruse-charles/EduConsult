@@ -45,9 +45,9 @@ function StudentCardContent({student}: {student: Student}) {
         <div className="space-y-2">
             <div className="flex items-center justify-between">
                 <div className="text-sm font-medium">Application Progress</div>
-                <span className="text-sm">{student?.progress}%</span>
+                {/* <span className="text-sm">{student?.progress}%</span> */}
             </div>
-            <Progress value={student?.progress} className="h-2" />
+            {/* <Progress value={student?.progress} className="h-2" /> */}
         </div>
 
         <Separator />
