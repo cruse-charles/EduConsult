@@ -57,9 +57,7 @@ const page = () => {
             email: user.email,
             role: user.role
           }))
-
           
-          // NEW
           // If the user is a student then set their data in student slice and redirect to student profile
           if (user.role === 'student') {
             dispatch(fetchStudent(user.id))
@@ -162,7 +160,6 @@ const page = () => {
               role: userInfo.role
             }))
 
-            // NEW
             // If the user is a student then set their data in Redux
             if (userInfo.role === 'student') {
               dispatch(fetchStudent(userInfo.id))

@@ -28,7 +28,6 @@ const page = () => {
     // const role = useSelector((state: RootState) => state.user.role)
     const user = useSelector((state: RootState) => state.user);
 
-    // TODO: Add students to redux so we dont have to fetch them every time we go to dashboard
     // Function to fetch students for the current consultant user
     const fetchStudents = async (user: FirebaseUser) => {
         try {
@@ -82,7 +81,6 @@ const page = () => {
     }
     
     return (
-        // user.role === 'consultant' ? (
             <div className="flex min-h-screen">
                 {/* Sidebar Container */}
                 <Sidebar />
@@ -117,36 +115,6 @@ const page = () => {
                     </div>
                 </div>
             </div>
-        // ) : (
-        //     <div className="min-h-screen bg-background">
-        //         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        //             <div className="container flex h-16 items-center justify-between px-4">
-        //                 <div className="flex items-center gap-4">
-        //                     <div>
-        //                         <h1 className="text-lg font-semibold">Welcome back, {user.firstName} {user.lastName}!</h1>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </header>
-        //         <Sidebar />
-        //         <main className="container p-4 md:p-6 space-y-6">
-        //           {/* Task Stats */}
-        //           <div>Task Stats</div>
-
-        //           {/* Select Assignment, Calendar */}
-        //           <Tabs defaultValue="assignments" className="space-y-4">
-        //             <TabsList>
-        //                 <TabsTrigger value="assignments">My Assignments</TabsTrigger>
-        //                 <TabsTrigger value="calendar">Calendar</TabsTrigger>
-        //             </TabsList>
-        //             {/* JUST ADDED, THIS IS WHERE WORK GOES */}
-        //             <TabsContent value="assignments">
-        //                 <AssignmentsList />
-        //             </TabsContent>
-        //           </Tabs>
-        //         </main>
-        //     </div>
-        // )
     );
 };
 

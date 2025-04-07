@@ -54,12 +54,7 @@ function page() {
         if (studentFromHook) setStudent(studentFromHook);
     }, [studentFromHook]);
 
-    // NEW
     const user = useSelector((state: RootState) => state.user);
-    
-
-
-    // NEW
 
     if (!student) {
         return (
@@ -111,7 +106,6 @@ function page() {
                         <TabsTrigger value="assignments">My Assignments</TabsTrigger>
                         <TabsTrigger value="calendar">Calendar</TabsTrigger>
                     </TabsList>
-                    {/* JUST ADDED, THIS IS WHERE WORK GOES */}
                     <TabsContent value="assignments">
                         <AssignmentsList />
                     </TabsContent>
