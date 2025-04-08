@@ -7,19 +7,25 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react"
 
 
-
+// TODO: Use redirect() to redirect without any flash, need to research how
 const AuthGuard = ({children}: {children: React.ReactNode}) => {
     const user = useSelector((state: RootState) => state.user);
     const router = useRouter();
 
+    const isCheckingAuth = !user.id
+
     useEffect(() => {
-        if (!user.id) {
+        if (isCheckingAuth) {
             router.push('/signin');
         }
-    }, [user])
+    }, [user, isCheckingAuth])
+
+    if (isCheckingAuth) {
+        return null;
+    }
 
     return (
-        <div>{children}</div>
+        <>{children}</>
     )
 }
 
