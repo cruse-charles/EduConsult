@@ -58,7 +58,7 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
-
+        
         const entryData = {
             files: [] as AssignmentFile[],
             note: formData.note,
@@ -66,16 +66,24 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
             uploadedBy: user.firstName + '' + user.lastName,
             type: user.role === 'consultant' ? 'feedback' : 'submission'
         }
+
+        // TODO: Make this a red inline error
+        // Error handling
+        if (entryData.note.trim() === '') {
+            if (user.role === 'consultant') {
+                alert('Please add a note to submit feedback.')
+            } else {
+                alert('Please add a note to submit submission   .')
+            }
+
+            setIsLoading(false)
+            return
+        }
         
         // Upload files to firebase storage and attach files for entry form upload
         const filesData = await fileUpload(files, studentId)
         entryData.files = filesData
 
-        // TODO: Improve error handling
-        if (entryData.note.trim() === '') {
-            alert('Please add a note to submit feedback.')
-            setIsLoading(false)
-        }
         
         // Upload entry to firestore
         await uploadEntry(entryData, assignmentId)
@@ -93,8 +101,6 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
     const baseButtonLabel = user.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';
     const buttonLabel = isLoading ? 'Submitting...' : baseButtonLabel;
 
-    // TODO: The submit button and title shouldn't be called 'send feedback' from the student's view, just consultant
-        // change it to submit or something
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
