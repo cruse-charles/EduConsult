@@ -1,10 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'lucide-react'
+
+import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 
 const Highlights = () => {
 
-    const user = useSelector(state => state.user)
+    const user = useSelector((state: RootState) => state.user)
 
     return (
 

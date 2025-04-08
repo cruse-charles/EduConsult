@@ -96,22 +96,26 @@ function page() {
                         </div>
                     </div>
                 </header>
-                <Sidebar />
-                <main className="container p-4 md:p-6 space-y-6">
-                  {/* Task Stats */}
-                  <Highlights />
+                <div className="flex min-h screen">
+                        {/* Side Bar */}
+                        <Sidebar />
+                        
+                        <main className="container p-4 md:p-6 space-y-6">
+                        {/* Task Stats */}
+                        <Highlights />
 
-                  {/* Select Assignment, Calendar */}
-                  <Tabs defaultValue="assignments" className="space-y-4">
-                    <TabsList>
-                        <TabsTrigger value="assignments">My Assignments</TabsTrigger>
-                        <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="assignments">
-                        <AssignmentsList />
-                    </TabsContent>
-                  </Tabs>
-                </main>
+                        {/* Select Assignment, Calendar */}
+                        <Tabs defaultValue="assignments" className="space-y-4">
+                            <TabsList>
+                                <TabsTrigger value="assignments">My Assignments</TabsTrigger>
+                                <TabsTrigger value="calendar">Calendar</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="assignments">
+                                <AssignmentsList />
+                            </TabsContent>
+                        </Tabs>
+                    </main>
+                </div>
             </div>
         )
     )
