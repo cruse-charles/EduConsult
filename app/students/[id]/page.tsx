@@ -18,6 +18,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Sidebar from "@/app/components/Sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Highlights from "@/app/components/Highlights";
 
 function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
@@ -85,7 +86,7 @@ function page() {
                 </div>
             </div>
         ) : (
-                        <div className="min-h-screen bg-background">
+            <div className="min-h-screen bg-background">
                 <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                     <div className="container flex h-16 items-center justify-between px-4">
                         <div className="flex items-center gap-4">
@@ -98,7 +99,7 @@ function page() {
                 <Sidebar />
                 <main className="container p-4 md:p-6 space-y-6">
                   {/* Task Stats */}
-                  <div>Task Stats</div>
+                  <Highlights />
 
                   {/* Select Assignment, Calendar */}
                   <Tabs defaultValue="assignments" className="space-y-4">
