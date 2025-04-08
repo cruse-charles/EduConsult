@@ -19,6 +19,7 @@ import { RootState } from "@/redux/store";
 import AssignmentsList from "../students/[id]/AssignmentsList";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import Highlights from "../components/Highlights";
 
 // TODO: Add protection to this route so that if no one is logged in, they can't get to this page 
 // and are redirected to login
@@ -106,6 +107,9 @@ const page = () => {
                         <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/>
                         </div>
                     </div>
+
+                    {/* Highlights */}
+                    <Highlights />
 
     
                     {/* Tabs Container */}
