@@ -63,7 +63,7 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
             files: [] as AssignmentFile[],
             note: formData.note,
             uploadedAt: new Date(),
-            uploadedBy: user.firstName + '' + user.lastName,
+            uploadedBy: user.firstName + ' ' + user.lastName,
             type: user.role === 'consultant' ? 'feedback' : 'submission'
         }
 

@@ -1,6 +1,8 @@
 'use client'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 import { getDoc, doc, DocumentReference, DocumentData } from "firebase/firestore";
 import { db, app } from "@/lib/firebaseConfig";
@@ -12,14 +14,12 @@ import { useConsultant } from "@/hooks/useConsultant";
 import Sidebar from "../components/Sidebar";
 import AddStudentModal from "./AddStudentModal/AddStudentModal";
 import StudentCard from "../components/StudentCard";
+import Highlights from "../components/Highlights";
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import AssignmentsList from "../students/[id]/AssignmentsList";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import Highlights from "../components/Highlights";
+
 
 // TODO: Add protection to this route so that if no one is logged in, they can't get to this page 
 // and are redirected to login
