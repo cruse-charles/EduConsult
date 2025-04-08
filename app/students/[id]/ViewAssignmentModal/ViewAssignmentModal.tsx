@@ -63,7 +63,6 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
             files: [] as AssignmentFile[],
             note: formData.note,
             uploadedAt: new Date(),
-            // TODO: Adjust below to be user name and feedback/submission based on user
             uploadedBy: user.firstName + '' + user.lastName,
             type: user.role === 'consultant' ? 'feedback' : 'submission'
         }
@@ -90,6 +89,9 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
         clearFiles()
         setIsLoading(false)
     }
+
+    const baseButtonLabel = user.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';
+    const buttonLabel = isLoading ? 'Submitting...' : baseButtonLabel;
 
     // TODO: The submit button and title shouldn't be called 'send feedback' from the student's view, just consultant
         // change it to submit or something
@@ -130,7 +132,7 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
                             </div>
                             <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
                             <Button type='submit' className='mt-2' disabled={isLoading}>
-                                {!isLoading ? 'Send Feedback' : 'Sending Feedback...'}
+                                {buttonLabel}
                             </Button>
                         </form>
                     </div>
