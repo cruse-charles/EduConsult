@@ -31,6 +31,7 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
 
     // Find assignment from state by matching with selected assignment ID
     const assignment = useSelector((state: RootState) => state.assignments.find((a) => a.id === assignmentId))
+    const user = useSelector((state: RootState) => state.user)
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
@@ -63,8 +64,8 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
             note: formData.note,
             uploadedAt: new Date(),
             // TODO: Adjust below to be user name and feedback/submission based on user
-            uploadedBy: 'User',
-            type: 'Feedback'
+            uploadedBy: user.firstName + '' + user.lastName,
+            type: user.role === 'consultant' ? 'feedback' : 'submission'
         }
         
         // Upload files to firebase storage and attach files for entry form upload
@@ -90,6 +91,8 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
         setIsLoading(false)
     }
 
+    // TODO: The submit button and title shouldn't be called 'send feedback' from the student's view, just consultant
+        // change it to submit or something
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
