@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Student } from "@/lib/types/types";
+import Link from "next/link";
 
 import { useState } from "react"
 
@@ -10,18 +11,27 @@ interface StudentTableProps {
 
 const StudentTable = ({students}: StudentTableProps) => {
     const [sortBy, setSortBy] = useState("name")
+    const [sortOrder, setSortOrder] = useState("asc")
     
 
-    const handleSort = (string: string) => {
-
+    const handleSort = (column: string) => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+        } else {
+            setSortBy(column)
+            setSortOrder("asc")
+        }
     }
 
     const sortedStudents = [...students].sort((a,b) => {
+        let comparison = 0
+
         switch (sortBy) {
             case "name":
                 return a.personalInformation.firstName.localeCompare(b.personalInformation.firstName)
         }
 
+        return sortOrder === "desc" ? -comparison : comparison
     })
 
     return (
@@ -48,9 +58,23 @@ const StudentTable = ({students}: StudentTableProps) => {
                 </TableHeader>
                 <TableBody>
                     {sortedStudents.map((student) => (
-                        <TableRow>
+                        <TableRow key={student.id} className="cursor-pointer">
                             <TableCell>
-                                {student.personalInformation.firstName} {student.personalInformation.lastName}
+                                <Link href={`/students/${student.id}`} className="flex items-center gap-3">
+                                    {student.personalInformation.firstName} {student.personalInformation.lastName}
+                                </Link>
+                            </TableCell>
+                            <TableCell>
+                                <Link href={`/dashboard/students/${student.id}`}>
+                                {/* <span className="font-medium">{student.pendingTasks}</span> */}
+                                pending tasks
+                                </Link>
+                            </TableCell>
+                            <TableCell>
+                                <Link href={`/dashboard/students/${student.id}`}>
+                                {/* <span className="font-medium">{student.nextDeadline}</span> */}
+                                next deadline
+                                </Link>
                             </TableCell>
                         </TableRow>
                     ))}
