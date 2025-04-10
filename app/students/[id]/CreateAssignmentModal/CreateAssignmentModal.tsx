@@ -138,7 +138,7 @@ function CreateAssignmentModal() {
         dispatch(updateFolders(formData.folder))
         dispatch(updateAssignmentDocIds(assignmentDocId))
         updateNextDeadline(studentId)
-        updatePendingAssignments(studentId)
+        updatePendingAssignments(studentId, 'pending')
     }
 
     const handleInputChange = (name: string, value: string) => {

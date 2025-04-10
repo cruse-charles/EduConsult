@@ -70,8 +70,7 @@ const StudentTable = ({students}: StudentTableProps) => {
                             </TableCell>
                             <TableCell>
                                 <Link href={`/students/${student.id}`}>
-                                {/* <span className="font-medium">{student.pendingTasks}</span> */}
-                                pending tasks
+                                <span className="font-medium">{student.stats?.pendingAssignmentsCount || 0}</span>
                                 </Link>
                             </TableCell>
                             <TableCell>
