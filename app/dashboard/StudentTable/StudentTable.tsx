@@ -68,13 +68,13 @@ const StudentTable = ({students}: StudentTableProps) => {
                                 </Link>
                             </TableCell>
                             <TableCell>
-                                <Link href={`/dashboard/students/${student.id}`}>
+                                <Link href={`/students/${student.id}`}>
                                 {/* <span className="font-medium">{student.pendingTasks}</span> */}
                                 pending tasks
                                 </Link>
                             </TableCell>
                             <TableCell>
-                                <Link href={`/dashboard/students/${student.id}`}>
+                                <Link href={`/students/${student.id}`}>
                                 {/* <span className="font-medium">{student.nextDeadline}</span> */}
                                 next deadline
                                 </Link>

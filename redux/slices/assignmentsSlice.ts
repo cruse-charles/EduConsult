@@ -11,7 +11,7 @@ export const fetchAssignments = createAsyncThunk(
   async (assignmentsDocIds: string[], {rejectWithValue}) => {
     try {
       // Fetch all assignments in parallel
-      console.log("fetching assignemtns...")
+      // console.log("fetching assignments...")
       const assignments = await Promise.all(
         assignmentsDocIds.map(async (assignmentDocId) => {
           // Get a reference to the assignment document and fetch its snapshot

@@ -24,6 +24,7 @@ import { RootState } from "@/redux/store";
 import { addAssignment } from "@/redux/slices/assignmentsSlice"
 import { Timestamp } from "firebase/firestore";
 import { useFiles } from "@/hooks/useFiles"
+import { updateNextDeadline } from "@/lib/statsUtils"
 
 
 
@@ -121,7 +122,7 @@ function CreateAssignmentModal() {
 
         const assignmentDocId = await uploadAssignment(assignmentData, studentId, consultant)
         
-        // Create assignment with ID to add to redux for peroper ordering
+        // Create assignment with ID to add to redux for proper ordering
         const assignmentWithId = {
             id: assignmentDocId,
             ...assignmentData,
@@ -136,6 +137,7 @@ function CreateAssignmentModal() {
         // Update redux to include new folder if any and add assignment to student's profile
         dispatch(updateFolders(formData.folder))
         dispatch(updateAssignmentDocIds(assignmentDocId))
+        updateNextDeadline(studentId)
     }
 
     const handleInputChange = (name: string, value: string) => {

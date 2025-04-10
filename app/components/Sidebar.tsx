@@ -13,7 +13,7 @@ const Sidebar = () => {
         try {
             await signOut(auth)
             dispatch(resetStore())
-            console.log("User signed out successfully");
+            // console.log("User signed out successfully");
         } catch (error) {
             console.error("Error signing out: ", error);
         }

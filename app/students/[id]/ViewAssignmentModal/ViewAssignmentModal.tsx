@@ -42,9 +42,9 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
     const [isLoading, setIsLoading] = useState(false)
 
 
-    useEffect(() => {
-        console.log('assignmentId', assignmentId)
-    }, [assignmentId])
+    // useEffect(() => {
+    //     console.log('assignmentId', assignmentId)
+    // }, [assignmentId])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
         const {name, value} = e.target

@@ -43,11 +43,11 @@ const page = () => {
         try {
           // Sign in and get user crednetials
           const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
-          console.log('signed in with userCredential...', userCredential)
+          // console.log('signed in with userCredential...', userCredential)
 
           // Retrieve user info
           const user = await getUserInfo(userCredential.user.uid);
-          console.log('User from getUserInfo', user)
+          // console.log('User from getUserInfo', user)
 
           // Add user info to Redux state
           dispatch(setUser({
@@ -90,7 +90,7 @@ const page = () => {
 
     // Retrieve user's info
     const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
-      console.log('getUserInfo function is called')
+      // console.log('getUserInfo function is called')
       try {
         // Check if id is for a consultant
         const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
@@ -103,7 +103,7 @@ const page = () => {
         const studentDoc = await getDoc(doc(db, "studentUsers", userId))
         if (studentDoc.exists()) {
           const data = studentDoc.data()
-          console.log('Student Data:', data)
+          // console.log('Student Data:', data)
           return {id: studentDoc.id, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student'}
         }
 
@@ -124,7 +124,7 @@ const page = () => {
         // Firebase function to sign in with Google
         signInWithPopup(auth, googleProvider)
           .then( async (result) => {
-              console.log(result)
+              // console.log(result)
         
             // Check if this is a new user (first time signing in with Google)
             const user = result.user
@@ -145,11 +145,11 @@ const page = () => {
                     createdAt: new Date(),
                     signInMethod: 'google'
                 })
-                console.log('New Google user document created with parsed names:', { firstName, lastName })
+                // console.log('New Google user document created with parsed names:', { firstName, lastName })
             }
 
             const userInfo = await getUserInfo(user.uid);
-            console.log('user', user)
+            // console.log('user', user)
 
             // Add user info to Redux state
             dispatch(setUser({

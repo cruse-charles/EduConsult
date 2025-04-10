@@ -9,7 +9,7 @@ import { Student } from '@/lib/types/types';
 export const fetchStudent = createAsyncThunk(
     'student/fetchStudent',
     async (studentId: string) => {
-        console.log("fetching student info")
+        // console.log("fetching student info")
         const docRef = doc(db, "studentUsers", studentId);
         const docSnap = await getDoc(docRef);
         return {id: docSnap.id, ...docSnap.data()};
