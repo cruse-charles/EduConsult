@@ -37,3 +37,9 @@ export const formatDueDateAndTime = (dueDate: Date | Timestamp | undefined) => {
     const date = dueDate instanceof Date ? dueDate : dueDate.toDate();
     return format(date, "MMM d, yyyy 'at' h:mm a");
 }
+
+export const nextDeadline = (nextDeadline: Date | Timestamp | undefined) => {
+    if (!nextDeadline || nextDeadline === undefined) return "N/A";
+    const date = nextDeadline instanceof Date ? nextDeadline : nextDeadline.toDate();
+    return format(date, "MMM d, yyyy");
+}

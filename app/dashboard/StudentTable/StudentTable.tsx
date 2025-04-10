@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Student } from "@/lib/types/types";
-import { formatDueDateAndTime } from "@/lib/utils";
+import { formatDueDateAndTime, nextDeadline } from "@/lib/utils";
 import Link from "next/link";
 
 import { useState } from "react"
@@ -76,7 +76,7 @@ const StudentTable = ({students}: StudentTableProps) => {
                             </TableCell>
                             <TableCell>
                                 <Link href={`/students/${student.id}`}>
-                                <span className="font-medium">{formatDueDateAndTime(student.stats?.nextDeadline)}</span>
+                                <span className="font-medium">{nextDeadline(student.stats?.nextDeadline)}</span>
                                 </Link>
                             </TableCell>
                         </TableRow>
