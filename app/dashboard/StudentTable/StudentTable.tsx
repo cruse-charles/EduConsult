@@ -10,10 +10,11 @@ interface StudentTableProps {
 }
 
 const StudentTable = ({students}: StudentTableProps) => {
+    // State to manage sorting by column and order
     const [sortBy, setSortBy] = useState("name")
     const [sortOrder, setSortOrder] = useState("asc")
     
-
+    // Handle sorting logic when column header is clicked
     const handleSort = (column: string) => {
         if (sortBy === column) {
             setSortOrder(sortOrder === "asc" ? "desc" : "asc")
@@ -26,11 +27,13 @@ const StudentTable = ({students}: StudentTableProps) => {
     const sortedStudents = [...students].sort((a,b) => {
         let comparison = 0
 
+        // Determine comparison based on column selected with sortBy
         switch (sortBy) {
             case "name":
-                return a.personalInformation.firstName.localeCompare(b.personalInformation.firstName)
+                comparison = a.personalInformation.firstName.localeCompare(b.personalInformation.firstName)
         }
 
+        // If sortOrder is descending, reverse the comparison result
         return sortOrder === "desc" ? -comparison : comparison
     })
 
