@@ -40,3 +40,27 @@ export const updateNextDeadline = async (studentId) => {
         console.log("Error updating nextDeadline:", error)
     }
 }
+
+export const updatePendingAssignments = async (studentId, status) => {
+    try {
+        const studentDocRef = doc(db, "studentUsers", studentId);
+        const studentDocSnap = await getDoc(studentDocRef);
+
+        const studentData = studentDocSnap.data();
+        const pendingAssignmentsCount = studentData.stats?.pendingAssignmentsCount || 0;
+
+        // Update the pending assignments count
+        if (status === 'pending') {
+            await updateDoc(studentDocRef, {
+                "stats.pendingAssignmentsCount": pendingAssignmentsCount + 1
+            })
+        } else {
+            await updateDoc(studentDocRef, {
+                "stats.pendingAssignmentsCount": Math.max(pendingAssignmentsCount - 1, 0)
+            })
+        }
+
+    } catch (error) {
+        console.log("Error updating pending assignments:", error)
+    }
+}
