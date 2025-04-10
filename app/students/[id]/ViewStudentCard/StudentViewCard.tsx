@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebaseConfig'
 import { Student } from '@/lib/types/types'
-import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { deleteDoc, doc, DocumentReference, getDoc, updateDoc } from 'firebase/firestore'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
@@ -48,7 +48,7 @@ function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
             const consultantSnap = await getDoc(consultantRef);
             const consultantData = consultantSnap.data();
 
-            const studentRefs = consultantData?.students
+            const studentRefs = consultantData?.students as DocumentReference[]
 
             const updatedStudentRefs = studentRefs.filter((ref) => ref.id !== student.id)
 
@@ -56,7 +56,7 @@ function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
                 students: updatedStudentRefs
             })
 
-            console.log("student Deleted from consultant's array")
+            console.log("Student deleted from consultant's array")
             // Redirect to dashboard
             router.push('/dashboard');
         } catch (error) {
