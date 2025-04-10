@@ -1,6 +1,9 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
+// TODO: We don't really need to do all this. We can just see if assigmentDocIds is empty and put in 
+// the deadline of the asssignment, if it is not empty then we just check the assignnment we are creating
+// and compare it with the current nextDeadline
 export const updateNextDeadline = async (studentId) => {
     try {
         const studentDocRef = doc(db, "studentUsers", studentId);
