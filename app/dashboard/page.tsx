@@ -19,6 +19,7 @@ import Highlights from "../components/Highlights";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import StudentTable from "./StudentTable/StudentTable";
 
 
 
@@ -71,6 +72,10 @@ const page = () => {
         }
     };
 
+    useEffect(() => {
+        console.log("Students fetched:", students);
+    }, [students])
+
     // OLD
     // // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
     // const currentUser = useConsultant();
@@ -102,12 +107,12 @@ const page = () => {
     // NEW
     
     return (
-            <div className="flex min-h-screen">
-                {/* Sidebar Container */}
-                <Sidebar />
+        <div className="flex min-h-screen">
+            {/* Sidebar Container */}
+            <Sidebar />
     
-                {/* Main Content Container */}
-                <div className="container p-4 md:p-6 space-y-6">
+            {/* Main Content Container */}
+            <div className="container p-4 md:p-6 space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-2xl font-bold">Dashboard</h1>
                         <div className="flex items-center gap-2">
@@ -140,21 +145,22 @@ const page = () => {
                             <TabsTrigger value="deadlines">Upcoming Deadlines</TabsTrigger> */}
                             </TabsList>
                             <TabsContent value="students" className="space-y-4">
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                {students.map((student) => (
-                                    <StudentCard key={student.id} student={student} />
-                                ))}
-                            </div>
-                            {students.length === 0 && (
-                                <div className="flex flex-col items-center justify-center py-12">
-                                <p className="text-muted-foreground">No students found matching your search.</p>
+                                {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                    {students.map((student) => (
+                                        <StudentCard key={student.id} student={student} />
+                                    ))}
                                 </div>
-                            )}
+                                {students.length === 0 && (
+                                    <div className="flex flex-col items-center justify-center py-12">
+                                    <p className="text-muted-foreground">No students found matching your search.</p>
+                                    </div>
+                                )} */}
+                                <StudentTable students={students}/>
                             </TabsContent>
                         </Tabs>
                     </div>
-                </div>
             </div>
+        </div>
     );
 };
 
