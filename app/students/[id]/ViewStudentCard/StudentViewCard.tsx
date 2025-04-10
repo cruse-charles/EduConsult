@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebaseConfig'
 import { Student } from '@/lib/types/types'
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
+import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation'
 
 import StudentCardContent from './StudentCardContent'
 import EditStudentCardContent from './EditStudentCardContent'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
 
 interface ViewStudentCardProps {
     student: Student;
@@ -29,14 +31,32 @@ function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
     // Initialize router for navigation
     const router = useRouter();
 
+    const user = useSelector((state: RootState) => state.user)
+
     // Function to handle student deletion
     // TODO: DELETE THE STUDENT REF FROM THE CONSULTANT DOCUMENT
+
+    // TODO: Make sure students can't delete their own card/themselves
     const handleDelete = async () => {
         try {
             // Delete the student document from Firestore
             await deleteDoc(doc(db, "studentUsers", student.id))
             console.log("Student deleted:", student.id);
 
+            // Remove student from consultant's students array
+            const consultantRef = doc(db, "consultantUsers", user.id);
+            const consultantSnap = await getDoc(consultantRef);
+            const consultantData = consultantSnap.data();
+
+            const studentRefs = consultantData?.students
+
+            const updatedStudentRefs = studentRefs.filter((ref) => ref.id !== student.id)
+
+            await updateDoc(consultantRef, {
+                students: updatedStudentRefs
+            })
+
+            console.log("student Deleted from consultant's array")
             // Redirect to dashboard
             router.push('/dashboard');
         } catch (error) {

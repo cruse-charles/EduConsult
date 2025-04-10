@@ -8,7 +8,7 @@ import { getDoc, doc, DocumentReference, DocumentData } from "firebase/firestore
 import { db, app } from "@/lib/firebaseConfig";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { Student } from "@/lib/types/types";
+import { FirebaseUserInfo, Student } from "@/lib/types/types";
 import { useConsultant } from "@/hooks/useConsultant";
 
 import Sidebar from "../components/Sidebar";
@@ -21,8 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
 
-// TODO: Add protection to this route so that if no one is logged in, they can't get to this page 
-// and are redirected to login
+
 const page = () => {
     // State to manage students and set reference to the consultant document
     const [students, setStudents] = useState<Student[]>([]);
@@ -32,15 +31,17 @@ const page = () => {
     const user = useSelector((state: RootState) => state.user);
 
     // Function to fetch students for the current consultant user
-    const fetchStudents = async (user: FirebaseUser) => {
+    // const fetchStudents = async (user: FirebaseUser) => {
+    const fetchStudents = async (user: FirebaseUserInfo) => {
         try {
             // Get the consultant's document reference and snapshot
             console.log('fetching students.....')
-            const ref = doc(db, "consultantUsers", user.uid);
+            const ref = doc(db, "consultantUsers", user.id);
             console.log("Consultant Document Reference:", ref);
             setConsultantDocRef(ref);
             const consultantDocSnap = await getDoc(ref);
             console.log("Consultant Document Snapshot:", consultantDocSnap);
+            console.log("Consultant Document Data:", consultantDocSnap.data());
 
             // If the consultant document does not exist, set students to an empty array
             if (!consultantDocSnap.exists()) {
@@ -70,18 +71,35 @@ const page = () => {
         }
     };
 
+    // OLD
+    // // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
+    // const currentUser = useConsultant();
+    
+
+    // // 2. Fetch students when user is available
+    // useEffect(() => {
+    //     if (currentUser) fetchStudents(currentUser);
+    // }, [currentUser]);
+
+    // const handleStudentAdded = () => {
+    //     if (currentUser) fetchStudents(currentUser);
+    // }
+    // OLD
+
+    // NEW
     // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
-    const currentUser = useConsultant();
+    // const currentUser = useConsultant();
     
 
     // 2. Fetch students when user is available
     useEffect(() => {
-        if (currentUser) fetchStudents(currentUser);
-    }, [currentUser]);
+        if (user) fetchStudents(user as FirebaseUserInfo);
+    }, [user]);
 
     const handleStudentAdded = () => {
-        if (currentUser) fetchStudents(currentUser);
+        if (user) fetchStudents(user as FirebaseUserInfo);
     }
+    // NEW
     
     return (
             <div className="flex min-h-screen">

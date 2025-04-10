@@ -22,10 +22,8 @@ interface AddStudentModalProps {
     onStudentAdded: () => void;
 }
 
-// TODO: Some sort of error here with creaeting a student. Got this in the logs:
-// Error adding document:  FirebaseError: Function arrayUnion() called with invalid data. Unsupported field value: undefined (found in document consultantUsers/dAZZyiLUrrfEJ8ug6HpgOtDMZ6D3)
-// It does create a student user, but doesn't add the student to the consultant's array of students
-// Even on manually adding the studen in firebase, I don't see it in frontend
+// TODO: Added students should be in redux, don't need to call again I guess but idk really if I want to do
+    // that in the dashboard
 function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
     let auth = getAuth(app);
     
@@ -91,6 +89,12 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             return;
         }
 
+        console.log("Consultant Document Reference:", consultantDocRef);
+        const consultantSnap = await getDoc(consultantDocRef)
+        console.log("Consultant Document Snapshot:", consultantSnap);   
+        const consultantData = consultantSnap.data();
+        console.log("Consultant Document Data:", consultantData);
+
         // Create a new student document in the "studentUsers" collection
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
@@ -122,10 +126,13 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
                 password: formData.password,
             });
 
+            console.log("Student was created, now updating consultant doc...")
             // Add the studentDocRef to the consultant's students array
             await updateDoc(consultantDocRef, {
                 students: arrayUnion(studentDocRef)
             });
+
+            console.log("Consultant's students array updated with new student reference.");
 
             // Callback to refresh student list or perform any other action after adding a student
             onStudentAdded();
