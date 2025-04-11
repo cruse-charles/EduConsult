@@ -57,7 +57,6 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         }))
 
         // Adjust pendingCount if status changes
-        // TODO: CHECK IF THIS WORKS CORRECTLY
         if (name === 'status') {
             updatePendingAssignments(studentId, value)
         } 

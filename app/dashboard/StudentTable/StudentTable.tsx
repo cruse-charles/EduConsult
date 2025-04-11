@@ -1,8 +1,11 @@
-import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
 import { Student } from "@/lib/types/types";
-import { formatDueDateAndTime, nextDeadline } from "@/lib/utils";
+import { nextDeadline } from "@/lib/utils";
+
 import Link from "next/link";
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
 
 import { useState } from "react"
 
@@ -32,11 +35,28 @@ const StudentTable = ({students}: StudentTableProps) => {
         switch (sortBy) {
             case "name":
                 comparison = a.personalInformation.firstName.localeCompare(b.personalInformation.firstName)
+                break
+            case "pending":
+                comparison = (a.stats?.pendingAssignmentsCount || 0) - (b.stats?.pendingAssignmentsCount || 0)
+                break
+            case "nextDeadline":
+                const aDeadline = a.stats?.nextDeadline ? a.stats?.nextDeadline.toDate() : new Date(0)
+                const bDeadline = b.stats?.nextDeadline ? b.stats?.nextDeadline.toDate() : new Date(0)
+                comparison = aDeadline.getTime() - bDeadline.getTime()
+                break
         }
 
         // If sortOrder is descending, reverse the comparison result
         return sortOrder === "desc" ? -comparison : comparison
     })
+
+    const getSortIcon = (column: string) => {
+        if (sortBy != column) {
+            return <ArrowUpDown className="h-4 w-4"/>
+        }
+
+        return sortOrder === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4"/>
+    }
 
     return (
         <div>
@@ -45,17 +65,17 @@ const StudentTable = ({students}: StudentTableProps) => {
                     <TableRow>
                         <TableHead className="w-[300px]">
                             <Button variant="ghost" onClick={() => handleSort("name")} className="h-auto p-0 font-semibold hover:bg-transparent">
-                                Student
+                                Student {getSortIcon("name")}
                             </Button>
                         </TableHead>
                         <TableHead className="w-[300px]">
                             <Button variant="ghost" onClick={() => handleSort("pending")} className="h-auto p-0 font-semibold hover:bg-transparent">
-                                Pending Tasks
+                                Pending Tasks {getSortIcon("pending")}
                             </Button>
                         </TableHead>
                         <TableHead className="w-[300px]">
-                            <Button variant="ghost" onClick={() => handleSort("deadline")} className="h-auto p-0 font-semibold hover:bg-transparent">
-                                Next Deadline
+                            <Button variant="ghost" onClick={() => handleSort("nextDeadline")} className="h-auto p-0 font-semibold hover:bg-transparent">
+                                Next Deadline {getSortIcon("nextDeadline")}
                             </Button>
                         </TableHead>
                     </TableRow>
