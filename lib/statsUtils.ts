@@ -53,7 +53,7 @@ export const updateNextDeadline = async (studentId: string) => {
     }
 }
 
-export const updatePendingAssignments = async (studentId: string, status: string) => {
+export const updatePendingCount = async (studentId: string, status: string) => {
     try {
         // Get the student's doc reference and fetch snapshot
         const studentDocRef = doc(db, "studentUsers", studentId);
@@ -68,13 +68,16 @@ export const updatePendingAssignments = async (studentId: string, status: string
         // Retrieve student's data and pending assignments count
         const studentData = studentDocSnap.data();
         const pendingAssignmentsCount = studentData.stats?.pendingAssignmentsCount || 0;
+        console.log(pendingAssignmentsCount, 'Pending Assignment Count')
 
         // Update the pending assignments count, if added assignment is pending then add to count, if not then subtract
-        if (status === 'pending') {
+        if (status === 'Pending') {
+            console.log('Entering pending clause')
             await updateDoc(studentDocRef, {
                 "stats.pendingAssignmentsCount": pendingAssignmentsCount + 1
             })
         } else {
+            console.log('Entering other clause')
             await updateDoc(studentDocRef, {
                 "stats.pendingAssignmentsCount": Math.max(pendingAssignmentsCount - 1, 0)
             })

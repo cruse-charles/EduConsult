@@ -16,7 +16,7 @@ import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/ass
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'next/navigation'
-import { updatePendingAssignments } from '@/lib/statsUtils'
+import { updatePendingCount } from '@/lib/statsUtils'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;
@@ -58,7 +58,8 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
 
         // Adjust pendingCount if status changes
         if (name === 'status') {
-            updatePendingAssignments(studentId, value)
+            console.log('Going into Upddate assignment function')
+            updatePendingCount(studentId, value)
         } 
     }
 

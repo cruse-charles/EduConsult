@@ -24,7 +24,7 @@ import { RootState } from "@/redux/store";
 import { addAssignment } from "@/redux/slices/assignmentsSlice"
 import { Timestamp } from "firebase/firestore";
 import { useFiles } from "@/hooks/useFiles"
-import { updateNextDeadline, updatePendingAssignments } from "@/lib/statsUtils"
+import { updateNextDeadline, updatePendingCount } from "@/lib/statsUtils"
 
 
 
@@ -138,7 +138,7 @@ function CreateAssignmentModal() {
         dispatch(updateFolders(formData.folder))
         dispatch(updateAssignmentDocIds(assignmentDocId))
         updateNextDeadline(studentId)
-        updatePendingAssignments(studentId, 'pending')
+        updatePendingCount(studentId, 'Pending')
     }
 
     const handleInputChange = (name: string, value: string) => {
