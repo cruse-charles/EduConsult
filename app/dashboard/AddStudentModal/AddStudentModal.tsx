@@ -48,6 +48,10 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             toefl: null,
             targetSchools: '',
         },
+        stats: {
+            pendingAssignmentsCount: 0,
+            nextDeadline: undefined,
+        },
         email: '',
         password: '',
         consultant: null,
@@ -71,6 +75,10 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             sat: null,
             toefl: null,
             targetSchools: '',
+        },
+        stats: {
+            pendingAssignmentsCount: 0,
+            nextDeadline: undefined,
         },
         email: '',
         password: '',

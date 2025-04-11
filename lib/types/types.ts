@@ -19,6 +19,10 @@ export interface StudentBase {
         other: string;
         notes: string;
     };
+    stats: {
+        pendingAssignmentsCount: number;
+        nextDeadline: Timestamp | undefined;
+    }
     consultant: DocumentReference<DocumentData> | null;
     email: string;
     folders: string[];

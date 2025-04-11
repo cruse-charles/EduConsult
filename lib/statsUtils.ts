@@ -6,7 +6,7 @@ import { db } from "./firebaseConfig";
 // and compare it with the current nextDeadline
 
 // TODO: Need to not count dates previous to today's current date
-export const updateNextDeadline = async (studentId) => {
+export const updateNextDeadline = async (studentId: string) => {
     try {
         const studentDocRef = doc(db, "studentUsers", studentId);
         const studentDocSnap = await getDoc(studentDocRef);
@@ -21,9 +21,15 @@ export const updateNextDeadline = async (studentId) => {
         // CORRECT ABOVE
 
         const dueDates = await Promise.all( 
-            assignmentDocIds.map(async (assignmentDocId) => {
+            assignmentDocIds.map(async (assignmentDocId: string) => {
                 const assignmentDocRef = doc(db, "assignments", assignmentDocId);
                 const assignmentDocSnap = await getDoc(assignmentDocRef);
+
+                if (!assignmentDocSnap.exists()) {
+                    console.log('No assignment document found')
+                    return
+                }
+
                 return assignmentDocSnap.data().dueDate;
             })
         )
@@ -43,10 +49,15 @@ export const updateNextDeadline = async (studentId) => {
     }
 }
 
-export const updatePendingAssignments = async (studentId, status) => {
+export const updatePendingAssignments = async (studentId: string, status: string) => {
     try {
         const studentDocRef = doc(db, "studentUsers", studentId);
         const studentDocSnap = await getDoc(studentDocRef);
+
+        if (!studentDocSnap.exists()) {
+            console.log("No student document found!");
+            return;
+        }
 
         const studentData = studentDocSnap.data();
         const pendingAssignmentsCount = studentData.stats?.pendingAssignmentsCount || 0;
