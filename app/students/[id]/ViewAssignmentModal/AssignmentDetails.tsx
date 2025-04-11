@@ -16,6 +16,7 @@ import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/ass
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'next/navigation'
+import { updatePendingAssignments } from '@/lib/statsUtils'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;
@@ -43,7 +44,6 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
             ...prev,
             [name]: value
         }))
-
     }
 
     useEffect(() => {
@@ -55,6 +55,12 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
             ...prev,
             [name]: value
         }))
+
+        // Adjust pendingCount if status changes
+        // TODO: CHECK IF THIS WORKS CORRECTLY
+        if (name === 'status') {
+            updatePendingAssignments(studentId, value)
+        } 
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -151,7 +157,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="Pending">Pending</SelectItem>
-                                    <SelectItem value="In Progress">Submitted</SelectItem>
+                                    <SelectItem value="Submitted">Submitted</SelectItem>
                                     <SelectItem value="Under Review">Under Review</SelectItem>
                                     <SelectItem value="Completed">Completed</SelectItem>
                                 </SelectContent>
