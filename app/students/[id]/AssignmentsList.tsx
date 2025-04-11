@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
+import { BookOpen, CheckCircle, ChevronDown, ChevronRight, Eye, FileText, Folder, FolderOpen, Hourglass, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
@@ -56,6 +56,44 @@ function AssignmentsList() {
         let count = 0
         // assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
         return count
+    }
+
+    const getStatusBadge = (status: string) => {
+    switch (status) {
+        case "Pending":
+        return (
+            <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
+                <Hourglass className="h-3 w-3" />
+                Pending
+            </Badge>
+        )
+
+        case "Completed":
+        return (
+            <Badge className="gap-1 bg-green-100 text-green-800 font-bold hover:bg-green-100 hover:text-green-800">
+                <CheckCircle className="h-3 w-3" />
+                Completed
+            </Badge>
+        )
+
+        case "Submitted":
+        return (
+            <Badge className="gap-1 bg-blue-100 text-blue-800 font-bold hover:bg-blue-100 hover:text-blue-800">
+                <Upload className="h-3 w-3" />
+                Submitted
+            </Badge>
+        )
+
+        case "Under Review":
+        return (
+            <Badge className="gap-1 bg-purple-100 text-purple-800 font-bold hover:bg-purple-100 hover:text-purple-800">
+                <Eye className="h-3 w-3" />
+                Reviewing
+            </Badge>
+        )
+    }
+
+    return null
     }
 
     return (
@@ -114,6 +152,7 @@ function AssignmentsList() {
                                                     <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
                                                 </div>
                                             </div>
+                                            <div className="flex items-center gap-3">{getStatusBadge(assignment.status)}</div>
                                         </div>
                                     ))}
                                 </div>
