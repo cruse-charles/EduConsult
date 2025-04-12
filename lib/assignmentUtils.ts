@@ -4,6 +4,7 @@ import { arrayRemove, arrayUnion, deleteDoc, doc, setDoc, updateDoc } from "fire
 import { AssignmentUpload, Entry, UpdateAssignment } from "./types/types";
 import { User } from "firebase/auth";
 import { nanoid } from "@reduxjs/toolkit";
+import { updateNextDeadline } from "./statsUtils";
 
 export const fileUpload = async (files: File[], studentId: string) => {
     const filesData = []
@@ -51,7 +52,9 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
         await setDoc(assignmentDocRef, {
             ...assignmentData,
             consultant: doc(db, "consultantUsers", consultant.uid)
-        })    
+        })
+
+        const nextDeadline = updateNextDeadline(studentId, assignmentData.dueDate)
     
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {

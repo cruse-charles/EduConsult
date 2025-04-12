@@ -97,6 +97,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         }))
     }
 
+    // TODO: MAKE THIS DECREASE PENDING TASKS TOO IF WE DELETE AND STATUS IS ON PENDING
     const handleDelete = async () => {
         if (!assignment?.id) return;
         setEdit(false)
