@@ -3,10 +3,19 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
+import { countTasksDueThisWeek } from '@/lib/querys'
+import { useEffect, useState } from 'react'
 
 const Highlights = () => {
 
     const user = useSelector((state: RootState) => state.user)
+    const [tasksDueThisWeek, setTasksDueThisWeek] = useState<number>(0);
+
+    useEffect(() => {
+        if (user.role === 'consultant') {
+            countTasksDueThisWeek(user.id).then(setTasksDueThisWeek);
+        }
+    }, [user, tasksDueThisWeek])
 
     return (
 
@@ -29,7 +38,7 @@ const Highlights = () => {
                             <BookOpen className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold"># of pending tasks</div>
+                            <div className="text-2xl font-bold">{tasksDueThisWeek} of pending tasks</div>
                             <p className="text-xs text-muted-foreground">X due this week</p>
                         </CardContent>
                     </Card>
