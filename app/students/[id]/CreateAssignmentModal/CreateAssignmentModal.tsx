@@ -139,7 +139,6 @@ function CreateAssignmentModal() {
         // Update redux to include new folder if any and add assignment to student's profile
         dispatch(updateFolders(formData.folder))
         dispatch(updateAssignmentDocIds(assignmentDocId))
-        // updateNextDeadline(studentId)
         updatePendingCount(studentId, 'Pending')
     }
 

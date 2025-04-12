@@ -38,8 +38,8 @@ const Highlights = () => {
                             <BookOpen className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{tasksDueThisWeek} of pending tasks</div>
-                            <p className="text-xs text-muted-foreground">X due this week</p>
+                            <div className="text-2xl font-bold">{tasksDueThisWeek} due this week</div>
+                            <p className="text-xs text-muted-foreground">X pending tasks total</p>
                         </CardContent>
                     </Card>
                     <Card>
