@@ -14,9 +14,10 @@ import { cn, formatDueDate } from '@/lib/utils'
 import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/assignmentsSlice'
 
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'next/navigation'
 import { updatePendingCount } from '@/lib/statsUtils'
+import { RootState } from '@/redux/store'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;
@@ -24,6 +25,8 @@ interface AssignmentDetailProps {
 }
 
 function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
+    const user = useSelector((state: RootState) => state.user)
+
     const dispatch = useDispatch();
     const [edit, setEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -106,29 +109,25 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         onOpenChange(false);
     }
     
+    // TODO: MAKE STATUS CHANGE TO SUBMITTED AUTOMATICALLY WHEN STUDENT SUBMITS
     return (
 
          <>
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
                     <h4 className="font-medium">Assignment Overview</h4>
-                    {/* {!edit && (
-                        <Button variant="outline" size="sm" onClick={() => setEdit(true)}className="gap-2">
-                            <Pencil className="h-4 w-4" />
-                            Edit
-                        </Button>
-                    )} */}
-
-                    {!edit ? (
-                        <Button variant="outline" size="sm" onClick={() => setEdit(true)} className="gap-2">
-                            <Pencil className="h-4 w-4" />
-                            Edit
-                        </Button>
-                    ) : (
-                        <Button variant='destructive' size="sm" onClick={() => handleDelete()} className="gap-2">
-                            <Trash />
-                            Delete
-                        </Button>
+                    { user.role === 'consultant' && (
+                        !edit ? (
+                            <Button variant="outline" size="sm" onClick={() => setEdit(true)} className="gap-2">
+                                <Pencil className="h-4 w-4" />
+                                Edit
+                            </Button>
+                        ) : (
+                            <Button variant='destructive' size="sm" onClick={() => handleDelete()} className="gap-2">
+                                <Trash />
+                                Delete
+                            </Button>
+                        )
                     )}
                 </div>
 

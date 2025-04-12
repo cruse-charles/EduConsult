@@ -11,6 +11,7 @@ const Highlights = () => {
     const user = useSelector((state: RootState) => state.user)
     const [tasksDueThisWeek, setTasksDueThisWeek] = useState<number>(0);
 
+    // TODO: Might want to not make this callback
     useEffect(() => {
         if (user.role === 'consultant') {
             countTasksDueThisWeek(user.id).then(setTasksDueThisWeek);
