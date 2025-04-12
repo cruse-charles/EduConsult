@@ -36,6 +36,7 @@ function CreateAssignmentModal() {
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     
     // Retrieve student and consultant
+    // TODO: Replace useConsultant I think, pretty sure we just add it into store now
     const { id: studentId } = useParams<{id:string}>()
     const consultant = useConsultant()
     const student = useStudent(studentId)

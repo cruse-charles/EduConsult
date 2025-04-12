@@ -43,11 +43,15 @@ export const fileUpload = async (files: File[], studentId: string) => {
 export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultant: User | null) => {
     try {
         const assignmentDocId = nanoid()
+        console.log("Consultant on uplaoding assignment", consultant)
     
 
         // Create a new Doc
         const assignmentDocRef = doc(db, "assignments", assignmentDocId)
-        await setDoc(assignmentDocRef, assignmentData)    
+        await setDoc(assignmentDocRef, {
+            ...assignmentData,
+            consultant: doc(db, "consultantUsers", consultant.uid)
+        })    
     
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {
