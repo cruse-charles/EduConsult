@@ -40,7 +40,7 @@ export const fileUpload = async (files: File[], studentId: string) => {
 
 // TODO: ADDING AN ASSIGNMENT TO A NEW FOLDER
 
-export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultant: User | null) => {
+export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultant: User) => {
     try {
         const assignmentDocId = nanoid()
         console.log("Consultant on uplaoding assignment", consultant)

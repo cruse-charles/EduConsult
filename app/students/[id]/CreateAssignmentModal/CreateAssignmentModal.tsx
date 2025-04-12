@@ -121,6 +121,7 @@ function CreateAssignmentModal() {
         const filesData = await fileUpload(files, studentId)
         assignmentData.timeline[0].files = filesData
 
+        if (!consultant) return console.log('No consultant found')
         const assignmentDocId = await uploadAssignment(assignmentData, studentId, consultant)
         
         // Create assignment with ID to add to redux for proper ordering

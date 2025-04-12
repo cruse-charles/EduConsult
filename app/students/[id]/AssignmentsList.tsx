@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { BookOpen, CheckCircle, ChevronDown, ChevronRight, Eye, FileText, Folder, FolderOpen, Hourglass, Upload } from "lucide-react";
+import { BookOpen, CheckCircle, ChevronDown, ChevronRight, Clock, Eye, FileText, Folder, FolderOpen, Hourglass, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
@@ -11,12 +11,13 @@ import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
 import { fetchAssignments, setAssignments } from "@/redux/slices/assignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
-import { formatDueDate } from "@/lib/utils";
+import { formatDueDate, formatDueDateAndTime } from "@/lib/utils";
 import { fetchStudent } from "@/redux/slices/studentSlice";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
+import { Timestamp } from "firebase/firestore";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
@@ -58,42 +59,53 @@ function AssignmentsList() {
         return count
     }
 
-    const getStatusBadge = (status: string) => {
-    switch (status) {
-        case "Pending":
-        return (
-            <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
-                <Hourglass className="h-3 w-3" />
-                Pending
-            </Badge>
-        )
+    const getStatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
+        if (!dueDate) return null
 
-        case "Completed":
-        return (
-            <Badge className="gap-1 bg-green-100 text-green-800 font-bold hover:bg-green-100 hover:text-green-800">
-                <CheckCircle className="h-3 w-3" />
-                Completed
-            </Badge>
-        )
+        if (status === 'Pending' && dueDate < Timestamp.fromDate(new Date())) {
+            return (
+                <Badge className="gap-1 bg-red-100 text-red-800 font-bold hover:bg-red-100 hover:text-red-800">
+                    <Clock className="h-3 w-3" />
+                    Overdue
+                </Badge>
+            )
+        }
 
-        case "Submitted":
-        return (
-            <Badge className="gap-1 bg-blue-100 text-blue-800 font-bold hover:bg-blue-100 hover:text-blue-800">
-                <Upload className="h-3 w-3" />
-                Submitted
-            </Badge>
-        )
+        switch (status) {
+            case "Pending":
+            return (
+                <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
+                    <Hourglass className="h-3 w-3" />
+                    Pending
+                </Badge>
+            )
 
-        case "Under Review":
-        return (
-            <Badge className="gap-1 bg-purple-100 text-purple-800 font-bold hover:bg-purple-100 hover:text-purple-800">
-                <Eye className="h-3 w-3" />
-                Reviewing
-            </Badge>
-        )
-    }
+            case "Completed":
+            return (
+                <Badge className="gap-1 bg-green-100 text-green-800 font-bold hover:bg-green-100 hover:text-green-800">
+                    <CheckCircle className="h-3 w-3" />
+                    Completed
+                </Badge>
+            )
 
-    return null
+            case "Submitted":
+            return (
+                <Badge className="gap-1 bg-blue-100 text-blue-800 font-bold hover:bg-blue-100 hover:text-blue-800">
+                    <Upload className="h-3 w-3" />
+                    Submitted
+                </Badge>
+            )
+
+            case "Under Review":
+            return (
+                <Badge className="gap-1 bg-purple-100 text-purple-800 font-bold hover:bg-purple-100 hover:text-purple-800">
+                    <Eye className="h-3 w-3" />
+                    Reviewing
+                </Badge>
+            )
+        }
+
+        return null
     }
 
     return (
@@ -152,7 +164,7 @@ function AssignmentsList() {
                                                     <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-3">{getStatusBadge(assignment.status)}</div>
+                                            <div className="flex items-center gap-3">{getStatusBadge(assignment.status, assignment?.dueDate)}</div>
                                         </div>
                                     ))}
                                 </div>
