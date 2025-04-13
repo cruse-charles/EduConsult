@@ -21,6 +21,7 @@ function AssignmentsOverview({student}: {student: Student}) {
     }, [student])
 
     return (
+        // TODO: Need to style these a bit more, either font size or coloring
         <div className="grid gap-4 md:grid-cols-3">
             <Card>
                 <CardHeader className="pb-2">
