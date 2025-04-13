@@ -3,7 +3,7 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import { countOfInProgressStudents, countOverDueAssignments, countTasksDueThisWeek, findNextDeadlineAssignment } from '@/lib/querys'
+import { countOfInProgressStudents, countOverDueAssignmentsConsultantDashboard, countTasksDueThisWeekConsultantDashboard, findNextAssignmentDeadlineConsultantDashboard } from '@/lib/querys'
 import { useEffect, useState } from 'react'
 
 import { formatNextDeadline } from '@/lib/utils'
@@ -15,15 +15,15 @@ const Highlights = () => {
     const [tasksDueThisWeek, setTasksDueThisWeek] = useState(0);
     const [studentsInProgress, setStudentsInProgress] = useState(0)
     const [overDueAssignments, setOverDueAssignments] = useState(0)
-    const [nextDeadlineAssignment, setNextDeadlineAssignment] = useState<Assignment>()
+    const [nextAssignmentDeadline, setNextAssignmentDeadline] = useState<Assignment>()
 
     // TODO: Might want to not make this callback
     useEffect(() => {
         if (user.role === 'consultant') {
-            countTasksDueThisWeek(user.id).then(setTasksDueThisWeek);
+            countTasksDueThisWeekConsultantDashboard(user.id).then(setTasksDueThisWeek);
             countOfInProgressStudents(user.id).then(setStudentsInProgress)
-            countOverDueAssignments(user.id).then(setOverDueAssignments)
-            findNextDeadlineAssignment(user.id).then(setNextDeadlineAssignment)
+            countOverDueAssignmentsConsultantDashboard(user.id).then(setOverDueAssignments)
+            findNextAssignmentDeadlineConsultantDashboard(user.id).then(setNextAssignmentDeadline)
         }
     }, [user, tasksDueThisWeek])
 
@@ -58,8 +58,8 @@ const Highlights = () => {
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{formatNextDeadline(nextDeadlineAssignment?.dueDate)}</div>
-                            <p className="text-xs text-muted-foreground">{nextDeadlineAssignment?.student}/{nextDeadlineAssignment?.title}</p>
+                            <div className="text-2xl font-bold">{formatNextDeadline(nextAssignmentDeadline?.dueDate)}</div>
+                            <p className="text-xs text-muted-foreground">{nextAssignmentDeadline?.student}/{nextAssignmentDeadline?.title}</p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -69,7 +69,7 @@ const Highlights = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{overDueAssignments} assignments</div>
-                            <p className="text-xs text-muted-foreground">For: Student/Assignment</p>
+                            {/* <p className="text-xs text-muted-foreground">For: Student/Assignment</p> */}
                         </CardContent>
                     </Card>
                 </>

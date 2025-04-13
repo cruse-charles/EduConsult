@@ -6,7 +6,7 @@ import { Timestamp } from "firebase/firestore";
 import { Assignment } from './types/types';
 
 // Function to count tasks due this week for a consultant view
-export const countTasksDueThisWeek = async (consultantId: string) => {
+export const countTasksDueThisWeekConsultantDashboard = async (consultantId: string) => {
 
     // Get consultant's doc reference
     const consultantRef = doc(db, "consultantUsers", consultantId);
@@ -43,7 +43,7 @@ export const countOfInProgressStudents = async (consultantId: string) => {
 }
 
 // Function to count overdue assignments for a consultant view
-export const countOverDueAssignments = async (consultantId: string) => {
+export const countOverDueAssignmentsConsultantDashboard = async (consultantId: string) => {
     const consultantRef = doc(db, "consultantUsers", consultantId);
 
     const q = query(
@@ -57,7 +57,7 @@ export const countOverDueAssignments = async (consultantId: string) => {
     return snapshot.size;
 }
 
-export const findNextDeadlineAssignment = async (consultantId: string) => {
+export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId: string) => {
     const consultantRef = doc(db, "consultantUsers", consultantId)
 
     const q = query(
@@ -69,6 +69,64 @@ export const findNextDeadlineAssignment = async (consultantId: string) => {
     )
     const snapshot = await getDocs(q);
     console.log('findNextDeadlineAssignment snapshot', snapshot.docs[0]?.data())
+    // return snapshot.docs.length > 0 ? snapshot.docs[0].data() : undefined;
+
+    if (snapshot.docs.length > 0) {
+        const docSnap = snapshot.docs[0]
+
+        return {
+            id: docSnap.id,
+            ...docSnap.data()
+        } as Assignment
+    }
+}
+
+// TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
+export const countPendingTasksForStudentConsultantView = async (studentId: string, consultantId: string) => {
+    // const studentRef = doc(db, "studentUsers", studentId)
+    const consultantRef = doc(db, "consultantUsers", consultantId)
+
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
+        where('consultant', '==', consultantRef),
+        where('status', '==', 'Pending')
+    )
+
+    const snapshot = await getDocs(q)
+    return snapshot.size
+}
+
+// TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
+export const countCompletedTasksForStudentConsultantView = async (studentId: string, consultantId: string) => {
+    // const studentRef = doc(db, "studentUsers", studentId)
+    const consultantRef = doc(db, "consultantUsers", consultantId)
+
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
+        where('consultant', '==', consultantRef),
+        where('status', '==', 'Completed')
+    )
+
+    const snapshot = await getDocs(q)
+    return snapshot.size
+}
+
+// TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
+export const findNextAssignmentDeadlineStudentDashboard = async (studentId: string, consultantId: string) => {
+    const consultantRef = doc(db, "consultantUsers", consultantId)
+
+    const q = query(
+        collection(db, 'assignments'),
+        where('consultant', '==', consultantRef),
+        where('student', '==', studentId),
+        where('dueDate', '>=', Timestamp.fromDate(new Date())),
+        orderBy('dueDate', 'asc'),
+        limit(1)
+    )
+    const snapshot = await getDocs(q);
+    // console.log('findNextDeadlineAssignment snapshot', snapshot.docs[0]?.data())
     // return snapshot.docs.length > 0 ? snapshot.docs[0].data() : undefined;
 
     if (snapshot.docs.length > 0) {
