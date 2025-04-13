@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 import { Student } from "@/lib/types/types";
-import { nextDeadline } from "@/lib/utils";
+import { formatNextDeadline } from "@/lib/utils";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button"
@@ -101,7 +101,7 @@ const StudentTable = ({students}: StudentTableProps) => {
                                 </TableCell>
                                 <TableCell>
                                     <Link href={`/students/${student.id}`}>
-                                    <span className="font-medium">{nextDeadline(student.stats?.nextDeadline)}</span>
+                                    <span className="font-medium">{formatNextDeadline(student.stats?.nextDeadline)}</span>
                                     </Link>
                                 </TableCell>
                             </TableRow>

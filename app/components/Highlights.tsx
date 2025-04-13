@@ -3,8 +3,11 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import { countOfInProgressStudents, countOverDueAssignments, countTasksDueThisWeek } from '@/lib/querys'
+import { countOfInProgressStudents, countOverDueAssignments, countTasksDueThisWeek, findNextDeadlineAssignment } from '@/lib/querys'
 import { useEffect, useState } from 'react'
+
+import { formatNextDeadline } from '@/lib/utils'
+import { Assignment } from '@/lib/types/types'
 
 const Highlights = () => {
 
@@ -12,6 +15,7 @@ const Highlights = () => {
     const [tasksDueThisWeek, setTasksDueThisWeek] = useState(0);
     const [studentsInProgress, setStudentsInProgress] = useState(0)
     const [overDueAssignments, setOverDueAssignments] = useState(0)
+    const [nextDeadlineAssignment, setNextDeadlineAssignment] = useState<Assignment>()
 
     // TODO: Might want to not make this callback
     useEffect(() => {
@@ -19,6 +23,7 @@ const Highlights = () => {
             countTasksDueThisWeek(user.id).then(setTasksDueThisWeek);
             countOfInProgressStudents(user.id).then(setStudentsInProgress)
             countOverDueAssignments(user.id).then(setOverDueAssignments)
+            findNextDeadlineAssignment(user.id).then(setNextDeadlineAssignment)
         }
     }, [user, tasksDueThisWeek])
 
@@ -44,7 +49,7 @@ const Highlights = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{tasksDueThisWeek} due this week</div>
-                            <p className="text-xs text-muted-foreground">X pending tasks total</p>
+                            {/* <p className="text-xs text-muted-foreground">X pending tasks total</p> */}
                         </CardContent>
                     </Card>
                     <Card>
@@ -53,8 +58,8 @@ const Highlights = () => {
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">Date</div>
-                            <p className="text-xs text-muted-foreground">For: Student/Assignment</p>
+                            <div className="text-2xl font-bold">{formatNextDeadline(nextDeadlineAssignment?.dueDate)}</div>
+                            <p className="text-xs text-muted-foreground">{nextDeadlineAssignment?.student}/{nextDeadlineAssignment?.title}</p>
                         </CardContent>
                     </Card>
                     <Card>
