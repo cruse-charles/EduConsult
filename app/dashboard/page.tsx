@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import StudentTable from "./StudentTable/StudentTable";
+import ConsultantCalendar from "../components/ConsultantCalendar";
 
 
 
@@ -137,21 +138,14 @@ const page = () => {
                         <Tabs defaultValue="students">
                             <TabsList>
                             <TabsTrigger value="students">Students</TabsTrigger>
-                            {/* <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                            <TabsTrigger value="deadlines">Upcoming Deadlines</TabsTrigger> */}
+                            <TabsTrigger value="calendar">Calendar</TabsTrigger>
+                            {/* <TabsTrigger value="deadlines">Upcoming Deadlines</TabsTrigger> */}
                             </TabsList>
                             <TabsContent value="students" className="space-y-4">
-                                {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                    {students.map((student) => (
-                                        <StudentCard key={student.id} student={student} />
-                                    ))}
-                                </div>
-                                {students.length === 0 && (
-                                    <div className="flex flex-col items-center justify-center py-12">
-                                    <p className="text-muted-foreground">No students found matching your search.</p>
-                                    </div>
-                                )} */}
                                 <StudentTable students={students}/>
+                            </TabsContent>
+                            <TabsContent value="calendar" className="space-y-4">
+                                <ConsultantCalendar />
                             </TabsContent>
                         </Tabs>
                     </div>
