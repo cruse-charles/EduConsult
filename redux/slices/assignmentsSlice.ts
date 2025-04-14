@@ -53,8 +53,8 @@ export const fetchAssignments = createAsyncThunk(
 const initialState: Assignment[] = []
 
 // Create a slice for assignments
-const assignmentsSlice = createSlice({
-  name: 'assignments',
+const studentAssignmentsSlice = createSlice({
+  name: 'studentAssignments',
   initialState,
   reducers: {
     // Replaces state with a new list of assignments
@@ -102,5 +102,5 @@ const assignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteAssignmentSlice } = assignmentsSlice.actions;
-export default assignmentsSlice.reducer;
+export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteAssignmentSlice } = studentAssignmentsSlice.actions;
+export default studentAssignmentsSlice.reducer;

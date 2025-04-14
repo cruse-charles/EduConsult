@@ -6,7 +6,7 @@ import { Timestamp } from "firebase/firestore";
 import { Assignment } from './types/types';
 
 // Function to count tasks due this week for a consultant view
-export const countTasksDueThisWeekConsultantDashboard = async (consultantId: string) => {
+export const getTasksDueThisWeekConsultantDashboard = async (consultantId: string) => {
 
     // Get consultant's doc reference
     const consultantRef = doc(db, "consultantUsers", consultantId);
@@ -25,7 +25,8 @@ export const countTasksDueThisWeekConsultantDashboard = async (consultantId: str
     )
 
     const snapshot = await getDocs(q);
-    return snapshot.size;
+    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
+    return snapshot;
 }
 
 // Function to count students in progress (has pending assighnemnts) for a consultant view
@@ -138,3 +139,9 @@ export const findNextAssignmentDeadlineStudentDashboard = async (studentId: stri
         } as Assignment
     }
 }
+
+// export const getAssignmentsDueThisWeek = async (consultantId: string) => {
+//     const consultantRef = doc(db, "consultantUsers", consultantId);
+
+
+// }

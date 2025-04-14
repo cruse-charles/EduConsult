@@ -3,7 +3,7 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import { countOfInProgressStudents, countOverDueAssignmentsConsultantDashboard, countTasksDueThisWeekConsultantDashboard, findNextAssignmentDeadlineConsultantDashboard } from '@/lib/querys'
+import { countOfInProgressStudents, countOverDueAssignmentsConsultantDashboard, getTasksDueThisWeekConsultantDashboard, findNextAssignmentDeadlineConsultantDashboard } from '@/lib/querys'
 import { useEffect, useState } from 'react'
 
 import { formatNextDeadline } from '@/lib/utils'
@@ -20,7 +20,7 @@ const Highlights = () => {
     // TODO: Might want to not make this callback
     useEffect(() => {
         if (user.role === 'consultant') {
-            countTasksDueThisWeekConsultantDashboard(user.id).then(setTasksDueThisWeek);
+            getTasksDueThisWeekConsultantDashboard(user.id).then((snapshot) => setTasksDueThisWeek(snapshot.size));
             countOfInProgressStudents(user.id).then(setStudentsInProgress)
             countOverDueAssignmentsConsultantDashboard(user.id).then(setOverDueAssignments)
             findNextAssignmentDeadlineConsultantDashboard(user.id).then(setNextAssignmentDeadline)

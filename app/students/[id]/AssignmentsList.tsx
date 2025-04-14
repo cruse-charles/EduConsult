@@ -27,7 +27,7 @@ function AssignmentsList() {
 
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
 
-    const assignments = useSelector((state: RootState) => state.assignments)
+    const assignments = useSelector((state: RootState) => state.studentAssignments)
 
     const folders = useSelector((state: RootState) => {
         const studentState = state.student as Student

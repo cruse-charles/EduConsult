@@ -4,14 +4,14 @@ import storage from 'redux-persist/lib/storage';
 import type { UnknownAction } from 'redux';
 
 import studentReducer from './slices/studentSlice';
-import assignmentReducer from './slices/assignmentsSlice';
+import studentAssignmentReducer from './slices/assignmentsSlice';
 import userReducer from './slices/userSlice';
 import { resetStore } from './slices/resetSlice';
 
 // Combine all  individual slice reducers into a single app-level reducer
 const appReducer = combineReducers({
   student: studentReducer,
-  assignments: assignmentReducer,
+  studentAssignments: studentAssignmentReducer,
   user: userReducer,
 })
 

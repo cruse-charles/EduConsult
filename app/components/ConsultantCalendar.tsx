@@ -10,8 +10,8 @@ const ConsultantCalendar = () => {
         return currentDate.toLocaleString("default", { month: "long", year: "numeric" })
     }
 
-    const navigate = (direction) => {
-
+    const navigate = (direction: string) => {
+        if (direction) return
     }
 
     const renderMonthView = () => {

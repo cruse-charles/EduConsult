@@ -30,7 +30,7 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
     const dispatch = useDispatch();
 
     // Find assignment from state by matching with selected assignment ID
-    const assignment = useSelector((state: RootState) => state.assignments.find((a) => a.id === assignmentId))
+    const assignment = useSelector((state: RootState) => state.studentAssignments.find((a) => a.id === assignmentId))
     const user = useSelector((state: RootState) => state.user)
 
     // Form data for user to submit feedback 
