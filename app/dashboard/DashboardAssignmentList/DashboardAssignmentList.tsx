@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const DashboardAssignmentList = () => {
-    const [currentStartDate, setcurrentStartDate] = useState(new Date())
+    const [currentStartDate, setCurrentStartDate] = useState(new Date())
     const [dashboardAssignments, setDashboardAssignments] = useState<Assignment>([])
 
     const user = useSelector((state: RootState) => state.user)
@@ -55,8 +55,11 @@ const DashboardAssignmentList = () => {
         }
     }
 
-    const navigate = (direction) => {
-
+  // Navigate by single day
+    const navigate = (direction: "prev" | "next") => {
+        const newDate = new Date(currentStartDate)
+        newDate.setDate(currentStartDate.getDate() + (direction === "next" ? 1 : -1))
+        setCurrentStartDate(newDate)
     }
     
     return (
