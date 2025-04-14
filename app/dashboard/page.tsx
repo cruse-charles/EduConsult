@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import StudentTable from "./StudentTable/StudentTable";
 import ConsultantCalendar from "../components/ConsultantCalendar";
+import DashboardAssignmentList from "./DashboardAssignmentList/DashboardAssignmentList";
 
 
 
@@ -145,7 +146,8 @@ const page = () => {
                                 <StudentTable students={students}/>
                             </TabsContent>
                             <TabsContent value="calendar" className="space-y-4">
-                                <ConsultantCalendar />
+                                {/* <ConsultantCalendar /> */}
+                                <DashboardAssignmentList />
                             </TabsContent>
                         </Tabs>
                     </div>
