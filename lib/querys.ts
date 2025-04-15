@@ -4,7 +4,7 @@ import { query, where, getDocs, collection, doc } from 'firebase/firestore';
 import { db } from "@/lib/firebaseConfig";
 import { Timestamp } from "firebase/firestore";
 
-// Function to count tasks due this week for a consultant
+// Function to count tasks due this week for a consultant view
 export const countTasksDueThisWeek = async (consultantId: string) => {
 
     // Get consultant's doc reference
@@ -26,7 +26,7 @@ export const countTasksDueThisWeek = async (consultantId: string) => {
     return snapshot.size;
 }
 
-// Function to count students in progress (has pending assighnemnts) for a consultant
+// Function to count students in progress (has pending assighnemnts) for a consultant view
 export const countOfInProgressStudents = async (consultantId: string) => {
     const consultantRef = doc(db, "consultantUsers", consultantId);
 
@@ -34,6 +34,21 @@ export const countOfInProgressStudents = async (consultantId: string) => {
         collection(db, 'studentUsers'),
         where('consultant', '==', consultantRef),
         where('stats.pendingAssignmentsCount', '>', 0)
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.size;
+}
+
+// Function to count overdue assignments for a consultant view
+export const countOverDueAssignments = async (consultantId: string) => {
+    const consultantRef = doc(db, "consultantUsers", consultantId);
+
+    const q = query(
+        collection(db, 'assignments'),
+        where('consultant', '==', consultantRef),
+        where('dueDate', '<=', Timestamp.fromDate(new Date())),
+        where('status', '==', 'Pending')
     )
 
     const snapshot = await getDocs(q);

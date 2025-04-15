@@ -3,7 +3,7 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import { countOfInProgressStudents, countTasksDueThisWeek } from '@/lib/querys'
+import { countOfInProgressStudents, countOverDueAssignments, countTasksDueThisWeek } from '@/lib/querys'
 import { useEffect, useState } from 'react'
 
 const Highlights = () => {
@@ -11,12 +11,14 @@ const Highlights = () => {
     const user = useSelector((state: RootState) => state.user)
     const [tasksDueThisWeek, setTasksDueThisWeek] = useState(0);
     const [studentsInProgress, setStudentsInProgress] = useState(0)
+    const [overDueAssignments, setOverDueAssignments] = useState(0)
 
     // TODO: Might want to not make this callback
     useEffect(() => {
         if (user.role === 'consultant') {
             countTasksDueThisWeek(user.id).then(setTasksDueThisWeek);
             countOfInProgressStudents(user.id).then(setStudentsInProgress)
+            countOverDueAssignments(user.id).then(setOverDueAssignments)
         }
     }, [user, tasksDueThisWeek])
 
@@ -32,7 +34,7 @@ const Highlights = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{studentsInProgress} Students</div>
-                            <p className="text-xs text-muted-foreground">Down X from last month</p>
+                            {/* <p className="text-xs text-muted-foreground">Down X from last month</p> */}
                         </CardContent>
                     </Card>
                     <Card>
@@ -61,7 +63,7 @@ const Highlights = () => {
                             <Flag className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold"># of assignments</div>
+                            <div className="text-2xl font-bold">{overDueAssignments} assignments</div>
                             <p className="text-xs text-muted-foreground">For: Student/Assignment</p>
                         </CardContent>
                     </Card>
