@@ -19,7 +19,8 @@ export const countTasksDueThisWeek = async (consultantId: string) => {
         collection(db, 'assignments'),
         where('consultant', '==', consultantRef),
         where('dueDate', '>=', Timestamp.fromDate(start)),
-        where('dueDate', '<=', Timestamp.fromDate(end))
+        where('dueDate', '<=', Timestamp.fromDate(end)),
+        where('status', '==', 'Pending')
     )
 
     const snapshot = await getDocs(q);
