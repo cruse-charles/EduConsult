@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { getTasksDueThisWeekConsultantDashboard } from '@/lib/querys'
 import { Assignment } from '@/lib/types/types'
@@ -29,7 +29,7 @@ const DashboardAssignmentList = () => {
 
     useEffect(() => {
         dashboardAssignments.forEach((assignment) => {
-            console.log('dashboardAssignments', formatNextDeadline(assignment.dueDate))
+            console.log('dashboardAssignments', assignment)
         })
     }, [dashboardAssignments])
     
@@ -38,7 +38,7 @@ const DashboardAssignmentList = () => {
         for (let i = 0; i < 7; i++) {
             const day = new Date(currentStartDate)
             day.setDate(currentStartDate.getDate() + i)
-            console.log('day', day)
+            // console.log('day', day)
             daysArray.push(day)
         }
         return daysArray
@@ -56,7 +56,7 @@ const DashboardAssignmentList = () => {
     }
 
     const navigate = (direction) => {
-        
+
     }
     
     return (
@@ -77,31 +77,40 @@ const DashboardAssignmentList = () => {
                 </div>
                 </div>
             </CardHeader>
-            <div className="grid grid-cols-7 gap-4">
-                {days.map((day, index) => {
-                    const dayInfo = formatDay(day)
+            <CardContent>
+                <div className="grid grid-cols-7 gap-4">
+                    {days.map((day, index) => {
+                        const dayInfo = formatDay(day)
 
-                    return (
-                    <div key={index} className="space-y-2">
-                        <div className="text-center">
-                            <div className="text-sm font-medium text-muted-foreground">{dayInfo.dayName}</div>
-                            <div className={`text-lg font-semibold ${dayInfo.isToday ? "text-primary bg-primary/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto" : ""}`}>
-                                {dayInfo.dayNumber}
-                            </div>
-                        </div>
-
-                        {/* Event List */}
-                        <ScrollArea>
-                            {dashboardAssignments.map((assignment) => (
-                                <div>
-                                    {formatNextDeadline(day) === formatNextDeadline(assignment.dueDate) ? assignment.title : null}
+                        return (
+                        <div key={index} className="space-y-2">
+                            <div className="text-center">
+                                <div className="text-sm font-medium text-muted-foreground">{dayInfo.dayName}</div>
+                                <div className={`text-lg font-semibold ${dayInfo.isToday ? "text-primary bg-primary/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto" : ""}`}>
+                                    {dayInfo.dayNumber}
                                 </div>
-                            ))}
-                        </ScrollArea>
-                    </div>
-                    )
-                })}
-            </div>
+                            </div>
+
+                            {/* Event List */}
+                            <ScrollArea className="h-[225px]">
+                                {dashboardAssignments.map((assignment) => (
+                                    <div key={assignment.id} className="p-2 rounded-md border cursor-pointer hover:bg-muted/50 transition-colors border-blue-200 bg-blue-50">
+                                        <div className="space-y-1">
+                                            <div className="text-sm font-medium truncate">
+                                                {formatNextDeadline(day) === formatNextDeadline(assignment.dueDate) ? assignment.title : null}
+                                            </div>
+                                            <div className="text-xs text-muted-foreground truncate" title={assignment.student}>
+                                                {assignment.student}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </ScrollArea>
+                        </div>
+                        )
+                    })}
+                </div>
+            </CardContent>
         </Card>
     )
 }
