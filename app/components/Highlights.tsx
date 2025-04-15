@@ -3,18 +3,20 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import { countTasksDueThisWeek } from '@/lib/querys'
+import { countOfInProgressStudents, countTasksDueThisWeek } from '@/lib/querys'
 import { useEffect, useState } from 'react'
 
 const Highlights = () => {
 
     const user = useSelector((state: RootState) => state.user)
-    const [tasksDueThisWeek, setTasksDueThisWeek] = useState<number>(0);
+    const [tasksDueThisWeek, setTasksDueThisWeek] = useState(0);
+    const [studentsInProgress, setStudentsInProgress] = useState(0)
 
     // TODO: Might want to not make this callback
     useEffect(() => {
         if (user.role === 'consultant') {
             countTasksDueThisWeek(user.id).then(setTasksDueThisWeek);
+            countOfInProgressStudents(user.id).then(setStudentsInProgress)
         }
     }, [user, tasksDueThisWeek])
 
@@ -29,7 +31,7 @@ const Highlights = () => {
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold"># of Students</div>
+                            <div className="text-2xl font-bold">{studentsInProgress} Students</div>
                             <p className="text-xs text-muted-foreground">Down X from last month</p>
                         </CardContent>
                     </Card>

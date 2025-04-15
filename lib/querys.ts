@@ -21,3 +21,17 @@ export const countTasksDueThisWeek = async (consultantId: string) => {
     const snapshot = await getDocs(q);
     return snapshot.size;
 }
+
+export const countOfInProgressStudents = async (consultantId: string) => {
+    const consultantRef = doc(db, "consultantUsers", consultantId);
+
+    const q = query(
+        collection(db, 'studentUsers'),
+        where('consultant', '==', consultantRef),
+        where('stats.pendingAssignmentsCount', '>', 0)
+    )
+
+    const snapshot = await getDocs(q);
+    console.log("Count of in-progress students:", snapshot.size);
+    return snapshot.size;
+}
