@@ -93,17 +93,19 @@ const DashboardAssignmentList = () => {
 
                             {/* Event List */}
                             <ScrollArea className="h-[225px]">
-                                {dashboardAssignments.map((assignment) => (
-                                    <div key={assignment.id} className="p-2 rounded-md border cursor-pointer hover:bg-muted/50 transition-colors border-blue-200 bg-blue-50">
-                                        <div className="space-y-1">
-                                            <div className="text-sm font-medium truncate">
-                                                {formatNextDeadline(day) === formatNextDeadline(assignment.dueDate) ? assignment.title : null}
-                                            </div>
-                                            <div className="text-xs text-muted-foreground truncate" title={assignment.student}>
-                                                {assignment.student}
+                                {dashboardAssignments
+                                    .filter(assignment => formatNextDeadline(day) === formatNextDeadline(assignment.dueDate))
+                                    .map((assignment) => (
+                                        <div key={assignment.id} className="p-2 rounded-md border cursor-pointer hover:bg-muted/50 transition-colors border-blue-200 bg-blue-50">
+                                            <div className="space-y-1">
+                                                <div className="text-sm font-medium truncate">
+                                                    {assignment.title}
+                                                </div>
+                                                <div className="text-xs text-muted-foreground truncate" title={assignment.student}>
+                                                    {assignment.student}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                 ))}
                             </ScrollArea>
                         </div>
