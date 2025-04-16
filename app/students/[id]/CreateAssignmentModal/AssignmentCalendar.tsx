@@ -14,7 +14,6 @@ interface AssignmentCalendarProps {
 function AssignmentCalendar({dueDate, setDueDate}: AssignmentCalendarProps) {
     return (
         <>
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
                 <div className="space-y-2">
                     <Label>Due Date  <span className="text-red-500">*</span></Label>
                     <Popover>
@@ -35,7 +34,6 @@ function AssignmentCalendar({dueDate, setDueDate}: AssignmentCalendarProps) {
                     </PopoverContent>
                     </Popover>
                 </div>
-            {/* </div> */}
         </>
     )
 }

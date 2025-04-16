@@ -18,13 +18,11 @@ import AssignmentDetails from './AssignmentDetails'
 import AssignmentTimeline from './AssignmentTimeline'
 
 interface ViewAssignmentModalProps {
-    // assignmentId: string;
     assignment: Assignment;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-// function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentModalProps) {
 function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentModalProps) {
 
     // Hook to manage file state, fetching studentId
@@ -32,10 +30,6 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
     const { id: studentId } = useParams<{id:string}>()
     const dispatch = useDispatch();
 
-    // TODO: HOW SHOULD I BE FETCHING ASSIGNMENTS TO VIEW, CUZ THIS IS USING TWO DIFFERENT SLICES, SHOULD I EVEN TAKE FROM SLICE TO VIEW?
-    // Find assignment from state by matching with selected assignment ID
-    // const assignment = useSelector((state: RootState) => state.studentAssignments.find((a) => a.id === assignmentId))
-    // const assignment = useSelector((state: RootState) => state.consultantDashboardAssignments.find((a) => a.id === assignmentId))
     const user = useSelector((state: RootState) => state.user)
 
     // Form data for user to submit feedback 
@@ -45,11 +39,6 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
     })
 
     const [isLoading, setIsLoading] = useState(false)
-
-
-    // useEffect(() => {
-    //     console.log('assignmentId', assignmentId)
-    // }, [assignmentId])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
         const {name, value} = e.target
@@ -91,12 +80,10 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
         
         // Upload entry to firestore
-        // await uploadEntry(entryData, assignmentId)
         await uploadEntry(entryData, assignment.id)
 
         
         // update redux state and reset form data
-        // dispatch(addEntry({ entryData, assignmentId }))
         dispatch(addEntry({ entryData, assignmentId: assignment.id }))
         setFormData({
             note: '',

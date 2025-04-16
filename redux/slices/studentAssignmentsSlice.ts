@@ -15,7 +15,6 @@ export const fetchAssignments = createAsyncThunk(
   async (assignmentsDocIds: string[], {rejectWithValue}) => {
     try {
       // Fetch all assignments in parallel
-      // console.log("fetching assignments...")
       const assignments = await Promise.all(
         assignmentsDocIds.map(async (assignmentDocId) => {
           // Get a reference to the assignment document and fetch its snapshot
@@ -52,38 +51,6 @@ export const fetchAssignments = createAsyncThunk(
     }
   }
 );
-
-// TODO: THIS NEEDS TO BE IN A NEW FILE CUZ WE ARE MESSING WITH JUST THAT ASSIGNMENT SLICE, RENAME THIS FILE TOO
-// export const fetchConsultantDashboardAssignments = createAsyncThunk(
-//   "consultantDashboard/fetchConsultantDashboardAssignments",
-//   async (consultantId: string) => {
-//     try {
-//       // Get consultant's doc reference
-//       const consultantRef = doc(db, "consultantUsers", consultantId);
-      
-//       // Find the start and end of current week
-//       const start = startOfWeek(new Date())
-//       const end = endOfWeek(new Date())
-      
-//       // Count assignments with dueDates within current week
-//       const q = query(
-//           collection(db, 'assignments'),
-//           where('consultant', '==', consultantRef),
-//           where('dueDate', '>=', Timestamp.fromDate(start)),
-//           where('dueDate', '<=', Timestamp.fromDate(end)),
-//           where('status', '==', 'Pending')
-//       )
-      
-//       const snapshot = await getDocs(q);
-//       console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
-//       return snapshot;
-//     } catch (error) {
-//       console.error("Error fetching consultant dashboard assignments:", error);
-//       throw error;
-//     }
-//   }
-// )
-
 
 const initialState: Assignment[] = []
 
@@ -135,13 +102,6 @@ const studentAssignmentsSlice = createSlice({
       console.error("fetchAssignments rejected:", action.payload);
       return state;
     })
-    // .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
-    //   // action.payload is a QuerySnapshot, so map to Assignment[]
-    //   return action.payload.docs.map(doc => ({
-    //     id: doc.id,
-    //     ...doc.data(),
-    //   })) as Assignment[];
-    // })
   },
 });
 

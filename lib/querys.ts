@@ -70,7 +70,6 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
     )
     const snapshot = await getDocs(q);
     console.log('findNextDeadlineAssignment snapshot', snapshot.docs[0]?.data())
-    // return snapshot.docs.length > 0 ? snapshot.docs[0].data() : undefined;
 
     if (snapshot.docs.length > 0) {
         const docSnap = snapshot.docs[0]
@@ -84,7 +83,6 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
 
 // TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
 export const countPendingTasksForStudentConsultantView = async (studentId: string, consultantId: string) => {
-    // const studentRef = doc(db, "studentUsers", studentId)
     const consultantRef = doc(db, "consultantUsers", consultantId)
 
     const q = query(
@@ -100,7 +98,6 @@ export const countPendingTasksForStudentConsultantView = async (studentId: strin
 
 // TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
 export const countCompletedTasksForStudentConsultantView = async (studentId: string, consultantId: string) => {
-    // const studentRef = doc(db, "studentUsers", studentId)
     const consultantRef = doc(db, "consultantUsers", consultantId)
 
     const q = query(
@@ -127,8 +124,6 @@ export const findNextAssignmentDeadlineStudentDashboard = async (studentId: stri
         limit(1)
     )
     const snapshot = await getDocs(q);
-    // console.log('findNextDeadlineAssignment snapshot', snapshot.docs[0]?.data())
-    // return snapshot.docs.length > 0 ? snapshot.docs[0].data() : undefined;
 
     if (snapshot.docs.length > 0) {
         const docSnap = snapshot.docs[0]
@@ -140,6 +135,7 @@ export const findNextAssignmentDeadlineStudentDashboard = async (studentId: stri
     }
 }
 
+// TODO: I have this copy/pasted in some other redux slice function, reduce
 // Function to retrieve all assignments within 7 days
 export const getConsultantDashboardAssignments = async (consultantId: string) => {
 

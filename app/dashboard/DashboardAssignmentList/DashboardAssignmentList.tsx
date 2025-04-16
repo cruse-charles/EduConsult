@@ -1,13 +1,17 @@
 import ViewAssignmentModal from '@/app/students/[id]/ViewAssignmentModal/ViewAssignmentModal'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
+
 import { getConsultantDashboardAssignments } from '@/lib/querys'
-import { Assignment } from '@/lib/types/types'
+
 import { formatNextDeadline } from '@/lib/utils'
+import { Assignment } from '@/lib/types/types'
+
 import { fetchConsultantDashboardAssignments } from '@/redux/slices/consultantAssignmentSlice'
 import { RootState } from '@/redux/store'
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -130,7 +134,6 @@ const DashboardAssignmentList = () => {
             </Card>
             {/* @ts-ignore */}
             <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
-            {/* <ViewAssignmentModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} /> */}
         </>
     )
 }

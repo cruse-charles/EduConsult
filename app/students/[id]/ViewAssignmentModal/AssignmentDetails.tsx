@@ -117,7 +117,6 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     
     // TODO: MAKE STATUS CHANGE TO SUBMITTED AUTOMATICALLY WHEN STUDENT SUBMITS
     return (
-
          <>
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
