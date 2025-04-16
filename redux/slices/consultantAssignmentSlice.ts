@@ -11,7 +11,7 @@ import { Assignment } from "@/lib/types/types";
 
 // Async thunk to fetch assignments from Firestore by an array of IDs
 export const fetchConsultantAssignments = createAsyncThunk(
-  "studentAssignments/fetchAssignments",
+  "consultantAssignments/fetchAssignments",
   async (assignmentsDocIds: string[], {rejectWithValue}) => {
     try {
       // Fetch all assignments in parallel

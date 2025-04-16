@@ -33,6 +33,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     
     const { id: studentId } = useParams<{id:string}>();
 
+    // TODO: WHEN WE CHANGE THE DUEDATE, WE NEED TO UPDATE THE STUDENT'S STATS OBJECT ON EDIT TOO, ALSO DIDNT WORK FOR CREATION
     const [formData, setFormData] = useState({
         type: assignment?.type,
         status: assignment?.status,

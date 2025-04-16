@@ -140,8 +140,28 @@ export const findNextAssignmentDeadlineStudentDashboard = async (studentId: stri
     }
 }
 
-// export const getAssignmentsDueThisWeek = async (consultantId: string) => {
-//     const consultantRef = doc(db, "consultantUsers", consultantId);
+// Function to retrieve all assignments within 7 days
+export const getConsultantDashboardAssignments = async (consultantId: string) => {
 
+    // Get consultant's doc reference
+    const consultantRef = doc(db, "consultantUsers", consultantId);
 
-// }
+    // Find today and six days later, encompasing a week
+    const today = new Date()
+    today.setDate(today.getDate())
+    const sixDaysLater = new Date()
+    sixDaysLater.setDate(today.getDate() + 6);
+
+    // Count assignments with dueDates within current week
+    const q = query(
+        collection(db, 'assignments'),
+        where('consultant', '==', consultantRef),
+        where('dueDate', '>=', Timestamp.fromDate(today)),
+        where('dueDate', '<=', Timestamp.fromDate(sixDaysLater)),
+        where('status', '==', 'Pending')
+    )
+
+    const snapshot = await getDocs(q);
+    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
+    return snapshot;
+}

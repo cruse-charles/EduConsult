@@ -97,12 +97,17 @@ function CreateAssignmentModal() {
             return
         }
 
+        // set dueDate to 11:59pm of the day selected
+        const dueDateAt1159pm = new Date(dueDate);
+        dueDateAt1159pm.setHours(23, 59, 0, 0); 
+
         // Data to create a new assignment
         const assignmentData = {
             title: formData.title,
             type: formData.type,
             priority: formData.priority,
-            dueDate: Timestamp.fromDate(dueDate),
+            // dueDate: Timestamp.fromDate(dueDate),
+            dueDate: Timestamp.fromDate(dueDateAt1159pm),
             note: formData.note,
             createdAt: Timestamp.fromDate(new Date()),
             student: studentId,

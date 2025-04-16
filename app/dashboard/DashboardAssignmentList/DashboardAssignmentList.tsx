@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { getTasksDueThisWeekConsultantDashboard } from '@/lib/querys'
+import { getConsultantDashboardAssignments } from '@/lib/querys'
 import { Assignment } from '@/lib/types/types'
 import { formatNextDeadline } from '@/lib/utils'
-import { fetchConsultantDashboardAssignments } from '@/redux/slices/studentAssignmentsSlice'
+import { fetchConsultantDashboardAssignments } from '@/redux/slices/consultantAssignmentSlice'
 import { RootState } from '@/redux/store'
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
@@ -12,30 +12,32 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const DashboardAssignmentList = () => {
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
-    const [dashboardAssignments, setDashboardAssignments] = useState<Assignment>([])
+    const [dashboardAssignments, setDashboardAssignments] = useState<Assignment[]>([])
 
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch();
     
     useEffect(() => {
-        getTasksDueThisWeekConsultantDashboard(user.id).then((snapshot) => {
+        getConsultantDashboardAssignments(user.id).then((snapshot) => {
             const assignments = snapshot.docs.map((doc) => {
                 return {
                     id: doc.id,
                     ...doc.data()
-                }
+                } as Assignment
             })
             setDashboardAssignments(assignments)
         })
     }, [])
 
-    useEffect(() => {
-        dashboardAssignments.forEach((assignment) => {
-            console.log('dashboardAssignments', assignment)
-        })
-    }, [dashboardAssignments])
+    // useEffect(() => {
+    //     dashboardAssignments.forEach((assignment) => {
+    //         console.log('dashboardAssignments', assignment)
+    //     })
+    // }, [dashboardAssignments])
 
+    // TODO: Adjust all queries to return data itself, not the snapshot
     useEffect(() => {
+        // @ts-ignore
         dispatch(fetchConsultantDashboardAssignments(user.id))
     }, [])
     
