@@ -60,16 +60,18 @@ export const fetchConsultantDashboardAssignments = createAsyncThunk(
       // Get consultant's doc reference
       const consultantRef = doc(db, "consultantUsers", consultantId);
       
-      // Find the start and end of current week
-      const start = startOfWeek(new Date())
-      const end = endOfWeek(new Date())
+    // Find today and six days later, encompasing a week
+    const today = new Date()
+    today.setDate(today.getDate())
+    const sixDaysLater = new Date()
+    sixDaysLater.setDate(today.getDate() + 6);
       
       // Count assignments with dueDates within current week
       const q = query(
           collection(db, 'assignments'),
           where('consultant', '==', consultantRef),
-          where('dueDate', '>=', Timestamp.fromDate(start)),
-          where('dueDate', '<=', Timestamp.fromDate(end)),
+          where('dueDate', '>=', Timestamp.fromDate(today)),
+          where('dueDate', '<=', Timestamp.fromDate(sixDaysLater)),
           where('status', '==', 'Pending')
       )
       
