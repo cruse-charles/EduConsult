@@ -64,37 +64,18 @@ const page = () => {
                 signInMethod: 'email',
             })
 
-            // new
-                      // Sign in and get user crednetials
-                      await signInWithEmailAndPassword(auth, userData.email, userData.password)
-                      // console.log('signed in with userCredential...', userCredential)
-            
-                      // Retrieve user info
-                      // await getUserInfo(userCredential.user.uid);
-                      // console.log('User from getUserInfo', user)
-            
-                      // Add user info to Redux state
-                      dispatch(setUser({
-                        id: user.uid,
-                        firstName: userData.firstName,
-                        lastName: userData.lastName,
-                        email: user.email,
-                        role: 'consultant'
-                      }))
-                      
-                      // If the user is a student then set their data in student slice and redirect to student profile
-                      // if (user.role === 'student') {
-                      //   dispatch(fetchStudent(user.id))
-                      //   router.push(`/students/${user.id}`)
-                      // } else {
-                      //   // Navigate to dashboard
-                      //   router.push('/dashboard')
-                      // }
+            // login user
+            await signInWithEmailAndPassword(auth, userData.email, userData.password)
 
+            // set user's data after user creation
+            dispatch(setUser({
+              id: user.uid,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+              email: user.email,
+              role: 'consultant'
+            }))
 
-
-            // new
-            console.log('Consultant Created')
             router.push('/dashboard');
             setIsLoading(false)
         } catch (error) {

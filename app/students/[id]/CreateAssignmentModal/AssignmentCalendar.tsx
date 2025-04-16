@@ -17,21 +17,21 @@ function AssignmentCalendar({dueDate, setDueDate}: AssignmentCalendarProps) {
                 <div className="space-y-2">
                     <Label>Due Date  <span className="text-red-500">*</span></Label>
                     <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                        variant="outline"
-                        className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !dueDate && "text-muted-foreground",
-                        )}
-                        >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dueDate ? format(dueDate, "PPP") : "Pick a date"}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                        <Calendar mode="single" selected={dueDate} onSelect={setDueDate} />
-                    </PopoverContent>
+                        <PopoverTrigger asChild>
+                            <Button
+                            variant="outline"
+                            className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !dueDate && "text-muted-foreground",
+                            )}
+                            >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {dueDate ? format(dueDate, "PPP") : "Pick a date"}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                            <Calendar mode="single" selected={dueDate} onSelect={setDueDate} />
+                        </PopoverContent>
                     </Popover>
                 </div>
         </>

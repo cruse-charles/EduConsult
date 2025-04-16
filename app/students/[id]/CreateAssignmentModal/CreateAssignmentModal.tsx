@@ -25,6 +25,7 @@ import { addAssignment } from "@/redux/slices/studentAssignmentsSlice"
 import { Timestamp } from "firebase/firestore";
 import { useFiles } from "@/hooks/useFiles"
 import { updateNextDeadline, updatePendingCount } from "@/lib/statsUtils"
+import { useSelectSingle } from "react-day-picker"
 
 
 
@@ -34,6 +35,7 @@ function CreateAssignmentModal() {
     const dispatch = useDispatch()
 
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
+    const user = useSelector((state: RootState) => state.user);
     
     // Retrieve student and consultant
     // TODO: Replace useConsultant I think, pretty sure we just add it into store now
@@ -116,7 +118,7 @@ function CreateAssignmentModal() {
                 files: [] as AssignmentFile[],
                 type: 'Assignment Created',
                 uploadedAt: Timestamp.fromDate(new Date()),
-                uploadedBy: 'user',
+                uploadedBy: `${user.firstName} ${user.lastName}`,
                 note: 'Assignment created and assigned to student.'
             }]
         }
