@@ -15,6 +15,9 @@ import "./globals.css";
 import { Provider } from 'react-redux'
 import { store } from "@/redux/store";
 import ClientProviders from "./ClientProviders";
+import AppSidebar from "./components/AppSidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,15 +31,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        {/* <Provider store={store}> */}
-          <body
-            // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-            <ClientProviders>
+      <body>
+        <ClientProviders>
+          <SidebarProvider>
+            <AppSidebar />
+            <main>
+              <SidebarTrigger />
               {children}
-            </ClientProviders>
-          </body>
-        {/* </Provider> */}
+            </main>
+          </SidebarProvider>
+        </ClientProviders>
+      </body>
     </html>
   );
 }

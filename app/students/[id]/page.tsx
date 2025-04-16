@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import Sidebar from "@/app/components/Sidebar";
+import Sidebar from "@/app/components/AppSidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Highlights from "@/app/components/Highlights";
 

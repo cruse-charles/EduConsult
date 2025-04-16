@@ -11,7 +11,7 @@ import { User as FirebaseUser } from "firebase/auth";
 import { FirebaseUserInfo, Student } from "@/lib/types/types";
 import { useConsultant } from "@/hooks/useConsultant";
 
-import Sidebar from "../components/Sidebar";
+import AppSidebar from "../components/AppSidebar";
 import AddStudentModal from "./AddStudentModal/AddStudentModal";
 import StudentCard from "../components/StudentCard";
 import Highlights from "../components/Highlights";
@@ -22,6 +22,7 @@ import { RootState } from "@/redux/store";
 import StudentTable from "./StudentTable/StudentTable";
 import ConsultantCalendar from "../components/ConsultantCalendar";
 import DashboardAssignmentList from "./DashboardAssignmentList/DashboardAssignmentList";
+
 
 
 
@@ -107,7 +108,7 @@ const page = () => {
     return (
         <div className="flex min-h-screen">
             {/* Sidebar Container */}
-            <Sidebar />
+            {/* <AppSidebar /> */}
     
             {/* Main Content Container */}
             <div className="container p-4 md:p-6 space-y-6">
