@@ -106,7 +106,6 @@ function CreateAssignmentModal() {
             title: formData.title,
             type: formData.type,
             priority: formData.priority,
-            // dueDate: Timestamp.fromDate(dueDate),
             dueDate: Timestamp.fromDate(dueDateAt1159pm),
             note: formData.note,
             createdAt: Timestamp.fromDate(new Date()),

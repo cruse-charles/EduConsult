@@ -64,7 +64,7 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
             note: formData.note,
             uploadedAt: new Date(),
             uploadedBy: user.firstName + ' ' + user.lastName,
-            type: user.role === 'consultant' ? 'feedback' : 'submission'
+            type: user.role === 'consultant' ? 'Feedback' : 'Submission'
         }
 
         // TODO: Make this a red inline error

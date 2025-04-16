@@ -67,6 +67,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         } 
     }
 
+    // TODO: If there is no note, then we shouldn't make it mandatory. Also on view assignment, the type doesn't always show up
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
@@ -94,10 +95,14 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         setEdit(false)
     }
 
-    const handleDateChange = (date: Date) => {
+    const handleDateChange = (dueDate: Date) => {
+        // set dueDate to 11:59pm of the day selected
+        const dueDateAt1159pm = new Date(dueDate);
+        dueDateAt1159pm.setHours(23, 59, 0, 0); 
+        
         setFormData((prev) => ({
             ...prev,
-            dueDate: date
+            dueDate: dueDateAt1159pm
         }))
     }
 
