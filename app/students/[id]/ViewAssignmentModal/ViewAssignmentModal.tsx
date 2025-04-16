@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import FileUploadView from '@/app/students/[id]/CreateAssignmentModal/FileUploadView'
 
 import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
-import { AssignmentFile } from '@/lib/types/types'
+import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 
 import { addEntry } from '@/redux/slices/studentAssignmentsSlice'
@@ -18,12 +18,15 @@ import AssignmentDetails from './AssignmentDetails'
 import AssignmentTimeline from './AssignmentTimeline'
 
 interface ViewAssignmentModalProps {
-    assignmentId: string;
+    // assignmentId: string;
+    assignment: Assignment;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentModalProps) {
+// function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentModalProps) {
+function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentModalProps) {
+
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     const { id: studentId } = useParams<{id:string}>()
@@ -32,7 +35,7 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
     // TODO: HOW SHOULD I BE FETCHING ASSIGNMENTS TO VIEW, CUZ THIS IS USING TWO DIFFERENT SLICES, SHOULD I EVEN TAKE FROM SLICE TO VIEW?
     // Find assignment from state by matching with selected assignment ID
     // const assignment = useSelector((state: RootState) => state.studentAssignments.find((a) => a.id === assignmentId))
-    const assignment = useSelector((state: RootState) => state.consultantDashboardAssignments.find((a) => a.id === assignmentId))
+    // const assignment = useSelector((state: RootState) => state.consultantDashboardAssignments.find((a) => a.id === assignmentId))
     const user = useSelector((state: RootState) => state.user)
 
     // Form data for user to submit feedback 
@@ -88,10 +91,13 @@ function ViewAssignmentModal({assignmentId, open, onOpenChange}: ViewAssignmentM
 
         
         // Upload entry to firestore
-        await uploadEntry(entryData, assignmentId)
+        // await uploadEntry(entryData, assignmentId)
+        await uploadEntry(entryData, assignment.id)
+
         
         // update redux state and reset form data
-        dispatch(addEntry({ entryData, assignmentId }))
+        // dispatch(addEntry({ entryData, assignmentId }))
+        dispatch(addEntry({ entryData, assignmentId: assignment.id }))
         setFormData({
             note: '',
             files: []

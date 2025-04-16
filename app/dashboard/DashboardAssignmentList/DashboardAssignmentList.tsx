@@ -128,7 +128,9 @@ const DashboardAssignmentList = () => {
                     </div>
                 </CardContent>
             </Card>
-            <ViewAssignmentModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            {/* @ts-ignore */}
+            <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            {/* <ViewAssignmentModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} /> */}
         </>
     )
 }
