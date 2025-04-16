@@ -16,7 +16,7 @@ const AuthGuard = ({children}: {children: React.ReactNode}) => {
 
     useEffect(() => {
         if (isCheckingAuth) {
-            router.push('/signin');
+            router.push('/login');
         }
     }, [user, isCheckingAuth])
 

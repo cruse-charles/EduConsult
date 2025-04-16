@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link'
-import { BookOpen, Calendar, GraduationCap, Home, LogOut, Settings, Users } from "lucide-react"
+import { BookOpen, Calendar, GraduationCap, Home, LogOut, Router, Settings, Users } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -21,7 +21,8 @@ import { getAuth, signOut } from 'firebase/auth'
 
 import { resetStore } from '@/redux/slices/resetSlice'
 import { useDispatch } from 'react-redux'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+
 
 const menuItems = [
   {
@@ -63,24 +64,26 @@ const AppSidebar = () => {
   const pathname = usePathname()
   const auth = getAuth(app)
   const dispatch = useDispatch()
+  const router = useRouter()
 
   // Don't show sidebar on login/signup pages
-  if (pathname === "/signin" || pathname === "/signup" || pathname === "/") {
+  if (pathname === "/login" || pathname === "/signup" || pathname === "/") {
     return null
   }
     
-  // TODO: Rename things logout/login and signup
   // Handle user sign out
   const handleLogout = async () => {
       try {
           await signOut(auth)
-          dispatch(resetStore())
+          router.push('/')
+          setTimeout(() => dispatch(resetStore()), 200); // Delay Redux clear to prevent authgaurd redirect
+
       } catch (error) {
-          console.error("Error signing out: ", error);
+          console.error("Error logging out: ", error);
       }
   }
 
-  // Make sidebar not have the trigger on certain pages, it does make some headers bigger
+  // TODO: Make sidebar not have the trigger on certain pages, it does make some headers bigger
   return (
     <Sidebar>
       <SidebarHeader>

@@ -1,6 +1,6 @@
 'use client'
 
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
 import { setDoc, doc, getDoc } from "firebase/firestore"
 
@@ -13,12 +13,16 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { useDispatch } from "react-redux"
+import { setUser } from "@/redux/slices/userSlice"
+import { fetchStudent } from "@/redux/slices/studentSlice"
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
     let auth = getAuth(app);
     const router = useRouter();
     let googleProvider = new GoogleAuthProvider();
+    const dispatch = useDispatch();
     
 
     // State to manage form input data for email and password
