@@ -4,16 +4,18 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { getTasksDueThisWeekConsultantDashboard } from '@/lib/querys'
 import { Assignment } from '@/lib/types/types'
 import { formatNextDeadline } from '@/lib/utils'
+import { fetchConsultantDashboardAssignments } from '@/redux/slices/studentAssignmentsSlice'
 import { RootState } from '@/redux/store'
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const DashboardAssignmentList = () => {
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
     const [dashboardAssignments, setDashboardAssignments] = useState<Assignment>([])
 
     const user = useSelector((state: RootState) => state.user)
+    const dispatch = useDispatch();
     
     useEffect(() => {
         getTasksDueThisWeekConsultantDashboard(user.id).then((snapshot) => {
@@ -32,6 +34,10 @@ const DashboardAssignmentList = () => {
             console.log('dashboardAssignments', assignment)
         })
     }, [dashboardAssignments])
+
+    useEffect(() => {
+        dispatch(fetchConsultantDashboardAssignments(user.id))
+    }, [])
     
     const getDays = () => {
         const daysArray = []
@@ -55,7 +61,7 @@ const DashboardAssignmentList = () => {
         }
     }
 
-  // Navigate by single day
+    // Navigate by single day
     const navigate = (direction: "prev" | "next") => {
         const newDate = new Date(currentStartDate)
         newDate.setDate(currentStartDate.getDate() + (direction === "next" ? 1 : -1))
@@ -121,3 +127,7 @@ const DashboardAssignmentList = () => {
 }
 
 export default DashboardAssignmentList
+
+function dispatch(arg0: any) {
+    throw new Error('Function not implemented.')
+}

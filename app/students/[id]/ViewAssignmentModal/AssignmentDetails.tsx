@@ -11,7 +11,7 @@ import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'luc
 import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
 import { Assignment } from '@/lib/types/types'
 import { cn, formatDueDate } from '@/lib/utils'
-import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/assignmentsSlice'
+import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/studentAssignmentsSlice'
 
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'

@@ -9,7 +9,7 @@ import { fileUpload, uploadEntry } from '@/lib/assignmentUtils'
 import { AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 
-import { addEntry } from '@/redux/slices/assignmentsSlice'
+import { addEntry } from '@/redux/slices/studentAssignmentsSlice'
 import { RootState } from '@/redux/store'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

@@ -21,7 +21,7 @@ import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { updateFolders, updateAssignmentDocIds } from "@/redux/slices/studentSlice"
 import { RootState } from "@/redux/store";
-import { addAssignment } from "@/redux/slices/assignmentsSlice"
+import { addAssignment } from "@/redux/slices/studentAssignmentsSlice"
 import { Timestamp } from "firebase/firestore";
 import { useFiles } from "@/hooks/useFiles"
 import { updateNextDeadline, updatePendingCount } from "@/lib/statsUtils"

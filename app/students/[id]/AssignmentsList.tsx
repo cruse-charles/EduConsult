@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 
 import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
 
-import { fetchAssignments, setAssignments } from "@/redux/slices/assignmentsSlice";
+import { fetchAssignments, setAssignments } from "@/redux/slices/studentAssignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
 import { formatDueDate, formatDueDateAndTime } from "@/lib/utils";
