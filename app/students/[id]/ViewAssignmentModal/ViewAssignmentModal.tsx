@@ -31,6 +31,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
     const dispatch = useDispatch();
 
     const user = useSelector((state: RootState) => state.user)
+    const [currentAssignment, setCurrentAssignment] = useState(assignment)
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
@@ -89,6 +90,12 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
             note: '',
             files: []
         })
+
+        setCurrentAssignment((prev) => ({
+            ...prev,
+            timeline: [...(prev?.timeline || []), entryData]
+        }))
+
         clearFiles()
         setIsLoading(false)
     }
@@ -115,7 +122,8 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
                     {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
-                        <AssignmentTimeline assignment={assignment}/>
+                        {/* <AssignmentTimeline assignment={assignment}/> */}
+                        <AssignmentTimeline assignment={currentAssignment}/>
 
                         <Separator />
                         
