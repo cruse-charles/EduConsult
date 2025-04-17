@@ -41,17 +41,19 @@ export const fileUpload = async (files: File[], studentId: string) => {
 
 // TODO: ADDING AN ASSIGNMENT TO A NEW FOLDER
 
-export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultant: User) => {
+// export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultant: User) => {
+export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, userId: string) => {
+
     try {
         const assignmentDocId = nanoid()
-        console.log("Consultant on uplaoding assignment", consultant)
+        console.log("Consultant on uplaoding assignment", userId)
     
 
         // Create a new Doc
         const assignmentDocRef = doc(db, "assignments", assignmentDocId)
         await setDoc(assignmentDocRef, {
             ...assignmentData,
-            consultant: doc(db, "consultantUsers", consultant.uid)
+            consultant: doc(db, "consultantUsers", userId)
         })
 
         const nextDeadline = updateNextDeadline(studentId, assignmentData.dueDate)
@@ -59,7 +61,6 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {
             assignmentDocIds: arrayUnion(assignmentDocId),
-            // folders: arrayUnion(assignmentData.folderName)
             folders: arrayUnion(assignmentData.folder)
         })
     

@@ -10,7 +10,7 @@ import AssignmentCalendar from "./AssignmentCalendar"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useParams } from "next/navigation"
 
 import { AssignmentFile, AssignmentFormData } from "@/lib/types/types"
@@ -24,8 +24,7 @@ import { RootState } from "@/redux/store";
 import { addAssignment } from "@/redux/slices/studentAssignmentsSlice"
 import { Timestamp } from "firebase/firestore";
 import { useFiles } from "@/hooks/useFiles"
-import { updateNextDeadline, updatePendingCount } from "@/lib/statsUtils"
-import { useSelectSingle } from "react-day-picker"
+import { updatePendingCount } from "@/lib/statsUtils"
 
 
 
@@ -33,16 +32,14 @@ import { useSelectSingle } from "react-day-picker"
 function CreateAssignmentModal() {
 
     const dispatch = useDispatch()
-
+    
+    // Extract functions for file uploads
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
-    const user = useSelector((state: RootState) => state.user);
+
     
     // Retrieve student and consultant
-    // TODO: Replace useConsultant I think, pretty sure we just add it into store now
     const { id: studentId } = useParams<{id:string}>()
-    const consultant = useConsultant()
-    const student = useStudent(studentId)
-
+    const user = useSelector((state: RootState) => state.user);
 
     // State to manage assignment details
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
@@ -127,8 +124,9 @@ function CreateAssignmentModal() {
         const filesData = await fileUpload(files, studentId)
         assignmentData.timeline[0].files = filesData
 
-        if (!consultant) return console.log('No consultant found')
-        const assignmentDocId = await uploadAssignment(assignmentData, studentId, consultant)
+        // Create Assignment
+        if (!user.role) return console.log('No consultant found')
+        const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
         
         // Create assignment with ID to add to redux for proper ordering
         const assignmentWithId = {

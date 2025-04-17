@@ -87,9 +87,6 @@ function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
                     toefl: editStudent.academicInformation.toefl,
                     targetSchools: editStudent.academicInformation.targetSchools
                 },
-                // pendingTasks: editStudent.pendingTasks,
-                // progress: editStudent.progress,
-                // nextDeadline: editStudent.nextDeadline
             })
 
             // Update the local state with the edited student data
