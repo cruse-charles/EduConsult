@@ -5,15 +5,11 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 import { getDoc, doc, DocumentReference, DocumentData } from "firebase/firestore";
-import { db, app } from "@/lib/firebaseConfig";
-import { User as FirebaseUser } from "firebase/auth";
+import { db,  } from "@/lib/firebaseConfig";
 
 import { FirebaseUserInfo, Student } from "@/lib/types/types";
-import { useConsultant } from "@/hooks/useConsultant";
 
-import AppSidebar from "../components/AppSidebar";
 import AddStudentModal from "./AddStudentModal/AddStudentModal";
-import StudentCard from "../components/StudentCard";
 import Highlights from "../components/Highlights";
 
 import { useEffect, useState } from "react";
@@ -74,6 +70,7 @@ const page = () => {
 
 
 
+    // TODO: We shouldn't be fetching students again, just adding to localstate/redux on submissions
     // Fetch students when user is available
     useEffect(() => {
         if (user) fetchStudents(user as FirebaseUserInfo);
@@ -89,14 +86,14 @@ const page = () => {
     
     return (
         <div className="flex min-h-screen">
-            {/* Sidebar Container */}
-            {/* <AppSidebar /> */}
-    
+
             {/* Main Content Container */}
             <div className="container p-4 md:p-6 space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-2xl font-bold">Dashboard</h1>
                         <div className="flex items-center gap-2">
+
+                            {/* Search Bar */}
                              <div className="relative">
                                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                                 <Input
@@ -112,19 +109,18 @@ const page = () => {
                                 {showDropdown && filteredStudents.length > 0 && (
                                     <div className="absolute z-10 left-0 mt-2 w-full bg-white border rounded shadow">
                                     {filteredStudents.map(student => (
-                                        <div
-                                        key={student.id}
-                                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                        onMouseDown={() => {
-                                            window.location.href = `/students/${student.id}`;
-                                        }}
+                                        <div key={student.id} className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                            onMouseDown={() => {
+                                                window.location.href = `/students/${student.id}`;
+                                            }}
                                         >
-                                        {student.personalInformation.firstName} {student.personalInformation.lastName}
+                                            {student.personalInformation.firstName} {student.personalInformation.lastName}
                                         </div>
                                     ))}
                                     </div>
                                 )}
                              </div>
+
                         {/* Add Student Container */}
                         <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/>
                         </div>
@@ -135,7 +131,6 @@ const page = () => {
 
     
                     {/* Tabs Container */}
-                    {/* TODO: Export to another component and use Redux to fetch students needed */}
                     <div className="">
                         <Tabs defaultValue="students">
                             <TabsList>

@@ -76,7 +76,7 @@ function AssignmentsList() {
             return (
                 <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
                     <Hourglass className="h-3 w-3" />
-                    Pending
+                    Assigned
                 </Badge>
             )
 

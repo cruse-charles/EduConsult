@@ -41,6 +41,10 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
     const [isLoading, setIsLoading] = useState(false)
 
+    useEffect(() => {
+        setCurrentAssignment(assignment);
+    }, [assignment]);
+
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
         const {name, value} = e.target
 
@@ -91,6 +95,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
             files: []
         })
 
+        // Update local state to reflect new timeline entry
         setCurrentAssignment((prev) => ({
             ...prev,
             timeline: [...(prev?.timeline || []), entryData]
@@ -122,8 +127,9 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
                     {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
-                        {/* <AssignmentTimeline assignment={assignment}/> */}
                         <AssignmentTimeline assignment={currentAssignment}/>
+                        {/* <AssignmentTimeline assignment={assignment}/> */}
+
 
                         <Separator />
                         

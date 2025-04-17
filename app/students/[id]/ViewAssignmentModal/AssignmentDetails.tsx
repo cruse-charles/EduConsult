@@ -161,7 +161,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                                     <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="Pending">Pending</SelectItem>
+                                    <SelectItem value="Pending">Assigned</SelectItem>
                                     <SelectItem value="Submitted">Submitted</SelectItem>
                                     <SelectItem value="Under Review">Under Review</SelectItem>
                                     <SelectItem value="Completed">Completed</SelectItem>
