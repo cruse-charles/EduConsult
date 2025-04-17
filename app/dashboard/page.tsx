@@ -30,22 +30,19 @@ const page = () => {
     // State to manage students and set reference to the consultant document
     const [students, setStudents] = useState<Student[]>([]);
     const [consultantDocRef, setConsultantDocRef] = useState<DocumentReference<DocumentData> | null>(null);
+    const [searchQuery, setSearchQuery] = useState("")
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    // const role = useSelector((state: RootState) => state.user.role)
     const user = useSelector((state: RootState) => state.user);
 
     // Function to fetch students for the current consultant user
-    // const fetchStudents = async (user: FirebaseUser) => {
     const fetchStudents = async (user: FirebaseUserInfo) => {
         try {
             // Get the consultant's document reference and snapshot
-            // console.log('fetching students.....')
             const ref = doc(db, "consultantUsers", user.id);
-            // console.log("Consultant Document Reference:", ref);
+
             setConsultantDocRef(ref);
             const consultantDocSnap = await getDoc(ref);
-            // console.log("Consultant Document Snapshot:", consultantDocSnap);
-            // console.log("Consultant Document Data:", consultantDocSnap.data());
 
             // If the consultant document does not exist, set students to an empty array
             if (!consultantDocSnap.exists()) {
@@ -75,27 +72,9 @@ const page = () => {
         }
     };
 
-    // OLD
-    // // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
-    // const currentUser = useConsultant();
-    
 
-    // // 2. Fetch students when user is available
-    // useEffect(() => {
-    //     if (currentUser) fetchStudents(currentUser);
-    // }, [currentUser]);
 
-    // const handleStudentAdded = () => {
-    //     if (currentUser) fetchStudents(currentUser);
-    // }
-    // OLD
-
-    // NEW
-    // 1. Listen for auth state changes and set user, grabbing currentUser isn't always reliable on initial render
-    // const currentUser = useConsultant();
-    
-
-    // 2. Fetch students when user is available
+    // Fetch students when user is available
     useEffect(() => {
         if (user) fetchStudents(user as FirebaseUserInfo);
     }, [user]);
@@ -103,7 +82,10 @@ const page = () => {
     const handleStudentAdded = () => {
         if (user) fetchStudents(user as FirebaseUserInfo);
     }
-    // NEW
+
+    const filteredStudents = students.filter((student) => 
+        `${student.personalInformation.firstName} ${student.personalInformation.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     
     return (
         <div className="flex min-h-screen">
@@ -118,12 +100,30 @@ const page = () => {
                              <div className="relative">
                                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                type="search"
-                                placeholder="Search students..."
-                                className="w-[200px] md:w-[260px] pl-8"
-                                // value={searchQuery}
-                                // onChange={(e) => setSearchQuery(e.target.value)}
+                                    type="search"
+                                    placeholder="Search students..."
+                                    className="w-[200px] md:w-[260px] pl-8"
+                                    value={searchQuery}
+                                    onChange={(e) => {
+                                        setShowDropdown(e.target.value.length > 0)
+                                        setSearchQuery(e.target.value)
+                                    }}
                                 />
+                                {showDropdown && filteredStudents.length > 0 && (
+                                    <div className="absolute z-10 left-0 mt-2 w-full bg-white border rounded shadow">
+                                    {filteredStudents.map(student => (
+                                        <div
+                                        key={student.id}
+                                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                        onMouseDown={() => {
+                                            window.location.href = `/students/${student.id}`;
+                                        }}
+                                        >
+                                        {student.personalInformation.firstName} {student.personalInformation.lastName}
+                                        </div>
+                                    ))}
+                                    </div>
+                                )}
                              </div>
                         {/* Add Student Container */}
                         <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/>
