@@ -39,9 +39,6 @@ export const fileUpload = async (files: File[], studentId: string) => {
     return filesData
 }
 
-// TODO: ADDING AN ASSIGNMENT TO A NEW FOLDER
-
-// export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultant: User) => {
 export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, userId: string) => {
 
     try {
@@ -56,7 +53,7 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
             consultant: doc(db, "consultantUsers", userId)
         })
 
-        const nextDeadline = updateNextDeadline(studentId, assignmentData.dueDate)
+        await updateNextDeadline(studentId, assignmentData.dueDate)
     
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {
@@ -83,20 +80,6 @@ export const updateAssignment = async (assignmentData: UpdateAssignment, assignm
     } catch (error) {
         console.log('Error updating assignment', error)
     }
-
-
-    // try {
-    //     // Get reference to the assignment document
-    //     const assignmentDocRef = doc(db, "assignments", assignmentId);
-    //     let updatedAssignmentData = {...assignmentData}
-    //     updatedAssignmentData.dueDate = Timestamp.fromDate(new Date(assignmentData.dueDate))
-
-    //     // Update doc
-    //     // @ts-ignore
-    //     await updateDoc(assignmentDocRef, updatedAssignmentData);
-    // } catch (error) {
-    //     console.log('Error updating assignment', error)
-    // }
 }
 
 export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => {
