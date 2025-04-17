@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Student } from "@/lib/types/types";
-import { useStudent } from "@/hooks/useStudent";
 
 import ViewStudentCard from "./ViewStudentCard/StudentViewCard";
 import AssignmentsOverview from "./AssignmentsOverview";
@@ -24,9 +23,12 @@ function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
     const { id: studentId } = useParams<{id: string}>();
     const dispatch = useDispatch<AppDispatch>()
+    const studentState = useSelector((state: RootState) => state.student)
+    const user = useSelector((state: RootState) => state.user);
 
-    // State to track if authetication is ready
+    // State to track if authetication is ready, create local state for student
     const [authReady, setAuthReady] = useState(false)
+    const [student, setStudent] = useState<Student | null>(null);
 
     // Check if the user is authenticated and set authReady to true when the auth state changes
     // This ensures that the student data is only fetched after the authentication state is confirmed
@@ -35,28 +37,25 @@ function page() {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) setAuthReady(true);
         });
+
         return () => unsubscribe();
     }, []);
 
+    // fetch student data from Firestore when the component mounts and set it to state
     useEffect(() => {
         if (authReady && studentId) {
             dispatch(fetchStudent(studentId))
         }
     }, [studentId, dispatch, authReady])
 
-    // fetch student data from Firestore when the component mounts and set it to state
-    const studentFromHook = useStudent(studentId)
-    const [student, setStudent] = useState<Student | null>(null);
-
-    // TODO: Remove using hook to set student and use Redux. Will need to adjust the StudentProfileCard
-    // and EditStudentCardContent components. They are using the local state here, so need to migrate
-    // logic to reducer
+    // Update local student state when studentState in Redux store changes
     useEffect(() => {
-        if (studentFromHook) setStudent(studentFromHook);
-    }, [studentFromHook]);
+        if (studentState && studentState.id) {
+            setStudent(studentState as Student);
+        }
+    }, [studentState]);
 
-    const user = useSelector((state: RootState) => state.user);
-
+    // Loading page displayed while no student
     if (!student) {
         return (
             <div className="flex items-center justify-center min-h-screen">

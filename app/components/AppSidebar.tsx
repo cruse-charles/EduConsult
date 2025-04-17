@@ -76,7 +76,7 @@ const AppSidebar = () => {
       try {
           await signOut(auth)
           router.push('/')
-          setTimeout(() => dispatch(resetStore()), 200); // Delay Redux clear to prevent authgaurd redirect
+          setTimeout(() => dispatch(resetStore()), 400); // Delay Redux clear to prevent authgaurd redirect
 
       } catch (error) {
           console.error("Error logging out: ", error);
