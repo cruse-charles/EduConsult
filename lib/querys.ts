@@ -29,6 +29,30 @@ export const getTasksDueThisWeekConsultantDashboard = async (consultantId: strin
     return snapshot;
 }
 
+// Function to count tasks due this week for a consultant view
+export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => {
+
+    // Get consultant's doc reference
+    // const consultantRef = doc(db, "studentUsers", studentId);
+
+    // Find the start and end of current week
+    const start = startOfWeek(new Date())
+    const end = endOfWeek(new Date())
+
+    // Count assignments with dueDates within current week
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
+        where('dueDate', '>=', Timestamp.fromDate(start)),
+        where('dueDate', '<=', Timestamp.fromDate(end)),
+        where('status', '==', 'Pending')
+    )
+
+    const snapshot = await getDocs(q);
+    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
+    return snapshot;
+}
+
 // Function to count students in progress (has pending assighnemnts) for a consultant view
 export const countOfInProgressStudents = async (consultantId: string) => {
     const consultantRef = doc(db, "consultantUsers", consultantId);
@@ -52,6 +76,20 @@ export const countOverDueAssignmentsConsultantDashboard = async (consultantId: s
         where('consultant', '==', consultantRef),
         where('dueDate', '<=', Timestamp.fromDate(new Date())),
         where('status', '==', 'Pending')
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.size;
+}
+
+// Function to count overdue assignments for a consultant view
+export const countCompletedAssignmentsStudentDashboard = async (studentId: string) => {
+    // const consultantRef = doc(db, "consultantUsers", consultantId);
+
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
+        where('status', '==', 'Completed')
     )
 
     const snapshot = await getDocs(q);
