@@ -38,9 +38,12 @@ function AssignmentsList() {
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
 
     // TODO NOW: Add student state to redux right away if student log in, this will let us to fetch their assignments
+    // TODO: When I delete an assignment, it deletes from database and redux, it fulfills. But if I refresh
+    // I get this error: fetchAssignments rejected: Assignment with ID XXXXX not found. Why does it do this?
+    // In this console.log below, I see that the studentState does show the assignmentDocId that was deleted, why?
     useEffect(() => {
         const studentState = student as Student
-        // console.log("StudentState", studentState)
+        console.log("StudentState", studentState)
         if (studentState?.assignmentDocIds) {
             dispatch(fetchAssignments(studentState.assignmentDocIds));
         } else {

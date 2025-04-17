@@ -112,6 +112,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         setEdit(false)
         await deleteAssignment(assignment?.id, studentId)
         dispatch(deleteAssignmentSlice(assignment?.id))
+        updatePendingCount(studentId, 'Deleted')
         onOpenChange(false);
     }
     
