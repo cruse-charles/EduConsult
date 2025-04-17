@@ -82,14 +82,38 @@ export const countOverDueAssignmentsConsultantDashboard = async (consultantId: s
     return snapshot.size;
 }
 
-// Function to count overdue assignments for a consultant view
+// Function to count completed assignments for a student view
 export const countCompletedAssignmentsStudentDashboard = async (studentId: string) => {
-    // const consultantRef = doc(db, "consultantUsers", consultantId);
 
     const q = query(
         collection(db, 'assignments'),
         where('student', '==', studentId),
         where('status', '==', 'Completed')
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.size;
+}
+
+// Function to count under review assignments for a student view
+export const countReviewedAssignmentsStudentDashboard = async (studentId: string) => {
+
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
+        where('status', '==', 'Under Review')
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.size;
+}
+
+// Function to count total assignments for a student view
+export const countTotalAssignmentsStudentDashboard = async (studentId: string) => {
+
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
     )
 
     const snapshot = await getDocs(q);

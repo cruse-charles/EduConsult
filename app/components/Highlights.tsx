@@ -3,7 +3,7 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import { countOfInProgressStudents, countOverDueAssignmentsConsultantDashboard, getTasksDueThisWeekConsultantDashboard, findNextAssignmentDeadlineConsultantDashboard, getTasksDueThisWeekStudentDashboard, countCompletedAssignmentsStudentDashboard } from '@/lib/querys'
+import { countOfInProgressStudents, countOverDueAssignmentsConsultantDashboard, getTasksDueThisWeekConsultantDashboard, findNextAssignmentDeadlineConsultantDashboard, getTasksDueThisWeekStudentDashboard, countCompletedAssignmentsStudentDashboard, countReviewedAssignmentsStudentDashboard, countTotalAssignmentsStudentDashboard } from '@/lib/querys'
 import { useEffect, useState } from 'react'
 
 import { formatNextDeadline } from '@/lib/utils'
@@ -17,6 +17,8 @@ const Highlights = () => {
     const [overDueAssignments, setOverDueAssignments] = useState(0)
     const [nextAssignmentDeadline, setNextAssignmentDeadline] = useState<Assignment>()
     const [completedAssignments, setCompletedAssignments] = useState(0)
+    const [underReviewAssignments, setUnderReviewAssignments] = useState(0)
+    const [ totalAssignments, setTotalAssignments] = useState(0)
 
     // TODO: Might want to not make this callback
     useEffect(() => {
@@ -28,6 +30,8 @@ const Highlights = () => {
         } else {
             getTasksDueThisWeekStudentDashboard(user.id).then((snapshot) => setTasksDueThisWeek(snapshot.size))
             countCompletedAssignmentsStudentDashboard(user.id).then(setCompletedAssignments)
+            countReviewedAssignmentsStudentDashboard(user.id).then(setUnderReviewAssignments)
+            countTotalAssignmentsStudentDashboard(user.id).then((setTotalAssignments))
         }
     }, [user, tasksDueThisWeek])
 
@@ -85,7 +89,7 @@ const Highlights = () => {
                             <BookOpen className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold"># of Assignments</div>
+                            <div className="text-2xl font-bold">{totalAssignments} Assignments total</div>
                             <p className="text-xs text-muted-foreground">Across all applications</p>
                         </CardContent>
                     </Card>
@@ -95,8 +99,8 @@ const Highlights = () => {
                             <Clock className="h-4 w-4 text-orange-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{tasksDueThisWeek} {tasksDueThisWeek == 1 ? 'task' : 'tasks'}</div>
-                            <p className="text-xs text-muted-foreground">Due this week!</p>
+                            <div className="text-2xl font-bold">{tasksDueThisWeek} {tasksDueThisWeek == 1 ? 'task' : 'tasks'} due this week</div>
+                            <p className="text-xs text-muted-foreground">Your attention is needed</p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -105,7 +109,7 @@ const Highlights = () => {
                             <Search className="h-4 w-4 text-blue-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold"># Tasks under Review</div>
+                            <div className="text-2xl font-bold">{underReviewAssignments} {underReviewAssignments == 1 ? 'task' : 'tasks'} under Review</div>
                             <p className="text-xs text-muted-foreground">Being Reviewed</p>
                         </CardContent>
                     </Card>
