@@ -68,17 +68,29 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     }
 
     // TODO: If there is no note, then we shouldn't make it mandatory. Also on view assignment, the type doesn't always show up
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleEditAssignmentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if (!assignment?.id || !formData.type || !formData.status || !formData.dueDate || !formData.note) {
             alert("Please fill out all fields.");
             return;
         }
+        
+        // Change status to 'submitted' if student is submitting
+        // let updatedFormData = {...formData}
+        // if (user.role === 'student') {
+        //     updatedFormData.status = 'Submitted'
+        // }
+        // console.log('Updated form data before dispatch: ', updatedFormData)
+        // console.log('Form data before dispatch: ', formData)
 
         dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: formData }))
         // @ts-ignore
         await updateAssignment(formData, assignment?.id)
+        
+        // dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: updatedFormData }))
+        // // @ts-ignore
+        // await updateAssignment(updatedFormData, assignment?.id)
 
         setEdit(false)
     }
@@ -137,7 +149,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                 </div>
 
                 {edit ? (
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleEditAssignmentSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="type">Type</Label>
                             <Select value={formData.type} onValueChange={(value) => handleSelectChange('type', value)}>
