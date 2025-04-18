@@ -71,26 +71,14 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const handleEditAssignmentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (!assignment?.id || !formData.type || !formData.status || !formData.dueDate || !formData.note) {
+        if (!assignment?.id || !formData.type || !formData.status || !formData.dueDate) {
             alert("Please fill out all fields.");
             return;
         }
-        
-        // Change status to 'submitted' if student is submitting
-        // let updatedFormData = {...formData}
-        // if (user.role === 'student') {
-        //     updatedFormData.status = 'Submitted'
-        // }
-        // console.log('Updated form data before dispatch: ', updatedFormData)
-        // console.log('Form data before dispatch: ', formData)
 
         dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: formData }))
         // @ts-ignore
         await updateAssignment(formData, assignment?.id)
-        
-        // dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: updatedFormData }))
-        // // @ts-ignore
-        // await updateAssignment(updatedFormData, assignment?.id)
 
         setEdit(false)
     }
@@ -224,24 +212,24 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                         <div className="flex items-center gap-2">
                             {/* <User className="h-4 w-4 text-muted-foreground" /> */}
                             {/* <span className="text-sm font-medium">Student:</span>
-                            <span className="text-sm">{assignment?.student}</span> */}
+                            <span className="text-sm">{formData?.student}</span> */}
                         </div>
                         <div className="flex items-center gap-2">
                             <FileText className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm font-medium">Type:</span>
-                            <Badge variant="outline">{assignment?.type}</Badge>
+                            <Badge variant="outline">{formData?.type}</Badge>
                         </div>
                         <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm font-medium">Status:</span>
-                            <Badge variant={assignment?.status === "Completed" ? "default" : "outline"}>
-                                {assignment?.status}
+                            <Badge variant={formData?.status === "Completed" ? "default" : "outline"}>
+                                {formData?.status}
                             </Badge>
                         </div>
                         <div className="flex items-center gap-2">
                             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm font-medium">Due Date:</span>
-                            <span className="text-sm">{formatDueDate(assignment?.dueDate)}</span>
+                            <span className="text-sm">{formatDueDate(formData?.dueDate)}</span>
                         </div>
                     </div>
                 )}
@@ -253,7 +241,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                 <div className="space-y-3">
                     <h4 className="font-medium">Instructions</h4>
                     <div className="p-3 bg-muted/50 rounded-md">
-                        <p className="text-sm">{assignment?.note}</p>
+                        <p className="text-sm">{formData?.note}</p>
                     </div>
                 </div>
             )}
