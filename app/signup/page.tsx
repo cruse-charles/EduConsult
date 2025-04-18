@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthPro
 import { app, db } from "@/lib/firebaseConfig"
 import { setDoc, doc, getDoc } from "firebase/firestore"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 
@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
-import { fetchStudent } from "@/redux/slices/studentSlice"
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
@@ -35,11 +34,6 @@ const page = () => {
     })
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<{email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; }>({})
-
-
-    useEffect(() => {
-      console.log('Errors updated:', errors)
-    }, [errors])
 
 
     // Function to validate form inputs and set error messages
@@ -128,6 +122,9 @@ const page = () => {
             setIsLoading(false)
         } catch (error) {
             console.log('Error creating consultant', (error as Error).message)
+            if ((error as Error).message.includes('auth/email-already-in-use')) {
+              setErrors({email: 'Email already in use'})
+            }
             setIsLoading(false)
         }
             
@@ -249,40 +246,17 @@ const page = () => {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input
-                        name="email"
-                        placeholder="name@example.com"
-                        type="email"
-                        disabled={isLoading}
-                        className={errors.email ? 'border-red-500' : ''}
-                        onChange={handleInputChange}
-                    />
+                    <Input name="email" placeholder="name@example.com" type="email" disabled={isLoading} className={errors.email ? 'border-red-500' : ''} onChange={handleInputChange} />
                     {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input
-                        name="password"
-                        placeholder="••••••••"
-                        type="password"
-                        disabled={isLoading}
-                        onChange={handleInputChange}
-                        className={userData.password ? "border-red-500" : ""}
-                        value={userData.password}
-                    />
+                    <Input name="password" placeholder="••••••••" type="password" disabled={isLoading} onChange={handleInputChange} className={userData.password ? "border-red-500" : ""} value={userData.password} />
                     {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input
-                      name="confirmPassword"
-                      placeholder="••••••••"
-                      type="password"
-                      disabled={isLoading}
-                      className={userData.confirmPassword ? "border-red-500" : ""}
-                      onChange={handleInputChange}
-                      value={userData.confirmPassword}
-                    />
+                    <Input name="confirmPassword" placeholder="••••••••" type="password" disabled={isLoading} className={userData.confirmPassword ? "border-red-500" : ""} onChange={handleInputChange} value={userData.confirmPassword} />
                     {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword}</p>}
                   </div>
                   <Button disabled={isLoading}>
