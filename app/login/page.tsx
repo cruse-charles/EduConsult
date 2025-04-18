@@ -33,12 +33,35 @@ const page = () => {
         password: '',
     })
 
+    const [errors, setErrors] = useState<{email?: string; password?: string}>({})
+
     const [isLoading, setIsLoading] = useState(false)
+
+    const validateForm = () => {
+      const newErrors: { email?: string; password?: string } = {}
+
+      if (!userData.email) {
+        newErrors['email'] = 'Email is required'
+      }
+
+      if (!userData.password) {
+        newErrors['password'] = 'Password is required'
+      }
+      
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
 
     // Handles form submission and user creation in Firebase Auth
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
+        validateForm()
+
+        if (!validateForm()) {
+          setIsLoading(false)
+          return
+        }
 
         try {
           // Sign in and get user crednetials
@@ -69,7 +92,8 @@ const page = () => {
 
 
         } catch (error) {
-          console.log('Error Signing in', error)
+          console.log('Error Signing in TEST THIS ', error)
+          setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
         } finally {
           setIsLoading(false)
         }
@@ -183,6 +207,9 @@ const page = () => {
             ...prevData,
             [name]: value,
         }))
+
+        // Clear errors on input change
+        setErrors({})
     }
 
   return (
@@ -207,7 +234,9 @@ const page = () => {
                         placeholder="name@example.com"
                         type="email"
                         disabled={isLoading}
+                        className={errors.email ? "border-red-500" : ""}
                     />
+                    {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
@@ -217,7 +246,9 @@ const page = () => {
                         placeholder="••••••••"
                         type="password"
                         disabled={isLoading}
+                        className={errors.password ? "border-red-500" : ""}
                     />
+                    {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                   </div>
                   <Button disabled={isLoading}>{isLoading ? "Logging in..." : "Login"}</Button>
                   <Button onClick={handleGoogleSignIn} variant='outline'>Continue With Google</Button>
