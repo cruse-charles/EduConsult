@@ -123,7 +123,6 @@ const page = () => {
         const studentDoc = await getDoc(doc(db, "studentUsers", userId))
         if (studentDoc.exists()) {
           const data = studentDoc.data()
-          // console.log('Student Data:', data)
           return {id: studentDoc.id, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student'}
         }
 

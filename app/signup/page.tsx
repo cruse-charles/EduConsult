@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthPro
 import { app, db } from "@/lib/firebaseConfig"
 import { setDoc, doc, getDoc } from "firebase/firestore"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 
@@ -33,10 +33,16 @@ const page = () => {
         password: '',
         confirmPassword: ''
     })
-
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<{email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; }>({})
 
+
+    useEffect(() => {
+      console.log('Errors updated:', errors)
+    }, [errors])
+
+
+    // Function to validate form inputs and set error messages
     const validateForm = () => {
       const newErrors: { email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; } = {}
 
@@ -81,12 +87,13 @@ const page = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        // Validate form inputs and set error messages
         validateForm()
 
+        // Early exit if validation fails
         if (!validateForm()) {
           return
         }
-
 
         setIsLoading(true)
 
@@ -135,6 +142,9 @@ const page = () => {
             ...prevData,
             [name]: value,
         }))
+
+        // Clear error messages
+        setErrors({})
     }
 
     // Function to parse display name into first and last name for users from Google sign-in
@@ -228,12 +238,12 @@ const page = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
                       <Label htmlFor="firstName">First name</Label>
-                      <Input id="firstName" placeholder="John" disabled={isLoading} className={userData.firstName ? "border-red-500" : ""}/>
+                      <Input name="firstName" onChange={handleInputChange} value={userData.firstName} id="firstName" placeholder="John" disabled={isLoading} className={errors.firstName ? "border-red-500" : ""}/>
                       {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="lastName">Last name</Label>
-                      <Input id="lastName" placeholder="Doe" disabled={isLoading} className={userData.lastName ? "border-red-500" : ""}/>
+                      <Input name="lastName" onChange={handleInputChange} value={userData.lastName} id="lastName" placeholder="Doe" disabled={isLoading} className={errors.lastName ? "border-red-500" : ""}/>
                       {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
                     </div>
                   </div>
@@ -244,7 +254,7 @@ const page = () => {
                         placeholder="name@example.com"
                         type="email"
                         disabled={isLoading}
-                        className={userData.email ? 'border-red-500' : ''}
+                        className={errors.email ? 'border-red-500' : ''}
                         onChange={handleInputChange}
                     />
                     {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
