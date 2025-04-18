@@ -35,17 +35,58 @@ const page = () => {
     })
 
     const [isLoading, setIsLoading] = useState(false)
+    const [errors, setErrors] = useState<{email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; }>({})
+
+    const validateForm = () => {
+      const newErrors: { email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; } = {}
+
+
+      if (!userData.firstName) {
+        newErrors.firstName = 'First name is required'
+      }
+
+      if (!userData.lastName) {
+        newErrors.lastName = 'Last name is required'
+      }
+
+      if (!userData.email) {
+        newErrors.email = 'Email is required'
+      }
+
+      if (!userData.password) {
+        newErrors.password = 'Password is required'
+      }
+
+      if (userData.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters'
+      }
+
+      if (!userData.confirmPassword) {
+        newErrors.confirmPassword = 'Please confirm your password'
+      }
+      
+      if (userData.password !== userData.confirmPassword) {
+          newErrors.password = 'Passwords do not match'
+          newErrors.confirmPassword = 'Passwords do not match'
+          return
+      }
+
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
+
 
     // Handles form submission for user creation in Firebase Auth
     // TODO: Error handling, confirm passwords match
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        // Check if passwords match
-        if (userData.password !== userData.confirmPassword) {
-            alert("Passwords don't match!")
-            return
+        validateForm()
+
+        if (!validateForm()) {
+          return
         }
+
 
         setIsLoading(true)
 
@@ -187,11 +228,13 @@ const page = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
                       <Label htmlFor="firstName">First name</Label>
-                      <Input id="firstName" placeholder="John" disabled={isLoading} required />
+                      <Input id="firstName" placeholder="John" disabled={isLoading} className={userData.firstName ? "border-red-500" : ""}/>
+                      {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="lastName">Last name</Label>
-                      <Input id="lastName" placeholder="Doe" disabled={isLoading} required />
+                      <Input id="lastName" placeholder="Doe" disabled={isLoading} className={userData.lastName ? "border-red-500" : ""}/>
+                      {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
                     </div>
                   </div>
                   <div className="grid gap-2">
@@ -201,9 +244,10 @@ const page = () => {
                         placeholder="name@example.com"
                         type="email"
                         disabled={isLoading}
-                        required
+                        className={userData.email ? 'border-red-500' : ''}
                         onChange={handleInputChange}
                     />
+                    {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
@@ -213,9 +257,10 @@ const page = () => {
                         type="password"
                         disabled={isLoading}
                         onChange={handleInputChange}
-                        required
+                        className={userData.password ? "border-red-500" : ""}
                         value={userData.password}
                     />
+                    {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
@@ -224,10 +269,11 @@ const page = () => {
                       placeholder="••••••••"
                       type="password"
                       disabled={isLoading}
-                      required
+                      className={userData.confirmPassword ? "border-red-500" : ""}
                       onChange={handleInputChange}
                       value={userData.confirmPassword}
                     />
+                    {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword}</p>}
                   </div>
                   <Button disabled={isLoading}>
                     {isLoading ? "Creating account..." : "Create Account"}
