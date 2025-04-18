@@ -27,25 +27,24 @@ const page = () => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
 
-    // State to manage form input data for email and password, and loading state
+    // State to manage form input data for email and password, loading state, and errors
     const [userData, setuserData] = useState({
         email: '',
         password: '',
     })
-
     const [errors, setErrors] = useState<{email?: string; password?: string}>({})
-
     const [isLoading, setIsLoading] = useState(false)
 
+    // Function to validate form inputs and set error messages
     const validateForm = () => {
       const newErrors: { email?: string; password?: string } = {}
 
       if (!userData.email) {
-        newErrors['email'] = 'Email is required'
+        newErrors.email = 'Email is required'
       }
 
       if (!userData.password) {
-        newErrors['password'] = 'Password is required'
+        newErrors.password = 'Password is required'
       }
       
       setErrors(newErrors)
@@ -66,11 +65,9 @@ const page = () => {
         try {
           // Sign in and get user crednetials
           const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
-          // console.log('signed in with userCredential...', userCredential)
 
           // Retrieve user info
           const user = await getUserInfo(userCredential.user.uid);
-          // console.log('User from getUserInfo', user)
 
           // Add user info to Redux state
           dispatch(setUser({
@@ -92,7 +89,7 @@ const page = () => {
 
 
         } catch (error) {
-          console.log('Error Signing in TEST THIS ', error)
+          // Set errors if login fails
           setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
         } finally {
           setIsLoading(false)
@@ -114,7 +111,6 @@ const page = () => {
 
     // Retrieve user's info
     const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
-      // console.log('getUserInfo function is called')
       try {
         // Check if id is for a consultant
         const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
@@ -139,8 +135,8 @@ const page = () => {
     }
 
     // TODO: Think this is copy-pasted with signup for googleSignIn, so export it
-    // Handle Google sign-in
     // TODO: Double check the id stuff with google sign ins
+    // Handle Google sign-in
     const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         setIsLoading(false)
@@ -148,7 +144,6 @@ const page = () => {
         // Firebase function to sign in with Google
         signInWithPopup(auth, googleProvider)
           .then( async (result) => {
-              // console.log(result)
         
             // Check if this is a new user (first time signing in with Google)
             const user = result.user
@@ -169,11 +164,9 @@ const page = () => {
                     createdAt: new Date(),
                     signInMethod: 'google'
                 })
-                // console.log('New Google user document created with parsed names:', { firstName, lastName })
             }
 
             const userInfo = await getUserInfo(user.uid);
-            // console.log('user', user)
 
             // Add user info to Redux state
             dispatch(setUser({
