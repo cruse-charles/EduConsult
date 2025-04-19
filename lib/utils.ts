@@ -7,13 +7,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// export const formatDueDate = (dueDate: Date | Timestamp | undefined) => {
-//     if (!dueDate || dueDate === undefined) return "No due date";
-//     console.log('dueDate', dueDate)
-//     const date = dueDate instanceof Date ? dueDate : dueDate.toDate();
-//     return format(date, "MMM d, yyyy");
-// }
-
 export const formatDueDate = (dueDate: any) => {
   if (!dueDate) return "No due date";
 
@@ -39,7 +32,7 @@ export const formatDueDateAndTime = (dueDate: Date | Timestamp | undefined) => {
 }
 
 export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined) => {
-    if (!nextDeadline || nextDeadline === undefined) return "N/A";
+    if (!nextDeadline || nextDeadline === undefined) return "No upcoming deadlines";
     const date = nextDeadline instanceof Date ? nextDeadline : nextDeadline.toDate();
     return format(date, "MMM d, yyyy");
 }

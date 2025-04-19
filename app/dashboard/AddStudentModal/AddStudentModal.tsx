@@ -187,6 +187,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         })) 
     }
 
+    // TODO: Add loading state and error handling for form submission
     return (
         // <Dialog open={open} onOpenChange={setOpen}>
         <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>

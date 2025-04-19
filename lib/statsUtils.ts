@@ -35,21 +35,6 @@ export const updateNextDeadline = async (studentId: string, dueDate: Date | Time
 
         const now = Timestamp.fromDate(new Date());
 
-        // OLD
-        // // Case 1: The current nextDeadline is in the past → always replace it with the new valid dueDate
-        // if (nextDeadline.toMillis() < now.toMillis() && dueDateTs.toMillis() >= now.toMillis()) {
-        //     await updateDoc(studentDocRef, { "stats.nextDeadline": dueDateTs });
-        // } else if (
-        //     // Case 2: The current nextDeadline is in the future → only replace if new dueDate is earlier (but still in future)
-        //     nextDeadline.toMillis() >= now.toMillis() &&
-        //     dueDateTs.toMillis() >= now.toMillis() &&
-        //     dueDateTs.toMillis() < nextDeadline.toMillis()
-        // ) {
-        //     await updateDoc(studentDocRef, { "stats.nextDeadline": dueDateTs });
-        // }
-        // OLD
-
-        // NEW
         if (nextDeadline.seconds < now.seconds && dueDateTs.seconds >= now.seconds) {
             await updateDoc(studentDocRef, { "stats.nextDeadline": dueDateTs });
             } else if (
@@ -59,8 +44,6 @@ export const updateNextDeadline = async (studentId: string, dueDate: Date | Time
         ) {
             await updateDoc(studentDocRef, { "stats.nextDeadline": dueDateTs });
         }
-        // NEW
-
 
         // TODO: Next deadline should be updated to N/A when all assignments are completed
 
