@@ -15,16 +15,18 @@ function FileUploadView({handleFileUpload, removeFile, files}: FileUploadViewPro
             <div className="space-y-4">
                 <div className="space-y-2">
                 <Label>Attach Files</Label>
+                <Label htmlFor="file-upload" className="cursor-pointer">
+
                 <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6">
                     <div className="text-center">
                     <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
                         <div className="mt-2">
-                            <Label htmlFor="file-upload" className="cursor-pointer">
+                            {/* <Label htmlFor="file-upload" className="cursor-pointer"> */}
                             <span className="text-sm font-medium text-primary hover:text-primary/80">
                                 Click to upload files
                             </span>
                             <span className="text-sm text-muted-foreground"> or drag and drop</span>
-                            </Label>
+                            {/* </Label> */}
                             <Input
                             id="file-upload"
                             type="file"
@@ -36,6 +38,7 @@ function FileUploadView({handleFileUpload, removeFile, files}: FileUploadViewPro
                         </div>
                     </div>
                 </div>
+                </Label>
 
                 {files.length > 0 && (
                     <div className="space-y-2">
