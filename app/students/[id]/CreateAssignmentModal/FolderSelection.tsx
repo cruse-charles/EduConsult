@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 import { AssignmentFormData } from '@/lib/types/types';
 import { RootState } from '@/redux/store';
+import { Dispatch, SetStateAction } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -12,7 +13,7 @@ interface FolderSelectionProps {
     handleInputChange: (field: string, value: string) => void;
     setNewFolder: (value: boolean) => void;
     newFolder: boolean;
-    setErrors: () => void;
+    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string }>>;
     errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;};
 }
 

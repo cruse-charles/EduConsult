@@ -21,12 +21,10 @@ function FileUploadView({handleFileUpload, removeFile, files}: FileUploadViewPro
                     <div className="text-center">
                     <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
                         <div className="mt-2">
-                            {/* <Label htmlFor="file-upload" className="cursor-pointer"> */}
                             <span className="text-sm font-medium text-primary hover:text-primary/80">
                                 Click to upload files
                             </span>
                             <span className="text-sm text-muted-foreground"> or drag and drop</span>
-                            {/* </Label> */}
                             <Input
                             id="file-upload"
                             type="file"

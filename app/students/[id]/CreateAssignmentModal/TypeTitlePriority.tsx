@@ -3,12 +3,12 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 import { AssignmentFormData } from '@/lib/types/types'
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 interface TypeTitlePriorityProps {
     formData: AssignmentFormData;
     handleInputChange: (field: string, value: string) => void;
-    setErrors: () => void;
+    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string }>>;
     errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;};
 }
 

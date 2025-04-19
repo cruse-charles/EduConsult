@@ -10,12 +10,10 @@ import AssignmentCalendar from "./AssignmentCalendar"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useParams } from "next/navigation"
 
 import { AssignmentFile, AssignmentFormData } from "@/lib/types/types"
-import { useConsultant } from "@/hooks/useConsultant"
-import { useStudent } from "@/hooks/useStudent"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
@@ -45,7 +43,7 @@ function CreateAssignmentModal() {
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
     const [newFolder, setNewFolder] = useState(false)
 
-    // State to manage loading state and formData for form submission
+    // State to manage loading state, formData for form submission, and errors
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [formData, setFormData] = useState<AssignmentFormData>({
@@ -60,13 +58,7 @@ function CreateAssignmentModal() {
         createdAt: null,
         status: 'Pending',
     })
-
     const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;}>({})
-
-    // useEffect(() => {
-    //     console.log('errors', errors)
-    // }, [errors])
-
 
     // Reset the form data
     const resetForm = () => {
@@ -87,6 +79,7 @@ function CreateAssignmentModal() {
         setNewFolder(false);
     };
 
+    // Validate form inputs and set error messages
     const validateForm = () => {
         const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;} = {}
 
@@ -102,7 +95,7 @@ function CreateAssignmentModal() {
             newErrors.folder = 'Please select a folder or input a new folder name.'
         }
 
-        if (!formData.dueDate) {
+        if (!dueDate) {
             newErrors.dueDate = 'Please select a due date.'
         }
 
@@ -110,10 +103,10 @@ function CreateAssignmentModal() {
         return Object.keys(newErrors).length === 0
     }
 
-    // TODO: Improve error handling
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
+        console.log(formData)
 
         const isValid = validateForm();
         if (!isValid) {
@@ -121,18 +114,8 @@ function CreateAssignmentModal() {
             return;
         }
 
-        // if (
-        //     !formData.title ||
-        //     !formData.type ||
-        //     !formData.folder ||
-        //     !dueDate
-        // ) {
-        //     alert("Please fill out all required fields")
-        //     setIsLoading(false)
-        //     return
-        // }
-
         // set dueDate to 11:59pm of the day selected
+        // @ts-ignore
         const dueDateAt1159pm = new Date(dueDate);
         dueDateAt1159pm.setHours(23, 59, 0, 0); 
 
@@ -240,6 +223,7 @@ function CreateAssignmentModal() {
                                 Cancel
                             </Button>
                         </DialogClose>
+
                         {/* Submit Button */}
                         <Button type="submit" disabled={isLoading}>
                             {isLoading ? "Creating..." : "Create Assignment"}
