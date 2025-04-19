@@ -97,8 +97,7 @@ export const deleteAssignment = async (assignmentId: string, studentId: string) 
         await deleteDoc(doc(db, "assignments", assignmentId))
 
         const studentDocRef = doc(db, "studentUsers", studentId)
-        console.log('STUDENT REF', studentDocRef)
-        console.log('ASSIGNMENT ID', assignmentId)
+
         await updateDoc(studentDocRef, {
             assignmentDocIds: arrayRemove(assignmentId)
         })
