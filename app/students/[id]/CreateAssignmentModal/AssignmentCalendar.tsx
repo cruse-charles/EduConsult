@@ -9,9 +9,11 @@ import { CalendarIcon } from 'lucide-react'
 interface AssignmentCalendarProps {
     dueDate: Date | undefined;
     setDueDate: (date: Date | undefined) => void;
+    setErrors: () => void;
+    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;};
 }
 
-function AssignmentCalendar({dueDate, setDueDate}: AssignmentCalendarProps) {
+function AssignmentCalendar({dueDate, setDueDate, setErrors, errors}: AssignmentCalendarProps) {
     return (
         <>
             <div className="space-y-2">
@@ -33,6 +35,7 @@ function AssignmentCalendar({dueDate, setDueDate}: AssignmentCalendarProps) {
                         <Calendar mode="single" selected={dueDate} onSelect={setDueDate} />
                     </PopoverContent>
                 </Popover>
+                {errors?.dueDate && <p className="text-sm text-red-500">{errors.dueDate}</p>}
             </div>
         </>
     )

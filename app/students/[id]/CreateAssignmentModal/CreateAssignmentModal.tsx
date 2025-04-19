@@ -10,7 +10,7 @@ import AssignmentCalendar from "./AssignmentCalendar"
 import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 
 import { AssignmentFile, AssignmentFormData } from "@/lib/types/types"
@@ -61,6 +61,13 @@ function CreateAssignmentModal() {
         status: 'Pending',
     })
 
+    const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;}>({})
+
+    // useEffect(() => {
+    //     console.log('errors', errors)
+    // }, [errors])
+
+
     // Reset the form data
     const resetForm = () => {
         setFormData({
@@ -80,21 +87,50 @@ function CreateAssignmentModal() {
         setNewFolder(false);
     };
 
+    const validateForm = () => {
+        const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;} = {}
+
+        if (!formData.title) {
+            newErrors.title = 'A title is required.'
+        }
+
+        if (!formData.type) {
+            newErrors.type = 'A type is required.'
+        }
+
+        if (!formData.folder) {
+            newErrors.folder = 'Please select a folder or input a new folder name.'
+        }
+
+        if (!formData.dueDate) {
+            newErrors.dueDate = 'Please select a due date.'
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
     // TODO: Improve error handling
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
 
-        if (
-            !formData.title ||
-            !formData.type ||
-            !formData.folder ||
-            !dueDate
-        ) {
-            alert("Please fill out all required fields")
-            setIsLoading(false)
-            return
+        const isValid = validateForm();
+        if (!isValid) {
+            setIsLoading(false);
+            return;
         }
+
+        // if (
+        //     !formData.title ||
+        //     !formData.type ||
+        //     !formData.folder ||
+        //     !dueDate
+        // ) {
+        //     alert("Please fill out all required fields")
+        //     setIsLoading(false)
+        //     return
+        // }
 
         // set dueDate to 11:59pm of the day selected
         const dueDateAt1159pm = new Date(dueDate);
@@ -151,6 +187,8 @@ function CreateAssignmentModal() {
             ...prevData,
             [name]: value,
         }))
+
+        setErrors({})
     }
 
     // TODO: Currently imported into SelectViewTabs, should be imported into AssignmentsList and moved to top left
@@ -181,13 +219,13 @@ function CreateAssignmentModal() {
                     {/* Form Container */}
                     <div className="space-y-4">
                         {/* Type, Title, Priority Input Container */}
-                        <TypeTitlePriority formData={formData} handleInputChange={handleInputChange}/>
+                        <TypeTitlePriority formData={formData} handleInputChange={handleInputChange} setErrors={setErrors} errors={errors}/>
                             
                         {/* Folder Selection Container */}
-                        <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData}/>
+                        <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData} setErrors={setErrors} errors={errors}/>
 
                         {/* Calendar Due Date Container */}
-                        <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate}/>
+                        <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate} setErrors={setErrors} errors={errors}/>
                             
                         {/* Notes Container */}
                         <Notes formData={formData} handleInputChange={handleInputChange} />

@@ -3,20 +3,30 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 import { AssignmentFormData } from '@/lib/types/types'
+import { useEffect } from 'react';
 
 interface TypeTitlePriorityProps {
     formData: AssignmentFormData;
     handleInputChange: (field: string, value: string) => void;
+    setErrors: () => void;
+    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;};
 }
 
-function TypeTitlePriority({formData, handleInputChange}: TypeTitlePriorityProps) {
+function TypeTitlePriority({formData, handleInputChange, setErrors, errors}: TypeTitlePriorityProps) {
+
+    useEffect(() => {
+        console.log('errors', errors)
+    }, [errors])
+
+
     return (
         <>
             <div className="space-y-2">
                 <Label htmlFor="title">
                     Assignment Title <span className="text-red-500">*</span>
                 </Label>
-                <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={(e) => handleInputChange("title", e.target.value)} required   />
+                <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={(e) => handleInputChange("title", e.target.value)}   />
+                {errors?.title && <p className="text-sm text-red-500">{errors.title}</p>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -38,6 +48,7 @@ function TypeTitlePriority({formData, handleInputChange}: TypeTitlePriorityProps
                         <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                     </Select>
+                    {errors?.type && <p className="text-sm text-red-500">{errors.type}</p>}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="priority">Priority Level</Label>
