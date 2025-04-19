@@ -88,21 +88,21 @@ const StudentTable = ({students}: StudentTableProps) => {
                     </TableHeader>
                     <TableBody>
                         {sortedStudents.map((student) => (
-                            <TableRow key={student.id} className="cursor-pointer">
+                            <TableRow key={student.id} className="cursor-pointer" onClick={() => window.location.href = `/students/${student.id}`}>
                                 <TableCell>
-                                    <Link href={`/students/${student.id}`} className="flex items-center gap-3">
+                                    {/* <Link href={`/students/${student.id}`} className="flex items-center gap-3"> */}
                                         {student.personalInformation.firstName} {student.personalInformation.lastName}
-                                    </Link>
+                                    {/* </Link> */}
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={`/students/${student.id}`}>
+                                    {/* <Link href={`/students/${student.id}`}> */}
                                     <span className="font-medium">{student.stats?.pendingAssignmentsCount || 0}</span>
-                                    </Link>
+                                    {/* </Link> */}
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={`/students/${student.id}`}>
+                                    {/* <Link href={`/students/${student.id}`}> */}
                                     <span className="font-medium">{formatNextDeadline(student.stats?.nextDeadline)}</span>
-                                    </Link>
+                                    {/* </Link> */}
                                 </TableCell>
                             </TableRow>
                         ))}
