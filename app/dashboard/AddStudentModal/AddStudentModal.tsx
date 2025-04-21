@@ -97,30 +97,12 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             return;
         }
 
-        // console.log("Consultant Document Reference:", consultantDocRef);
         const consultantSnap = await getDoc(consultantDocRef)
-        // console.log("Consultant Document Snapshot:", consultantSnap);   
         const consultantData = consultantSnap.data();
-        // console.log("Consultant Document Data:", consultantData);
 
         // Create a new student document in the "studentUsers" collection
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
-
-            // const docRef = await setDoc(doc(db, "studentUsers", userCredentials.user.uid), {
-            //     personalInformation: formData.personalInformation,
-            //     academicInformation: formData.academicInformation,
-            //     consultant: consultantDocRef,
-            //     folders: formData.folders,
-            //     email: formData.email,
-            //     password: formData.password,
-            // })
-
-
-            // // Update the consultant's document to include the new student
-            // await updateDoc(consultantDocRef, {
-            //     students: arrayUnion(docRef)
-            // })
 
             const studentId = userCredentials.user.uid;
             const studentDocRef = doc(db, "studentUsers", studentId);
@@ -134,13 +116,10 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
                 password: formData.password,
             });
 
-            // console.log("Student was created, now updating consultant doc...")
             // Add the studentDocRef to the consultant's students array
             await updateDoc(consultantDocRef, {
                 students: arrayUnion(studentDocRef)
             });
-
-            // console.log("Consultant's students array updated with new student reference.");
 
             // Callback to refresh student list or perform any other action after adding a student
             onStudentAdded();
@@ -149,7 +128,6 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             setOpen(false);
             resetFormData()
 
-            // console.log("Document written with ID: ", docRef.id);
         } catch (error) {
             console.error("Error adding document: ", error);
         }
@@ -189,7 +167,6 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
 
     // TODO: Add loading state and error handling for form submission
     return (
-        // <Dialog open={open} onOpenChange={setOpen}>
         <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
                 <Button variant="default" className="w-full">

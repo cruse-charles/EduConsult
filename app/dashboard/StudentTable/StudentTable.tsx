@@ -90,19 +90,13 @@ const StudentTable = ({students}: StudentTableProps) => {
                         {sortedStudents.map((student) => (
                             <TableRow key={student.id} className="cursor-pointer" onClick={() => window.location.href = `/students/${student.id}`}>
                                 <TableCell>
-                                    {/* <Link href={`/students/${student.id}`} className="flex items-center gap-3"> */}
                                         {student.personalInformation.firstName} {student.personalInformation.lastName}
-                                    {/* </Link> */}
                                 </TableCell>
                                 <TableCell>
-                                    {/* <Link href={`/students/${student.id}`}> */}
                                     <span className="font-medium">{student.stats?.pendingAssignmentsCount || 0}</span>
-                                    {/* </Link> */}
                                 </TableCell>
                                 <TableCell>
-                                    {/* <Link href={`/students/${student.id}`}> */}
                                     <span className="font-medium">{formatNextDeadline(student.stats?.nextDeadline)}</span>
-                                    {/* </Link> */}
                                 </TableCell>
                             </TableRow>
                         ))}
