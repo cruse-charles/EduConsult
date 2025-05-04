@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { updateUserPersonalInfo } from '@/lib/userUtils'
 import { RootState } from '@/redux/store'
 import { Pencil, Save } from 'lucide-react'
 import { useState } from 'react'
@@ -13,16 +14,17 @@ const page = () => {
 
     const [passwords, setPasswords] = useState({currentPassword: '', newPassword: '', confirmPassword: ''})
     const [edit, setEdit] = useState(false)
-    const [profileData, setProfileData] = useState({firstName: '', lastName: '', email: ''})
-
+    
     const user = useSelector((state: RootState) => state.user);
+    const [profileData, setProfileData] = useState({firstName: user.firstName, lastName: user.lastName, email: user.email})
 
     const handlePasswordChange = () => {
 
     }
 
-    const handleSave = () => {
-        
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault()
+        updateUserPersonalInfo(user.id, profileData)
         setEdit(false)
     }
 
@@ -79,9 +81,9 @@ const page = () => {
                                     <div className="space-y-2">
                                         <Label htmlFor="lastName">Last Name</Label>
                                         <Input
-                                            id="firstName"
-                                            value={profileData.firstName}
-                                            onChange={(e) => setProfileData((prev) => ({ ...prev, firstName: e.target.value }))}
+                                            id="lastName"
+                                            value={profileData.lastName}
+                                            onChange={(e) => setProfileData((prev) => ({ ...prev, lastName: e.target.value }))}
                                         />
                                     </div>
                                 </div>
@@ -89,9 +91,9 @@ const page = () => {
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email Address</Label>
                                     <Input
-                                            id="firstName"
-                                            value={profileData.firstName}
-                                            onChange={(e) => setProfileData((prev) => ({ ...prev, firstName: e.target.value }))}
+                                            id="email"
+                                            value={profileData.email}
+                                            onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
                                         />
                                 </div>
                                 <Button type='submit'>
