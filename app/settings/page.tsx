@@ -5,12 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { updateUserPersonalInfo } from '@/lib/userUtils'
+import { updateUser } from '@/redux/slices/userSlice'
 import { RootState } from '@/redux/store'
 import { Pencil, Save } from 'lucide-react'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const page = () => {
+    const dispatch = useDispatch()
 
     const [passwords, setPasswords] = useState({currentPassword: '', newPassword: '', confirmPassword: ''})
     const [edit, setEdit] = useState(false)
@@ -25,11 +27,13 @@ const page = () => {
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault()
         updateUserPersonalInfo(user.id, profileData)
+        dispatch(updateUser(profileData))
         setEdit(false)
     }
 
     const handleCancel = () => {
         setEdit(false)
+        setProfileData({firstName: user.firstName, lastName: user.lastName, email: user.email})
     }
 
     return (
@@ -47,17 +51,17 @@ const page = () => {
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="space-y-2">
                                         <Label htmlFor="firstName">First Name</Label>
-                                        <p>{user.firstName}</p>
+                                        <p>{profileData.firstName}</p>
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="lastName">Last Name</Label>
-                                        <p>{user.lastName}</p>
+                                        <p>{profileData.lastName}</p>
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email Address</Label>
-                                    <p>{user.email}</p>
+                                    <p>{profileData.email}</p>
                                 </div>
                                 
                                 <Button onClick={() => setEdit(true)}>
