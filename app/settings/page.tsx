@@ -5,17 +5,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RootState } from '@/redux/store'
+import { Pencil, Save } from 'lucide-react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const page = () => {
 
     const [passwords, setPasswords] = useState({currentPassword: '', newPassword: '', confirmPassword: ''})
+    const [edit, setEdit] = useState(false)
+    const [profileData, setProfileData] = useState({firstName: '', lastName: '', email: ''})
 
     const user = useSelector((state: RootState) => state.user);
 
     const handlePasswordChange = () => {
 
+    }
+
+    const handleSave = () => {
+        
+        setEdit(false)
+    }
+
+    const handleCancel = () => {
+        setEdit(false)
     }
 
     return (
@@ -28,21 +40,70 @@ const page = () => {
                         <CardDescription>Update your personal information and profile details</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label htmlFor="firstName">First Name</Label>
-                                <p>{user.firstName}</p>
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="lastName">Last Name</Label>
-                                <p>{user.lastName}</p>
-                            </div>
-                        </div>
+                        {!edit ? (
+                            <>
+                                <div className="grid gap-4 md:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="firstName">First Name</Label>
+                                        <p>{user.firstName}</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="lastName">Last Name</Label>
+                                        <p>{user.lastName}</p>
+                                    </div>
+                                </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email Address</Label>
-                            <p>{user.email}</p>
-                        </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email Address</Label>
+                                    <p>{user.email}</p>
+                                </div>
+                                
+                                <Button onClick={() => setEdit(true)}>
+                                    <Pencil className="mr-2 h-4 w-4" />
+                                    Edit Profile
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                            {/* Edit Section */}
+                            <form onSubmit={handleSave}>
+                                <div className="grid gap-4 md:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="firstName">First Name</Label>
+                                        <Input
+                                            id="firstName"
+                                            value={profileData.firstName}
+                                            onChange={(e) => setProfileData((prev) => ({ ...prev, firstName: e.target.value }))}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="lastName">Last Name</Label>
+                                        <Input
+                                            id="firstName"
+                                            value={profileData.firstName}
+                                            onChange={(e) => setProfileData((prev) => ({ ...prev, firstName: e.target.value }))}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email Address</Label>
+                                    <Input
+                                            id="firstName"
+                                            value={profileData.firstName}
+                                            onChange={(e) => setProfileData((prev) => ({ ...prev, firstName: e.target.value }))}
+                                        />
+                                </div>
+                                <Button type='submit'>
+                                    <Save className="mr-2 h-4 w-4" />
+                                    Save Changes
+                                </Button>
+                                <Button onClick={handleCancel} variant="outline">
+                                    Cancel
+                                </Button>
+                            </form>
+                        </>
+                        )}
                     </CardContent>
                 </Card>
 
