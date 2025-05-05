@@ -35,9 +35,11 @@ export const updateNextDeadline = async (studentId: string, dueDate: Date | Time
 
         const now = Timestamp.fromDate(new Date());
 
+        // If the current next deadline is in the past and the new due date is in the future, update it
         if (nextDeadline.seconds < now.seconds && dueDateTs.seconds >= now.seconds) {
             await updateDoc(studentDocRef, { "stats.nextDeadline": dueDateTs });
-            } else if (
+        // If the new due date is earlier than the current next deadline and both are in the future, update it
+        } else if (
             nextDeadline.seconds >= now.seconds &&
             dueDateTs.seconds >= now.seconds &&
             dueDateTs.seconds < nextDeadline.seconds

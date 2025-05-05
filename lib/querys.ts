@@ -25,15 +25,11 @@ export const getTasksDueThisWeekConsultantDashboard = async (consultantId: strin
     )
 
     const snapshot = await getDocs(q);
-    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
     return snapshot;
 }
 
 // Function to count tasks due this week for a consultant view
 export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => {
-
-    // Get consultant's doc reference
-    // const consultantRef = doc(db, "studentUsers", studentId);
 
     // Find the start and end of current week
     const start = startOfWeek(new Date())
@@ -49,7 +45,6 @@ export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => 
     )
 
     const snapshot = await getDocs(q);
-    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
     return snapshot;
 }
 
@@ -131,7 +126,6 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
         limit(1)
     )
     const snapshot = await getDocs(q);
-    console.log('findNextDeadlineAssignment snapshot', snapshot.docs[0]?.data())
 
     if (snapshot.docs.length > 0) {
         const docSnap = snapshot.docs[0]
@@ -220,6 +214,5 @@ export const getConsultantDashboardAssignments = async (consultantId: string) =>
     )
 
     const snapshot = await getDocs(q);
-    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
     return snapshot;
 }
