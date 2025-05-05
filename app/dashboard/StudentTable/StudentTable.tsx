@@ -11,12 +11,14 @@ import { useState } from "react"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import AssignmentsList from "@/app/students/[id]/AssignmentsList";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface StudentTableProps {
     students: Student[];
+    loading: boolean;
 }
 
-const StudentTable = ({students}: StudentTableProps) => {
+const StudentTable = ({students, loading}: StudentTableProps) => {
     const user = useSelector((state: RootState)=> state.user)
 
     // State to manage sorting by column and order
@@ -61,6 +63,15 @@ const StudentTable = ({students}: StudentTableProps) => {
         }
 
         return sortOrder === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4"/>
+    }
+
+    // Show loading screen while students are fetching
+    if (loading) {
+        return (
+            Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full rounded-md" />
+            )
+        ))
     }
 
     return (

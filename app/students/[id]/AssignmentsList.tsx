@@ -56,13 +56,14 @@ function AssignmentsList() {
             dispatch(setAssignments([]))
             setLoading(false)
         }
-    }, [dispatch, studentId]);
+    }, [dispatch, studentId, student]);
 
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
         return assignments.filter((assignment) => assignment.folder === folder)
     }
 
+    // TODO: Finish this function
     const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
         let count = 0
         // assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
@@ -118,80 +119,6 @@ function AssignmentsList() {
         return null
     }
 
-    // return (
-        // <>
-        //     <Card>
-        //         <CardContent className="p-0">
-        //             <div className="space-y-2">
-        //                 {folders?.map((folder) => (
-        //                     <Collapsible
-        //                         key={folder}
-        //                         onOpenChange={() => setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
-        //                     >
-        //                         <CollapsibleTrigger asChild>
-        //                             <Button
-        //                                 variant="ghost"
-        //                                 className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto"
-        //                             >
-        //                                 <div className="flex items-center gap-3">
-        //                                     {openedFolders.includes(folder) ? (
-        //                                         <FolderOpen className="h-5 w-5 text-primary" />
-        //                                     ) : (
-        //                                         <Folder className="h-5 w-5 text-muted-foreground" />
-        //                                     )}
-        //                                     <div className="text-left">
-        //                                         <h3 className="font-medium">{folder}</h3>
-        //                                         <p className="text-sm text-muted-foreground">
-        //                                             {/* TODO: Add handling for just 1 assignment or no completed assignments */}
-        //                                             {getFilteredAssignments(folder).length} assignments • {getCompletedCount(getFilteredAssignments(folder))} completed
-        //                                         </p>
-        //                                     </div>
-        //                                 </div>
-        //                                 <div className="flex items-center gap-2">
-        //                                 <Badge variant="outline">
-        //                                     {getCompletedCount(getFilteredAssignments(folder))}/{getFilteredAssignments(folder).length}
-        //                                 </Badge>
-        //                                 {openedFolders.includes(folder) ? (
-        //                                     <ChevronDown className="h-4 w-4" />
-        //                                 ) : (
-        //                                     <ChevronRight className="h-4 w-4" />
-        //                                 )}
-        //                                 </div>
-        //                             </Button>
-        //                         </CollapsibleTrigger>
-        //                         <CollapsibleContent>
-        //                         <div className="space-y-1">
-        //                             {getFilteredAssignments(folder).map((assignment) => (
-        //                                 <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
-        //                                     <div className="flex items-center gap-3 flex-1">
-        //                                         <div className="flex items-center gap-2">
-        //                                             {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
-        //                                             {assignment.type === "document" && <BookOpen className="h-4 w-4 text-green-500" />}
-        //                                             {assignment.type === "portfolio" && <Upload className="h-4 w-4 text-purple-500" />}
-        //                                         </div>
-        //                                         <div className="flex-1">
-        //                                             <div className="font-medium">{assignment.title}</div>
-        //                                             <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
-        //                                         </div>
-        //                                     </div>
-        //                                     <div className="flex items-center gap-3">{getStatusBadge(assignment.status, assignment?.dueDate)}</div>
-        //                                 </div>
-        //                             ))}
-        //                         </div>
-        //                         </CollapsibleContent>
-        //                     </Collapsible>
-        //                 ))}      
-        //             </div>  
-        //         </CardContent>
-        //     </Card>
-        //     {/* @ts-ignore */}
-        //     <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
-        // </>
-    // )
-
-
-
-
     return (
         <>
             <Card>
@@ -203,71 +130,70 @@ function AssignmentsList() {
                                 ))
                             ) : (
                                 folders?.map((folder) => (
-                            <Collapsible
-                                key={folder}
-                                onOpenChange={() => setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
-                            >
-                                <CollapsibleTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto"
+                                    <Collapsible
+                                        key={folder}
+                                        onOpenChange={() => setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
                                     >
-                                        <div className="flex items-center gap-3">
-                                            {openedFolders.includes(folder) ? (
-                                                <FolderOpen className="h-5 w-5 text-primary" />
-                                            ) : (
-                                                <Folder className="h-5 w-5 text-muted-foreground" />
-                                            )}
-                                            <div className="text-left">
-                                                <h3 className="font-medium">{folder}</h3>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {/* TODO: Add handling for just 1 assignment or no completed assignments */}
-                                                    {getFilteredAssignments(folder).length} assignments • {getCompletedCount(getFilteredAssignments(folder))} completed
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                        <Badge variant="outline">
-                                            {getCompletedCount(getFilteredAssignments(folder))}/{getFilteredAssignments(folder).length}
-                                        </Badge>
-                                        {openedFolders.includes(folder) ? (
-                                            <ChevronDown className="h-4 w-4" />
-                                        ) : (
-                                            <ChevronRight className="h-4 w-4" />
-                                        )}
-                                        </div>
-                                    </Button>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent>
-                                <div className="space-y-1">
-                                    {getFilteredAssignments(folder).map((assignment) => (
-                                        <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
-                                            <div className="flex items-center gap-3 flex-1">
+                                        <CollapsibleTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    {openedFolders.includes(folder) ? (
+                                                        <FolderOpen className="h-5 w-5 text-primary" />
+                                                    ) : (
+                                                        <Folder className="h-5 w-5 text-muted-foreground" />
+                                                    )}
+                                                    <div className="text-left">
+                                                        <h3 className="font-medium">{folder}</h3>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            {/* TODO: Add handling for just 1 assignment or no completed assignments */}
+                                                            {getFilteredAssignments(folder).length} assignments • {getCompletedCount(getFilteredAssignments(folder))} completed
+                                                        </p>
+                                                    </div>
+                                                </div>
                                                 <div className="flex items-center gap-2">
-                                                    {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
-                                                    {assignment.type === "document" && <BookOpen className="h-4 w-4 text-green-500" />}
-                                                    {assignment.type === "portfolio" && <Upload className="h-4 w-4 text-purple-500" />}
+                                                <Badge variant="outline">
+                                                    {getCompletedCount(getFilteredAssignments(folder))}/{getFilteredAssignments(folder).length}
+                                                </Badge>
+                                                {openedFolders.includes(folder) ? (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronRight className="h-4 w-4" />
+                                                )}
                                                 </div>
-                                                <div className="flex-1">
-                                                    <div className="font-medium">{assignment.title}</div>
-                                                    <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
+                                            </Button>
+                                        </CollapsibleTrigger>
+                                        <CollapsibleContent>
+                                        <div className="space-y-1">
+                                            {getFilteredAssignments(folder).map((assignment) => (
+                                                <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
+                                                    <div className="flex items-center gap-3 flex-1">
+                                                        <div className="flex items-center gap-2">
+                                                            {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
+                                                            {assignment.type === "document" && <BookOpen className="h-4 w-4 text-green-500" />}
+                                                            {assignment.type === "portfolio" && <Upload className="h-4 w-4 text-purple-500" />}
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <div className="font-medium">{assignment.title}</div>
+                                                            <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">{getStatusBadge(assignment.status, assignment?.dueDate)}</div>
                                                 </div>
-                                            </div>
-                                            <div className="flex items-center gap-3">{getStatusBadge(assignment.status, assignment?.dueDate)}</div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
-                                </CollapsibleContent>
-                            </Collapsible>
-                        ))
+                                        </CollapsibleContent>
+                                    </Collapsible>
+                                ))
                             )
                             }
                         </div>
                     </CardContent>
             </Card>
             {/* @ts-ignore */}
-                        <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
-
+            <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
         </>
     )
 }
