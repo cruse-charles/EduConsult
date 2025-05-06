@@ -60,7 +60,7 @@ const page = () => {
 
         }
 
-        // TODO: Update user's password in Firebase Auth
+        // TODO: Provide notification on successful update
 
         try {
             // Reauthenticate
@@ -74,7 +74,7 @@ const page = () => {
             // Update password
             await updatePassword(currentUser, passwords.newPassword);
             setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
-
+            alert('Password changed')
         } catch (error) {
             console.error("Error updating password:", error);
         }
@@ -99,9 +99,9 @@ const page = () => {
 
     return (
         <div className="min-h-screen">
-            <div className="container mx-auto p-6 max-w-4xl space-y-6">
+            <div className="w-full max-w-screen-xl mx-auto p-6">
                 {/* Profile Settings */}
-                <Card>
+                <Card className='m-6'>
                     <CardHeader>
                         <CardTitle>Profile Information</CardTitle>
                         <CardDescription>Update your personal information and profile details</CardDescription>
@@ -175,7 +175,7 @@ const page = () => {
                 </Card>
 
                 {/* Password Settings */}
-                <Card>
+                <Card className='m-6'>
                     <CardHeader>
                         <CardTitle>Change Password</CardTitle>
                         <CardDescription>Update your password to keep your account secure</CardDescription>
