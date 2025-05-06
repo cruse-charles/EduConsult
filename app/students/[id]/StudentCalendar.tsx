@@ -1,10 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { formatNextDeadline } from '@/lib/utils'
 import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const StudentCalendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date())
+    const studentAssignments = useSelector((state: RootState) => state.studentAssignments)
 
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
@@ -79,13 +83,27 @@ const StudentCalendar = () => {
                 
                 return (
                     <div
-                    key={index}
-                    className={`h-40 p-1 border cursor-pointer hover:bg-muted/50 ${
-                        !isCurrentMonth ? "text-muted-foreground bg-muted/20" : ""
-                    } ${isToday ? "bg-primary/10 border-primary" : ""}`}
-                    onClick={() => handleDateClick(day)}
+                        key={index}
+                        className={`h-40 p-1 border cursor-pointer hover:bg-muted/50 ${
+                            !isCurrentMonth ? "text-muted-foreground bg-muted/20" : ""
+                        } ${isToday ? "bg-primary/10 border-primary" : ""}`}
+                        onClick={() => handleDateClick(day)}
                     >
-                    <div className="text-sm font-medium mb-1">{day.getDate()}</div>
+                        <div className="text-sm font-medium mb-1">{day.getDate()}</div>
+                        <ScrollArea>
+                            {studentAssignments
+                                .filter(assignment => (
+                                    formatNextDeadline(day) === formatNextDeadline(assignment.dueDate)
+                                ))
+                                .map((assignment) => (
+                                    <div key={assignment.id} className="p-1 mb-1 rounded-md border border-blue-200 bg-blue-50">
+                                        <div className="text-xs font-medium truncate">
+                                            {assignment.title}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </ScrollArea>
                     </div>
                 )
             })}
