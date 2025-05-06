@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { Student } from "@/lib/types/types";
 
-import ViewStudentCard from "./ViewStudentCard/StudentViewCard";
+import ViewStudentCard from "./ViewStudentCard/ViewStudentCard";
 import AssignmentsOverview from "./AssignmentsOverview";
 import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";

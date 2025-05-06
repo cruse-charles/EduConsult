@@ -55,7 +55,7 @@ const StudentCalendar = () => {
           <div className="flex items-center space-x-4">
             {/* <CardTitle className="flex items-center gap-2"> */}
               {/* <CalendarIcon className="h-5 w-5" /> */}
-              {getViewTitle()}
+              <p className='text-2xl font-bold"'>{getViewTitle()}</p>
             {/* </CardTitle> */}
           </div>
           <div className="flex items-center space-x-2">

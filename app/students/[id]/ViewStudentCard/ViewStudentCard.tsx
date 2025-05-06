@@ -10,23 +10,37 @@ import { Edit } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import StudentCardContent from './StudentCardContent'
 import EditStudentCardContent from './EditStudentCardContent'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
+import { useStudent } from '@/hooks/useStudent'
 
-interface ViewStudentCardProps {
-    student: Student;
-    setStudent: (student: Student) => void;
-}
+// interface ViewStudentCardProps {
+//     student: Student;
+//     setStudent: (student: Student) => void;
+// }
 
-function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
+// function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
+function ViewStudentCard() {
+
+    const student : Student = useStudent(useSelector((state: RootState) => state.student).id as string)
+    
     // State to manage edit mode and the student being edited
     const [editMode, setEditMode] = useState(false)
     const [editStudent, setEditStudent] = useState(student)
+    
+    useEffect(() => {
+        setEditStudent(student)
+    }, [student])
+
+    useEffect(() => {
+        console.log('Edit Student', editStudent)
+        console.log('Student', student)
+    }, [editStudent])
     
     // Initialize router for navigation
     const router = useRouter();
@@ -91,7 +105,7 @@ function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
 
             // Update the local state with the edited student data
             setEditMode(false);
-            setStudent(editStudent)
+            // setStudent(editStudent)
             console.log("Student updated:", student.id);
         } catch (error) {
             console.error("Error updating student:", error);

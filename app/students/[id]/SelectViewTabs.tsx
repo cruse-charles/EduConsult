@@ -8,6 +8,7 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux"
 import AssignmentsList from "./AssignmentsList";
 import StudentCalendar from "./StudentCalendar";
+import ViewStudentCard from "./ViewStudentCard/ViewStudentCard";
 
 // TODO: AssignmentList needs to be added here I think for it to 'render' and not render depending on tab selected
 // Currently, it's always rendering that assigment list
@@ -22,7 +23,7 @@ function SelectViewTabs() {
             <TabsList>
                 <TabsTrigger value="assignments">Assignments</TabsTrigger>
                 <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                <TabsTrigger value="school-info">School Information</TabsTrigger>
+                <TabsTrigger value="school-info">Student Information</TabsTrigger>
             </TabsList>
             <TabsContent value="assignments" className="space-y-4">
                 <div className="flex justify-between items-center">
@@ -37,18 +38,14 @@ function SelectViewTabs() {
             </TabsContent>
             <TabsContent value="calendar">
                 <Card>
-                <CardHeader>
-                    <CardTitle>Student Calendar</CardTitle>
-                    <CardDescription>View and manage deadlines for {student?.personalInformation?.firstName} {student?.personalInformation?.lastName}</CardDescription>
-                </CardHeader>
-                <CardContent>
+                <CardContent className="mt-3">
                     <StudentCalendar />
                 </CardContent>
                 </Card>
             </TabsContent>
-            {/* <TabsContent value="school-info">
-                <SchoolInfo schoolName={student.targetSchool} />
-                </TabsContent> */}
+            <TabsContent value="school-info">
+                <ViewStudentCard />
+            </TabsContent>
         </Tabs>
     )
 }
