@@ -18,6 +18,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Sidebar from "@/app/components/AppSidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Highlights from "@/app/components/Highlights";
+import StudentCalendar from "./StudentCalendar";
 
 function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
@@ -70,9 +71,9 @@ function page() {
             <div className="container flex-1 p-4 md:p-6 space-y-6">
                 <StudentProfileHeader />
 
-                <div className="grid gap-6 md:grid-cols-3">
+                <div className="grid gap-6 md:grid-cols-1">
                     {/* Student Details Card */}
-                    <ViewStudentCard student={student} setStudent={setStudent} />
+                    {/* <ViewStudentCard student={student} setStudent={setStudent} /> */}
 
                     {/* Main Content Container */}
                     <div className="md:col-span-2 space-y-6">
@@ -112,6 +113,9 @@ function page() {
                             <TabsContent value="assignments">
                                 <AssignmentsList />
                             </TabsContent>
+                            {/* <TabsContent value='calendar'>
+                                <StudentCalendar />
+                            </TabsContent> */}
                         </Tabs>
                     </main>
                 </div>

@@ -1,12 +1,13 @@
 import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
 
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Student } from "@/lib/types/types";
 import { RootState } from "@/redux/store";
 
 import { useSelector } from "react-redux"
 import AssignmentsList from "./AssignmentsList";
+import StudentCalendar from "./StudentCalendar";
 
 // TODO: AssignmentList needs to be added here I think for it to 'render' and not render depending on tab selected
 // Currently, it's always rendering that assigment list
@@ -40,9 +41,9 @@ function SelectViewTabs() {
                     <CardTitle>Student Calendar</CardTitle>
                     <CardDescription>View and manage deadlines for {student?.personalInformation?.firstName} {student?.personalInformation?.lastName}</CardDescription>
                 </CardHeader>
-                {/* <CardContent>
-                    <CalendarView studentId={student.id} />
-                    </CardContent> */}
+                <CardContent>
+                    <StudentCalendar />
+                </CardContent>
                 </Card>
             </TabsContent>
             {/* <TabsContent value="school-info">
