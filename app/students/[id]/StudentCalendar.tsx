@@ -1,14 +1,20 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 import { formatNextDeadline } from '@/lib/utils'
-import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react'
-import React, { useState } from 'react'
+import { Assignment } from '@/lib/types/types'
+
+import { useState } from 'react'
+import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
+
+import ViewAssignmentModal from './ViewAssignmentModal/ViewAssignmentModal'
 
 const StudentCalendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date())
     const studentAssignments = useSelector((state: RootState) => state.studentAssignments)
+    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
 
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
@@ -23,10 +29,6 @@ const StudentCalendar = () => {
     for (let i = 0; i < 35; i++) {
       days.push(new Date(current))
       current.setDate(current.getDate() + 1)
-    }
-
-    const handleDateClick = (day) => {
-
     }
 
     const navigateMonth = (direction: "prev" | "next") => {
@@ -84,10 +86,10 @@ const StudentCalendar = () => {
                 return (
                     <div
                         key={index}
-                        className={`h-40 p-1 border cursor-pointer hover:bg-muted/50 ${
+                        className={`h-40 p-1 border hover:bg-muted/50 ${
                             !isCurrentMonth ? "text-muted-foreground bg-muted/20" : ""
                         } ${isToday ? "bg-primary/10 border-primary" : ""}`}
-                        onClick={() => handleDateClick(day)}
+                        // onClick={() => handleDateClick(day)}
                     >
                         <div className="text-sm font-medium mb-1">{day.getDate()}</div>
                         <ScrollArea>
@@ -96,7 +98,7 @@ const StudentCalendar = () => {
                                     formatNextDeadline(day) === formatNextDeadline(assignment.dueDate)
                                 ))
                                 .map((assignment) => (
-                                    <div key={assignment.id} className="p-1 mb-1 rounded-md border border-blue-200 bg-blue-50">
+                                    <div key={assignment.id} className="p-1 mb-1 cursor-pointer rounded-md border border-blue-200 bg-blue-50" onClick={()=> setSelectedAssignment(assignment)}>
                                         <div className="text-xs font-medium truncate">
                                             {assignment.title}
                                         </div>
@@ -108,6 +110,9 @@ const StudentCalendar = () => {
                 )
             })}
         </div>
+        {/* @ts-ignore */}
+        <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+
     </>
     )
 }
