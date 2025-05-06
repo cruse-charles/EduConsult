@@ -1,5 +1,6 @@
 'use client'
 
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -11,26 +12,58 @@ import { Pencil, Save } from 'lucide-react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+
 const page = () => {
     const dispatch = useDispatch()
 
+    // state variables for form inputs, edit mode, and errors
     const [passwords, setPasswords] = useState({currentPassword: '', newPassword: '', confirmPassword: ''})
     const [edit, setEdit] = useState(false)
-    
+    const [errors, setErrors] = useState({})
+
+    // Retreive user from redux store
     const user = useSelector((state: RootState) => state.user);
     const [profileData, setProfileData] = useState({firstName: user.firstName, lastName: user.lastName, email: user.email})
 
     const handlePasswordChange = () => {
+        // Check for empty password fields
+        if (passwords.currentPassword === '' || passwords.newPassword === '' || passwords.confirmPassword === '') {
+            setErrors({form: 'All fields are required.'})
+            return;
+        }
 
+        // Check if new passwords match
+        if (passwords.newPassword !== passwords.confirmPassword) {
+            setErrors({form: 'New passwords do not match.'})
+            return;
+        }
+
+        // Check password length
+        if (passwords.newPassword.length < 6) {
+            setErrors({form: 'Password should be at least 6 characters long.'})
+            return;
+        }
+
+        // TODO: Confirm current password
+        if (passwords.currentPassword != '') {
+
+        }
+
+        // TODO: Update user's password in Firebase Auth
     }
 
+    // Handle save
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault()
+        
+        // update Firestore and Redux store
         updateUserPersonalInfo(user.id, profileData)
         dispatch(updateUser(profileData))
+
         setEdit(false)
     }
 
+    // Handle cancel, return to view mode and restore user's info
     const handleCancel = () => {
         setEdit(false)
         setProfileData({firstName: user.firstName, lastName: user.lastName, email: user.email})
