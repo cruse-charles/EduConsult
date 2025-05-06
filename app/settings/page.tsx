@@ -1,17 +1,20 @@
 'use client'
 
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { updateUserPersonalInfo } from '@/lib/userUtils'
-import { updateUser } from '@/redux/slices/userSlice'
-import { RootState } from '@/redux/store'
 import { Pencil, Save } from 'lucide-react'
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
+import { updateUserPersonalInfo } from '@/lib/userUtils'
+
+import { useState } from 'react'
+
+import { RootState } from '@/redux/store'
+import { updateUser } from '@/redux/slices/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const page = () => {
     const dispatch = useDispatch()
@@ -25,7 +28,15 @@ const page = () => {
     const user = useSelector((state: RootState) => state.user);
     const [profileData, setProfileData] = useState({firstName: user.firstName, lastName: user.lastName, email: user.email})
 
-    const handlePasswordChange = () => {
+    const handlePasswordChange = async () => {
+        const auth = getAuth();
+        const currentUser = auth.currentUser;
+
+        if (!currentUser || !currentUser.email) {
+            setErrors({ form: "No authenticated user found." });
+            return;
+        }
+
         // Check for empty password fields
         if (passwords.currentPassword === '' || passwords.newPassword === '' || passwords.confirmPassword === '') {
             setErrors({form: 'All fields are required.'})
@@ -50,6 +61,23 @@ const page = () => {
         }
 
         // TODO: Update user's password in Firebase Auth
+
+        try {
+            // Reauthenticate
+            const credential = EmailAuthProvider.credential(
+                currentUser.email,
+                passwords.currentPassword
+            );
+
+            await reauthenticateWithCredential(currentUser, credential);
+
+            // Update password
+            await updatePassword(currentUser, passwords.newPassword);
+            setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
+
+        } catch (error) {
+            console.error("Error updating password:", error);
+        }
     }
 
     // Handle save
