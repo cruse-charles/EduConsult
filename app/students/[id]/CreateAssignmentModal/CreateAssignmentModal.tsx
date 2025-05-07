@@ -25,6 +25,8 @@ import { useFiles } from "@/hooks/useFiles"
 import { updatePendingCount } from "@/lib/statsUtils"
 
 
+import { toast } from "sonner"
+
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
 function CreateAssignmentModal() {
@@ -163,6 +165,7 @@ function CreateAssignmentModal() {
         dispatch(updateFolders(formData.folder))
         dispatch(updateAssignmentDocIds(assignmentDocId))
         updatePendingCount(studentId, 'Pending')
+        toast("Assignment Created")
     }
 
     const handleInputChange = (name: string, value: string) => {
