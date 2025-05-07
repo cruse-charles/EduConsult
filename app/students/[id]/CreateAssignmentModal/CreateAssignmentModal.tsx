@@ -26,6 +26,7 @@ import { updatePendingCount } from "@/lib/statsUtils"
 
 
 import { toast } from "sonner"
+import CustomToast from "@/app/components/CustomToast"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -165,7 +166,8 @@ function CreateAssignmentModal() {
         dispatch(updateFolders(formData.folder))
         dispatch(updateAssignmentDocIds(assignmentDocId))
         updatePendingCount(studentId, 'Pending')
-        toast("Assignment Created")
+        // toast("Assignment Created")
+        toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="succes"/>)
     }
 
     const handleInputChange = (name: string, value: string) => {
