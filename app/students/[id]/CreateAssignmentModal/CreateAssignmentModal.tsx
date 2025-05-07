@@ -106,6 +106,7 @@ function CreateAssignmentModal() {
         return Object.keys(newErrors).length === 0
     }
 
+    // TODO: This needs to be a try/catch for errors
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)

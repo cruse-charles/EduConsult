@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AssignmentDetails from './AssignmentDetails'
 import AssignmentTimeline from './AssignmentTimeline'
+import { toast } from 'sonner'
+import CustomToast from '@/app/components/CustomToast'
 
 interface ViewAssignmentModalProps {
     assignment: Assignment;
@@ -54,6 +56,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
         }))
     }
 
+    // TODO: This needs to be in a try-catch block
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
@@ -110,6 +113,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
         clearFiles()
         setIsLoading(false)
+        toast(<CustomToast title="Entry Added" description="" status="succes"/>)
     }
 
     const baseButtonLabel = user.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';

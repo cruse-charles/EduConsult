@@ -16,6 +16,8 @@ import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
 import CreateStudentAccount from "./CreateStudentAccount";
 import { StudentFormData } from "@/lib/types/types";
+import { toast } from "sonner";
+import CustomToast from "@/app/components/CustomToast";
 
 interface AddStudentModalProps {
     consultantDocRef: DocumentReference<DocumentData> | null;
@@ -29,6 +31,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
     
     // State to manage dialog open/close state
     const [open, setOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     // State to manage form input data for student
     const [formData, setFormData] = useState<StudentFormData>({
@@ -90,6 +93,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
     // Handles form submission, adds a new student document to Firestore
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsLoading(true);
 
         // Check if consultantDocRef is provided
         if (!consultantDocRef) {
@@ -127,9 +131,13 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             // Close the dialog after submission
             setOpen(false);
             resetFormData()
+            setIsLoading(false);
+
+            toast(<CustomToast title="Student Account Created" description="" status="succes"/>)
 
         } catch (error) {
             console.error("Error adding document: ", error);
+            toast(<CustomToast title="Student Account Not Created" description="Please refresh and try again." status="error"/>)
         }
     }
 
@@ -189,7 +197,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
                     <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
                     <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} />
                     <GoalsAndNotesSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} handleAcademicInfoChange={handleAcademicInfoChange} />
-                    <Button type='submit'>Submit</Button>
+                    <Button type='submit' disabled={isLoading}>Submit</Button>
                 </form>
             </DialogContent>
       </Dialog>
