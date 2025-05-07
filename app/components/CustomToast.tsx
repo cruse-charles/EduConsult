@@ -1,7 +1,7 @@
 import { CheckCircle, XCircle } from 'lucide-react'
 import React from 'react'
 
-const CustomToast = ({title, description, status}) => {
+const CustomToast = ({title, description, status}: {title: string; description: string; status: string}) => {
     
     if (status === 'success') {
         return (

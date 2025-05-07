@@ -9,7 +9,7 @@ interface AcademicInfoSectionProps {
 
 function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoSectionProps) {
 
-    const safeValue = (value) => (value === null || isNaN(value) ? '' : value);
+    const safeValue = (value: number | null) => (value === null || isNaN(value) ? '' : value);
 
     return (
         <>
