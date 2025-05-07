@@ -34,13 +34,13 @@ function ViewStudentCard() {
     const [editStudent, setEditStudent] = useState(student)
     
     useEffect(() => {
-        setEditStudent(student)
+        if (student) setEditStudent(student)
     }, [student])
 
     useEffect(() => {
         console.log('Edit Student', editStudent)
         console.log('Student', student)
-    }, [editStudent])
+    }, [editStudent, student])
     
     // Initialize router for navigation
     const router = useRouter();
@@ -85,22 +85,8 @@ function ViewStudentCard() {
             // Update the student document in Firestore with the edited data
             const studentRef = doc(db, "studentUsers", student.id);
             await updateDoc(studentRef, {
-                personalInformation: {
-                    firstName: editStudent.personalInformation.firstName,
-                    lastName: editStudent.personalInformation.lastName,
-                    email: editStudent.personalInformation.email,
-                    phone: editStudent.personalInformation.phone,
-                    other: editStudent.personalInformation.other,
-                    notes: editStudent.personalInformation.notes
-                },
-                academicInformation: {
-                    currentSchool: editStudent.academicInformation.currentSchool,
-                    grade: editStudent.academicInformation.grade,
-                    gpa: editStudent.academicInformation.gpa,
-                    sat: editStudent.academicInformation.sat,
-                    toefl: editStudent.academicInformation.toefl,
-                    targetSchools: editStudent.academicInformation.targetSchools
-                },
+                personalInformation: editStudent.personalInformation,
+                academicInformation: editStudent.academicInformation,
             })
 
             // Update the local state with the edited student data
