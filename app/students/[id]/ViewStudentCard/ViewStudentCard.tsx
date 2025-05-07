@@ -28,6 +28,8 @@ import { useStudent } from '@/hooks/useStudent'
 function ViewStudentCard() {
 
     const student : Student = useStudent(useSelector((state: RootState) => state.student).id as string)
+
+    if (!student) return <div>Loading...</div>
     
     // State to manage edit mode and the student being edited
     const [editMode, setEditMode] = useState(false)
@@ -149,7 +151,7 @@ function ViewStudentCard() {
             { editMode ? (
                     <EditStudentCardContent editStudent={editStudent} setEditStudent={setEditStudent}/>
                 ) : (
-                    <StudentCardContent student={student} />
+                    <StudentCardContent student={editStudent} />
                 )
             }
         </Card>
