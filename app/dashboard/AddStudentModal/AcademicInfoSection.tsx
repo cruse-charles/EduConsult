@@ -8,41 +8,44 @@ interface AcademicInfoSectionProps {
 }
 
 function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoSectionProps) {
-  return (
-    <>
-        <div className="space-y-4">
-            <h3 className="text-sm font-medium text-muted-foreground">Academic Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="currentSchool">
-                        Current School <span className="text-red-500">*</span>
-                    </Label>
-                    <Input id="currentSchool" placeholder="Lincoln High School" value={formData.academicInformation.currentSchool} name="currentSchool" onChange={handleAcademicInfoChange} required />
+
+    const safeValue = (value) => (value === null || isNaN(value) ? '' : value);
+
+    return (
+        <>
+            <div className="space-y-4">
+                <h3 className="text-sm font-medium text-muted-foreground">Academic Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="currentSchool">
+                            Current School <span className="text-red-500">*</span>
+                        </Label>
+                        <Input id="currentSchool" placeholder="Lincoln High School" value={formData.academicInformation.currentSchool} name="currentSchool" onChange={handleAcademicInfoChange} required />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="grade">
+                            Grade Level <span className="text-red-500">*</span>
+                        </Label>
+                        <Input id="grade" placeholder="12" value={safeValue(formData.academicInformation.grade)} name="grade" onChange={handleAcademicInfoChange} required />
+                    </div>
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="grade">
-                        Grade Level <span className="text-red-500">*</span>
-                    </Label>
-                    <Input id="grade" placeholder="12th Grade" value={Number(formData.academicInformation.grade)} name="grade" onChange={handleAcademicInfoChange} required />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="gpa">GPA</Label>
+                        <Input id="gpa" step="any" placeholder="3.85" value={safeValue(formData.academicInformation.gpa)} name="gpa" onChange={handleAcademicInfoChange} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="satScore">SAT Score</Label>
+                        <Input id="satScore" placeholder="1450" value={safeValue(formData.academicInformation.sat)} name="sat" onChange={handleAcademicInfoChange} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="toeflScore">TOEFL Score</Label>
+                        <Input id="toeflScore" placeholder="105" value={safeValue(formData.academicInformation.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
+                    </div>
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="gpa">GPA</Label>
-                    <Input id="gpa" placeholder="3.85" value={Number(formData.academicInformation.gpa)} name="gpa" onChange={handleAcademicInfoChange} />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="satScore">SAT Score</Label>
-                    <Input id="satScore" placeholder="1450" value={Number(formData.academicInformation.sat)} name="sat" onChange={handleAcademicInfoChange} />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="toeflScore">TOEFL Score</Label>
-                    <Input id="toeflScore" placeholder="105" value={Number(formData.academicInformation.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
-                </div>
-            </div>
-        </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default AcademicInfoSection

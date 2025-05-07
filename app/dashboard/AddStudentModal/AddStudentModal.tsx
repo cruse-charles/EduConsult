@@ -133,7 +133,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             resetFormData()
             setIsLoading(false);
 
-            toast(<CustomToast title="Student Account Created" description="" status="succes"/>)
+            toast(<CustomToast title="Student Account Created" description="" status="success"/>)
 
         } catch (error) {
             console.error("Error adding document: ", error);

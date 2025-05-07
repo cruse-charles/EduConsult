@@ -113,7 +113,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
         clearFiles()
         setIsLoading(false)
-        toast(<CustomToast title="Entry Added" description="" status="succes"/>)
+        toast(<CustomToast title="Entry Added" description="" status="success"/>)
     }
 
     const baseButtonLabel = user.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';
