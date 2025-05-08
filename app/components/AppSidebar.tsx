@@ -30,16 +30,16 @@ const menuItems = [
     url: "/dashboard",
     icon: Home,
   },
-  {
-    title: "Assignments",
-    url: "/assignments",
-    icon: BookOpen,
-  },
   // {
-  //   title: "Calendar",
-  //   url: "/calendar",
-  //   icon: Calendar,
+  //   title: "Assignments",
+  //   url: "/assignments",
+  //   icon: BookOpen,
   // },
+  {
+    title: "Calendar",
+    url: "/calendar",
+    icon: Calendar,
+  },
   // {
   //   title: "Schools",
   //   url: "/dashboard/schools",
