@@ -3,7 +3,7 @@
 import { getConsultantCalendarAssignments } from '@/lib/querys'
 import { Assignment } from '@/lib/types/types'
 import { RootState } from '@/redux/store'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const page = () => {

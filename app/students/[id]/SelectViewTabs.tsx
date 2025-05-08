@@ -18,6 +18,10 @@ function SelectViewTabs() {
     // Access student from store
     const student = useSelector((state: RootState) => state.student) as Student;
 
+    // new
+    const studentAssignments = useSelector((state: RootState) => state.studentAssignments)
+    // new
+
     return (
         <Tabs defaultValue="assignments">
             <TabsList>
@@ -39,7 +43,8 @@ function SelectViewTabs() {
             <TabsContent value="calendar">
                 <Card>
                 <CardContent className="mt-3">
-                    <StudentCalendar />
+                    {/* <StudentCalendar /> */}
+                    <StudentCalendar assignments={studentAssignments}/>
                 </CardContent>
                 </Card>
             </TabsContent>
