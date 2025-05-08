@@ -152,7 +152,7 @@ import { useSelector } from 'react-redux'
 
 import ViewAssignmentModal from './ViewAssignmentModal/ViewAssignmentModal'
 
-const StudentCalendar = ({assignments}) => {
+const StudentCalendar = ({assignments}: {assignments: Assignment[]}) => {
     const [currentDate, setCurrentDate] = useState(new Date())
     // const studentAssignments = useSelector((state: RootState) => state.studentAssignments)
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
