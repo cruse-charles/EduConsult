@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'next/navigation'
 import { updatePendingCount } from '@/lib/statsUtils'
 import { RootState } from '@/redux/store'
+import CustomToast from '@/app/components/CustomToast'
+import { toast } from 'sonner'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;
@@ -80,6 +82,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         // @ts-ignore
         await updateAssignment(formData, assignment?.id)
 
+        toast(<CustomToast title="Successfully Updated Assignment" description='' status='success' />)
         setEdit(false)
     }
 

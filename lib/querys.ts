@@ -216,3 +216,25 @@ export const getConsultantDashboardAssignments = async (consultantId: string) =>
     const snapshot = await getDocs(q);
     return snapshot;
 }
+
+export const getConsultantCalendarAssignments = async (consultantId: string) => {
+    // Get consultant's doc reference
+    const consultantRef = doc(db, "consultantUsers", consultantId);
+
+    // Find assignments from two last month, this month, and next month
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); 
+
+    // Count assignments with dueDates last month to next month
+    const q = query(
+        collection(db, 'assignments'),
+        where('consultant', '==', consultantRef),
+        where('dueDate', '>=', Timestamp.fromDate(startDate)),
+        where('dueDate', '<=', Timestamp.fromDate(endDate)),
+        where('status', '==', 'Pending')
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot;
+}
