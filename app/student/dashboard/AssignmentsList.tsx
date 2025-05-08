@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, CheckCircle, ChevronDown, ChevronRight, Clock, Eye, FileText, Folder, FolderOpen, Hourglass, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
+import ViewAssignmentModal from "../../components/ViewAssignmentModal/ViewAssignmentModal";
 
 import { fetchAssignments, setAssignments } from "@/redux/slices/studentAssignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
