@@ -1,10 +1,12 @@
 'use client'
 
+import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getConsultantCalendarAssignments } from '@/lib/querys'
 import { Assignment } from '@/lib/types/types'
 import { formatNextDeadline } from '@/lib/utils'
 import { RootState } from '@/redux/store'
+import { BookOpen, Check, Clock, Download, FileText, Upload } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -38,7 +40,33 @@ const page = () => {
                         {assignments.map((assignment) => (
                             <TableRow key={assignment.id}>
                             <TableCell className="font-medium">{assignment.title}</TableCell>
+                            {/* TODO: Change student to an object with id, firstName, lastName */}
                             <TableCell>{assignment.student}</TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                    {assignment.type === "Essay" && <FileText className="h-4 w-4 text-blue-500" />}
+                                    {assignment.type === "Document" && <BookOpen className="h-4 w-4 text-green-500" />}
+                                    {assignment.type === "Portfolio" && <Upload className="h-4 w-4 text-purple-500" />}
+                                    {assignment.type === "Payment" && <Download className="h-4 w-4 text-red-500" />}
+                                    {assignment.type === "Application" && <FileText className="h-4 w-4 text-orange-500" />}
+                                {assignment.type}
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant={assignment.status === "completed" ? "success" : "outline"}>
+                                {assignment.status === "completed" ? (
+                                    <div className="flex items-center gap-1">
+                                    <Check className="h-3 w-3" />
+                                    Completed
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    Pending
+                                    </div>
+                                )}
+                                </Badge>
+                            </TableCell>
                             <TableCell>{formatNextDeadline(assignment.dueDate)}</TableCell>
                             </TableRow>
                         ))}
