@@ -232,9 +232,13 @@ export const getConsultantCalendarAssignments = async (consultantId: string) => 
         where('consultant', '==', consultantRef),
         where('dueDate', '>=', Timestamp.fromDate(startDate)),
         where('dueDate', '<=', Timestamp.fromDate(endDate)),
-        where('status', '==', 'Pending')
     )
 
     const snapshot = await getDocs(q);
-    return snapshot;
+    return snapshot.docs.map((doc) => {
+        return {
+            id: doc.id,
+            ...doc.data()
+        } as Assignment
+    });
 }
