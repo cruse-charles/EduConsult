@@ -57,13 +57,13 @@ function page() {
     }, [studentState]);
 
     // Loading page displayed while no student
-    if (!student) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p className="text-lg text-muted-foreground">Loading student profile...</p>
-            </div>
-        );
-    }
+    // if (!student) {
+    //     return (
+    //         <div className="flex items-center justify-center min-h-screen">
+    //             <p className="text-lg text-muted-foreground">Loading student profile...</p>
+    //         </div>
+    //     );
+    // }
 
     return (
             <div className="min-h-screen bg-background">

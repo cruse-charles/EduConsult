@@ -87,6 +87,13 @@ const page = () => {
             router.push('/dashboard')
           }
 
+          // Call API to set cookie
+          await fetch("/api/set-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ role: user.role }),
+          });
+
 
         } catch (error) {
           // Set errors if login fails
