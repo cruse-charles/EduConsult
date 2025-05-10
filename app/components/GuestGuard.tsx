@@ -8,6 +8,7 @@ import { useEffect } from "react"
 
 
 // TODO: Use redirect() to redirect without any flash, need to research how
+// TODO: REMOVE THIS, OUTDATED
 const GuestGuard = ({children}: {children: React.ReactNode}) => {
     const user = useSelector((state: RootState) => state.user);
     const router = useRouter();
@@ -16,7 +17,7 @@ const GuestGuard = ({children}: {children: React.ReactNode}) => {
 
     useEffect(() => {
         if (isCheckingAuth) {
-            router.push('/dashboard');
+            router.push('/student/dashboard');
         }
     }, [user, isCheckingAuth])
 

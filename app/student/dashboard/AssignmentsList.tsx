@@ -24,7 +24,7 @@ function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
     // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
     // const folders = useSelector((state: RootState) => state.student.folders) as string[]
-    const {id: studentId} = useParams()
+    // const {id: studentId} = useParams()
 
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
 
@@ -60,7 +60,8 @@ function AssignmentsList() {
             dispatch(setAssignments([]))
             setLoading(false)
         }
-    }, [dispatch, studentId, student]);
+    // }, [dispatch, studentId, student]);
+    }, [dispatch, student]);
 
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []

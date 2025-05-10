@@ -30,7 +30,7 @@ function page() {
     const user = useSelector((state: RootState) => state.user);
 
     // State to track if authetication is ready, create local state for student
-    const [authReady, setAuthReady] = useState(false)
+    // const [authReady, setAuthReady] = useState(false)
     const [student, setStudent] = useState<Student | null>(null);
     const [assignments, setAssignments] = useState<Assignment[]>([])
 

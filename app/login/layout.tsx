@@ -3,9 +3,9 @@ import GuestGuard from '../components/GuestGuard'
 
 const layout = ({children}: {children: React.ReactNode}) => {
     return (
-        <GuestGuard>
+        // <GuestGuard>
             {children}
-        </GuestGuard>
+        // </GuestGuard>
     )
 }
 

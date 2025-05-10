@@ -173,6 +173,7 @@ const WeeklyCalendar = () => {
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
 
     const user = useSelector((state: RootState) => state.user)
+    const assignments = useSelector((state: RootState) => state.studentAssignments) as Assignment[]
     const dispatch = useDispatch();
     
     useEffect(() => {
@@ -263,7 +264,8 @@ const WeeklyCalendar = () => {
 
                                 {/* Event List */}
                                 <ScrollArea className="h-[225px]">
-                                    {dashboardAssignments
+                                    {/* {dashboardAssignments */}
+                                    {assignments
                                         .filter(assignment => formatNextDeadline(day) === formatNextDeadline(assignment.dueDate))
                                         .map((assignment) => (
                                             <div key={assignment.id} onClick={()=> setSelectedAssignment(assignment)} className="p-2 rounded-md border cursor-pointer hover:bg-muted/50 transition-colors border-blue-200 bg-blue-50">
