@@ -257,3 +257,5 @@ export const getStudentAssignments = async (studentId: string) => {
         } as Assignment
     })
 }
+
+// TODO: Adjust all queries to return data itself, not the snapshot
