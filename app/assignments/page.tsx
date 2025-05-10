@@ -2,23 +2,20 @@
 
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { getConsultantCalendarAssignments } from '@/lib/querys'
-import { Assignment } from '@/lib/types/types'
-import { formatNextDeadline } from '@/lib/utils'
-import { RootState } from '@/redux/store'
-import { Timestamp } from 'firebase/firestore'
 import { BookOpen, Check, CheckCircle, Clock, Download, Eye, FileText, Hourglass, Upload } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+
+import { formatNextDeadline } from '@/lib/utils'
+
+import { RootState } from '@/redux/store'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
+import { Timestamp } from 'firebase/firestore'
+
 const page = () => {
-    const [assignments, setAssignments] = useState<Assignment[]>([])
+    const assignments = useSelector((state: RootState) => state.studentAssignments)
     
     const user = useSelector((state: RootState) => state.user)
-
-    useEffect(() => {
-        getConsultantCalendarAssignments(user.id).then(setAssignments)
-    }, [])
 
     // TODO: This is in AssignmentsList as well, export it
         const getStatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {

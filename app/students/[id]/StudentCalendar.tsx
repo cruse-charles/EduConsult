@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 
 import ViewAssignmentModal from './ViewAssignmentModal/ViewAssignmentModal'
 
+// TODO: Possibly delete this file, moved it all into the page. Don't see why not just have it all there.
 const StudentCalendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date())
     const assignments = useSelector((state: RootState) => state.studentAssignments)
