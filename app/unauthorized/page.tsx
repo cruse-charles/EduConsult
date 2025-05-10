@@ -2,7 +2,7 @@ import React from 'react'
 
 const page = () => {
     return (
-        <div className="flex h-screen items-center justify-center">
+        <div className="flex h-screen flex-col items-center justify-center text-center">
             <h1 className="text-2xl font-bold">Unauthorized</h1>
             <p>You don't have permission to view this page.</p>
         </div>

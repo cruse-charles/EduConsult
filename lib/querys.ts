@@ -242,3 +242,18 @@ export const getConsultantCalendarAssignments = async (consultantId: string) => 
         } as Assignment
     });
 }
+
+export const getStudentAssignments = async (studentId: string) => {
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => {
+        return {
+            id: doc.id,
+            ...doc.data()
+        } as Assignment
+    })
+}

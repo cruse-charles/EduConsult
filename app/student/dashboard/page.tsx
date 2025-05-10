@@ -18,6 +18,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Sidebar from "@/app/components/AppSidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Highlights from "@/app/components/Highlights";
+import WeeklyCalendar from "./WeeklyCalendar";
+import { getStudentAssignments } from "@/lib/querys";
 // import StudentCalendar from "./StudentCalendar";
 
 function page() {
@@ -30,6 +32,7 @@ function page() {
     // State to track if authetication is ready, create local state for student
     const [authReady, setAuthReady] = useState(false)
     const [student, setStudent] = useState<Student | null>(null);
+    const [assignments, setAssignments] = useState([])
 
     // Check if the user is authenticated and set authReady to true when the auth state changes
     // This ensures that the student data is only fetched after the authentication state is confirmed
@@ -56,6 +59,21 @@ function page() {
         }
     }, [studentState]);
 
+    useEffect(() => {
+        const fetchAssignments = async () => {
+            const assignmentsData = await getStudentAssignments(user.id);
+            setAssignments(assignmentsData)
+        }
+
+        fetchAssignments()
+    }, [])
+
+    useEffect(() => {
+        console.log('StudentId', studentId)
+        console.log("assignments", assignments);
+    }, [assignments])
+
+    // TODO: ADD PROPER LOADING STATE
     // Loading page displayed while no student
     // if (!student) {
     //     return (
@@ -87,15 +105,15 @@ function page() {
                         {/* Select Assignment, Calendar */}
                         <Tabs defaultValue="assignments" className="space-y-4">
                             <TabsList>
-                                <TabsTrigger value="assignments">My Assignments</TabsTrigger>
+                                <TabsTrigger value="assignments">Assignments</TabsTrigger>
                                 <TabsTrigger value="calendar">Calendar</TabsTrigger>
                             </TabsList>
                             <TabsContent value="assignments">
                                 <AssignmentsList />
                             </TabsContent>
-                            {/* <TabsContent value='calendar'>
-                                <StudentCalendar />
-                            </TabsContent> */}
+                            <TabsContent value='calendar'>
+                                <WeeklyCalendar />
+                            </TabsContent>
                         </Tabs>
                     </main>
                 </div>
