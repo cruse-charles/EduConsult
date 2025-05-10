@@ -81,10 +81,12 @@ const page = () => {
           // If the user is a student then set their data in student slice and redirect to student profile
           if (user.role === 'student') {
             dispatch(fetchStudent(user.id))
-            router.push(`/students/${user.id}`)
+            // router.push(`/students/${user.id}`)
+            router.push(`/student/dashboard`)
           } else {
             // Navigate to dashboard
-            router.push('/dashboard')
+            // router.push('/dashboard')
+            router.push('/consultant/dashboard')
           }
 
           // Call API to set cookie

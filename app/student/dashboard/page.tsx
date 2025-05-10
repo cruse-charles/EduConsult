@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Student } from "@/lib/types/types";
+import { Assignment, Student } from "@/lib/types/types";
 
 // import ViewStudentCard from "./ViewStudentCard/ViewStudentCard";
 // import AssignmentsOverview from "./AssignmentsOverview";
@@ -24,7 +24,7 @@ import { getStudentAssignments } from "@/lib/querys";
 
 function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
-    const { id: studentId } = useParams<{id: string}>();
+    // const { id: studentId } = useParams<{id: string}>();
     const dispatch = useDispatch<AppDispatch>()
     const studentState = useSelector((state: RootState) => state.student)
     const user = useSelector((state: RootState) => state.user);
@@ -32,29 +32,42 @@ function page() {
     // State to track if authetication is ready, create local state for student
     const [authReady, setAuthReady] = useState(false)
     const [student, setStudent] = useState<Student | null>(null);
-    const [assignments, setAssignments] = useState([])
+    const [assignments, setAssignments] = useState<Assignment[]>([])
 
     // Check if the user is authenticated and set authReady to true when the auth state changes
     // This ensures that the student data is only fetched after the authentication state is confirmed
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) setAuthReady(true);
-        });
+    // useEffect(() => {
+    //     const auth = getAuth();
+    //     const unsubscribe = onAuthStateChanged(auth, (user) => {
+    //         if (user) setAuthReady(true);
+    //     });
 
-        return () => unsubscribe();
-    }, []);
+    //     return () => unsubscribe();
+    // }, []);
 
     // fetch student data from Firestore when the component mounts and set it to state
+    // useEffect(() => {
+    //     if (authReady && studentId) {
+    //         dispatch(fetchStudent(studentId))
+    //     }
+    // }, [studentId, dispatch, authReady])
+
+    // useEffect(() => {
+    //     if (authReady && user.id) {
+    //         dispatch(fetchStudent(user.id))
+    //     }
+    // }, [user.id, dispatch, authReady])
+    
     useEffect(() => {
-        if (authReady && studentId) {
-            dispatch(fetchStudent(studentId))
-        }
-    }, [studentId, dispatch, authReady])
+        // if (user.id) {
+            dispatch(fetchStudent(user.id))
+        // }
+    }, [])
+
 
     // Update local student state when studentState in Redux store changes
     useEffect(() => {
-        if (studentState && studentState.id) {
+        if (studentState) {
             setStudent(studentState as Student);
         }
     }, [studentState]);
@@ -69,7 +82,7 @@ function page() {
     }, [])
 
     useEffect(() => {
-        console.log('StudentId', studentId)
+        console.log('StudentId', user.id)
         console.log("assignments", assignments);
     }, [assignments])
 
