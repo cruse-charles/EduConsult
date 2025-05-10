@@ -22,7 +22,7 @@ const page = () => {
 
   return (
     <>
-      <StudentCalendar  assignments={assignments}/>
+      <StudentCalendar />
     </>
   )
 }
