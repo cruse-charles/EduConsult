@@ -121,7 +121,7 @@ function ViewStudentCard() {
                     {!editMode && 
                         <>
                             <CardTitle className="text-xl">
-                                {student?.personalInformation.firstName} {student?.personalInformation.lastName}
+                                {student?.personalInformation?.firstName} {student?.personalInformation?.lastName}
                             </CardTitle>
                             <Button onClick={ ()=> setEditMode(true)} variant="outline" className="self-start md:self-auto">
                                 <Edit className="mr-2 h-4 w-4" />

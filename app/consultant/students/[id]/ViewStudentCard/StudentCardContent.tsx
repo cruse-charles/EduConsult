@@ -10,9 +10,9 @@ function StudentCardContent({student}: {student: Student}) {
             <div className="text-sm font-medium">Contact Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">Email:</div>
-                <div>{student?.personalInformation.email}</div>
+                <div>{student?.personalInformation?.email}</div>
                 <div className="text-muted-foreground">Phone:</div>
-                <div>{student?.personalInformation.phone}</div>
+                <div>{student?.personalInformation?.phone}</div>
             </div>
         </div>
 
@@ -22,11 +22,11 @@ function StudentCardContent({student}: {student: Student}) {
             <div className="text-sm font-medium">Academic Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">School:</div>
-                <div>{student?.academicInformation.currentSchool}</div>
+                <div>{student?.academicInformation?.currentSchool}</div>
                 <div className="text-muted-foreground">Grade:</div>
-                <div>{student?.academicInformation.grade}</div>
+                <div>{student?.academicInformation?.grade}</div>
                 <div className="text-muted-foreground">GPA: </div>
-                <div>{student?.academicInformation.gpa}</div>
+                <div>{student?.academicInformation?.gpa}</div>
             </div>
         </div>
 
@@ -54,7 +54,7 @@ function StudentCardContent({student}: {student: Student}) {
 
         <div className="space-y-2">
             <div className="text-sm font-medium">Notes</div>
-            <p className="text-sm text-muted-foreground">{student?.personalInformation.notes}</p>
+            <p className="text-sm text-muted-foreground">{student?.personalInformation?.notes}</p>
         </div>
     </CardContent>
   )

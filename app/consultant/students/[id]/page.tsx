@@ -5,20 +5,13 @@ import { useEffect, useState } from "react";
 
 import { Student } from "@/lib/types/types";
 
-import ViewStudentCard from "./ViewStudentCard/ViewStudentCard";
 import AssignmentsOverview from "./AssignmentsOverview";
 import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";
-import AssignmentsList from "./AssignmentsList";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import Sidebar from "@/app/components/AppSidebar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Highlights from "@/app/components/Highlights";
-import StudentCalendar from "./StudentCalendar";
 
 function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
@@ -28,26 +21,13 @@ function page() {
     const user = useSelector((state: RootState) => state.user);
 
     // State to track if authetication is ready, create local state for student
-    const [authReady, setAuthReady] = useState(false)
     const [student, setStudent] = useState<Student | null>(null);
-
-    // Check if the user is authenticated and set authReady to true when the auth state changes
-    // This ensures that the student data is only fetched after the authentication state is confirmed
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) setAuthReady(true);
-        });
-
-        return () => unsubscribe();
-    }, []);
 
     // fetch student data from Firestore when the component mounts and set it to state
     useEffect(() => {
-        if (authReady && studentId) {
             dispatch(fetchStudent(studentId))
-        }
-    }, [studentId, dispatch, authReady])
+    }, [studentId, dispatch])
+
 
     // Update local student state when studentState in Redux store changes
     useEffect(() => {
@@ -68,61 +48,23 @@ function page() {
     }
 
     return (
-        // user.role === 'consultant' ? (
-            // Page Containers
-            <div className="container flex-1 p-4 md:p-6 space-y-6">
-                <StudentProfileHeader />
+        // Page Containers
+        <div className="container flex-1 p-4 md:p-6 space-y-6">
+            <StudentProfileHeader />
 
-                <div className="grid gap-6 md:grid-cols-1">
-                    {/* Student Details Card */}
-                    {/* <ViewStudentCard student={student} setStudent={setStudent} /> */}
+            <div className="grid gap-6 md:grid-cols-1">
+                {/* Student Details Card */}
 
-                    {/* Main Content Container */}
-                    <div className="md:col-span-2 space-y-6">
-                        {/* Task Summary Section */}
-                        <AssignmentsOverview student={student} />
+                {/* Main Content Container */}
+                <div className="md:col-span-2 space-y-6">
+                    {/* Task Summary Section */}
+                    <AssignmentsOverview student={student} />
 
-                        {/* Student Details Section */}
-                        <SelectViewTabs />
-                    </div>
+                    {/* Student Details Section */}
+                    <SelectViewTabs />
                 </div>
             </div>
-        // ) : (
-        //     <div className="min-h-screen bg-background">
-        //         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        //             <div className="container flex h-16 items-center justify-between px-4">
-        //                 <div className="flex items-center gap-4">
-        //                     <div>
-        //                         <h1 className="text-lg font-semibold">Welcome back, {user.firstName} {user.lastName}!</h1>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </header>
-        //         <div className="flex min-h screen">
-        //                 {/* Side Bar */}
-        //                 <Sidebar />
-                        
-        //                 <main className="container p-4 md:p-6 space-y-6">
-        //                 {/* Task Stats */}
-        //                 <Highlights />
-
-        //                 {/* Select Assignment, Calendar */}
-        //                 <Tabs defaultValue="assignments" className="space-y-4">
-        //                     <TabsList>
-        //                         <TabsTrigger value="assignments">My Assignments</TabsTrigger>
-        //                         <TabsTrigger value="calendar">Calendar</TabsTrigger>
-        //                     </TabsList>
-        //                     <TabsContent value="assignments">
-        //                         <AssignmentsList />
-        //                     </TabsContent>
-        //                     {/* <TabsContent value='calendar'>
-        //                         <StudentCalendar />
-        //                     </TabsContent> */}
-        //                 </Tabs>
-        //             </main>
-        //         </div>
-        //     </div>
-        // )
+        </div>
     )
 }
 
