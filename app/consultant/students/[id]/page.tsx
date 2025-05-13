@@ -68,7 +68,7 @@ function page() {
     }
 
     return (
-        user.role === 'consultant' ? (
+        // user.role === 'consultant' ? (
             // Page Containers
             <div className="container flex-1 p-4 md:p-6 space-y-6">
                 <StudentProfileHeader />
@@ -87,42 +87,42 @@ function page() {
                     </div>
                 </div>
             </div>
-        ) : (
-            <div className="min-h-screen bg-background">
-                <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    <div className="container flex h-16 items-center justify-between px-4">
-                        <div className="flex items-center gap-4">
-                            <div>
-                                <h1 className="text-lg font-semibold">Welcome back, {user.firstName} {user.lastName}!</h1>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-                <div className="flex min-h screen">
-                        {/* Side Bar */}
-                        <Sidebar />
+        // ) : (
+        //     <div className="min-h-screen bg-background">
+        //         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        //             <div className="container flex h-16 items-center justify-between px-4">
+        //                 <div className="flex items-center gap-4">
+        //                     <div>
+        //                         <h1 className="text-lg font-semibold">Welcome back, {user.firstName} {user.lastName}!</h1>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </header>
+        //         <div className="flex min-h screen">
+        //                 {/* Side Bar */}
+        //                 <Sidebar />
                         
-                        <main className="container p-4 md:p-6 space-y-6">
-                        {/* Task Stats */}
-                        <Highlights />
+        //                 <main className="container p-4 md:p-6 space-y-6">
+        //                 {/* Task Stats */}
+        //                 <Highlights />
 
-                        {/* Select Assignment, Calendar */}
-                        <Tabs defaultValue="assignments" className="space-y-4">
-                            <TabsList>
-                                <TabsTrigger value="assignments">My Assignments</TabsTrigger>
-                                <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="assignments">
-                                <AssignmentsList />
-                            </TabsContent>
-                            {/* <TabsContent value='calendar'>
-                                <StudentCalendar />
-                            </TabsContent> */}
-                        </Tabs>
-                    </main>
-                </div>
-            </div>
-        )
+        //                 {/* Select Assignment, Calendar */}
+        //                 <Tabs defaultValue="assignments" className="space-y-4">
+        //                     <TabsList>
+        //                         <TabsTrigger value="assignments">My Assignments</TabsTrigger>
+        //                         <TabsTrigger value="calendar">Calendar</TabsTrigger>
+        //                     </TabsList>
+        //                     <TabsContent value="assignments">
+        //                         <AssignmentsList />
+        //                     </TabsContent>
+        //                     {/* <TabsContent value='calendar'>
+        //                         <StudentCalendar />
+        //                     </TabsContent> */}
+        //                 </Tabs>
+        //             </main>
+        //         </div>
+        //     </div>
+        // )
     )
 }
 

@@ -43,8 +43,8 @@ function SelectViewTabs() {
             <TabsContent value="calendar">
                 <Card>
                 <CardContent className="mt-3">
-                    <StudentCalendar />
-                    {/* <StudentCalendar assignments={studentAssignments}/> */}
+                    {/* <StudentCalendar /> */}
+                    <StudentCalendar assignments={studentAssignments}/>
                 </CardContent>
                 </Card>
             </TabsContent>

@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import AssignmentsList from "@/app/students/[id]/AssignmentsList";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 interface StudentTableProps {
     students: Student[];
@@ -20,6 +21,8 @@ interface StudentTableProps {
 
 const StudentTable = ({students, loading}: StudentTableProps) => {
     const user = useSelector((state: RootState)=> state.user)
+    const router = useRouter();
+
 
     // State to manage sorting by column and order
     const [sortBy, setSortBy] = useState("name")
@@ -65,58 +68,59 @@ const StudentTable = ({students, loading}: StudentTableProps) => {
         return sortOrder === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4"/>
     }
 
+    // Navigate to the student's detailed page
+    const handleStudentClick = (studentId: string) => { 
+        router.push(`/consultant/students/${studentId}`);
+    }
+
+
     // Show loading screen while students are fetching
-    // if (loading) {
-    //     return (
-    //         Array.from({ length: 3 }).map((_, i) => (
-    //             <Skeleton key={i} className="h-12 w-full rounded-md" />
-    //         )
-    //     ))
-    // }
+    if (loading) {
+        return (
+            Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full rounded-md" />
+            )
+        ))
+    }
 
     return (
         <div>
-            {user.role === 'consultant' ? (
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[300px]">
-                                <Button variant="ghost" onClick={() => handleSort("name")} className="h-auto p-0 font-semibold hover:bg-transparent">
-                                    Student {getSortIcon("name")}
-                                </Button>
-                            </TableHead>
-                            <TableHead className="w-[300px]">
-                                <Button variant="ghost" onClick={() => handleSort("pending")} className="h-auto p-0 font-semibold hover:bg-transparent">
-                                    Pending Tasks {getSortIcon("pending")}
-                                </Button>
-                            </TableHead>
-                            <TableHead className="w-[300px]">
-                                <Button variant="ghost" onClick={() => handleSort("nextDeadline")} className="h-auto p-0 font-semibold hover:bg-transparent">
-                                    Next Deadline {getSortIcon("nextDeadline")}
-                                </Button>
-                            </TableHead>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[300px]">
+                            <Button variant="ghost" onClick={() => handleSort("name")} className="h-auto p-0 font-semibold hover:bg-transparent">
+                                Student {getSortIcon("name")}
+                            </Button>
+                        </TableHead>
+                        <TableHead className="w-[300px]">
+                            <Button variant="ghost" onClick={() => handleSort("pending")} className="h-auto p-0 font-semibold hover:bg-transparent">
+                                Pending Tasks {getSortIcon("pending")}
+                            </Button>
+                        </TableHead>
+                        <TableHead className="w-[300px]">
+                            <Button variant="ghost" onClick={() => handleSort("nextDeadline")} className="h-auto p-0 font-semibold hover:bg-transparent">
+                                Next Deadline {getSortIcon("nextDeadline")}
+                            </Button>
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {sortedStudents.map((student) => (
+                        <TableRow key={student.id} className="cursor-pointer" onClick={() => handleStudentClick(student.id)}>
+                            <TableCell>
+                                    {student.personalInformation.firstName} {student.personalInformation.lastName}
+                            </TableCell>
+                            <TableCell>
+                                <span className="font-medium">{student.stats?.pendingAssignmentsCount || 0}</span>
+                            </TableCell>
+                            <TableCell>
+                                <span className="font-medium">{formatNextDeadline(student.stats?.nextDeadline)}</span>
+                            </TableCell>
                         </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {sortedStudents.map((student) => (
-                            <TableRow key={student.id} className="cursor-pointer" onClick={() => window.location.href = `/students/${student.id}`}>
-                                <TableCell>
-                                        {student.personalInformation.firstName} {student.personalInformation.lastName}
-                                </TableCell>
-                                <TableCell>
-                                    <span className="font-medium">{student.stats?.pendingAssignmentsCount || 0}</span>
-                                </TableCell>
-                                <TableCell>
-                                    <span className="font-medium">{formatNextDeadline(student.stats?.nextDeadline)}</span>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-
-            ) : (
-                <AssignmentsList />
-            )}
+                    ))}
+                </TableBody>
+            </Table>
         </div>
     )
 }
