@@ -47,8 +47,8 @@ function AssignmentsList() {
     const student = useSelector((state: RootState) => state.student)
 
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
-    const [folderSort, setFolderSort] = useState("name")
-    const [assignmentSort, setAssignmentSort] = useState("due")
+    const [folderSort, setFolderSort] = useState("")
+    const [assignmentSort, setAssignmentSort] = useState("")
 
     const [loading, setLoading] = useState(true);
 
@@ -156,6 +156,42 @@ function AssignmentsList() {
 
         if (value === 'name') {
             sortedFolders.sort((a,b) => a.localeCompare(b))
+        }
+
+        // TODO: Needs to sort folders by the closest due date starting from todays date and onward
+            // Find the closest date in each folder, sort the folders by that date 
+        if (value === "due") {
+            const now = new Date()
+
+            sortedFolders.sort((a, b) => {
+            const assignmentsA = getFilteredAssignments(a)
+            const assignmentsB = getFilteredAssignments(b)
+
+            // get soonest upcoming due date in folder A
+            const soonestDueDateA = assignmentsA
+                .map(assignment => {
+                    if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
+                    return assignment.dueDate as Date
+                })
+                .filter(dueDate => dueDate >= now) // ignore past due dates
+                .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
+
+            // same for folder B
+            const soonestDueDateB = assignmentsB
+                .map(assignment => {
+                    if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
+                    return assignment.dueDate as Date
+                })
+                .filter(dueDate => dueDate >= now)
+                .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
+
+            // handle cases where a folder has no future due dates
+            if (!soonestDueDateA && !soonestDueDateB) return 0
+            if (!soonestDueDateA) return 1
+            if (!soonestDueDateB) return -1
+
+            return soonestDueDateA.getTime() - soonestDueDateB.getTime()
+            })
         }
 
         setFolders(sortedFolders)
