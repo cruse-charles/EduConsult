@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { BookOpen, CheckCircle, ChevronDown, ChevronRight, Clock, Eye, FileText, Folder, FolderOpen, Hourglass, Upload } from "lucide-react";
+import { ArrowUpDown, BookOpen, CheckCircle, ChevronDown, ChevronRight, Clock, Eye, FileText, Folder, FolderOpen, Hourglass, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
@@ -37,6 +39,8 @@ function AssignmentsList() {
     const student = useSelector((state: RootState) => state.student)
 
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
+    const [folderSort, setFolderSort] = useState("name")
+    const [assignmentSort, setAssignmentSort] = useState("due")
 
     const [loading, setLoading] = useState(true);
 
@@ -130,16 +134,51 @@ function AssignmentsList() {
         return null
     }
 
-    // if (loading) {
-    //     return (
-    //         Array.from({ length: 3 }).map((_, i) => (
-    //             <Skeleton key={i} className="h-12 w-full rounded-md" />
-    //         ))
-    //     )
-    // }
+    if (loading) {
+        return (
+            Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full rounded-md" />
+            ))
+        )
+    }
 
     return (
         <>
+            {/* Sorting Controls */}
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+                <div className="flex items-center gap-2">
+                    <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Sort folders by:</span>
+                    <Select value={folderSort} onValueChange={(value) => setFolderSort(value)}>
+                    <SelectTrigger className="w-40">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="name">Name</SelectItem>
+                        <SelectItem value="due">Closest Due Date</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">Sort assignments by:</span>
+                    <Select value={assignmentSort} onValueChange={(value) => setAssignmentSort(value)}>
+                    <SelectTrigger className="w-32">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="name">Name</SelectItem>
+                        <SelectItem value="due">Due Date</SelectItem>
+                        <SelectItem value="status">Status</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
+                </div>
+                <CreateAssignmentModal/>
+            </div>
+
+            {/* List of Folders/Assignments */}
             <Card>
                 <CardContent className="p-0">
                     <div className="space-y-2">

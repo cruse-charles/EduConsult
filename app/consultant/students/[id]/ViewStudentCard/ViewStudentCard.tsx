@@ -27,7 +27,8 @@ import { useStudent } from '@/hooks/useStudent'
 // function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
 function ViewStudentCard() {
 
-    const student : Student = useStudent(useSelector((state: RootState) => state.student).id as string)
+    // const student : Student = useStudent(useSelector((state: RootState) => state.student).id as string)
+    const student = useSelector((state: RootState) => state.student) as Student
 
     if (!student) return <div>Loading...</div>
     
