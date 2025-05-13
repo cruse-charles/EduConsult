@@ -32,10 +32,18 @@ function AssignmentsList() {
 
     const assignments = useSelector((state: RootState) => state.studentAssignments)
 
-    const folders = useSelector((state: RootState) => {
+    // const folders = useSelector((state: RootState) => {
+    //     const studentState = state.student as Student
+    //     return studentState?.folders || []
+    // })
+
+    const [folders, setFolders] = useState<string[]>(useSelector((state: RootState) => {
         const studentState = state.student as Student
         return studentState?.folders || []
-    })
+    }))
+
+
+
     const student = useSelector((state: RootState) => state.student)
 
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
@@ -85,6 +93,7 @@ function AssignmentsList() {
         return count
     }
 
+    // TODO: EXPORT THIS OUT, HAVE THIS IN A FEW PLACES
     const getStatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
         if (!dueDate) return null
 
@@ -142,6 +151,17 @@ function AssignmentsList() {
         )
     }
 
+    const sortFolders = (value: string) => {
+        let sortedFolders = [...folders]
+
+        if (value === 'name') {
+            sortedFolders.sort((a,b) => a.localeCompare(b))
+        }
+
+        setFolders(sortedFolders)
+    }
+
+    // TODO: A new folder isn't appearing when i create a new assignment with a new folder, but does on refresh
     return (
         <>
             {/* Sorting Controls */}
@@ -150,7 +170,8 @@ function AssignmentsList() {
                 <div className="flex items-center gap-2">
                     <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm font-medium">Sort folders by:</span>
-                    <Select value={folderSort} onValueChange={(value) => setFolderSort(value)}>
+                    {/* <Select value={folderSort} onValueChange={(value) => setFolderSort(value)}> */}
+                    <Select value={folderSort} onValueChange={(value) => {setFolderSort(value); sortFolders(value)}}>
                     <SelectTrigger className="w-40">
                         <SelectValue />
                     </SelectTrigger>
