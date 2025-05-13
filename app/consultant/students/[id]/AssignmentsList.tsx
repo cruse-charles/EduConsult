@@ -76,7 +76,13 @@ function AssignmentsList() {
 
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
-        return assignments.filter((assignment) => assignment.folder === folder)
+        let folderAssignments = assignments.filter((assignment) => assignment.folder === folder)
+
+        if (assignmentSort === 'name') {
+            folderAssignments.sort((a,b) => a.title.localeCompare(b.title))
+        }
+
+        return folderAssignments
     }
 
     useEffect(() => {
@@ -196,6 +202,16 @@ function AssignmentsList() {
 
         setFolders(sortedFolders)
     }
+
+    // const sortAssignments = (value: string) => {
+    //     let sortedAssignments = [...assignments]
+
+    //     if (value === 'name') {
+    //         sortedAssignments.sort((a,b) => a.title.localeCompare(b.title))
+    //     }
+
+    //     setAssignments(sortedAssignments)
+    // }
 
     // TODO: A new folder isn't appearing when i create a new assignment with a new folder, but does on refresh
     return (
