@@ -21,6 +21,7 @@ import { Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
+import StatusBadge from "@/app/components/StatusBadge";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
@@ -82,11 +83,24 @@ function AssignmentsList() {
             folderAssignments.sort((a,b) => a.title.localeCompare(b.title))
         }
 
+        if (assignmentSort === 'due') {
+            folderAssignments.sort((a,b) => {
+                const dataA = a.dueDate instanceof Timestamp ? a.dueDate.toDate() : a.dueDate as Date
+                const dataB = b.dueDate instanceof Timestamp ? b.dueDate.toDate() : b.dueDate as Date
+                return dataA.getTime() - dataB.getTime()
+            })
+        }
+
+        if (assignmentSort === 'status') {
+            const statusOrder = ['Overdue', 'Pending', 'Submitted', 'Under Review', 'Completed']
+            folderAssignments.sort((a,b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status))
+        }
+
         return folderAssignments
     }
 
     useEffect(() => {
-        console.log(assignments)
+        // console.log(assignments)
         if (assignments && assignments.length > 0) {
             setLoading(false);
         }
@@ -99,55 +113,55 @@ function AssignmentsList() {
         return count
     }
 
-    // TODO: EXPORT THIS OUT, HAVE THIS IN A FEW PLACES
-    const getStatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
-        if (!dueDate) return null
+    // // TODO: EXPORT THIS OUT, HAVE THIS IN A FEW PLACES
+    // const getStatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
+    //     if (!dueDate) return null
 
-        if (status === 'Pending' && dueDate < Timestamp.fromDate(new Date())) {
-            return (
-                <Badge className="gap-1 bg-red-100 text-red-800 font-bold hover:bg-red-100 hover:text-red-800">
-                    <Clock className="h-3 w-3" />
-                    Overdue
-                </Badge>
-            )
-        }
+    //     if (status === 'Pending' && dueDate < Timestamp.fromDate(new Date())) {
+    //         return (
+    //             <Badge className="gap-1 bg-red-100 text-red-800 font-bold hover:bg-red-100 hover:text-red-800">
+    //                 <Clock className="h-3 w-3" />
+    //                 Overdue
+    //             </Badge>
+    //         )
+    //     }
 
-        switch (status) {
-            case "Pending":
-            return (
-                <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
-                    <Hourglass className="h-3 w-3" />
-                    Assigned
-                </Badge>
-            )
+    //     switch (status) {
+    //         case "Pending":
+    //         return (
+    //             <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
+    //                 <Hourglass className="h-3 w-3" />
+    //                 Assigned
+    //             </Badge>
+    //         )
 
-            case "Completed":
-            return (
-                <Badge className="gap-1 bg-green-100 text-green-800 font-bold hover:bg-green-100 hover:text-green-800">
-                    <CheckCircle className="h-3 w-3" />
-                    Completed
-                </Badge>
-            )
+    //         case "Completed":
+    //         return (
+    //             <Badge className="gap-1 bg-green-100 text-green-800 font-bold hover:bg-green-100 hover:text-green-800">
+    //                 <CheckCircle className="h-3 w-3" />
+    //                 Completed
+    //             </Badge>
+    //         )
 
-            case "Submitted":
-            return (
-                <Badge className="gap-1 bg-blue-100 text-blue-800 font-bold hover:bg-blue-100 hover:text-blue-800">
-                    <Upload className="h-3 w-3" />
-                    Submitted
-                </Badge>
-            )
+    //         case "Submitted":
+    //         return (
+    //             <Badge className="gap-1 bg-blue-100 text-blue-800 font-bold hover:bg-blue-100 hover:text-blue-800">
+    //                 <Upload className="h-3 w-3" />
+    //                 Submitted
+    //             </Badge>
+    //         )
 
-            case "Under Review":
-            return (
-                <Badge className="gap-1 bg-purple-100 text-purple-800 font-bold hover:bg-purple-100 hover:text-purple-800">
-                    <Eye className="h-3 w-3" />
-                    Reviewing
-                </Badge>
-            )
-        }
+    //         case "Under Review":
+    //         return (
+    //             <Badge className="gap-1 bg-purple-100 text-purple-800 font-bold hover:bg-purple-100 hover:text-purple-800">
+    //                 <Eye className="h-3 w-3" />
+    //                 Reviewing
+    //             </Badge>
+    //         )
+    //     }
 
-        return null
-    }
+    //     return null
+    // }
 
     if (loading) {
         return (
@@ -306,7 +320,8 @@ function AssignmentsList() {
                                                     <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-3">{getStatusBadge(assignment.status, assignment?.dueDate)}</div>
+                                            {/* <div className="flex items-center gap-3">{getStatusBadge(assignment.status, assignment?.dueDate)}</div> */}
+                                            <div className="flex items-center gap-3">{StatusBadge(assignment.status, assignment?.dueDate)}</div>
                                         </div>
                                     ))}
                                 </div>
