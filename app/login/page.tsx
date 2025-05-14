@@ -78,6 +78,13 @@ const page = () => {
             role: user.role
           }))
           
+          // Call API to set cookie
+          await fetch("/api/set-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ role: user.role }),
+          });
+
           // If the user is a student then set their data in student slice and redirect to student profile
           if (user.role === 'student') {
             dispatch(fetchStudent(user.id))
@@ -86,14 +93,6 @@ const page = () => {
             // Navigate to dashboard
             router.push('/consultant/dashboard')
           }
-
-          // Call API to set cookie
-          await fetch("/api/set-session", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ role: user.role }),
-          });
-
 
         } catch (error) {
           // Set errors if login fails
