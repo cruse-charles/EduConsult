@@ -20,31 +20,27 @@ import { app } from '@/lib/firebaseConfig'
 import { getAuth, signOut } from 'firebase/auth'
 
 import { resetStore } from '@/redux/slices/resetSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { usePathname, useRouter } from 'next/navigation'
+import { RootState } from '@/redux/store'
 
 
-const menuItems = [
+const menuItems = (rolePrefix: string) => [
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: `/${rolePrefix}/dashboard`,
     icon: Home,
   },
-  // {
-  //   title: "Assignments",
-  //   url: "/dashboard/assignments",
-  //   icon: BookOpen,
-  // },
-  // {
-  //   title: "Calendar",
-  //   url: "/calendar",
-  //   icon: Calendar,
-  // },
-  // {
-  //   title: "Schools",
-  //   url: "/dashboard/schools",
-  //   icon: GraduationCap,
-  // },
+  {
+    title: "Assignments",
+    url: `/assignments`,
+    icon: BookOpen,
+  },
+  {
+    title: "Calendar",
+    url: `/calendar`,
+    icon: Calendar,
+  },
 ]
 
 const bottomMenuItems = [
@@ -65,6 +61,8 @@ const AppSidebar = () => {
   const auth = getAuth(app)
   const dispatch = useDispatch()
   const router = useRouter()
+
+  const user = useSelector((state: RootState) => state.user)
 
   // Don't show sidebar on login/signup pages
   if (pathname === "/login" || pathname === "/signup" || pathname === "/") {
@@ -97,7 +95,7 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
+              {menuItems(user.role).map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
                     <Link href={item.url}>

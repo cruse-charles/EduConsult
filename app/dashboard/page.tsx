@@ -28,11 +28,13 @@ const page = () => {
     const [consultantDocRef, setConsultantDocRef] = useState<DocumentReference<DocumentData> | null>(null);
     const [searchQuery, setSearchQuery] = useState("")
     const [showDropdown, setShowDropdown] = useState(false);
+    const [loading, setLoading] = useState(false)
 
     const user = useSelector((state: RootState) => state.user);
 
     // Function to fetch students for the current consultant user
     const fetchStudents = async (user: FirebaseUserInfo) => {
+        setLoading(true)
         try {
             // Get the consultant's document reference and snapshot
             const ref = doc(db, "consultantUsers", user.id);
@@ -62,9 +64,11 @@ const page = () => {
 
             // Filter out any null values due to possible deleted students or missing data
             setStudents(studentDocs.filter(Boolean));
+            setLoading(false)
         } catch (error) {
             console.log("Error fetching students:", error);
             setStudents([]);
+            setLoading(false)
         }
     };
 
@@ -139,7 +143,7 @@ const page = () => {
                             {/* <TabsTrigger value="deadlines">Upcoming Deadlines</TabsTrigger> */}
                             </TabsList>
                             <TabsContent value="students" className="space-y-4">
-                                <StudentTable students={students}/>
+                                <StudentTable students={students} loading={loading}/>
                             </TabsContent>
                             <TabsContent value="calendar" className="space-y-4">
                                 {/* <ConsultantCalendar /> */}

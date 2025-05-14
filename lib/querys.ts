@@ -25,15 +25,11 @@ export const getTasksDueThisWeekConsultantDashboard = async (consultantId: strin
     )
 
     const snapshot = await getDocs(q);
-    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
     return snapshot;
 }
 
 // Function to count tasks due this week for a consultant view
 export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => {
-
-    // Get consultant's doc reference
-    // const consultantRef = doc(db, "studentUsers", studentId);
 
     // Find the start and end of current week
     const start = startOfWeek(new Date())
@@ -49,7 +45,6 @@ export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => 
     )
 
     const snapshot = await getDocs(q);
-    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
     return snapshot;
 }
 
@@ -131,7 +126,6 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
         limit(1)
     )
     const snapshot = await getDocs(q);
-    console.log('findNextDeadlineAssignment snapshot', snapshot.docs[0]?.data())
 
     if (snapshot.docs.length > 0) {
         const docSnap = snapshot.docs[0]
@@ -220,6 +214,48 @@ export const getConsultantDashboardAssignments = async (consultantId: string) =>
     )
 
     const snapshot = await getDocs(q);
-    console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
     return snapshot;
 }
+
+export const getConsultantCalendarAssignments = async (consultantId: string) => {
+    // Get consultant's doc reference
+    const consultantRef = doc(db, "consultantUsers", consultantId);
+
+    // Find assignments from two last month, this month, and next month
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); 
+
+    // Count assignments with dueDates last month to next month
+    const q = query(
+        collection(db, 'assignments'),
+        where('consultant', '==', consultantRef),
+        where('dueDate', '>=', Timestamp.fromDate(startDate)),
+        where('dueDate', '<=', Timestamp.fromDate(endDate)),
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => {
+        return {
+            id: doc.id,
+            ...doc.data()
+        } as Assignment
+    });
+}
+
+export const getStudentAssignments = async (studentId: string) => {
+    const q = query(
+        collection(db, 'assignments'),
+        where('student', '==', studentId),
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => {
+        return {
+            id: doc.id,
+            ...doc.data()
+        } as Assignment
+    })
+}
+
+// TODO: Adjust all queries to return data itself, not the snapshot

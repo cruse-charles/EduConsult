@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
-import { fetchStudent } from "@/redux/slices/studentSlice"
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
@@ -33,18 +32,61 @@ const page = () => {
         password: '',
         confirmPassword: ''
     })
-
     const [isLoading, setIsLoading] = useState(false)
+    const [errors, setErrors] = useState<{email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; }>({})
+
+
+    // Function to validate form inputs and set error messages
+    const validateForm = () => {
+      const newErrors: { email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; } = {}
+
+
+      if (!userData.firstName) {
+        newErrors.firstName = 'First name is required'
+      }
+
+      if (!userData.lastName) {
+        newErrors.lastName = 'Last name is required'
+      }
+
+      if (!userData.email) {
+        newErrors.email = 'Email is required'
+      }
+
+      if (!userData.password) {
+        newErrors.password = 'Password is required'
+      }
+
+      if (userData.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters'
+      }
+
+      if (!userData.confirmPassword) {
+        newErrors.confirmPassword = 'Please confirm your password'
+      }
+      
+      if (userData.password !== userData.confirmPassword) {
+          newErrors.password = 'Passwords do not match'
+          newErrors.confirmPassword = 'Passwords do not match'
+          return
+      }
+
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
+
 
     // Handles form submission for user creation in Firebase Auth
     // TODO: Error handling, confirm passwords match
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        // Check if passwords match
-        if (userData.password !== userData.confirmPassword) {
-            alert("Passwords don't match!")
-            return
+        // Validate form inputs and set error messages
+        validateForm()
+
+        // Early exit if validation fails
+        if (!validateForm()) {
+          return
         }
 
         setIsLoading(true)
@@ -80,6 +122,9 @@ const page = () => {
             setIsLoading(false)
         } catch (error) {
             console.log('Error creating consultant', (error as Error).message)
+            if ((error as Error).message.includes('auth/email-already-in-use')) {
+              setErrors({email: 'Email already in use'})
+            }
             setIsLoading(false)
         }
             
@@ -94,6 +139,9 @@ const page = () => {
             ...prevData,
             [name]: value,
         }))
+
+        // Clear error messages
+        setErrors({})
     }
 
     // Function to parse display name into first and last name for users from Google sign-in
@@ -187,47 +235,29 @@ const page = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
                       <Label htmlFor="firstName">First name</Label>
-                      <Input id="firstName" placeholder="John" disabled={isLoading} required />
+                      <Input name="firstName" onChange={handleInputChange} value={userData.firstName} id="firstName" placeholder="John" disabled={isLoading} className={errors.firstName ? "border-red-500" : ""}/>
+                      {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="lastName">Last name</Label>
-                      <Input id="lastName" placeholder="Doe" disabled={isLoading} required />
+                      <Input name="lastName" onChange={handleInputChange} value={userData.lastName} id="lastName" placeholder="Doe" disabled={isLoading} className={errors.lastName ? "border-red-500" : ""}/>
+                      {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
                     </div>
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input
-                        name="email"
-                        placeholder="name@example.com"
-                        type="email"
-                        disabled={isLoading}
-                        required
-                        onChange={handleInputChange}
-                    />
+                    <Input name="email" placeholder="name@example.com" type="email" disabled={isLoading} className={errors.email ? 'border-red-500' : ''} onChange={handleInputChange} />
+                    {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input
-                        name="password"
-                        placeholder="••••••••"
-                        type="password"
-                        disabled={isLoading}
-                        onChange={handleInputChange}
-                        required
-                        value={userData.password}
-                    />
+                    <Input name="password" placeholder="••••••••" type="password" disabled={isLoading} onChange={handleInputChange} className={userData.password ? "border-red-500" : ""} value={userData.password} />
+                    {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input
-                      name="confirmPassword"
-                      placeholder="••••••••"
-                      type="password"
-                      disabled={isLoading}
-                      required
-                      onChange={handleInputChange}
-                      value={userData.confirmPassword}
-                    />
+                    <Input name="confirmPassword" placeholder="••••••••" type="password" disabled={isLoading} className={userData.confirmPassword ? "border-red-500" : ""} onChange={handleInputChange} value={userData.confirmPassword} />
+                    {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword}</p>}
                   </div>
                   <Button disabled={isLoading}>
                     {isLoading ? "Creating account..." : "Create Account"}

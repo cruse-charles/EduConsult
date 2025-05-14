@@ -18,6 +18,9 @@ import ClientProviders from "./ClientProviders";
 import AppSidebar from "./components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 
+import { Toaster } from "sonner"
+
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -35,9 +38,10 @@ export default function RootLayout({
         <ClientProviders>
           <SidebarProvider>
             <AppSidebar />
-            <main>
+            <main className="flex-1">
               <SidebarTrigger />
               {children}
+              <Toaster richColors position="top-right" />
             </main>
           </SidebarProvider>
         </ClientProviders>

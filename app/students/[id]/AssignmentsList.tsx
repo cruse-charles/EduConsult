@@ -12,12 +12,13 @@ import { fetchAssignments, setAssignments } from "@/redux/slices/studentAssignme
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
 import { formatDueDate, formatDueDateAndTime } from "@/lib/utils";
-import { fetchStudent } from "@/redux/slices/studentSlice";
+import { fetchStudent, updateFolders } from "@/redux/slices/studentSlice";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
@@ -37,25 +38,43 @@ function AssignmentsList() {
 
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
 
+    const [loading, setLoading] = useState(true);
+
     // TODO NOW: Add student state to redux right away if student log in, this will let us to fetch their assignments
     // TODO: When I delete an assignment, it deletes from database and redux, it fulfills. But if I refresh
     // I get this error: fetchAssignments rejected: Assignment with ID XXXXX not found. Why does it do this?
     // In this console.log below, I see that the studentState does show the assignmentDocId that was deleted, why?
+
+    // TODO: switching tabs in the tabs for dashboard re-runs this assignmentsList, but it really shouldn't, so cache
+    // this info and re-use it
     useEffect(() => {
+        // TODO: Need to dispatch a clear folders/assignments action when studentId changes
+        setLoading(true)
+        // console.log('HELLO')
+
         const studentState = student as Student
-        console.log("StudentState", studentState)
+        
         if (studentState?.assignmentDocIds) {
-            dispatch(fetchAssignments(studentState.assignmentDocIds));
+            dispatch(fetchAssignments(studentState.assignmentDocIds)).finally(() => setLoading(false));
         } else {
             dispatch(setAssignments([]))
+            setLoading(false)
         }
-    }, [dispatch, studentId]);
+    }, [dispatch, studentId, student]);
 
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
         return assignments.filter((assignment) => assignment.folder === folder)
     }
 
+    useEffect(() => {
+        console.log(assignments)
+        if (assignments && assignments.length > 0) {
+            setLoading(false);
+        }
+    }, [assignments]);
+
+    // TODO: Finish this function
     const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
         let count = 0
         // assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
@@ -110,6 +129,14 @@ function AssignmentsList() {
 
         return null
     }
+
+    // if (loading) {
+    //     return (
+    //         Array.from({ length: 3 }).map((_, i) => (
+    //             <Skeleton key={i} className="h-12 w-full rounded-md" />
+    //         ))
+    //     )
+    // }
 
     return (
         <>
@@ -179,8 +206,6 @@ function AssignmentsList() {
             </Card>
             {/* @ts-ignore */}
             <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
-            {/* <ViewAssignmentModal assignmentId={selectedAssignment?.id} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} /> */}
-
         </>
     )
 }

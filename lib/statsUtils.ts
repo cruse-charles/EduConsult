@@ -17,7 +17,8 @@ export const updateNextDeadline = async (studentId: string, dueDate: Date | Time
         const studentDocRef = doc(db, "studentUsers", studentId);
         const studentDocSnap = await getDoc(studentDocRef);
         const studentData = studentDocSnap.data();
-        // const nextDeadline = studentData?.stats?.nextDeadline;
+
+        // Extract the current nextDeadline from the student's stats
         const nextDeadlineRaw = studentData?.stats?.nextDeadline;
         const nextDeadline = nextDeadlineRaw
         ? new Timestamp(nextDeadlineRaw.seconds, nextDeadlineRaw.nanoseconds)
@@ -32,32 +33,16 @@ export const updateNextDeadline = async (studentId: string, dueDate: Date | Time
             return
         }
 
-        console.log('New Assignment DueDate', dueDate)
-        console.log('Existing nextDeadline stat', nextDeadline)
         const now = Timestamp.fromDate(new Date());
-        console.log('hello')
-        console.log('compare due dates', dueDateTs.toMillis() < nextDeadline.toMillis() &&
-                dueDateTs.toMillis() > now.toMillis())
 
-        // If the current assignment's due date is earlier than the next deadline and after current date, update it
-        // if (dueDate < nextDeadline && dueDate > Timestamp.fromDate(new Date())) {
-        // if (
-        //     dueDateTs.toMillis() < nextDeadline.toMillis() &&
-        //     dueDateTs.toMillis() > now.toMillis()
-        // ) {
-        // await updateDoc(studentDocRef, {
-        //     // "stats.nextDeadline": dueDate
-        //     "stats.nextDeadline": dueDateTs
-        // })}
-
-        // Case 1: The current nextDeadline is in the past → always replace it with the new valid dueDate
-        if (nextDeadline.toMillis() < now.toMillis() && dueDateTs.toMillis() >= now.toMillis()) {
+        // If the current next deadline is in the past and the new due date is in the future, update it
+        if (nextDeadline.seconds < now.seconds && dueDateTs.seconds >= now.seconds) {
             await updateDoc(studentDocRef, { "stats.nextDeadline": dueDateTs });
+        // If the new due date is earlier than the current next deadline and both are in the future, update it
         } else if (
-            // Case 2: The current nextDeadline is in the future → only replace if new dueDate is earlier (but still in future)
-            nextDeadline.toMillis() >= now.toMillis() &&
-            dueDateTs.toMillis() >= now.toMillis() &&
-            dueDateTs.toMillis() < nextDeadline.toMillis()
+            nextDeadline.seconds >= now.seconds &&
+            dueDateTs.seconds >= now.seconds &&
+            dueDateTs.seconds < nextDeadline.seconds
         ) {
             await updateDoc(studentDocRef, { "stats.nextDeadline": dueDateTs });
         }

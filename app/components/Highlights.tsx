@@ -66,6 +66,7 @@ const Highlights = () => {
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
+                            {/* TODO: Make sure styling stops name from going out of box */}
                             <div className="text-2xl font-bold">{formatNextDeadline(nextAssignmentDeadline?.dueDate)}</div>
                             <p className="text-xs text-muted-foreground">{nextAssignmentDeadline?.student}/{nextAssignmentDeadline?.title}</p>
                         </CardContent>

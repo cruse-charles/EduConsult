@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { Student } from "@/lib/types/types";
 
-import ViewStudentCard from "./ViewStudentCard/StudentViewCard";
+import ViewStudentCard from "./ViewStudentCard/ViewStudentCard";
 import AssignmentsOverview from "./AssignmentsOverview";
 import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";
@@ -18,6 +18,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Sidebar from "@/app/components/AppSidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Highlights from "@/app/components/Highlights";
+import StudentCalendar from "./StudentCalendar";
 
 function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
@@ -32,18 +33,25 @@ function page() {
 
     // Check if the user is authenticated and set authReady to true when the auth state changes
     // This ensures that the student data is only fetched after the authentication state is confirmed
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) setAuthReady(true);
-        });
+    // useEffect(() => {
+    //     const auth = getAuth();
+    //     const unsubscribe = onAuthStateChanged(auth, (user) => {
+    //         if (user) setAuthReady(true);
+    //     });
 
-        return () => unsubscribe();
-    }, []);
+    //     return () => unsubscribe();
+    // }, []);
 
     // fetch student data from Firestore when the component mounts and set it to state
+    // useEffect(() => {
+    //     if (authReady && studentId) {
+    //         dispatch(fetchStudent(studentId))
+    //     }
+    // }, [studentId, dispatch, authReady])
+
+
     useEffect(() => {
-        if (authReady && studentId) {
+        if (studentId) {
             dispatch(fetchStudent(studentId))
         }
     }, [studentId, dispatch, authReady])
@@ -53,6 +61,8 @@ function page() {
         if (studentState && studentState.id) {
             setStudent(studentState as Student);
         }
+
+        console.log('studentState', studentState)
     }, [studentState]);
 
     // Loading page displayed while no student
@@ -70,9 +80,9 @@ function page() {
             <div className="container flex-1 p-4 md:p-6 space-y-6">
                 <StudentProfileHeader />
 
-                <div className="grid gap-6 md:grid-cols-3">
+                <div className="grid gap-6 md:grid-cols-1">
                     {/* Student Details Card */}
-                    <ViewStudentCard student={student} setStudent={setStudent} />
+                    {/* <ViewStudentCard student={student} setStudent={setStudent} /> */}
 
                     {/* Main Content Container */}
                     <div className="md:col-span-2 space-y-6">
@@ -112,6 +122,9 @@ function page() {
                             <TabsContent value="assignments">
                                 <AssignmentsList />
                             </TabsContent>
+                            {/* <TabsContent value='calendar'>
+                                <StudentCalendar />
+                            </TabsContent> */}
                         </Tabs>
                     </main>
                 </div>

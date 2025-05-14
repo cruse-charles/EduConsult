@@ -1,10 +1,11 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
 import { arrayRemove, arrayUnion, deleteDoc, doc, setDoc, Timestamp, updateDoc } from "firebase/firestore";
+
 import { AssignmentUpload, Entry, UpdateAssignment } from "./types/types";
-import { User } from "firebase/auth";
-import { nanoid } from "@reduxjs/toolkit";
 import { updateNextDeadline } from "./statsUtils";
+
+import { nanoid } from "@reduxjs/toolkit";
 
 export const fileUpload = async (files: File[], studentId: string) => {
     const filesData = []
@@ -82,6 +83,7 @@ export const updateAssignment = async (assignmentData: UpdateAssignment, assignm
     }
 }
 
+// Adding an entry to an assignment's timeline
 export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => {
     try {
         await updateDoc(doc(db, "assignments", assignmentDocId), {
@@ -92,17 +94,18 @@ export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => 
     }
 }
 
+// Deleting an assignment
 export const deleteAssignment = async (assignmentId: string, studentId: string) => {
     try {
         await deleteDoc(doc(db, "assignments", assignmentId))
 
         const studentDocRef = doc(db, "studentUsers", studentId)
-        console.log('STUDENT REF', studentDocRef)
-        console.log('ASSIGNMENT ID', assignmentId)
+
         await updateDoc(studentDocRef, {
             assignmentDocIds: arrayRemove(assignmentId)
         })
 
+        // TODO: Have a popup that confirms deleted assignment and created and updated
         console.log("Assignment deleted successfully")
     } catch (error) {
         console.log("Error deleting assignment", error)
