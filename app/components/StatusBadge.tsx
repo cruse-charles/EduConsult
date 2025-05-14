@@ -3,7 +3,7 @@ import { Timestamp } from 'firebase/firestore'
 import { CheckCircle, Clock, Eye, Hourglass, Upload } from 'lucide-react'
 import React from 'react'
 
-    // TODO: EXPORT THIS OUT, HAVE THIS IN A FEW PLACES
+// TODO: Need to change pending status to overdue when we go past the date
 const StatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
     if (!dueDate) return null
 

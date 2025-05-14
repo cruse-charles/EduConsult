@@ -3,16 +3,17 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, BookOpen, CheckCircle, ChevronDown, ChevronRight, Clock, Eye, FileText, Folder, FolderOpen, Hourglass, Upload } from "lucide-react";
+import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
+import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
+import StatusBadge from "@/app/components/StatusBadge";
 
 import { fetchAssignments, setAssignments } from "@/redux/slices/studentAssignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
-import { formatDueDate, formatDueDateAndTime } from "@/lib/utils";
-import { fetchStudent, updateFolders } from "@/redux/slices/studentSlice";
+import { formatDueDate } from "@/lib/utils";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
@@ -20,8 +21,6 @@ import { useParams } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
-import StatusBadge from "@/app/components/StatusBadge";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
@@ -30,14 +29,7 @@ function AssignmentsList() {
     const {id: studentId} = useParams()
 
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
-
     const assignments = useSelector((state: RootState) => state.studentAssignments)
-
-    // const folders = useSelector((state: RootState) => {
-    //     const studentState = state.student as Student
-    //     return studentState?.folders || []
-    // })
-
     const [folders, setFolders] = useState<string[]>(useSelector((state: RootState) => {
         const studentState = state.student as Student
         return studentState?.folders || []
@@ -53,17 +45,14 @@ function AssignmentsList() {
 
     const [loading, setLoading] = useState(true);
 
-    // TODO NOW: Add student state to redux right away if student log in, this will let us to fetch their assignments
     // TODO: When I delete an assignment, it deletes from database and redux, it fulfills. But if I refresh
     // I get this error: fetchAssignments rejected: Assignment with ID XXXXX not found. Why does it do this?
-    // In this console.log below, I see that the studentState does show the assignmentDocId that was deleted, why?
 
     // TODO: switching tabs in the tabs for dashboard re-runs this assignmentsList, but it really shouldn't, so cache
-    // this info and re-use it
+        // this info and re-use it
     useEffect(() => {
         // TODO: Need to dispatch a clear folders/assignments action when studentId changes
         setLoading(true)
-        // console.log('HELLO')
 
         const studentState = student as Student
         
@@ -99,69 +88,12 @@ function AssignmentsList() {
         return folderAssignments
     }
 
-    useEffect(() => {
-        // console.log(assignments)
-        if (assignments && assignments.length > 0) {
-            setLoading(false);
-        }
-    }, [assignments]);
-
     // TODO: Finish this function
     const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
         let count = 0
         // assignmentsInFolder.forEach((assignment) => assignment.status == 'Complete' ? count++ : null)
         return count
     }
-
-    // // TODO: EXPORT THIS OUT, HAVE THIS IN A FEW PLACES
-    // const getStatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
-    //     if (!dueDate) return null
-
-    //     if (status === 'Pending' && dueDate < Timestamp.fromDate(new Date())) {
-    //         return (
-    //             <Badge className="gap-1 bg-red-100 text-red-800 font-bold hover:bg-red-100 hover:text-red-800">
-    //                 <Clock className="h-3 w-3" />
-    //                 Overdue
-    //             </Badge>
-    //         )
-    //     }
-
-    //     switch (status) {
-    //         case "Pending":
-    //         return (
-    //             <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
-    //                 <Hourglass className="h-3 w-3" />
-    //                 Assigned
-    //             </Badge>
-    //         )
-
-    //         case "Completed":
-    //         return (
-    //             <Badge className="gap-1 bg-green-100 text-green-800 font-bold hover:bg-green-100 hover:text-green-800">
-    //                 <CheckCircle className="h-3 w-3" />
-    //                 Completed
-    //             </Badge>
-    //         )
-
-    //         case "Submitted":
-    //         return (
-    //             <Badge className="gap-1 bg-blue-100 text-blue-800 font-bold hover:bg-blue-100 hover:text-blue-800">
-    //                 <Upload className="h-3 w-3" />
-    //                 Submitted
-    //             </Badge>
-    //         )
-
-    //         case "Under Review":
-    //         return (
-    //             <Badge className="gap-1 bg-purple-100 text-purple-800 font-bold hover:bg-purple-100 hover:text-purple-800">
-    //                 <Eye className="h-3 w-3" />
-    //                 Reviewing
-    //             </Badge>
-    //         )
-    //     }
-
-    //     return null
-    // }
 
     if (loading) {
         return (
@@ -178,8 +110,6 @@ function AssignmentsList() {
             sortedFolders.sort((a,b) => a.localeCompare(b))
         }
 
-        // TODO: Needs to sort folders by the closest due date starting from todays date and onward
-            // Find the closest date in each folder, sort the folders by that date 
         if (value === "due") {
             const now = new Date()
 
@@ -217,16 +147,6 @@ function AssignmentsList() {
         setFolders(sortedFolders)
     }
 
-    // const sortAssignments = (value: string) => {
-    //     let sortedAssignments = [...assignments]
-
-    //     if (value === 'name') {
-    //         sortedAssignments.sort((a,b) => a.title.localeCompare(b.title))
-    //     }
-
-    //     setAssignments(sortedAssignments)
-    // }
-
     // TODO: A new folder isn't appearing when i create a new assignment with a new folder, but does on refresh
     return (
         <>
@@ -236,7 +156,6 @@ function AssignmentsList() {
                 <div className="flex items-center gap-2">
                     <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm font-medium">Sort folders by:</span>
-                    {/* <Select value={folderSort} onValueChange={(value) => setFolderSort(value)}> */}
                     <Select value={folderSort} onValueChange={(value) => {setFolderSort(value); sortFolders(value)}}>
                     <SelectTrigger className="w-40">
                         <SelectValue />
@@ -320,7 +239,6 @@ function AssignmentsList() {
                                                     <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
                                                 </div>
                                             </div>
-                                            {/* <div className="flex items-center gap-3">{getStatusBadge(assignment.status, assignment?.dueDate)}</div> */}
                                             <div className="flex items-center gap-3">{StatusBadge(assignment.status, assignment?.dueDate)}</div>
                                         </div>
                                     ))}
