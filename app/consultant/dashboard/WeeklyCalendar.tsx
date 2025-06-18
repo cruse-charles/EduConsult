@@ -94,7 +94,7 @@ const WeeklyCalendar = () => {
                                                         {assignment.title}
                                                     </div>
                                                     <div className="text-xs text-muted-foreground truncate" title={assignment.studentFirstName}>
-                                                        {assignment.studentFirstName}
+                                                        {assignment.studentFirstName} {assignment.studentLastName}
                                                     </div>
                                                 </div>
                                             </div>
