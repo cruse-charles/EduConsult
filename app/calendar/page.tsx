@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 
-import ViewAssignmentModal from '../components/ViewAssignmentModal/ViewAssignmentModal'
+import ViewAssignmentModal from '../consultant/students/[id]/ViewAssignmentModal/ViewAssignmentModal'
 import { getConsultantAssignments, getStudentAssignments } from '@/lib/querys'
 
 // TODO: Add loading state
