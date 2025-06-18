@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-import ViewAssignmentModal from "../../components/ViewAssignmentModal/ViewAssignmentModal";
+import ViewAssignmentModal from "../ViewAssignmentModal/ViewAssignmentModal";
 import StatusBadge from "@/app/components/StatusBadge";
 
 import { fetchAssignments, setAssignments } from "@/redux/slices/studentAssignmentsSlice";
@@ -23,22 +23,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
 
-    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
-    const assignments = useSelector((state: RootState) => state.studentAssignments)
-    const [folders, setFolders] = useState<string[]>(useSelector((state: RootState) => {
-        const studentState = state.student as Student
-        return studentState?.folders || []
-    }))
-
-
-
+    // Retrieve student and assignment information
+    const assignments: Assignment[] = useSelector((state: RootState) => state.studentAssignments)
     const student = useSelector((state: RootState) => state.student)
-
+    
+    // Manage state for assignment modal, folder rendering and opening, and loading state
+    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
+    const [folders, setFolders] = useState<string[]>([])
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
+    const [loading, setLoading] = useState(true);
+
+    // Manage sorting for assignments and folders
     const [folderSort, setFolderSort] = useState("")
     const [assignmentSort, setAssignmentSort] = useState("")
-
-    const [loading, setLoading] = useState(true);
+    
+    // Set folders on load
+    useEffect(() => {
+        setFolders(student?.folders || [])
+    }, [student.folders])
 
     // TODO: When I delete an assignment, it deletes from database and redux, it fulfills. But if I refresh
     // I get this error: fetchAssignments rejected: Assignment with ID XXXXX not found. Why does it do this?
@@ -76,7 +78,7 @@ function AssignmentsList() {
         }
 
         if (assignmentSort === 'status') {
-            const statusOrder = ['Overdue', 'Pending', 'Submitted', 'Under Review', 'Completed']
+            const statusOrder = ['Overdue', 'In-Progress', 'Submitted', 'Under Review', 'Completed']
             folderAssignments.sort((a,b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status))
         }
 

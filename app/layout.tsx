@@ -19,6 +19,7 @@ import AppSidebar from "./components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 
 import { Toaster } from "sonner"
+import OnboardingManager from "./components/OnboardingManager";
 
 
 
@@ -41,6 +42,7 @@ export default function RootLayout({
             <main className="flex-1">
               <SidebarTrigger />
               {children}
+              <OnboardingManager />
               <Toaster richColors position="top-right" />
             </main>
           </SidebarProvider>

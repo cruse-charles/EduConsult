@@ -18,6 +18,7 @@ import { fetchStudent } from "@/redux/slices/studentSlice"
 
 import { FirebaseUserInfo } from "@/lib/types/types"
 import { AppDispatch } from "@/redux/store"
+import { setOnboardingState } from "@/redux/slices/onboardingSlice"
 
 // TODO: Redirect signed in users away from signin/signup pages
 const page = () => {
@@ -53,53 +54,60 @@ const page = () => {
 
     // Handles form submission and user creation in Firebase Auth
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        setIsLoading(true)
-        validateForm()
+      e.preventDefault()
+      setIsLoading(true)
+      const isValid = validateForm()
 
-        if (!validateForm()) {
-          setIsLoading(false)
-          return
-        }
+      if (!isValid) {
+        setIsLoading(false)
+        return
+      }
 
-        try {
-          // Sign in and get user crednetials
-          const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
+      try {
+        // Sign in and get user crednetials
+        const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
 
-          // Retrieve user info
-          const user = await getUserInfo(userCredential.user.uid);
+        // Retrieve user info
+        const user = await getUserInfo(userCredential.user.uid);
 
-          // Add user info to Redux state
-          dispatch(setUser({
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role
-          }))
+        // Add user info to Redux state
+        dispatch(setUser({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+        }))
+
+        // add onboarding state to redux
+        dispatch(setOnboardingState({
+          isComplete: user.onboarding.isComplete,
+          onboardingStep: user.onboarding.onboardingStep
+        }))
           
-          // Call API to set cookie
-          await fetch("/api/set-session", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ role: user.role }),
-          });
+        // Call API to set cookie
+        await fetch("/api/set-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: user.role }),
+        });
 
-          // If the user is a student then set their data in student slice and redirect to student profile
-          if (user.role === 'student') {
-            dispatch(fetchStudent(user.id))
-            router.push(`/student/dashboard`)
-          } else {
-            // Navigate to dashboard
-            router.push('/consultant/dashboard')
-          }
-
-        } catch (error) {
-          // Set errors if login fails
-          setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
-        } finally {
-          setIsLoading(false)
+        // If the user is a student then set their data in student slice and redirect to student profile
+        if (user.role === 'student') {
+          dispatch(fetchStudent(user.id))
+          router.push(`/student/dashboard`)
+        } else {
+          // Navigate to dashboard
+          router.push('/consultant/dashboard')
         }
+
+      } catch (error) {
+        // Set errors if login fails
+        setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
+        console.log('error logging in', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     // Function to parse display name into first and last name for users from Google sign-in
@@ -122,14 +130,15 @@ const page = () => {
         const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
         if (consultantDoc.exists()) {
           const data = consultantDoc.data()
-          return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant'}
+          return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant', onboarding: data.onboarding}
         }
 
+        // TODO: Add onboarding for students
         // Check if id is for a student
         const studentDoc = await getDoc(doc(db, "studentUsers", userId))
         if (studentDoc.exists()) {
           const data = studentDoc.data()
-          return {id: studentDoc.id, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student'}
+          return {id: studentDoc.id, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student', onboarding: data.onboarding}
         }
 
         throw new Error("User not found")
@@ -143,71 +152,72 @@ const page = () => {
     // TODO: Double check the id stuff with google sign ins
     // Handle Google sign-in
     const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        setIsLoading(false)
+      e.preventDefault()
+      setIsLoading(false)
 
-        // Firebase function to sign in with Google
-        signInWithPopup(auth, googleProvider)
-          .then( async (result) => {
+      // Firebase function to sign in with Google
+      signInWithPopup(auth, googleProvider)
+        .then( async (result) => {
         
-            // Check if this is a new user (first time signing in with Google)
-            const user = result.user
-            const userDocRef = doc(db, "consultantUsers", user.uid)
-            const userDoc = await getDoc(userDocRef)
+          // Check if this is a new user (first time signing in with Google)
+          const user = result.user
+          const userDocRef = doc(db, "consultantUsers", user.uid)
+          const userDoc = await getDoc(userDocRef)
 
-            // Parse the display name into first and last name
-            const { firstName, lastName } = parseDisplayName(user.displayName)
+          // Parse the display name into first and last name
+          const { firstName, lastName } = parseDisplayName(user.displayName)
                         
-            // If user document doesn't exist, create it (new user)
-            if (!userDoc.exists()) {
-                await setDoc(userDocRef, {
-                    email: user.email,
-                    firstName: firstName,
-                    lastName: lastName,
-                    photoURL: user.photoURL,
-                    students: [],
-                    createdAt: new Date(),
-                    signInMethod: 'google'
-                })
-            }
+          // If user document doesn't exist, create it (new user)
+          if (!userDoc.exists()) {
+              await setDoc(userDocRef, {
+                  email: user.email,
+                  firstName: firstName,
+                  lastName: lastName,
+                  photoURL: user.photoURL,
+                  students: [],
+                  createdAt: new Date(),
+                  signInMethod: 'google'
+              })
+          }
 
-            const userInfo = await getUserInfo(user.uid);
+          const userInfo = await getUserInfo(user.uid);
 
-            // Add user info to Redux state
-            dispatch(setUser({
-              id: userInfo.id,
-              firstName: userInfo.firstName,
-              lastName: userInfo.lastName,
-              email: userInfo.email,
-              role: userInfo.role
-            }))
+          // Add user info to Redux state
+          dispatch(setUser({
+            id: userInfo.id,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            email: userInfo.email,
+            role: userInfo.role
+          }))
 
-            // If the user is a student then set their data in Redux
-            if (userInfo.role === 'student') {
-              dispatch(fetchStudent(userInfo.id))
-            }
+          // If the user is a student then set their data in Redux
+          if (userInfo.role === 'student') {
+            dispatch(fetchStudent(userInfo.id))
+          }
                 
-            // Redirect to dashboard after successful sign-in
-            router.push('/dashboard');
-            setIsLoading(false)
-          })
-          .catch((error) => {
-              console.group(error.message)
-              setIsLoading(false)
-          })
+          // Redirect to dashboard after successful sign-in
+          router.push('/dashboard');
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          console.log('error loggin in', error)
+          console.group(error.message)
+          setIsLoading(false)
+        })
     }
 
     // Handles input changes and updates state accordingly
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target
+      const {name, value} = e.target
 
-        setuserData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }))
+      setuserData((prevData) => ({
+          ...prevData,
+          [name]: value,
+      }))
 
-        // Clear errors on input change
-        setErrors({})
+      // Clear errors on input change
+      setErrors({})
     }
 
   return (

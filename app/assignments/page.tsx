@@ -1,8 +1,7 @@
 'use client'
 
-import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { BookOpen, Check, CheckCircle, Clock, Download, Eye, FileText, Hourglass, Upload } from 'lucide-react'
+import { BookOpen, Download, FileText, Upload } from 'lucide-react'
 
 import { formatNextDeadline } from '@/lib/utils'
 
@@ -10,63 +9,27 @@ import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Timestamp } from 'firebase/firestore'
+import { getConsultantAssignments, getStudentAssignments } from '@/lib/querys'
+import { Assignment } from '@/lib/types/types'
 
+import StatusBadge from '../components/StatusBadge'
+
+// TODO: Add loading state
 const page = () => {
-    const assignments = useSelector((state: RootState) => state.studentAssignments)
-    
+    // Retrieve user details and assignment state
     const user = useSelector((state: RootState) => state.user)
+    const [assignments, setAssignments] = useState<Assignment[]>([])
 
-    // TODO: This is in AssignmentsList as well, export it
-        const getStatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
-            if (!dueDate) return null
-    
-            if (status === 'Pending' && dueDate < Timestamp.fromDate(new Date())) {
-                return (
-                    <Badge className="gap-1 bg-red-100 text-red-800 font-bold hover:bg-red-100 hover:text-red-800">
-                        <Clock className="h-3 w-3" />
-                        Overdue
-                    </Badge>
-                )
-            }
-    
-            switch (status) {
-                case "Pending":
-                return (
-                    <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
-                        <Hourglass className="h-3 w-3" />
-                        Assigned
-                    </Badge>
-                )
-    
-                case "Completed":
-                return (
-                    <Badge className="gap-1 bg-green-100 text-green-800 font-bold hover:bg-green-100 hover:text-green-800">
-                        <CheckCircle className="h-3 w-3" />
-                        Completed
-                    </Badge>
-                )
-    
-                case "Submitted":
-                return (
-                    <Badge className="gap-1 bg-blue-100 text-blue-800 font-bold hover:bg-blue-100 hover:text-blue-800">
-                        <Upload className="h-3 w-3" />
-                        Submitted
-                    </Badge>
-                )
-    
-                case "Under Review":
-                return (
-                    <Badge className="gap-1 bg-purple-100 text-purple-800 font-bold hover:bg-purple-100 hover:text-purple-800">
-                        <Eye className="h-3 w-3" />
-                        Reviewing
-                    </Badge>
-                )
-            }
-    
-            return null
+    // Fetch user's assignments 
+    useEffect(() => {
+        const fetchAssignments = async () => {
+            const assignmentData = user.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
+            console.log('assignmentData', assignmentData)
+            setAssignments(assignmentData)
         }
 
+        fetchAssignments()
+    },[user.id])
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -77,7 +40,7 @@ const page = () => {
                         <TableHeader>
                         <TableRow>
                             <TableHead>Assignment</TableHead>
-                            <TableHead>Student</TableHead>
+                            <TableHead>{user.role === 'consultant' ? 'Student' : 'Consultant'}</TableHead>
                             <TableHead>Type</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Due Date</TableHead>
@@ -89,7 +52,8 @@ const page = () => {
                             <TableRow key={assignment.id}>
                             <TableCell className="font-medium">{assignment.title}</TableCell>
                             {/* TODO: Change student to an object with id, firstName, lastName */}
-                            <TableCell>{assignment.student}</TableCell>
+                            {/* <TableCell>{assignment.studentFirstName} {assignment.studentLastName}</TableCell> */}
+                            <TableCell>{user.role === 'consultant' ? `${assignment.studentFirstName} ${assignment.studentLastName}` : `${assignment.consultantFirstName} ${assignment.consultantLastName}`}</TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-2">
                                     {assignment.type === "Essay" && <FileText className="h-4 w-4 text-blue-500" />}
@@ -101,10 +65,7 @@ const page = () => {
                                 </div>
                             </TableCell>
                             <TableCell>
-                                {/* <Badge variant={assignment.status === "completed" ? "success" : "outline"}> */}
-                                {getStatusBadge(assignment.status, assignment?.dueDate)}
-                                {/* {assignment.status} */}
-                                {/* </Badge> */}
+                                {StatusBadge(assignment.status, assignment.dueDate)}
                             </TableCell>
                             <TableCell>{formatNextDeadline(assignment.dueDate)}</TableCell>
                             </TableRow>
@@ -113,7 +74,7 @@ const page = () => {
                     </Table>
                     {assignments.length === 0 && (
                         <div className="flex flex-col items-center justify-center py-12">
-                        <p className="text-muted-foreground">No assignments found matching your criteria.</p>
+                        <p className="text-muted-foreground">No assignments found.</p>
                         </div>
                     )}
                     </div>

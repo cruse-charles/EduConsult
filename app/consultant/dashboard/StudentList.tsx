@@ -1,18 +1,18 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { Student } from "@/lib/types/types";
-import { formatNextDeadline } from "@/lib/utils";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
 
 import { useState } from "react"
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import AssignmentsList from "@/app/students/[id]/AssignmentsList";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
+import StudentListRow from "./StudentListRow";
+import { useDispatch, useSelector } from "react-redux";
+import { completeStep } from "@/redux/slices/onboardingSlice";
+import { nextStep } from "@/lib/onBoardingUtils";
+import { RootState } from "@/redux/store";
 
 interface StudentTableProps {
     students: Student[];
@@ -20,9 +20,10 @@ interface StudentTableProps {
 }
 
 const StudentTable = ({students, loading}: StudentTableProps) => {
-    const user = useSelector((state: RootState)=> state.user)
     const router = useRouter();
-
+    const dispatch = useDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const { isComplete } = useSelector((state: RootState) => state.onboarding)
 
     // State to manage sorting by column and order
     const [sortBy, setSortBy] = useState("name")
@@ -46,8 +47,8 @@ const StudentTable = ({students, loading}: StudentTableProps) => {
             case "name":
                 comparison = a.personalInformation.firstName.localeCompare(b.personalInformation.firstName)
                 break
-            case "pending":
-                comparison = (a.stats?.pendingAssignmentsCount || 0) - (b.stats?.pendingAssignmentsCount || 0)
+            case "In-Progress":
+                comparison = (a.stats?.inProgressAssignmentsCount || 0) - (b.stats?.inProgressAssignmentsCount || 0)
                 break
             case "nextDeadline":
                 const aDeadline = a.stats?.nextDeadline ? a.stats?.nextDeadline.toDate() : new Date(0)
@@ -69,7 +70,9 @@ const StudentTable = ({students, loading}: StudentTableProps) => {
     }
 
     // Navigate to the student's detailed page
-    const handleStudentClick = (studentId: string) => { 
+    const handleStudentClick = async (studentId: string) => {
+        if (!isComplete) dispatch(completeStep("fetchStudentProfile"))
+        await nextStep(user.id)
         router.push(`/consultant/students/${studentId}`);
     }
 
@@ -94,8 +97,8 @@ const StudentTable = ({students, loading}: StudentTableProps) => {
                             </Button>
                         </TableHead>
                         <TableHead className="w-[300px]">
-                            <Button variant="ghost" onClick={() => handleSort("pending")} className="h-auto p-0 font-semibold hover:bg-transparent">
-                                Pending Tasks {getSortIcon("pending")}
+                            <Button variant="ghost" onClick={() => handleSort("In-Progress")} className="h-auto p-0 font-semibold hover:bg-transparent">
+                                In-Progress Tasks {getSortIcon("In-Progress")}
                             </Button>
                         </TableHead>
                         <TableHead className="w-[300px]">
@@ -107,17 +110,7 @@ const StudentTable = ({students, loading}: StudentTableProps) => {
                 </TableHeader>
                 <TableBody>
                     {sortedStudents.map((student) => (
-                        <TableRow key={student.id} className="cursor-pointer" onClick={() => handleStudentClick(student.id)}>
-                            <TableCell>
-                                    {student.personalInformation.firstName} {student.personalInformation.lastName}
-                            </TableCell>
-                            <TableCell>
-                                <span className="font-medium">{student.stats?.pendingAssignmentsCount || 0}</span>
-                            </TableCell>
-                            <TableCell>
-                                <span className="font-medium">{formatNextDeadline(student.stats?.nextDeadline)}</span>
-                            </TableCell>
-                        </TableRow>
+                        <StudentListRow student={student} handleStudentClick={handleStudentClick} key={student.id}/>
                     ))}
                 </TableBody>
             </Table>

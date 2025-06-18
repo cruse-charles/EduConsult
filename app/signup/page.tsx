@@ -55,9 +55,7 @@ const page = () => {
 
       if (!userData.password) {
         newErrors.password = 'Password is required'
-      }
-
-      if (userData.password.length < 6) {
+      } else if (userData.password.length < 6) {
         newErrors.password = 'Password must be at least 6 characters'
       }
 
@@ -66,9 +64,8 @@ const page = () => {
       }
       
       if (userData.password !== userData.confirmPassword) {
-          newErrors.password = 'Passwords do not match'
-          newErrors.confirmPassword = 'Passwords do not match'
-          return
+        newErrors.password = 'Passwords do not match'
+        newErrors.confirmPassword = 'Passwords do not match'
       }
 
       setErrors(newErrors)
@@ -77,126 +74,122 @@ const page = () => {
 
 
     // Handles form submission for user creation in Firebase Auth
-    // TODO: Error handling, confirm passwords match
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+      e.preventDefault()
 
-        // Validate form inputs and set error messages
-        validateForm()
+      // Validate form inputs and set error messages
+      const isValid = validateForm()
 
-        // Early exit if validation fails
-        if (!validateForm()) {
-          return
+      // Early exit if validation fails
+      if (!isValid) {
+        return
+      }
+
+      setIsLoading(true)
+
+      try {
+        // Firebase function to create a new user with email and password in Firebase Auth
+        const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password)
+        const user = userCredential.user;
+
+        // Create a new document with user's UID in Firestore database
+        await setDoc(doc(db, "consultantUsers", user.uid), {
+            email: user.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            students: [],
+            createdAt: new Date(),
+            signInMethod: 'email',
+        })
+
+        // login user
+        await signInWithEmailAndPassword(auth, userData.email, userData.password)
+
+        // set user's data after user creation
+        dispatch(setUser({
+          id: user.uid,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: user.email,
+          role: 'consultant'
+        }))
+
+        router.push('/dashboard');
+        setIsLoading(false)
+      } catch (error) {
+        console.log('Error creating consultant', (error as Error).message)
+        if ((error as Error).message.includes('auth/email-already-in-use')) {
+          setErrors({email: 'Email already in use'})
         }
-
-        setIsLoading(true)
-
-        try {
-            // Firebase function to create a new user with email and password in Firebase Auth
-            const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password)
-            const user = userCredential.user;
-
-            // Create a new document with user's UID in Firestore database
-            await setDoc(doc(db, "consultantUsers", user.uid), {
-                email: user.email,
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-                students: [],
-                createdAt: new Date(),
-                signInMethod: 'email',
-            })
-
-            // login user
-            await signInWithEmailAndPassword(auth, userData.email, userData.password)
-
-            // set user's data after user creation
-            dispatch(setUser({
-              id: user.uid,
-              firstName: userData.firstName,
-              lastName: userData.lastName,
-              email: user.email,
-              role: 'consultant'
-            }))
-
-            router.push('/dashboard');
-            setIsLoading(false)
-        } catch (error) {
-            console.log('Error creating consultant', (error as Error).message)
-            if ((error as Error).message.includes('auth/email-already-in-use')) {
-              setErrors({email: 'Email already in use'})
-            }
-            setIsLoading(false)
-        }
-            
+        setIsLoading(false)
+      }
     }
-
 
     // Handles input changes and updates state accordingly
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target
+      const {name, value} = e.target
 
-        setUserData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }))
+      setUserData((prevData) => ({
+          ...prevData,
+          [name]: value,
+      }))
 
-        // Clear error messages
-        setErrors({})
+      // Clear errors on input change
+      setErrors({})
     }
 
     // Function to parse display name into first and last name for users from Google sign-in
     const parseDisplayName = (displayName: string | null) => {
-        if (!displayName) {
-            return { firstName: '', lastName: '' }
-        }
+      if (!displayName) {
+          return { firstName: '', lastName: '' }
+      }
         
-        const nameParts = displayName.trim().split(' ')
-        const firstName = nameParts[0] || ''
-        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+      const nameParts = displayName.trim().split(' ')
+      const firstName = nameParts[0] || ''
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
         
-        return { firstName, lastName }
+      return { firstName, lastName }
     }
 
     // Handle Google sign-in
     const handleGoogleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        setIsLoading(false)
+      e.preventDefault()
+      setIsLoading(false)
         
-        // Firebase function to sign in with Google
-        signInWithPopup(auth, googleProvider)
-            .then( async (result) => {
-                console.log(result)
+      // Firebase function to sign in with Google
+      signInWithPopup(auth, googleProvider)
+        .then( async (result) => {
+          console.log(result)
 
-                // Check if this is a new user (first time signing in with Google)
-                const user = result.user
-                const userDocRef = doc(db, "consultantUsers", user.uid)
-                const userDoc = await getDoc(userDocRef)
+          // Check if this is a new user (first time signing in with Google)
+          const user = result.user
+          const userDocRef = doc(db, "consultantUsers", user.uid)
+          const userDoc = await getDoc(userDocRef)
                 
-                // Parse the display name into first and last name
-                const { firstName, lastName } = parseDisplayName(user.displayName)
+          // Parse the display name into first and last name
+          const { firstName, lastName } = parseDisplayName(user.displayName)
                 
-                // If user document doesn't exist, create it (new user)
-                if (!userDoc.exists()) {
-                    await setDoc(userDocRef, {
-                        email: user.email,
-                        firstName: firstName,
-                        lastName: lastName,
-                        photoURL: user.photoURL,
-                        students: [],
-                        createdAt: new Date(),
-                        signInMethod: 'google'
-                    })
-                    console.log('New Google user document created with parsed names:', { firstName, lastName })
-                }
+          // If user document doesn't exist, create it (new user)
+          if (!userDoc.exists()) {
+              await setDoc(userDocRef, {
+                  email: user.email,
+                  firstName: firstName,
+                  lastName: lastName,
+                  photoURL: user.photoURL,
+                  students: [],
+                  createdAt: new Date(),
+                  signInMethod: 'google'
+              })
+              console.log('New Google user document created with parsed names:', { firstName, lastName })
+          }
 
-
-                router.push('/dashboard');
-                setIsLoading(false)
-            })
-            .catch((error) => {
-                console.group(error.message)
-                setIsLoading(false)
-            })
+          router.push('/dashboard');
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          console.group(error.message)
+          setIsLoading(false)
+        })
     }
 
   return (
@@ -251,12 +244,12 @@ const page = () => {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input name="password" placeholder="••••••••" type="password" disabled={isLoading} onChange={handleInputChange} className={userData.password ? "border-red-500" : ""} value={userData.password} />
+                    <Input name="password" placeholder="••••••••" type="password" disabled={isLoading} onChange={handleInputChange} className={errors.password ? "border-red-500" : ""} value={userData.password} />
                     {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input name="confirmPassword" placeholder="••••••••" type="password" disabled={isLoading} className={userData.confirmPassword ? "border-red-500" : ""} onChange={handleInputChange} value={userData.confirmPassword} />
+                    <Input name="confirmPassword" placeholder="••••••••" type="password" disabled={isLoading} className={errors.confirmPassword ? "border-red-500" : ""} onChange={handleInputChange} value={userData.confirmPassword} />
                     {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword}</p>}
                   </div>
                   <Button disabled={isLoading}>

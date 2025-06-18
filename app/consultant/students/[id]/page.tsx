@@ -1,9 +1,7 @@
 'use client'
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-
-import { Student } from "@/lib/types/types";
+import { useEffect } from "react";
 
 import AssignmentsOverview from "./AssignmentsOverview";
 import SelectViewTabs from "./SelectViewTabs";
@@ -12,40 +10,39 @@ import StudentProfileHeader from "./StudentProfileHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "@/redux/slices/studentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import { clearAssignments, fetchAssignments } from "@/redux/slices/studentAssignmentsSlice";
 
 function page() {
-    // Retrieve the student ID from URL and initialize dispatch for data retrieval and state management
-    const { id: studentId } = useParams<{id: string}>();
+    // Retrieve the student ID from URL and initialize dispatch for data retrieval
     const dispatch = useDispatch<AppDispatch>()
-    const studentState = useSelector((state: RootState) => state.student)
-    const user = useSelector((state: RootState) => state.user);
+    const { id: studentId } = useParams<{id: string}>();
+    const student = useSelector((state: RootState) => state.student)
 
-    // State to track if authetication is ready, create local state for student
-    const [student, setStudent] = useState<Student | null>(null);
-
-    // fetch student data from Firestore when the component mounts and set it to state
+    // TODO: Check if we want to combine these useEffects, and if we want to make a clearStudent
     useEffect(() => {
-            dispatch(fetchStudent(studentId))
+        // Clear previous student data and assignments
+        // dispatch(clearStudent()) // You'd need to create this action
+        dispatch(clearAssignments())
+        dispatch(fetchStudent(studentId))
     }, [studentId, dispatch])
 
-
-    // Update local student state when studentState in Redux store changes
+    // Then fetch assignments when student data loads
     useEffect(() => {
-        if (studentState && studentState.id) {
-            setStudent(studentState as Student);
+        if (student?.assignmentDocIds) {
+            dispatch(fetchAssignments(student.assignmentDocIds))
         }
+    }, [student?.assignmentDocIds, dispatch])
 
-        console.log('studentState', studentState)
-    }, [studentState]);
+
 
     // Loading page displayed while no student
-    if (!student) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p className="text-lg text-muted-foreground">Loading student profile...</p>
-            </div>
-        );
-    }
+    // if (!student) {
+    //     return (
+    //         <div className="flex items-center justify-center min-h-screen">
+    //             <p className="text-lg text-muted-foreground">Loading student profile...</p>
+    //         </div>
+    //     );
+    // }
 
     return (
         // Page Containers
@@ -58,7 +55,7 @@ function page() {
                 {/* Main Content Container */}
                 <div className="md:col-span-2 space-y-6">
                     {/* Task Summary Section */}
-                    <AssignmentsOverview student={student} />
+                    <AssignmentsOverview />
 
                     {/* Student Details Section */}
                     <SelectViewTabs />

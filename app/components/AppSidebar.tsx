@@ -35,11 +35,13 @@ const menuItems = (rolePrefix: string) => [
     title: "Assignments",
     url: `/assignments`,
     icon: BookOpen,
+    className: "view-assignments"
   },
   {
     title: "Calendar",
     url: `/calendar`,
     icon: Calendar,
+    className: "view-calendar"
   },
 ]
 
@@ -97,7 +99,7 @@ const AppSidebar = () => {
             <SidebarMenu>
               {menuItems(user.role).map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}>
+                  <SidebarMenuButton className={item.className} asChild isActive={pathname === item.url}>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

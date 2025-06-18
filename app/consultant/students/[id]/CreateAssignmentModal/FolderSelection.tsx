@@ -13,8 +13,8 @@ interface FolderSelectionProps {
     handleInputChange: (field: string, value: string) => void;
     setNewFolder: (value: boolean) => void;
     newFolder: boolean;
-    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string }>>;
-    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;};
+    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string; }>>;
+    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;};
 }
 
 function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, setErrors, errors}: FolderSelectionProps) {
@@ -39,7 +39,7 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
                         }
                     }}>
                 <SelectTrigger>
-                    <SelectValue placeholder="Select or create folder" />
+                    <SelectValue placeholder="Select or create folder, e.g., Stanford Folder " />
                 </SelectTrigger>
                 <SelectContent>
                     {student.folders?.map((folder: string) => (
@@ -56,6 +56,7 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
                 <div className="space-y-2">
                     <Label htmlFor="folder-name">New Folder Name</Label>
                     <Input id="folder" placeholder="Enter new folder name" value={formData.folder} onChange={(e) => handleInputChange("folder", e.target.value)} />
+                    {errors.folderName && <p className='text-sm text-red-500'>{errors.folderName}</p>}
                 </div>
             )}
         </>

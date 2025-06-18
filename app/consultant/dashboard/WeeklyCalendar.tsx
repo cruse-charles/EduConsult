@@ -1,4 +1,4 @@
-import ViewAssignmentModal from '@/app/students/[id]/ViewAssignmentModal/ViewAssignmentModal'
+import ViewAssignmentModal from '../students/[id]/ViewAssignmentModal/ViewAssignmentModal'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,6 +13,8 @@ import { RootState } from '@/redux/store'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
+
+// TODO: This is same as dashboardAssignmentList (finished/up to date). Need to replace that one's name what I did for student folder
 const WeeklyCalendar = () => {
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)

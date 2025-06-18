@@ -8,9 +8,6 @@ import { Assignment } from './types/types';
 // Function to count tasks due this week for a consultant view
 export const getTasksDueThisWeekConsultantDashboard = async (consultantId: string) => {
 
-    // Get consultant's doc reference
-    const consultantRef = doc(db, "consultantUsers", consultantId);
-
     // Find the start and end of current week
     const start = startOfWeek(new Date())
     const end = endOfWeek(new Date())
@@ -18,10 +15,10 @@ export const getTasksDueThisWeekConsultantDashboard = async (consultantId: strin
     // Count assignments with dueDates within current week
     const q = query(
         collection(db, 'assignments'),
-        where('consultant', '==', consultantRef),
+        where('consultantId', '==', consultantId),
         where('dueDate', '>=', Timestamp.fromDate(start)),
         where('dueDate', '<=', Timestamp.fromDate(end)),
-        where('status', '==', 'Pending')
+        where('status', '==', 'In-Progress')
     )
 
     const snapshot = await getDocs(q);
@@ -38,39 +35,38 @@ export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => 
     // Count assignments with dueDates within current week
     const q = query(
         collection(db, 'assignments'),
-        where('student', '==', studentId),
+        where('studentId', '==', studentId),
         where('dueDate', '>=', Timestamp.fromDate(start)),
         where('dueDate', '<=', Timestamp.fromDate(end)),
-        where('status', '==', 'Pending')
+        where('status', '==', 'In-Progress')
     )
 
     const snapshot = await getDocs(q);
     return snapshot;
 }
 
-// Function to count students in progress (has pending assighnemnts) for a consultant view
+// Function to count students in progress (has In-Progress assighnemnts) for a consultant view
 export const countOfInProgressStudents = async (consultantId: string) => {
-    const consultantRef = doc(db, "consultantUsers", consultantId);
 
     const q = query(
         collection(db, 'studentUsers'),
-        where('consultant', '==', consultantRef),
-        where('stats.pendingAssignmentsCount', '>', 0)
+        where('consultant', '==', consultantId),
+        where('stats.inProgressAssignmentsCount', '>', 0)
     )
 
     const snapshot = await getDocs(q);
+    // console.log('countOfInProgressStudents', snapshot)
     return snapshot.size;
 }
 
 // Function to count overdue assignments for a consultant view
 export const countOverDueAssignmentsConsultantDashboard = async (consultantId: string) => {
-    const consultantRef = doc(db, "consultantUsers", consultantId);
 
     const q = query(
         collection(db, 'assignments'),
-        where('consultant', '==', consultantRef),
+        where('consultantId', '==', consultantId),
         where('dueDate', '<=', Timestamp.fromDate(new Date())),
-        where('status', '==', 'Pending')
+        where('status', '==', 'In-Progress')
     )
 
     const snapshot = await getDocs(q);
@@ -79,10 +75,10 @@ export const countOverDueAssignmentsConsultantDashboard = async (consultantId: s
 
 // Function to count completed assignments for a student view
 export const countCompletedAssignmentsStudentDashboard = async (studentId: string) => {
-
+    
     const q = query(
         collection(db, 'assignments'),
-        where('student', '==', studentId),
+        where('studentId', '==', studentId),
         where('status', '==', 'Completed')
     )
 
@@ -92,10 +88,10 @@ export const countCompletedAssignmentsStudentDashboard = async (studentId: strin
 
 // Function to count under review assignments for a student view
 export const countReviewedAssignmentsStudentDashboard = async (studentId: string) => {
-
+    
     const q = query(
         collection(db, 'assignments'),
-        where('student', '==', studentId),
+        where('studentId', '==', studentId),
         where('status', '==', 'Under Review')
     )
 
@@ -105,10 +101,10 @@ export const countReviewedAssignmentsStudentDashboard = async (studentId: string
 
 // Function to count total assignments for a student view
 export const countTotalAssignmentsStudentDashboard = async (studentId: string) => {
-
+    
     const q = query(
         collection(db, 'assignments'),
-        where('student', '==', studentId),
+        where('studentId', '==', studentId),
     )
 
     const snapshot = await getDocs(q);
@@ -116,11 +112,10 @@ export const countTotalAssignmentsStudentDashboard = async (studentId: string) =
 }
 
 export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId: string) => {
-    const consultantRef = doc(db, "consultantUsers", consultantId)
-
+    
     const q = query(
         collection(db, 'assignments'),
-        where('consultant', '==', consultantRef),
+        where('consultantId', '==', consultantId),
         where('dueDate', '>=', Timestamp.fromDate(new Date())),
         orderBy('dueDate', 'asc'),
         limit(1)
@@ -138,14 +133,13 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
 }
 
 // TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
-export const countPendingTasksForStudentConsultantView = async (studentId: string, consultantId: string) => {
-    const consultantRef = doc(db, "consultantUsers", consultantId)
-
+export const countInProgressTasksForStudentConsultantView = async (studentId: string, consultantId: string) => {
+    
     const q = query(
         collection(db, 'assignments'),
-        where('student', '==', studentId),
-        where('consultant', '==', consultantRef),
-        where('status', '==', 'Pending')
+        where('studentId', '==', studentId),
+        where('consultantId', '==', consultantId),
+        where('status', '==', 'In-Progress')
     )
 
     const snapshot = await getDocs(q)
@@ -154,12 +148,11 @@ export const countPendingTasksForStudentConsultantView = async (studentId: strin
 
 // TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
 export const countCompletedTasksForStudentConsultantView = async (studentId: string, consultantId: string) => {
-    const consultantRef = doc(db, "consultantUsers", consultantId)
-
+    
     const q = query(
         collection(db, 'assignments'),
-        where('student', '==', studentId),
-        where('consultant', '==', consultantRef),
+        where('studentId', '==', studentId),
+        where('consultantId', '==', consultantId),
         where('status', '==', 'Completed')
     )
 
@@ -168,13 +161,12 @@ export const countCompletedTasksForStudentConsultantView = async (studentId: str
 }
 
 // TODO: Currently have just a string for student ref and actual ref for consultant, standardize this
-export const findNextAssignmentDeadlineStudentDashboard = async (studentId: string, consultantId: string) => {
-    const consultantRef = doc(db, "consultantUsers", consultantId)
-
+export const nextDeadlineForStudent = async (studentId: string, consultantId: string) => {
+    
     const q = query(
         collection(db, 'assignments'),
-        where('consultant', '==', consultantRef),
-        where('student', '==', studentId),
+        where('consultantId', '==', consultantId),
+        where('studentId', '==', studentId),
         where('dueDate', '>=', Timestamp.fromDate(new Date())),
         orderBy('dueDate', 'asc'),
         limit(1)
@@ -194,10 +186,7 @@ export const findNextAssignmentDeadlineStudentDashboard = async (studentId: stri
 // TODO: I have this copy/pasted in some other redux slice function, reduce
 // Function to retrieve all assignments within 7 days
 export const getConsultantDashboardAssignments = async (consultantId: string) => {
-
-    // Get consultant's doc reference
-    const consultantRef = doc(db, "consultantUsers", consultantId);
-
+    
     // Find today and six days later, encompasing a week
     const today = new Date()
     today.setDate(today.getDate())
@@ -207,20 +196,23 @@ export const getConsultantDashboardAssignments = async (consultantId: string) =>
     // Count assignments with dueDates within current week
     const q = query(
         collection(db, 'assignments'),
-        where('consultant', '==', consultantRef),
+        where('consultantId', '==', consultantId),
         where('dueDate', '>=', Timestamp.fromDate(today)),
         where('dueDate', '<=', Timestamp.fromDate(sixDaysLater)),
-        where('status', '==', 'Pending')
+        where('status', '==', 'In-Progress')
     )
 
     const snapshot = await getDocs(q);
-    return snapshot;
+    return snapshot.docs.map((doc) => {
+        return {
+            id: doc.id,
+            ...doc.data()
+        } as Assignment
+    })
 }
 
 export const getConsultantCalendarAssignments = async (consultantId: string) => {
-    // Get consultant's doc reference
-    const consultantRef = doc(db, "consultantUsers", consultantId);
-
+    
     // Find assignments from two last month, this month, and next month
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
@@ -229,7 +221,7 @@ export const getConsultantCalendarAssignments = async (consultantId: string) => 
     // Count assignments with dueDates last month to next month
     const q = query(
         collection(db, 'assignments'),
-        where('consultant', '==', consultantRef),
+        where('consultantId', '==', consultantId),
         where('dueDate', '>=', Timestamp.fromDate(startDate)),
         where('dueDate', '<=', Timestamp.fromDate(endDate)),
     )
@@ -244,9 +236,10 @@ export const getConsultantCalendarAssignments = async (consultantId: string) => 
 }
 
 export const getStudentAssignments = async (studentId: string) => {
+    
     const q = query(
         collection(db, 'assignments'),
-        where('student', '==', studentId),
+        where('studentId', '==', studentId),
     )
 
     const snapshot = await getDocs(q);
@@ -258,4 +251,20 @@ export const getStudentAssignments = async (studentId: string) => {
     })
 }
 
-// TODO: Adjust all queries to return data itself, not the snapshot
+export const getConsultantAssignments = async (consultantId: string) => {
+    
+    const q = query(
+        collection(db, 'assignments'),
+        where('consultantId', '==', consultantId),
+    )
+
+    const snapshot = await getDocs(q)
+    return snapshot.docs.map((doc) => {
+        return {
+            id: doc.id,
+            ...doc.data()
+        } as Assignment
+    })
+}
+
+// TODO: Adjust all queries to return data itself, not the snapshot, also leave comment on them to explain what they do

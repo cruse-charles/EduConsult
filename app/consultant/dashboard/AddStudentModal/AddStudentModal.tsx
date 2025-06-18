@@ -1,23 +1,29 @@
 'use client'
 
-import { updateDoc, arrayUnion, DocumentReference, DocumentData, setDoc, doc, getDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { DocumentReference, DocumentData, getDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 import { useState } from "react";
 
-import { app, db } from "@/lib/firebaseConfig";
+import { app } from "@/lib/firebaseConfig";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Plus, User } from "lucide-react";
+import { toast } from "sonner";
 
+import CustomToast from "@/app/components/CustomToast";
 import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
 import CreateStudentAccount from "./CreateStudentAccount";
+
 import { StudentFormData } from "@/lib/types/types";
-import { toast } from "sonner";
-import CustomToast from "@/app/components/CustomToast";
+
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { completeStep } from "@/redux/slices/onboardingSlice";
+import { nextStep } from "@/lib/onBoardingUtils";
 
 interface AddStudentModalProps {
     consultantDocRef: DocumentReference<DocumentData> | null;
@@ -28,6 +34,9 @@ interface AddStudentModalProps {
     // that in the dashboard
 function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
     let auth = getAuth(app);
+    const dispatch = useDispatch()
+    const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
+    const user = useSelector((state: RootState) => state.user)
     
     // State to manage dialog open/close state
     const [open, setOpen] = useState(false);
@@ -52,7 +61,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             targetSchools: '',
         },
         stats: {
-            pendingAssignmentsCount: 0,
+            inProgressAssignmentsCount: 0,
             nextDeadline: undefined,
         },
         email: '',
@@ -80,7 +89,7 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             targetSchools: '',
         },
         stats: {
-            pendingAssignmentsCount: 0,
+            inProgressAssignmentsCount: 0,
             nextDeadline: undefined,
         },
         email: '',
@@ -104,27 +113,34 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         const consultantSnap = await getDoc(consultantDocRef)
         const consultantData = consultantSnap.data();
 
+        // TODO: Export the update/set doc stuff to studentUtils file
         // Create a new student document in the "studentUsers" collection
         try {
-            const userCredentials = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+            const idToken = await auth.currentUser?.getIdToken(true); // current consultant’s token
 
-            const studentId = userCredentials.user.uid;
-            const studentDocRef = doc(db, "studentUsers", studentId);
-
-            await setDoc(studentDocRef, {
-                personalInformation: formData.personalInformation,
-                academicInformation: formData.academicInformation,
-                consultant: consultantDocRef,
-                folders: formData.folders,
-                email: formData.email,
-                password: formData.password,
+            const res = await fetch("/api/create-student", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${idToken}`,
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                    personalInformation: formData.personalInformation,
+                    academicInformation: formData.academicInformation,
+                    folders: formData.folders,
+                    consultantId: user.id,
+                    onboarding: {
+                        isComplete: false,
+                        onboardingStep: 0
+                    }
+                }),
             });
-
-            // Add the studentDocRef to the consultant's students array
-            await updateDoc(consultantDocRef, {
-                students: arrayUnion(studentDocRef)
-            });
-
+            
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to create student");
+            
             // Callback to refresh student list or perform any other action after adding a student
             onStudentAdded();
             
@@ -133,11 +149,19 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
             resetFormData()
             setIsLoading(false);
 
+            // Proceed to next step for tooltip and update backend
+            if (!isComplete) {
+                dispatch(completeStep("studentCreated"))
+                await nextStep(user.id)
+            }
+            
+            // Success Message
             toast(<CustomToast title="Student Account Created" description="" status="success"/>)
 
         } catch (error) {
-            console.error("Error adding document: ", error);
-            toast(<CustomToast title="Student Account Not Created" description="Please refresh and try again." status="error"/>)
+            setIsLoading(false)
+            console.log('error creating student', error)
+            toast(<CustomToast title="Student Account Not Created" description={`${error}`} status="error"/>)
         }
     }
 
@@ -170,14 +194,25 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         setFormData((prev) => ({
             ...prev,
             [name]: value
-        })) 
+        }))
+
+        if (name === 'email') {
+            setFormData((prev) => ({
+                ...prev,
+                personalInformation: {
+                    ...prev.personalInformation,
+                    email: value
+                }
+            }))
+        }
     }
 
     // TODO: Add loading state and error handling for form submission
     return (
         <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
-                <Button variant="default" className="w-full">
+                {/* <Button variant="default" className="w-full"> */}
+                <Button variant="default" className="w-full create-student-btn">
                     <Plus className="mr-2 h-4 w-4" />
                     Add Student
                 </Button>

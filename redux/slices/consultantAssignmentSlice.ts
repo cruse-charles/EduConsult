@@ -15,7 +15,6 @@ export const fetchConsultantAssignments = createAsyncThunk(
   async (assignmentsDocIds: string[], {rejectWithValue}) => {
     try {
       // Fetch all assignments in parallel
-      // console.log("fetching assignments...")
       const assignments = await Promise.all(
         assignmentsDocIds.map(async (assignmentDocId) => {
           // Get a reference to the assignment document and fetch its snapshot
@@ -57,22 +56,19 @@ export const fetchConsultantDashboardAssignments = createAsyncThunk(
   "consultantDashboard/fetchConsultantDashboardAssignments",
   async (consultantId: string) => {
     try {
-      // Get consultant's doc reference
-      const consultantRef = doc(db, "consultantUsers", consultantId);
-      
-    // Find today and six days later, encompasing a week
-    const today = new Date()
-    today.setDate(today.getDate())
-    const sixDaysLater = new Date()
-    sixDaysLater.setDate(today.getDate() + 6);
+      // Find today and six days later, encompasing a week
+      const today = new Date()
+      today.setDate(today.getDate())
+      const sixDaysLater = new Date()
+      sixDaysLater.setDate(today.getDate() + 6);
       
       // Count assignments with dueDates within current week
       const q = query(
           collection(db, 'assignments'),
-          where('consultant', '==', consultantRef),
+          where('consultantId', '==', consultantId),
           where('dueDate', '>=', Timestamp.fromDate(today)),
           where('dueDate', '<=', Timestamp.fromDate(sixDaysLater)),
-          where('status', '==', 'Pending')
+          where('status', '==', 'In-Progress')
       )
       
       const snapshot = await getDocs(q);
@@ -120,12 +116,14 @@ const consultantAssignmentsSlice = createSlice({
       }
     },
     // Deletes an assignment from the state by its ID
-    deleteAssignmentSlice(state, action) {
+    deleteDashboardAssignment(state, action) {
       const assignmentId = action.payload;
+      if (state.length === 0) return state
+
       return state.filter((assignment) => assignment.id !== assignmentId)
     }
   },
-  // Handle async actions using extraReducers for pending, fulfilled, and rejected states
+  // Handle async actions using extraReducers for Inprogress, fulfilled, and rejected states
   extraReducers: (builder) => {
     builder
     .addCase(fetchConsultantAssignments.fulfilled, (state, action) => {
@@ -145,5 +143,5 @@ const consultantAssignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteAssignmentSlice } = consultantAssignmentsSlice.actions;
+export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteDashboardAssignment } = consultantAssignmentsSlice.actions;
 export default consultantAssignmentsSlice.reducer;

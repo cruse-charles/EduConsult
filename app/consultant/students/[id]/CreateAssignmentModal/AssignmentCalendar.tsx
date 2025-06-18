@@ -10,8 +10,8 @@ import { Dispatch, SetStateAction } from 'react'
 interface AssignmentCalendarProps {
     dueDate: Date | undefined;
     setDueDate: (date: Date | undefined) => void;
-    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string }>>;
-    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;};
+    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;}>>;
+    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;};
 }
 
 function AssignmentCalendar({dueDate, setDueDate, setErrors, errors}: AssignmentCalendarProps) {

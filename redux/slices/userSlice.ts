@@ -17,7 +17,7 @@ const userSlice = createSlice({
         },
         updateUser(state, action) {
             return {...state, ...action.payload}
-        }
+        },
     }
 })
 

@@ -7,19 +7,34 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatNextDeadline } from '@/lib/utils'
 import { Assignment } from '@/lib/types/types'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 
 import ViewAssignmentModal from '../components/ViewAssignmentModal/ViewAssignmentModal'
+import { getConsultantAssignments, getStudentAssignments } from '@/lib/querys'
 
-// TODO: going directly to this before going to dashboard and getting all the assignments causes an error, have a loading state when signing in
+// TODO: Add loading state
 const page = () => {
+    const user = useSelector((state: RootState) => state.user)
+
+    // Manage state for current date, assignment modal, and all assignments
     const [currentDate, setCurrentDate] = useState(new Date())
-    const assignments = useSelector((state: RootState) => state.studentAssignments)
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
+    const [assignments, setAssignments] = useState<Assignment[]>([])
 
+    
+    // Fetch user's assignments 
+    useEffect(() => {
+        const fetchAssignments = async () => {
+            const assignmentData = user.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
+            setAssignments(assignmentData)
+        }
+    
+        fetchAssignments()
+    },[user.id])
 
+    // Variables to calculate days in months
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
     const firstDay = new Date(year, month, 1)
@@ -34,6 +49,7 @@ const page = () => {
       current.setDate(current.getDate() + 1)
     }
 
+    // Function to navigate between months
     const navigateMonth = (direction: "prev" | "next") => {
         setCurrentDate((prev) => {
             const newDate = new Date(prev)
@@ -46,6 +62,7 @@ const page = () => {
         })
     }
 
+    // Return month's name
     const getViewTitle = () => {
         return currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })
     }

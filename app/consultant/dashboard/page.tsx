@@ -11,16 +11,12 @@ import { FirebaseUserInfo, Student } from "@/lib/types/types";
 
 import AddStudentModal from "./AddStudentModal/AddStudentModal";
 import Highlights from "../../components/Highlights";
+import StudentTable from "./StudentList";
+import DashboardAssignmentList from "./DashboardAssignmentList";
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import StudentTable from "./StudentList";
-// import ConsultantCalendar from "../components/ConsultantCalendar";
-import DashboardAssignmentList from "./AssignmentList";
-
-
-
 
 const page = () => {
     // State to manage students and set reference to the consultant document
@@ -38,6 +34,7 @@ const page = () => {
         try {
             // Get the consultant's document reference and snapshot
             const ref = doc(db, "consultantUsers", user.id);
+            console.log('ref for fetching consultant doc', ref)
 
             setConsultantDocRef(ref);
             const consultantDocSnap = await getDoc(ref);
@@ -80,6 +77,7 @@ const page = () => {
         if (user) fetchStudents(user as FirebaseUserInfo);
     }, [user]);
 
+    // TODO: Add students to local state/redux instead of re-fetching
     const handleStudentAdded = () => {
         if (user) fetchStudents(user as FirebaseUserInfo);
     }
@@ -94,7 +92,7 @@ const page = () => {
             {/* Main Content Container */}
             <div className="container p-4 md:p-6 space-y-6">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-2xl font-bold">Dashboard</h1>
+                        <h1 className="text-2xl font-bold welcome-dashboard">Dashboard</h1>
                         <div className="flex items-center gap-2">
 
                             {/* Search Bar */}
@@ -138,15 +136,13 @@ const page = () => {
                     <div className="">
                         <Tabs defaultValue="students">
                             <TabsList>
-                            <TabsTrigger value="students">Students</TabsTrigger>
-                            <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                            {/* <TabsTrigger value="deadlines">Upcoming Deadlines</TabsTrigger> */}
+                                <TabsTrigger value="students">Students</TabsTrigger>
+                                <TabsTrigger value="calendar">Calendar</TabsTrigger>
                             </TabsList>
                             <TabsContent value="students" className="space-y-4">
                                 <StudentTable students={students} loading={loading}/>
                             </TabsContent>
                             <TabsContent value="calendar" className="space-y-4">
-                                {/* <ConsultantCalendar /> */}
                                 <DashboardAssignmentList />
                             </TabsContent>
                         </Tabs>

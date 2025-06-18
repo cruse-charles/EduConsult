@@ -1,9 +1,5 @@
 import { db } from "@/lib/firebaseConfig";
-
-import { startOfWeek, endOfWeek } from 'date-fns';
-
-import { query, where, getDocs, collection, doc, orderBy, limit, getDoc } from 'firebase/firestore';
-import { Timestamp } from "firebase/firestore";
+import { doc, getDoc } from 'firebase/firestore';
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -37,7 +33,10 @@ export const fetchAssignments = createAsyncThunk(
             dueDate: data?.dueDate || undefined,
             note: data?.note || '',
             createdAt: data?.createdAt || null,
-            student: data?.student || '',
+            // student: data?.student || '',
+            studentId: data?.studentId || '',
+            studentFirstName: data?.studentFirstName || '',
+            studentLastName: data?.studentLastName || '',
             folder: data?.folder || '',
             status: data?.status || '',
             timeline: data?.timeline || [],
@@ -67,6 +66,9 @@ const studentAssignmentsSlice = createSlice({
     addAssignment(state, action) {
       return [...state, action.payload]
     },
+    clearAssignments(state) {
+      return []
+    },
     // Adds a new entry to the timeline of a specific assignment
     addEntry(state, action) {
       const { entryData, assignmentId } = action.payload;
@@ -90,9 +92,18 @@ const studentAssignmentsSlice = createSlice({
     deleteAssignmentSlice(state, action) {
       const assignmentId = action.payload;
       return state.filter((assignment) => assignment.id !== assignmentId)
+    },
+    renameFolderInStudentAssignmentsSlice(state, action) {
+      const { oldFolderName, newFolderName } = action.payload;
+      state.map((assignment) => {
+        if (assignment.folder === oldFolderName) {
+          assignment.folder = newFolderName;
+          return assignment;
+        }
+      })
     }
   },
-  // Handle async actions using extraReducers for pending, fulfilled, and rejected states
+  // Handle async actions using extraReducers for in-rogress, fulfilled, and rejected states
   extraReducers: (builder) => {
     builder
     .addCase(fetchAssignments.fulfilled, (state, action) => {
@@ -105,5 +116,5 @@ const studentAssignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteAssignmentSlice } = studentAssignmentsSlice.actions;
+export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteAssignmentSlice, clearAssignments, renameFolderInStudentAssignmentsSlice } = studentAssignmentsSlice.actions;
 export default studentAssignmentsSlice.reducer;

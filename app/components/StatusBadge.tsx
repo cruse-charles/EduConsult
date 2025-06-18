@@ -3,11 +3,11 @@ import { Timestamp } from 'firebase/firestore'
 import { CheckCircle, Clock, Eye, Hourglass, Upload } from 'lucide-react'
 import React from 'react'
 
-// TODO: Need to change pending status to overdue when we go past the date
+// TODO: Need to change in-progress status to overdue when we go past the date in database
 const StatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
     if (!dueDate) return null
 
-    if (status === 'Pending' && dueDate < Timestamp.fromDate(new Date())) {
+    if (status === 'In-Progress' && dueDate < Timestamp.fromDate(new Date())) {
         return (
             <Badge className="gap-1 bg-red-100 text-red-800 font-bold hover:bg-red-100 hover:text-red-800">
                 <Clock className="h-3 w-3" />
@@ -17,11 +17,11 @@ const StatusBadge = (status: string, dueDate: Date | Timestamp | undefined) => {
     }
 
     switch (status) {
-        case "Pending":
+        case "In-Progress":
         return (
             <Badge className="gap-1  bg-orange-100 text-orange-800 font-bold hover:bg-orange-100 hover:text-orange-800">
                 <Hourglass className="h-3 w-3" />
-                Assigned
+                In-Progress
             </Badge>
         )
 

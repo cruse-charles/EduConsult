@@ -13,8 +13,11 @@ import ViewAssignmentModal from './ViewAssignmentModal/ViewAssignmentModal'
 
 // TODO: Possibly delete this file, moved it all into the page. Don't see why not just have it all there.
 const StudentCalendar = () => {
-    const [currentDate, setCurrentDate] = useState(new Date())
+    // Retreive student's assignments
     const assignments = useSelector((state: RootState) => state.studentAssignments)
+
+    // State to manage current date and display surrounding week and assignment modal
+    const [currentDate, setCurrentDate] = useState(new Date())
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
 
 
@@ -26,10 +29,6 @@ const StudentCalendar = () => {
 
     const days = []
     const current = new Date(startDate)
-
-    useEffect(() => {
-        console.log(assignments)
-    }, [])
 
     for (let i = 0; i < 35; i++) {
       days.push(new Date(current))

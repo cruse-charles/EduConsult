@@ -3,75 +3,73 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, Edit, FileText, Folder, FolderOpen, MoreHorizontal, Trash2, Upload } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 
+import CustomToast from "@/app/components/CustomToast";
+import StatusBadge from "@/app/components/StatusBadge";
 import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
 import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
-import StatusBadge from "@/app/components/StatusBadge";
+import EditFolderModal from "./EditFolderModal";
 
-import { fetchAssignments, setAssignments } from "@/redux/slices/studentAssignmentsSlice";
-import { Assignment, Student } from "@/lib/types/types";
+import { deleteAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/studentAssignmentsSlice";
+import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from "@/redux/slices/studentSlice";
+import { deleteDashboardAssignment } from "@/redux/slices/consultantAssignmentSlice";
+import { completeStep } from "@/redux/slices/onboardingSlice";
+import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+
+import { Assignment } from "@/lib/types/types";
 import { formatDueDate } from "@/lib/utils";
+import { deleteFolder, renameFolder } from "@/lib/assignmentUtils";
+import { nextStep } from "@/lib/onBoardingUtils";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
+
 import { Timestamp } from "firebase/firestore";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 function AssignmentsList() {
+    // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
-    // const assignments = useSelector((state: RootState) => state.assignments.assignments) as Assignment[]
-    // const folders = useSelector((state: RootState) => state.student.folders) as string[]
-    const {id: studentId} = useParams()
-
-    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
+    const { id } = useParams()
+    const studentId = id as string
     const assignments = useSelector((state: RootState) => state.studentAssignments)
-    const [folders, setFolders] = useState<string[]>(useSelector((state: RootState) => {
-        const studentState = state.student as Student
-        return studentState?.folders || []
-    }))
+    const user = useSelector((state: RootState) => state.user)
+    const folders = useSelector((state: RootState) => state.student.folders) || []
+    const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding);
+
+    // State to manage modal popup for folders
+    const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
 
 
-
-    const student = useSelector((state: RootState) => state.student)
-
+    // State to manage which folders are open and sorting of folders/assignments
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
     const [folderSort, setFolderSort] = useState("")
     const [assignmentSort, setAssignmentSort] = useState("")
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const [loading, setLoading] = useState(true);
+    // State for loading
+    // const [loading, setLoading] = useState(true);
 
-    // TODO: When I delete an assignment, it deletes from database and redux, it fulfills. But if I refresh
-    // I get this error: fetchAssignments rejected: Assignment with ID XXXXX not found. Why does it do this?
-
-    // TODO: switching tabs in the tabs for dashboard re-runs this assignmentsList, but it really shouldn't, so cache
-        // this info and re-use it
-    useEffect(() => {
-        // TODO: Need to dispatch a clear folders/assignments action when studentId changes
-        setLoading(true)
-
-        const studentState = student as Student
-        
-        if (studentState?.assignmentDocIds) {
-            dispatch(fetchAssignments(studentState.assignmentDocIds)).finally(() => setLoading(false));
-        } else {
-            dispatch(setAssignments([]))
-            setLoading(false)
-        }
-    }, [dispatch, studentId, student]);
-
+    // Sort assignments
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
-        let folderAssignments = assignments.filter((assignment) => assignment.folder === folder)
+        
+        // Filter assignments by folder 
+        let folderAssignments = assignments.filter((assignment: Assignment) => assignment.folder === folder)
 
+        // Sort by assignment name
         if (assignmentSort === 'name') {
             folderAssignments.sort((a,b) => a.title.localeCompare(b.title))
         }
 
+        // Sort by assignment dueDate
         if (assignmentSort === 'due') {
             folderAssignments.sort((a,b) => {
                 const dataA = a.dueDate instanceof Timestamp ? a.dueDate.toDate() : a.dueDate as Date
@@ -80,8 +78,9 @@ function AssignmentsList() {
             })
         }
 
+        // Sort by assignment status
         if (assignmentSort === 'status') {
-            const statusOrder = ['Overdue', 'Pending', 'Submitted', 'Under Review', 'Completed']
+            const statusOrder = ['Overdue', 'In-Progress', 'Submitted', 'Under Review', 'Completed']
             folderAssignments.sort((a,b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status))
         }
 
@@ -95,22 +94,26 @@ function AssignmentsList() {
         return count
     }
 
-    if (loading) {
-        return (
-            Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full rounded-md" />
-            ))
-        )
-    }
+    // Loading UI
+    // if (loading) {
+    //     return (
+    //         Array.from({ length: 3 }).map((_, i) => (
+    //             <Skeleton key={i} className="h-12 w-full rounded-md" />
+    //         ))
+    //     )
+    // }
 
-    const sortFolders = (value: string) => {
+    // Function to sort folders
+    const sortFolders = () => {
         let sortedFolders = [...folders]
 
-        if (value === 'name') {
+        // Sort by folder name
+        if (folderSort === 'name') {
             sortedFolders.sort((a,b) => a.localeCompare(b))
         }
 
-        if (value === "due") {
+        // Sort folders by earliest assignment dueDate
+        if (folderSort === "due") {
             const now = new Date()
 
             sortedFolders.sort((a, b) => {
@@ -144,10 +147,75 @@ function AssignmentsList() {
             })
         }
 
-        setFolders(sortedFolders)
+        return sortedFolders
     }
 
-    // TODO: A new folder isn't appearing when i create a new assignment with a new folder, but does on refresh
+    const sortedFolders = sortFolders()
+
+    // Function to delete a folder and assignments within it
+    const handleDeleteFolder = async (folderName: string) => {
+        console.log('foldernmae', folderName)
+
+        try {
+            // Delete folder and assignments in database
+            await deleteFolder(studentId, folderName)
+            
+            // Remove folder from redux, studentSlice
+            dispatch(removeFolder(folderName))
+
+            // Remove assignments from student slice, studentAssignmentsSlice, DashboardAssignmentsSlice
+            const assignmentsInFolder = assignments.filter((assignment: Assignment) => assignment.folder == folderName)
+            assignmentsInFolder.forEach((assignment) => {
+                dispatch(removeAssignmentDocId(assignment.id))
+                dispatch(deleteAssignmentSlice(assignment.id))
+                dispatch(deleteDashboardAssignment(assignment.id))
+            })
+        } catch (error) {
+            console.error("Error deleting folder:", error);
+            toast(<CustomToast title='Error deleting folders.' description="" status='error'/>)
+        }
+            
+    }
+
+    // Function to edit folder name
+    const handleEditFolder = async (oldFolderName: string, newFolderName: string) => {
+
+        try {
+            // Update folder in Firebase
+            await renameFolder(studentId, oldFolderName, newFolderName)
+
+            // Update folder in redux
+            // TODO: UPDATE REDUX ON CONSULTANTDASHBOARD ASSIGNMENTS
+            dispatch(renameFolderInStudentSlice({oldFolderName, newFolderName}))
+            dispatch(renameFolderInStudentAssignmentsSlice({oldFolderName, newFolderName}))
+        } catch (error) {
+            console.error("Error renaming folder:", error);
+            toast(<CustomToast title='Error renaming folders.' description="Please refresh and try again." status="error"/>)
+        }
+    }
+
+    // Handle opening folders and onboarding if necessary
+    const handleOpenFolder = async (folder: string) => {
+        setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])
+        if (!isComplete) {
+            dispatch(completeStep("openFolder"))
+            await nextStep(user.id)
+        }
+    }
+
+    // Handle clicking assignment to open modal for details
+    const handleAssignmentClick = async (assignment: Assignment) => {
+        setIsModalOpen(true)
+
+        dispatch(setCurrentAssignment(assignment))
+
+        // Check if onboarding is complete for tooltip to render
+        if (!isComplete) {
+            dispatch(completeStep("viewAssignment"))
+            await nextStep(user.id)
+        }
+    }
+
     return (
         <>
             {/* Sorting Controls */}
@@ -156,7 +224,7 @@ function AssignmentsList() {
                 <div className="flex items-center gap-2">
                     <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm font-medium">Sort folders by:</span>
-                    <Select value={folderSort} onValueChange={(value) => {setFolderSort(value); sortFolders(value)}}>
+                    <Select value={folderSort} onValueChange={(value) => {setFolderSort(value); sortFolders()}}>
                     <SelectTrigger className="w-40">
                         <SelectValue />
                     </SelectTrigger>
@@ -188,16 +256,13 @@ function AssignmentsList() {
             <Card>
                 <CardContent className="p-0">
                     <div className="space-y-2">
-                        {folders?.map((folder) => (
+                        {sortedFolders?.map((folder) => (
                             <Collapsible
                                 key={folder}
-                                onOpenChange={() => setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])}
+                                onOpenChange={() => handleOpenFolder(folder)}
                             >
                                 <CollapsibleTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto"
-                                    >
+                                    <div className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto folder">
                                         <div className="flex items-center gap-3">
                                             {openedFolders.includes(folder) ? (
                                                 <FolderOpen className="h-5 w-5 text-primary" />
@@ -213,21 +278,35 @@ function AssignmentsList() {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                        <Badge variant="outline">
-                                            {getCompletedCount(getFilteredAssignments(folder))}/{getFilteredAssignments(folder).length}
-                                        </Badge>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="sm" onClick={(e) => e.stopPropagation()}>
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onClick={() => setSelectedFolder(folder)}>
+                                                    <Edit className="h-4 w-4 mr-2" />
+                                                    Rename Folder
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem className="text-red-600" onClick={(e) => handleDeleteFolder(folder)}>
+                                                    <Trash2 className="h-4 w-4 mr-2" />
+                                                    Delete Folder
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                         {openedFolders.includes(folder) ? (
                                             <ChevronDown className="h-4 w-4" />
                                         ) : (
                                             <ChevronRight className="h-4 w-4" />
                                         )}
                                         </div>
-                                    </Button>
+                                    </div>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
-                                        <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
+                                        <div onClick={() => handleAssignmentClick(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted assignment">   
                                             <div className="flex items-center gap-3 flex-1">
                                                 <div className="flex items-center gap-2">
                                                     {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
@@ -249,8 +328,8 @@ function AssignmentsList() {
                     </div>  
                 </CardContent>
             </Card>
-            {/* @ts-ignore */}
-            <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            <ViewAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+            <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} handleSave={handleEditFolder} oldFolderName={selectedFolder}/>
         </>
     )
 }

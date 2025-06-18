@@ -21,10 +21,20 @@ const CustomToast = ({title, description, status}: {title: string; description: 
                 <XCircle className="h-5 w-5 text-red-500 mt-1" />
                 <div>
                     <p className="font-medium">{title}</p>
-                    {description && <p className="text-sm text-muted-foreground">{description}</p>}
+                    {description && <p className="text-sm text-muted-foreground">{descriptionCheck(description)}</p>}
                 </div>
             </div>
         )
+    }
+}
+
+const descriptionCheck = (description: string) => {
+    if ((description).includes('auth/email-already-in-use')) {
+        return 'Email already in use'
+    } else if ((description).includes('6')) {
+        return 'Password should be at least 6 characters long.'
+    } else {
+        return description
     }
 }
 

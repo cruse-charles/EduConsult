@@ -42,7 +42,7 @@ const Highlights = () => {
                 <>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Students In-Progress</CardTitle>
+                            <CardTitle className="text-sm font-medium">Students In-Progress</CardTitle>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -52,12 +52,12 @@ const Highlights = () => {
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
+                            <CardTitle className="text-sm font-medium">Tasks Due This Week</CardTitle>
                             <BookOpen className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{tasksDueThisWeek} due this week</div>
-                            {/* <p className="text-xs text-muted-foreground">X pending tasks total</p> */}
+                            <div className="text-2xl font-bold">{tasksDueThisWeek} Due</div>
+                            {/* <p className="text-xs text-muted-foreground">X tasks total</p> */}
                         </CardContent>
                     </Card>
                     <Card>
@@ -68,7 +68,8 @@ const Highlights = () => {
                         <CardContent>
                             {/* TODO: Make sure styling stops name from going out of box */}
                             <div className="text-2xl font-bold">{formatNextDeadline(nextAssignmentDeadline?.dueDate)}</div>
-                            <p className="text-xs text-muted-foreground">{nextAssignmentDeadline?.student}/{nextAssignmentDeadline?.title}</p>
+                            {/* <p className="text-xs text-muted-foreground">{nextAssignmentDeadline?.student}/{nextAssignmentDeadline?.title}</p> */}
+                            <p className="text-xs text-muted-foreground">{formatNextDeadline(nextAssignmentDeadline?.dueDate) != 'No upcoming deadlines'? `${nextAssignmentDeadline?.studentFirstName} ${nextAssignmentDeadline?.studentLastName}/${nextAssignmentDeadline?.title}` : ``}</p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -77,7 +78,7 @@ const Highlights = () => {
                             <Flag className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{overDueAssignments} assignments</div>
+                            <div className="text-2xl font-bold">{overDueAssignments} Overdue</div>
                             {/* <p className="text-xs text-muted-foreground">For: Student/Assignment</p> */}
                         </CardContent>
                     </Card>
@@ -96,7 +97,7 @@ const Highlights = () => {
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Pending</CardTitle>
+                            <CardTitle className="text-sm font-medium">In-Progress Tasks</CardTitle>
                             <Clock className="h-4 w-4 text-orange-500" />
                         </CardHeader>
                         <CardContent>

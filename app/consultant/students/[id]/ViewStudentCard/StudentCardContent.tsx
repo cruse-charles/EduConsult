@@ -30,7 +30,7 @@ function StudentCardContent({student}: {student: Student}) {
             </div>
         </div>
 
-        <Separator />
+        {/* <Separator /> */}
 
         {/* <div className="space-y-2">
             <div className="text-sm font-medium">Target School</div>
@@ -40,15 +40,15 @@ function StudentCardContent({student}: {student: Student}) {
             </div>
         </div> */}
 
-        <Separator />
+        {/* <Separator /> */}
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
             <div className="flex items-center justify-between">
                 <div className="text-sm font-medium">Application Progress</div>
-                {/* <span className="text-sm">{student?.progress}%</span> */}
+                <span className="text-sm">{student?.progress}%</span>
             </div>
-            {/* <Progress value={student?.progress} className="h-2" /> */}
-        </div>
+            <Progress value={student?.progress} className="h-2" />
+        </div> */}
 
         <Separator />
 

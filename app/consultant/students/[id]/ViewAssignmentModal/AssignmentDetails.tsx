@@ -6,27 +6,32 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from 'sonner'
 import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'lucide-react'
+
+import CustomToast from '@/app/components/CustomToast'
 
 import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
 import { Assignment } from '@/lib/types/types'
 import { cn, formatDueDate } from '@/lib/utils'
+import { updateInProgressCount } from '@/lib/statsUtils'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
 import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/studentAssignmentsSlice'
+import { checkReduxNextDeadline, removeAssignmentDocId, updateReduxInProgressCount } from '@/redux/slices/studentSlice'
+import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'next/navigation'
-import { updatePendingCount } from '@/lib/statsUtils'
-import { RootState } from '@/redux/store'
-import CustomToast from '@/app/components/CustomToast'
-import { toast } from 'sonner'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;
     onOpenChange: (open: boolean) => void;
 }
 
-function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
+function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
+
     const user = useSelector((state: RootState) => state.user)
 
     const dispatch = useDispatch();
@@ -34,6 +39,8 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const [isLoading, setIsLoading] = useState(false)
     
     const { id: studentId } = useParams<{id:string}>();
+    const assignment = useSelector((state: RootState) => state.currentAssignment)
+
 
     // TODO: WHEN WE CHANGE THE DUEDATE, WE NEED TO UPDATE THE STUDENT'S STATS OBJECT ON EDIT TOO, ALSO DIDNT WORK FOR CREATION
     const [formData, setFormData] = useState({
@@ -52,35 +59,40 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         }))
     }
 
-    useEffect(() => {
-        console.log(assignment)
-    }, [])
-
     const handleSelectChange = (name: string, value: string) => {
         setFormData((prev) => ({
             ...prev,
             [name]: value
         }))
 
-        // Adjust pendingCount if status changes
+        // Adjust in-progressCount if status changes
         if (name === 'status') {
-            console.log('Going into Upddate assignment function')
-            updatePendingCount(studentId, value)
+            updateInProgressCount(studentId, value)
         } 
     }
 
-    // TODO: If there is no note, then we shouldn't make it mandatory. Also on view assignment, the type doesn't always show up
     const handleEditAssignmentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        // Error handling
         if (!assignment?.id || !formData.type || !formData.status || !formData.dueDate) {
             alert("Please fill out all fields.");
             return;
         }
 
+        // Update edited assignment in redux
         dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: formData }))
+        
+        // Adjust InProgress count depending on status, and nextDeadline in backend and redux
+        updateInProgressCount(studentId, formData.status, assignment.status)
+        dispatch(updateReduxInProgressCount({oldStatus: assignment.status, newStatus: formData.status}))
+        dispatch(checkReduxNextDeadline(formData.dueDate))
         // @ts-ignore
-        await updateAssignment(formData, assignment?.id)
+        await updateAssignment(formData, assignment?.id, studentId)
+
+        // Update current assignment in redux
+        dispatch(setCurrentAssignment({...assignment, ...formData}))
+        
 
         toast(<CustomToast title="Successfully Updated Assignment" description='' status='success' />)
         setEdit(false)
@@ -88,7 +100,6 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
 
     const handleCancel = () => {
         // Reset form data to original values
-        
         setFormData({
             type: assignment?.type,
             status: assignment?.status,
@@ -97,9 +108,9 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         })
         setEdit(false)
     }
-
+    
+    // set dueDate to 11:59pm of the day selected
     const handleDateChange = (dueDate: Date) => {
-        // set dueDate to 11:59pm of the day selected
         const dueDateAt1159pm = new Date(dueDate);
         dueDateAt1159pm.setHours(23, 59, 0, 0); 
         
@@ -109,14 +120,27 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
         }))
     }
 
-    // TODO: MAKE THIS DECREASE PENDING TASKS TOO IF WE DELETE AND STATUS IS ON PENDING
+    // TODO: try/catch for error handling
     const handleDelete = async () => {
         if (!assignment?.id) return;
+        
+        // Exit edit mode and close modal
         setEdit(false)
-        await deleteAssignment(assignment?.id, studentId)
-        dispatch(deleteAssignmentSlice(assignment?.id))
-        updatePendingCount(studentId, 'Deleted')
         onOpenChange(false);
+
+        // Delete Assignmnet in backend
+        await deleteAssignment(assignment?.id, studentId)
+        
+        // Remove assignment from assignment list and list of AssignmentDocIds
+        dispatch(deleteAssignmentSlice(assignment?.id))
+        dispatch(removeAssignmentDocId(assignment?.id))
+
+        // Adjust progressCount in backend and redux
+        dispatch(updateReduxInProgressCount({oldStatus: assignment.status, newStatus: 'Deleted'}))
+        updateInProgressCount(studentId, 'Deleted')
+
+        // Show popup on success
+        toast(<CustomToast title="Successfully Deleted Assignment" description='' status='success'/>)
     }
     
     // TODO: MAKE STATUS CHANGE TO SUBMITTED AUTOMATICALLY WHEN STUDENT SUBMITS
@@ -150,9 +174,12 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="Essay">Essay</SelectItem>
+                                    <SelectItem value="Application">Application</SelectItem>
                                     <SelectItem value="Document">Document</SelectItem>
                                     <SelectItem value="Portfolio">Portfolio</SelectItem>
-                                    <SelectItem value="Application">Application</SelectItem>
+                                    <SelectItem value="Test Prep">Test Preparation</SelectItem>
+                                    <SelectItem value="Recommendation Letter">Recommendation Letter</SelectItem>
+                                    <SelectItem value="Interview Prep">Interview Preparation</SelectItem>
                                     <SelectItem value="Other">Other</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -165,7 +192,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                                     <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="Pending">Assigned</SelectItem>
+                                    <SelectItem value="In-Progress">In-Progress</SelectItem>
                                     <SelectItem value="Submitted">Submitted</SelectItem>
                                     <SelectItem value="Under Review">Under Review</SelectItem>
                                     <SelectItem value="Completed">Completed</SelectItem>
@@ -214,26 +241,26 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                 ) : (
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            {/* <User className="h-4 w-4 text-muted-foreground" /> */}
-                            {/* <span className="text-sm font-medium">Student:</span>
-                            <span className="text-sm">{formData?.student}</span> */}
+                            <User className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm font-medium">Student:</span>
+                            <span className="text-sm">{assignment?.studentFirstName} {assignment.studentLastName}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <FileText className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm font-medium">Type:</span>
-                            <Badge variant="outline">{formData?.type}</Badge>
+                            <Badge variant="outline">{assignment?.type}</Badge>
                         </div>
                         <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm font-medium">Status:</span>
-                            <Badge variant={formData?.status === "Completed" ? "default" : "outline"}>
-                                {formData?.status}
+                            <Badge variant={assignment?.status === "Completed" ? "default" : "outline"}>
+                                {assignment?.status}
                             </Badge>
                         </div>
                         <div className="flex items-center gap-2">
                             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm font-medium">Due Date:</span>
-                            <span className="text-sm">{formatDueDate(formData?.dueDate)}</span>
+                            <span className="text-sm">{formatDueDate(assignment?.dueDate)}</span>
                         </div>
                     </div>
                 )}
@@ -245,7 +272,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
                 <div className="space-y-3">
                     <h4 className="font-medium">Instructions</h4>
                     <div className="p-3 bg-muted/50 rounded-md">
-                        <p className="text-sm">{formData?.note}</p>
+                        <p className="text-sm">{assignment?.note}</p>
                     </div>
                 </div>
             )}

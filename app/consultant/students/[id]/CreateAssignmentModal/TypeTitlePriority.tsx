@@ -8,16 +8,11 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 interface TypeTitlePriorityProps {
     formData: AssignmentFormData;
     handleInputChange: (field: string, value: string) => void;
-    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string }>>;
-    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;};
+    setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string; }>>;
+    errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;};
 }
 
 function TypeTitlePriority({formData, handleInputChange, setErrors, errors}: TypeTitlePriorityProps) {
-
-    useEffect(() => {
-        console.log('errors', errors)
-    }, [errors])
-
 
     return (
         <>
@@ -25,7 +20,7 @@ function TypeTitlePriority({formData, handleInputChange, setErrors, errors}: Typ
                 <Label htmlFor="title">
                     Assignment Title <span className="text-red-500">*</span>
                 </Label>
-                <Input id="title" placeholder="e.g., Stanford Application Essay" value={formData.title} onChange={(e) => handleInputChange("title", e.target.value)}   />
+                <Input id="title" placeholder="e.g., Stanford Supplemental Essay #1" value={formData.title} onChange={(e) => handleInputChange("title", e.target.value)}   />
                 {errors?.title && <p className="text-sm text-red-500">{errors.title}</p>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

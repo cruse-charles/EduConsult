@@ -2,7 +2,7 @@ import { doc, getDoc, increment, Timestamp, updateDoc } from "firebase/firestore
 import { db } from "./firebaseConfig";
 
 // Function to update the next deadline for a student
-export const updateNextDeadline = async (studentId: string, dueDate: Date | Timestamp | undefined) => {
+export const updateNextDeadlineForStudent = async (studentId: string, dueDate: Date | Timestamp | undefined) => {
     try {
 
         if (!dueDate) {
@@ -54,25 +54,43 @@ export const updateNextDeadline = async (studentId: string, dueDate: Date | Time
     }
 }
 
-// Function to update the pending assignments count for a student
-export const updatePendingCount = async (studentId: string, status: string) => {
+// Function to update the InProgress assignments count for a student
+export const updateInProgressCount = async (studentId: string, newStatus: string, oldStatus?: string) => {
     try {
         // Get the student's doc reference
         const studentDocRef = doc(db, "studentUsers", studentId);
 
-        // Update the pending assignments count, if added assignment is pending then add to count, if not then subtract
+        // Update the InProgress assignments count, if added assignment is InProgress then add to count, if not then subtract
         // Use increment to update the count without reads
-        if (status === 'Pending') {
-            await updateDoc(studentDocRef, {
-                "stats.pendingAssignmentsCount": increment(1)
-            })
-        } else {
-            await updateDoc(studentDocRef, {
-                "stats.pendingAssignmentsCount": increment(-1)
-            })
-        }
 
+        
+        // Creating a document, automatically InProgress
+        if (newStatus === 'InProgress' && !oldStatus) {
+            await updateDoc(studentDocRef, {
+                "stats.inProgressAssignmentsCount": increment(1)
+            })
+            return
+        }
+        
+        // Changing status from InProgress to non-InProgress
+        if (oldStatus === 'InProgress' && newStatus != 'InProgress') {
+            await updateDoc(studentDocRef, {
+                "stats.inProgressAssignmentsCount": increment(-1)
+            })
+            return
+        }
+        
+        // Changing status from non-InProgress to non-InProgress
+        // if (newStatus != 'InProgress' && oldStatus != 'InProgress') return
+
+        // Changing status from non-InProgress back to InProgress
+        if (oldStatus !='In-Progress' && newStatus === 'In-Progress') {
+            await updateDoc(studentDocRef, {
+                "stats.inProgressAssignmentsCount": increment(1)
+            })
+            return
+        }
     } catch (error) {
-        console.log("Error updating pending assignments:", error)
+        console.log("Error updating In-Progress assignments:", error)
     }
 }

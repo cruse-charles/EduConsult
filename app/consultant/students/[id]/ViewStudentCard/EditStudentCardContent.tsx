@@ -11,11 +11,14 @@ interface EditStudentCardContentProps {
     setEditStudent: React.Dispatch<React.SetStateAction<Student>>;
 }
 
-// TODO: Need loading state
+// TODO: Need loading state on saving edits
 function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardContentProps) {
+    const safeValue = (value: number | null) => (value === null || isNaN(value) ? '' : value);
 
     const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target
+
+
 
         setEditStudent((prev) => (
             {
@@ -48,7 +51,7 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
             <div className="text-sm font-medium">Contact Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">Email:</div>
-                <Input className='h-7' name='email' value={editStudent?.personalInformation.email} onChange={handlePersonalInfoChange}/>
+                <Input className='h-7' name='email' type='email' value={editStudent?.personalInformation.email} onChange={handlePersonalInfoChange}/>
                 <div className="text-muted-foreground">Phone:</div>
                 <Input className='h-7' name='phone' value={editStudent?.personalInformation.phone} onChange={handlePersonalInfoChange}/>
             </div>
@@ -61,10 +64,12 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">School:</div>
                 <Input className='h-7' name='currentSchool' value={editStudent?.academicInformation.currentSchool} onChange={handleAcademicInfoChange}/>
+                
                 <div className="text-muted-foreground">Grade:</div>
-                <Input className='h-7' name='grade' value={Number(editStudent?.academicInformation.grade)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='grade' value={safeValue(editStudent?.academicInformation.grade)} onChange={handleAcademicInfoChange}/>
+                
                 <div className="text-muted-foreground">GPA:</div>
-                <Input className='h-7' name='gpa' value={Number(editStudent?.academicInformation.gpa)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' step="any" name='gpa' value={safeValue(editStudent?.academicInformation.gpa)} onChange={handleAcademicInfoChange}/>
             </div>
         </div>
 
@@ -78,21 +83,20 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
             </div>
         </div> */}
 
-        <Separator />
+        {/* <Separator /> */}
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
             <div className="flex items-center justify-between">
             <div className="text-sm font-medium">Application Progress</div>
-            {/* <span className="text-sm">{editStudent?.progress}%</span> */}
+            <span className="text-sm">{editStudent?.progress}%</span>
             </div>
-            {/* <Progress value={editStudent?.progress} className="h-2" /> */}
-        </div>
+            <Progress value={editStudent?.progress} className="h-2" />
+        </div> */}
 
-        <Separator />
+        {/* <Separator /> */}
 
         <div className="space-y-2">
             <Textarea name='notes' className="text-sm font-medium" value={editStudent?.personalInformation.notes} onChange={handlePersonalInfoChange}/>
-            {/* <p className="text-sm text-muted-foreground">{editStudent.notes}</p> */}
         </div>
     </CardContent>
   )

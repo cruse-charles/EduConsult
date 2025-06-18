@@ -17,16 +17,18 @@ import { AssignmentFile, AssignmentFormData } from "@/lib/types/types"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
-import { updateFolders, updateAssignmentDocIds } from "@/redux/slices/studentSlice"
+import { updateFolders, updateAssignmentDocIds, updateReduxInProgressCount, checkReduxNextDeadline } from "@/redux/slices/studentSlice"
 import { RootState } from "@/redux/store";
-import { addAssignment } from "@/redux/slices/studentAssignmentsSlice"
+import { addAssignment, fetchAssignments } from "@/redux/slices/studentAssignmentsSlice"
 import { Timestamp } from "firebase/firestore";
 import { useFiles } from "@/hooks/useFiles"
-import { updatePendingCount } from "@/lib/statsUtils"
+import { updateInProgressCount } from "@/lib/statsUtils"
 
 
 import { toast } from "sonner"
 import CustomToast from "@/app/components/CustomToast"
+import { completeStep } from "@/redux/slices/onboardingSlice"
+import { nextStep } from "@/lib/onBoardingUtils"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -41,6 +43,8 @@ function CreateAssignmentModal() {
     // Retrieve student and consultant
     const { id: studentId } = useParams<{id:string}>()
     const user = useSelector((state: RootState) => state.user);
+    const student = useSelector((state: RootState) => state.student)
+    const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 
     // State to manage assignment details
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
@@ -54,14 +58,20 @@ function CreateAssignmentModal() {
         type: "",
         priority: "",
         folder: "",
-        student: studentId,
+        studentId: studentId,
+        studentFirstName: student?.personalInformation?.firstName,
+        studentLastName: student?.personalInformation?.lastName,
+        consultantFirstName: user.firstName,
+        consultantLastName: user.lastName,
         dueDate: undefined,
         note: "",
         files: [],
         createdAt: null,
-        status: 'Pending',
+        status: 'In-Progress',
     })
-    const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;}>({})
+
+
+    const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;}>({})
 
     // Reset the form data
     const resetForm = () => {
@@ -70,12 +80,16 @@ function CreateAssignmentModal() {
             type: "",
             priority: "",
             folder: "",
-            student: studentId,
+            studentId: studentId,
+            studentFirstName: student?.personalInformation?.firstName,
+            studentLastName: student?.personalInformation?.lastName,
+            consultantFirstName: user.firstName,
+            consultantLastName: user.lastName,
             dueDate: undefined,
             note: "",
             files: [],
             createdAt: null,
-            status: 'Pending'
+            status: 'In-Progress'
         });
         clearFiles()
         setDueDate(undefined);
@@ -84,7 +98,7 @@ function CreateAssignmentModal() {
 
     // Validate form inputs and set error messages
     const validateForm = () => {
-        const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string;} = {}
+        const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;} = {}
 
         if (!formData.title) {
             newErrors.title = 'A title is required.'
@@ -101,6 +115,12 @@ function CreateAssignmentModal() {
         if (!dueDate) {
             newErrors.dueDate = 'Please select a due date.'
         }
+        
+        // Only validate folder name if user is creating a new folder
+        if (newFolder && student.folders?.includes(formData.folder)) {
+            newErrors.folderName = 'Folder name already used.'
+        }
+
 
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
@@ -108,67 +128,90 @@ function CreateAssignmentModal() {
 
     // TODO: This needs to be a try/catch for errors
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        setIsLoading(true)
-        console.log(formData)
+        try {
+            e.preventDefault()
+            setIsLoading(true)
+    
+            const isValid = validateForm();
+            if (!isValid) {
+                setIsLoading(false);
+                return;
+            }
+    
+            // set dueDate to 11:59pm of the day selected
+            // @ts-ignore
+            const dueDateAt1159pm = new Date(dueDate);
+            dueDateAt1159pm.setHours(23, 59, 0, 0); 
+    
+            // Data to create a new assignment
+            const assignmentData = {
+                title: formData.title,
+                type: formData.type,
+                priority: formData.priority,
+                note: formData.note,
+                folder: formData.folder,
+                status: formData.status,
+                dueDate: Timestamp.fromDate(dueDateAt1159pm),
+                createdAt: Timestamp.fromDate(new Date()),
+                studentId: studentId,
+                studentFirstName: student?.personalInformation?.firstName,
+                studentLastName: student?.personalInformation?.lastName,
+                consultantFirstName: user.firstName,
+                consultantLastName: user.lastName,
+                consultantId: user.id,
+                timeline: [{
+                    files: [] as AssignmentFile[],
+                    type: 'Assignment Created',
+                    uploadedAt: Timestamp.fromDate(new Date()),
+                    uploadedByName: `${user.firstName} ${user.lastName}`,
+                    uploadedById: user.id,
+                    note: 'Assignment created and assigned to student.'
+                }]
+            }
+    
+            // Upload files to Firebase Storage
+            const filesData = await fileUpload(files, studentId)
+            assignmentData.timeline[0].files = filesData
+            
+            // Create Assignment
+            if (!user.role) return
+            const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
 
-        const isValid = validateForm();
-        if (!isValid) {
-            setIsLoading(false);
-            return;
+            // Create assignment with ID to add to redux for proper ordering
+            const assignmentWithId = {
+                id: assignmentDocId,
+                ...assignmentData,
+            }
+
+            // Add assignment to StudentAssignmentSlice
+            dispatch(addAssignment(assignmentWithId))
+
+            // Clean up UI
+            setIsLoading(false)
+            setOpen(false)
+            resetForm()
+
+            // Update redux to include new folder if any and add assignment to student's profile
+            dispatch(updateFolders(formData.folder))
+            dispatch(updateAssignmentDocIds(assignmentDocId))
+
+            // Increase In-Progress count on addition of new assignment and nextDeadline check
+            updateInProgressCount(studentId, 'In-Progress')
+            dispatch(updateReduxInProgressCount({newStatus: assignmentData.status}))
+            dispatch(checkReduxNextDeadline(assignmentData.dueDate))
+
+            // Updating onboarding if necessary
+            if (!isComplete) {
+                dispatch(completeStep("createAssignment"))
+                await nextStep(user.id)
+            }
+            
+            // Display confirmation email
+            toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="success"/>)
+        } catch (error) {
+            console.error("Error creating assignment:", error);
+            toast(<CustomToast title="Failed to Create Assignment" description="Please refresh and try again." status="error"/>)
         }
-
-        // set dueDate to 11:59pm of the day selected
-        // @ts-ignore
-        const dueDateAt1159pm = new Date(dueDate);
-        dueDateAt1159pm.setHours(23, 59, 0, 0); 
-
-        // Data to create a new assignment
-        const assignmentData = {
-            title: formData.title,
-            type: formData.type,
-            priority: formData.priority,
-            dueDate: Timestamp.fromDate(dueDateAt1159pm),
-            note: formData.note,
-            createdAt: Timestamp.fromDate(new Date()),
-            student: studentId,
-            folder: formData.folder,
-            status: formData.status,
-            timeline: [{
-                files: [] as AssignmentFile[],
-                type: 'Assignment Created',
-                uploadedAt: Timestamp.fromDate(new Date()),
-                uploadedBy: `${user.firstName} ${user.lastName}`,
-                note: 'Assignment created and assigned to student.'
-            }]
-        }
-
-        // Upload files to Firebase Storage
-        const filesData = await fileUpload(files, studentId)
-        assignmentData.timeline[0].files = filesData
-
-        // Create Assignment
-        if (!user.role) return console.log('No consultant found')
-        const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
-        
-        // Create assignment with ID to add to redux for proper ordering
-        const assignmentWithId = {
-            id: assignmentDocId,
-            ...assignmentData,
-        }
-        dispatch(addAssignment(assignmentWithId))
-
-        // Clean up UI
-        setIsLoading(false)
-        setOpen(false)
-        resetForm()
-
-        // Update redux to include new folder if any and add assignment to student's profile
-        dispatch(updateFolders(formData.folder))
-        dispatch(updateAssignmentDocIds(assignmentDocId))
-        updatePendingCount(studentId, 'Pending')
-        // toast("Assignment Created")
-        toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="succes"/>)
     }
 
     const handleInputChange = (name: string, value: string) => {
@@ -187,7 +230,7 @@ function CreateAssignmentModal() {
             if (!isOpen) resetForm()
         }}>
             <DialogTrigger asChild>
-                <Button onClick={() => setOpen(true)}>
+                <Button onClick={() => setOpen(true)} className="create-assignment">
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
                 </Button>

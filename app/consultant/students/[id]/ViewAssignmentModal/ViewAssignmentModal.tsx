@@ -2,38 +2,43 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from 'sonner'
 
-import FileUploadView from '@/app/students/[id]/CreateAssignmentModal/FileUploadView'
+import FileUploadView from '../CreateAssignmentModal/FileUploadView'
+import AssignmentDetails from './AssignmentDetails'
+import AssignmentTimeline from './AssignmentTimeline'
+import CustomToast from '@/app/components/CustomToast'
 
 import { fileUpload, uploadEntry, updateAssignment } from '@/lib/assignmentUtils'
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
+import { nextStep } from '@/lib/onBoardingUtils'
 
 import { addEntry, updateAssignmentSlice } from '@/redux/slices/studentAssignmentsSlice'
+import { completeStep, next } from '@/redux/slices/onboardingSlice'
+import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 import { RootState } from '@/redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import AssignmentDetails from './AssignmentDetails'
-import AssignmentTimeline from './AssignmentTimeline'
-import { toast } from 'sonner'
-import CustomToast from '@/app/components/CustomToast'
 
 interface ViewAssignmentModalProps {
-    assignment: Assignment;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentModalProps) {
+function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
 
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     const { id: studentId } = useParams<{id:string}>()
+    
+    // Retrieve data for current user, if onboarding is commplete and assignment being viewed
     const dispatch = useDispatch();
-
     const user = useSelector((state: RootState) => state.user)
-    const [currentAssignment, setCurrentAssignment] = useState(assignment)
+    const { isComplete } = useSelector((state: RootState) => state.onboarding)
+    const assignment = useSelector((state: RootState) => state.currentAssignment)
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
@@ -41,11 +46,9 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
         files: []
     })
 
+    // Manage loading state 
     const [isLoading, setIsLoading] = useState(false)
-
-    useEffect(() => {
-        setCurrentAssignment(assignment);
-    }, [assignment]);
+    if (!assignment) return null;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
         const {name, value} = e.target
@@ -56,66 +59,78 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
         }))
     }
 
-    // TODO: This needs to be in a try-catch block
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
-        
-        const entryData = {
-            files: [] as AssignmentFile[],
-            note: formData.note,
-            uploadedAt: new Date(),
-            uploadedBy: user.firstName + ' ' + user.lastName,
-            type: user.role === 'consultant' ? 'Feedback' : 'Submission'
-        }
 
-        // TODO: Make this a red inline error
-        // Error handling
-        if (entryData.note.trim() === '') {
-            if (user.role === 'consultant') {
-                alert('Please add a note to submit feedback.')
-            } else {
-                alert('Please add a note to submit submission   .')
+        try {
+            const entryData = {
+                files: [] as AssignmentFile[],
+                note: formData.note,
+                uploadedAt: new Date(),
+                uploadedBy: user.firstName + ' ' + user.lastName,
+                type: user.role === 'consultant' ? 'Feedback' : 'Submission'
             }
-
+    
+            // TODO: Make this a red inline error
+            // Error handling
+            if (entryData.note.trim() === '') {
+                if (user.role === 'consultant') {
+                    alert('Please add a note to submit feedback.')
+                } else {
+                    alert('Please add a note to submit submission   .')
+                }
+    
+                setIsLoading(false)
+                return
+            }
+            
+            // Upload files to firebase storage and attach files for entry form upload
+            const filesData = await fileUpload(files, studentId)
+            entryData.files = filesData
+    
+            // Upload entry to firestore
+            await uploadEntry(entryData, assignment.id)
+    
+            // update redux state and reset form data
+            dispatch(addEntry({ entryData, assignmentId: assignment.id }))
+            setFormData({
+                note: '',
+                files: []
+            })
+    
+            // Update local state to reflect new timeline entry, updating status if there is an entry from a student
+            const updatedAssignment = {
+                ...assignment,
+                timeline: [...(assignment.timeline || []), entryData],
+                status: user.role === 'student' ? 'Submitted' : assignment.status
+            };
+    
+            // setCurrentAssignment(updatedAssignment);
+            dispatch(updateAssignmentSlice({ assignmentId: assignment.id, updateData: updatedAssignment }));
+            dispatch(setCurrentAssignment(updatedAssignment))
+            // @ts-ignore
+            await updateAssignment(updatedAssignment, assignment.id);
+    
+            // Next step in onboarding if not completed
+            if (!isComplete) {
+                dispatch(completeStep('createEntry'))
+                await nextStep(user.id)
+            }
+    
+            // CLear files, change loading state, success message
+            clearFiles()
             setIsLoading(false)
-            return
+            toast(<CustomToast title="Entry Added" description="" status="success"/>)
+
+        } catch (error) {
+            setIsLoading(false)
+            toast(<CustomToast title='Entry Not Added' description='' status='error'/>)
         }
-        
-        // Upload files to firebase storage and attach files for entry form upload
-        const filesData = await fileUpload(files, studentId)
-        entryData.files = filesData
 
-        
-        // Upload entry to firestore
-        await uploadEntry(entryData, assignment.id)
-
-        
-        // update redux state and reset form data
-        dispatch(addEntry({ entryData, assignmentId: assignment.id }))
-        setFormData({
-            note: '',
-            files: []
-        })
-
-        // Update local state to reflect new timeline entry, updating status if there is an entry from a student
-        const updatedAssignment = {
-            ...currentAssignment,
-            timeline: [...(currentAssignment.timeline || []), entryData],
-            status: user.role === 'student' ? 'Submitted' : currentAssignment.status
-        };
-
-        setCurrentAssignment(updatedAssignment);
-
-        dispatch(updateAssignmentSlice({ assignmentId: assignment.id, updateData: updatedAssignment }));
-        // @ts-ignore
-        await updateAssignment(updatedAssignment, assignment.id);
-
-        clearFiles()
-        setIsLoading(false)
-        toast(<CustomToast title="Entry Added" description="" status="success"/>)
     }
 
+    // Dynamic button label based on user role and loading state
     const baseButtonLabel = user.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';
     const buttonLabel = isLoading ? 'Submitting...' : baseButtonLabel;
 
@@ -133,14 +148,12 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
                     {/* Assignment Details Container*/}
                     <div className="lg:col-span-1 space-y-4">
-                        {/* <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} /> */}
-                        <AssignmentDetails assignment={currentAssignment} onOpenChange={onOpenChange} />
+                        <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} />
                     </div>
 
                     {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
-                        <AssignmentTimeline assignment={currentAssignment}/>
-                        {/* <AssignmentTimeline assignment={assignment}/> */}
+                        <AssignmentTimeline assignment={assignment}/>
 
 
                         <Separator />
@@ -158,7 +171,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
                                 />
                             </div>
                             <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
-                            <Button type='submit' className='mt-2' disabled={isLoading}>
+                            <Button type='submit' className='mt-2 .create-entry' disabled={isLoading}>
                                 {buttonLabel}
                             </Button>
                         </form>

@@ -15,50 +15,41 @@ import { useRouter } from 'next/navigation'
 
 import StudentCardContent from './StudentCardContent'
 import EditStudentCardContent from './EditStudentCardContent'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import { useStudent } from '@/hooks/useStudent'
+import { updateStudentInformation } from '@/redux/slices/studentSlice'
+import CustomToast from '@/app/components/CustomToast'
+import { toast } from 'sonner'
 
-// interface ViewStudentCardProps {
-//     student: Student;
-//     setStudent: (student: Student) => void;
-// }
-
-// function ViewStudentCard({student, setStudent} : ViewStudentCardProps) {
 function ViewStudentCard() {
 
-    // const student : Student = useStudent(useSelector((state: RootState) => state.student).id as string)
+    // Initialize router for navigation and retreive student and user data
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.user)
     const student = useSelector((state: RootState) => state.student) as Student
 
-    if (!student) return <div>Loading...</div>
+    // TODO: Adjust loading state
+    // if (!student) return <div>Loading...</div>
     
-    // State to manage edit mode and the student being edited
+    // State to manage edit mode and the student being edited and loading
     const [editMode, setEditMode] = useState(false)
     const [editStudent, setEditStudent] = useState(student)
+    const [isLoading, setIsLoading] = useState(false)
     
     useEffect(() => {
         if (student) setEditStudent(student)
-    }, [student])
+    }, [student.id])
 
-    useEffect(() => {
-        console.log('Edit Student', editStudent)
-        console.log('Student', student)
-    }, [editStudent, student])
-    
-    // Initialize router for navigation
-    const router = useRouter();
-
-    const user = useSelector((state: RootState) => state.user)
 
     // Function to handle student deletion
     // TODO: DELETE THE STUDENT REF FROM THE CONSULTANT DOCUMENT
-
-    // TODO: Make sure students can't delete their own card/themselves
+    // TODO: Export out the firebase functions
     const handleDelete = async () => {
         try {
+            setIsLoading(true)
             // Delete the student document from Firestore
             await deleteDoc(doc(db, "studentUsers", student.id))
-            console.log("Student deleted:", student.id);
 
             // Remove student from consultant's students array
             const consultantRef = doc(db, "consultantUsers", user.id);
@@ -73,10 +64,12 @@ function ViewStudentCard() {
                 students: updatedStudentRefs
             })
 
-            console.log("Student deleted from consultant's array")
+            setIsLoading(false)
+
             // Redirect to dashboard
-            router.push('/dashboard');
+            router.push(`/${user.role}/dashboard`);
         } catch (error) {
+            setIsLoading(false)
             console.error("Error deleting student:", error);
         }
     }
@@ -85,6 +78,7 @@ function ViewStudentCard() {
         e.preventDefault()
 
         try {
+            setIsLoading(true)
             // Update the student document in Firestore with the edited data
             const studentRef = doc(db, "studentUsers", student.id);
             await updateDoc(studentRef, {
@@ -92,12 +86,17 @@ function ViewStudentCard() {
                 academicInformation: editStudent.academicInformation,
             })
 
-            // Update the local state with the edited student data
+            // Update Redux
+            dispatch(updateStudentInformation(editStudent))
+
+            // Update the local state with the edited student data and end loading
+            setIsLoading(false)
             setEditMode(false);
-            // setStudent(editStudent)
-            console.log("Student updated:", student.id);
+            toast(<CustomToast title="Successfully Updated Student Info" description='' status='success' />)
         } catch (error) {
             console.error("Error updating student:", error);
+            setIsLoading(false)
+            toast(<CustomToast title="Failed to Update Student Info" description='Please refresh and try again.' status='error' />)
         }
     }
 
@@ -123,6 +122,7 @@ function ViewStudentCard() {
                         <>
                             <CardTitle className="text-xl">
                                 {student?.personalInformation?.firstName} {student?.personalInformation?.lastName}
+                                {/* {editStudent?.personalInformation?.firstName} {editStudent?.personalInformation?.lastName} */}
                             </CardTitle>
                             <Button onClick={ ()=> setEditMode(true)} variant="outline" className="self-start md:self-auto">
                                 <Edit className="mr-2 h-4 w-4" />
@@ -139,9 +139,9 @@ function ViewStudentCard() {
                                 <Input className='h-7' name='lastName' value={editStudent.personalInformation.lastName} onChange={handleNameChange}/>   
                             </div>
                             <div className='flex flex-col gap-1'>
-                                <Button variant="outline" onClick={handleSave}>Save</Button>
-                                <Button variant="outline" onClick={() => setEditMode(false)}>Cancel</Button>
-                                <Button variant="outline" onClick={handleDelete}>Delete</Button>
+                                <Button variant="outline" disabled={isLoading} onClick={handleSave}>Save</Button>
+                                <Button variant="outline" disabled={isLoading} onClick={() => setEditMode(false)}>Cancel</Button>
+                                <Button variant='destructive' disabled={isLoading} onClick={handleDelete}>Delete</Button>
                             </div>
                         </>
                     }
@@ -152,7 +152,7 @@ function ViewStudentCard() {
             { editMode ? (
                     <EditStudentCardContent editStudent={editStudent} setEditStudent={setEditStudent}/>
                 ) : (
-                    <StudentCardContent student={editStudent} />
+                    <StudentCardContent student={student} />
                 )
             }
         </Card>

@@ -1,4 +1,4 @@
-import ViewAssignmentModal from '@/app/students/[id]/ViewAssignmentModal/ViewAssignmentModal'
+import ViewAssignmentModal from '../ViewAssignmentModal/ViewAssignmentModal'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -90,8 +90,8 @@ const WeeklyCalendar = () => {
                                                     <div className="text-sm font-medium truncate">
                                                         {assignment.title}
                                                     </div>
-                                                    <div className="text-xs text-muted-foreground truncate" title={assignment.student}>
-                                                        {assignment.student}
+                                                    <div className="text-xs text-muted-foreground truncate" title={assignment.studentFirstName}>
+                                                        {assignment.consultantFirstName} {assignment.consultantLastName}
                                                     </div>
                                                 </div>
                                             </div>

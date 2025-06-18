@@ -2,7 +2,6 @@ import { Timestamp, DocumentReference, DocumentData } from "firebase/firestore";
 
 // Base to create/use a student
 export interface StudentBase {
-    // id: string;
     academicInformation: {
         currentSchool: string;
         gpa: number | null;
@@ -20,7 +19,7 @@ export interface StudentBase {
         notes: string;
     };
     stats: {
-        pendingAssignmentsCount: number;
+        inProgressAssignmentsCount: number;
         nextDeadline: Timestamp | undefined;
     }
     consultant: DocumentReference<DocumentData> | null;
@@ -33,9 +32,6 @@ export interface StudentBase {
 export interface Student extends StudentBase {
     id: string;
     assignmentDocIds?: string[];
-    // pendingTasks: number | null;
-    // nextDeadline: Timestamp | null;
-    // progress: number | null;
     folders: string[]
 }
 
@@ -58,7 +54,11 @@ export interface AssignmentBase {
     dueDate: Date | undefined | Timestamp;
     note: string;
     createdAt: Date | null | Timestamp;
-    student: string;
+    studentId?: string;
+    studentFirstName?: string;
+    studentLastName?: string;
+    consultantFirstName?: string;
+    consultantLastName?: string;
     folder: string;
     status: string;
 }
@@ -85,7 +85,8 @@ export interface Entry {
     note: string;
     type: string;
     uploadedAt: Date | Timestamp;
-    uploadedBy: string;
+    uploadedByName: string;
+    uploadedById: string;
 }
 
 export interface UpdateAssignment {
@@ -101,4 +102,8 @@ export interface FirebaseUserInfo {
   lastName: string;
   email: string;
   role: 'consultant' | 'student';
+  onboarding: {
+    isComplete: boolean;
+    onboardingStep: number;
+  }
 }
