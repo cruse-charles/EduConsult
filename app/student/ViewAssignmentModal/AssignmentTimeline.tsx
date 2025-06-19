@@ -64,7 +64,7 @@ function AssignmentTimeline({assignment}: AssignmentTimelineProps) {
                                     ) : (
                                     <User className="h-3 w-3 text-green-500" />
                                     )}   */}
-                                    <span className="text-sm font-medium">{entry.uploadedBy}</span>
+                                    <span className="text-sm font-medium">{entry.uploadedByName}</span>
                                 {/* </div> */}
                                 <Badge variant="outline" className="text-xs">
                                     {entry.type}
