@@ -67,9 +67,10 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
             const entryData = {
                 files: [] as AssignmentFile[],
                 note: formData.note,
+                type: user.role === 'consultant' ? 'Feedback' : 'Submission',
                 uploadedAt: new Date(),
-                uploadedBy: user.firstName + ' ' + user.lastName,
-                type: user.role === 'consultant' ? 'Feedback' : 'Submission'
+                uploadedById: user.id,
+                uploadedByName: user.firstName + ' ' + user.lastName
             }
     
             // TODO: Make this a red inline error
