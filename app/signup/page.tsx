@@ -100,6 +100,10 @@ const page = () => {
             students: [],
             createdAt: new Date(),
             signInMethod: 'email',
+            onboarding: {
+              isComplete: false,
+              onboardingStep: 0
+            }
         })
 
         // login user
@@ -114,7 +118,15 @@ const page = () => {
           role: 'consultant'
         }))
 
-        router.push('/dashboard');
+        // Call API to set cookie
+        await fetch("/api/set-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: 'consultant' }),
+        });
+        
+        // Navigate to dashboard
+        router.push('/consultant/dashboard')
         setIsLoading(false)
       } catch (error) {
         console.log('Error creating consultant', (error as Error).message)
