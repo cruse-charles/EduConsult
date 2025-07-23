@@ -10,7 +10,7 @@ import { formatNextDeadline } from '@/lib/utils'
 import { Assignment } from '@/lib/types/types'
 
 import { RootState } from '@/redux/store'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 
@@ -20,6 +20,11 @@ const WeeklyCalendar = () => {
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
     // TODO: Maybe rename to just dashboard assignments for redux store
     const assignments = useSelector((state: RootState) => state.consultantDashboardAssignments) as Assignment[]
+    console.log('assignments',assignments)
+
+    useEffect(() => {
+        console.log('assignments', assignments)
+    }, [assignments])
 
     const getDays = () => {
         const daysArray = []
