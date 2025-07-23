@@ -193,7 +193,7 @@ export const getConsultantDashboardAssignments = async (consultantId: string) =>
     // const sixDaysLater = new Date()
     // sixDaysLater.setDate(today.getDate() + 6);
 
-              // Find assignments from two last month, this month, and next month
+    // Find assignments from two last month, this month, and next month
     const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
     const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); 
@@ -202,11 +202,12 @@ export const getConsultantDashboardAssignments = async (consultantId: string) =>
     const q = query(
           collection(db, 'assignments'),
           where('consultantId', '==', consultantId),
+          where('dueDate', '>=', Timestamp.fromDate(startDate)),
+          where('dueDate', '<=', Timestamp.fromDate(endDate)),
+
+        //   7 days this week calendar
           // where('dueDate', '>=', Timestamp.fromDate(today)),
           // where('dueDate', '<=', Timestamp.fromDate(sixDaysLater)),
-                    where('dueDate', '>=', Timestamp.fromDate(startDate)),
-                    where('dueDate', '<=', Timestamp.fromDate(endDate)),
-
           // where('status', '==', 'In-Progress')
     )
 
