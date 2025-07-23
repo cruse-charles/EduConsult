@@ -19,6 +19,8 @@ import { fetchStudent } from "@/redux/slices/studentSlice"
 import { FirebaseUserInfo } from "@/lib/types/types"
 import { AppDispatch } from "@/redux/store"
 import { setOnboardingState } from "@/redux/slices/onboardingSlice"
+import CustomToast from "../components/CustomToast"
+import { toast } from "sonner"
 
 // TODO: Redirect signed in users away from signin/signup pages
 const page = () => {
@@ -66,9 +68,17 @@ const page = () => {
       try {
         // Sign in and get user crednetials
         const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
+        console.log('userCredential', userCredential)
 
         // Retrieve user info
         const user = await getUserInfo(userCredential.user.uid);
+
+        // NEW
+        if (!userCredential.user.emailVerified) {
+          toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
+          return
+        }
+        // NEW
 
         // Add user info to Redux state
         dispatch(setUser({

@@ -1,6 +1,6 @@
 'use client'
 
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
 import { setDoc, doc, getDoc } from "firebase/firestore"
 
@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
+import CustomToast from "../components/CustomToast"
+import { toast } from "sonner"
 
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
@@ -92,6 +94,11 @@ const page = () => {
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password)
         const user = userCredential.user;
 
+        // Send email verification
+        await sendEmailVerification(user)
+
+        toast(<CustomToast title="Email Verification sent. Please check your spam folder." description="" status="success"/>)
+
         // Create a new document with user's UID in Firestore database
         await setDoc(doc(db, "consultantUsers", user.uid), {
             email: user.email,
@@ -106,27 +113,34 @@ const page = () => {
             }
         })
 
-        // login user
-        await signInWithEmailAndPassword(auth, userData.email, userData.password)
+        // OLD
+        // // login user
+        // await signInWithEmailAndPassword(auth, userData.email, userData.password)
 
-        // set user's data after user creation
-        dispatch(setUser({
-          id: user.uid,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          email: user.email,
-          role: 'consultant'
-        }))
+        // // set user's data after user creation
+        // dispatch(setUser({
+        //   id: user.uid,
+        //   firstName: userData.firstName,
+        //   lastName: userData.lastName,
+        //   email: user.email,
+        //   role: 'consultant'
+        // }))
 
-        // Call API to set cookie
-        await fetch("/api/set-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: 'consultant' }),
-        });
+        // // Call API to set cookie
+        // await fetch("/api/set-session", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({ role: 'consultant' }),
+        // });
         
-        // Navigate to dashboard
-        router.push('/consultant/dashboard')
+        // // Navigate to dashboard
+        // router.push('/consultant/dashboard')
+        // OLD
+
+
+        // NEW
+        router.push('/login')
+        // NEW
         setIsLoading(false)
       } catch (error) {
         console.log('Error creating consultant', (error as Error).message)
