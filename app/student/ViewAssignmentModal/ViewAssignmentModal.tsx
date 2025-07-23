@@ -66,7 +66,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
                 uploadedAt: new Date(),
                 uploadedByName: user.firstName + ' ' + user.lastName,
                 uploadedById: user.id,
-                type: user.role === 'consultant' ? 'Feedback' : 'Submission'
+                type: 'Submission'
             }
                
             // Upload files to firebase storage and attach files for entry form upload
@@ -90,7 +90,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
             const updatedAssignment = {
                 ...currentAssignment,
                 timeline: [...(currentAssignment.timeline || []), entryData],
-                status: user.role === 'student' ? 'Submitted' : currentAssignment.status
+                status: 'Submitted'
             };
     
             setCurrentAssignment(updatedAssignment);
@@ -109,8 +109,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
         }
     }
 
-    const baseButtonLabel = user.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';
-    const buttonLabel = isLoading ? 'Submitting...' : baseButtonLabel;
+    const buttonLabel = isLoading ? 'Submitting...' : 'Submit Assignment';
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
