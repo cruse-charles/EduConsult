@@ -68,20 +68,7 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
                 uploadedById: user.id,
                 type: user.role === 'consultant' ? 'Feedback' : 'Submission'
             }
-    
-            // TODO: Make this a red inline error
-            // Error handling
-            if (entryData.note.trim() === '') {
-                if (user.role === 'consultant') {
-                    alert('Please add a note to submit feedback.')
-                } else {
-                    alert('Please add a note to submit submission   .')
-                }
-    
-                setIsLoading(false)
-                return
-            }
-            
+               
             // Upload files to firebase storage and attach files for entry form upload
             // @ts-ignore
             const filesData = await fileUpload(files, student.id)

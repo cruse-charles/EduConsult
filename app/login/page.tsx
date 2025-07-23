@@ -74,7 +74,7 @@ const page = () => {
         const user = await getUserInfo(userCredential.user.uid);
 
         // Check if account has been verified
-        if (!userCredential.user.emailVerified) {
+        if (!userCredential.user.emailVerified && user.role === 'consultant') {
           toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
           return
         }
@@ -93,7 +93,7 @@ const page = () => {
           isComplete: user.onboarding.isComplete,
           onboardingStep: user.onboarding.onboardingStep
         }))
-          
+
         // Call API to set cookie
         await fetch("/api/set-session", {
           method: "POST",

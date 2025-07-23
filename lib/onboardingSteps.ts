@@ -17,7 +17,7 @@ export const onboardingSteps = [
   {
     id: "click-student-profile",
     target: ".student-row",
-    content: "Click your student's name to view your their proifle.",
+    content: "Click your student's name to view their proifle.",
     actionRequired: "fetchStudentProfile",
     page: '3/9',
     path: '/consultant/dashboard'
