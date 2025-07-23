@@ -135,7 +135,7 @@ const page = () => {
 
                         {/* Add Student Container */}
                         {/* <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/> */}
-                        <AddStudentModal consultantDocRef={consultantDocRef}/>
+                        <AddStudentModal/>
                         </div>
                     </div>
 

@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { nextStep } from "@/lib/onBoardingUtils";
+import { addStudent } from "@/redux/slices/studentsSlice";
 
 interface AddStudentModalProps {
     consultantDocRef: DocumentReference<DocumentData> | null;
@@ -32,7 +33,8 @@ interface AddStudentModalProps {
 
 // TODO: Added students should be in redux, don't need to call again I guess but idk really if I want to do
     // that in the dashboard
-function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
+// function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
+function AddStudentModal() {
     let auth = getAuth(app);
     const dispatch = useDispatch()
     const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
@@ -105,19 +107,23 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         setIsLoading(true);
 
         // Check if consultantDocRef is provided
-        if (!consultantDocRef) {
-            console.error("Consultant is not provided.");
-            return;
-        }
+        // if (!consultantDocRef) {
+        //     console.error("Consultant is not provided.");
+        //     return;
+        // }
 
-        const consultantSnap = await getDoc(consultantDocRef)
-        const consultantData = consultantSnap.data();
+        // const consultantSnap = await getDoc(consultantDocRef)
+        // const consultantData = consultantSnap.data();
 
         // TODO: Export the update/set doc stuff to studentUtils file
         // Create a new student document in the "studentUsers" collection
         try {
-            const idToken = await auth.currentUser?.getIdToken(true); // current consultant’s token
 
+            console.log('Current user:', auth.currentUser?.uid);
+            console.log('User from Redux:', user?.id);
+
+            const idToken = await auth.currentUser?.getIdToken(true); // current consultant’s token
+            console.log('idToken', idToken)
             const res = await fetch("/api/create-student", {
                 method: "POST",
                 headers: {
@@ -137,13 +143,16 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
                     }
                 }),
             });
-            
+            console.log('before jsoning data')
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Failed to create student");
             
             // Callback to refresh student list or perform any other action after adding a student
-            onStudentAdded();
-            
+            // onStudentAdded();
+            console.log('before disptaching add student')
+            // Add student to redux state
+            dispatch(addStudent(formData))
+            console.log('after disptaching add student')
             // Close the dialog after submission
             setOpen(false);
             resetFormData()

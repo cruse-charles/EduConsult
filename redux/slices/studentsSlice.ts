@@ -53,6 +53,10 @@ const studentsSlice = createSlice({
     //   state.students = action.payload;
         return action.payload
     },
+    addStudent(state, action) {
+        state.push(action.payload);
+        return state;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -73,5 +77,5 @@ const studentsSlice = createSlice({
       });
   },
 });
-export const { setStudents } = studentsSlice.actions;
+export const { setStudents, addStudent } = studentsSlice.actions;
 export default studentsSlice.reducer;

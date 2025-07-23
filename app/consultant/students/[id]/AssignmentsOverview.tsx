@@ -12,7 +12,8 @@ import { Timestamp } from 'firebase/firestore'
 
     function AssignmentsOverview() {
         // Retrieve student and user from redux
-        const student = useSelector((state: RootState) => state.student)
+        // const student = useSelector((state: RootState) => state.student)
+        const student = useSelector((state: RootState) => state.currentStudent)
         const user = useSelector((state: RootState) => state.user)
 
         const [countOfCompletedTasks, setCountOfCompletedTasks] = useState(0)

@@ -3,22 +3,28 @@ import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb, admin } from '@/lib/firebaseAdmin';
 
 export async function POST(request: NextRequest) {
+  console.log('Received request to create student');
   try {
     // Parse request body
     const { email, password, personalInformation, academicInformation, folders, consultantId, onboarding } = await request.json();
-    
+    console.log('request', request)
+    console.log('consultantId', consultantId)
+
     // Verify consultant token from request headers
     const authHeader = request.headers.get('authorization');
+    console.log('authHeader', authHeader)
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
     const token = authHeader.split('Bearer ')[1];
+    console.log('token', token)
     
     // Verify the token and get user info
     let decodedToken;
     try {
       decodedToken = await adminAuth.verifyIdToken(token);
+      console.log('decodedToken', decodedToken)
     } catch (error) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
