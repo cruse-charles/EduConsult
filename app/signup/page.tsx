@@ -113,34 +113,7 @@ const page = () => {
             }
         })
 
-        // OLD
-        // // login user
-        // await signInWithEmailAndPassword(auth, userData.email, userData.password)
-
-        // // set user's data after user creation
-        // dispatch(setUser({
-        //   id: user.uid,
-        //   firstName: userData.firstName,
-        //   lastName: userData.lastName,
-        //   email: user.email,
-        //   role: 'consultant'
-        // }))
-
-        // // Call API to set cookie
-        // await fetch("/api/set-session", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ role: 'consultant' }),
-        // });
-        
-        // // Navigate to dashboard
-        // router.push('/consultant/dashboard')
-        // OLD
-
-
-        // NEW
         router.push('/login')
-        // NEW
         setIsLoading(false)
       } catch (error) {
         console.log('Error creating consultant', (error as Error).message)
