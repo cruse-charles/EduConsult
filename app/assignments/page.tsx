@@ -9,7 +9,7 @@ import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { getConsultantAssignments, getStudentAssignments } from '@/lib/querys'
+import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/querys'
 import { Assignment } from '@/lib/types/types'
 
 import StatusBadge from '../components/StatusBadge'

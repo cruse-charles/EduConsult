@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@/components/ui/table'
-import { nextDeadlineForStudent } from '@/lib/querys'
+import { nextDeadlineForStudent } from '@/lib/queries/querys'
 import { Student } from '@/lib/types/types'
 import { formatNextDeadline } from '@/lib/utils'
 import { RootState } from '@/redux/store'

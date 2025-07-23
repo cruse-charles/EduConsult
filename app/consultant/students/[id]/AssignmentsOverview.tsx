@@ -1,6 +1,6 @@
     import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-    import { countCompletedTasksForStudentConsultantView, nextDeadlineForStudent } from '@/lib/querys'
+    import { countCompletedTasksForStudentConsultantView, nextDeadlineForStudent } from '@/lib/queries/querys'
 
     import { Assignment } from '@/lib/types/types'
     import { evaluateNextDeadline, formatNextDeadline } from '@/lib/utils'

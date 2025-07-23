@@ -12,7 +12,7 @@ import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 
 import ViewAssignmentModal from '../consultant/students/[id]/ViewAssignmentModal/ViewAssignmentModal'
-import { getConsultantAssignments, getStudentAssignments } from '@/lib/querys'
+import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/querys'
 
 // TODO: Add loading state
 const page = () => {

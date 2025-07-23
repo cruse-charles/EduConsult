@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 
-import { getConsultantDashboardAssignments } from '@/lib/querys'
+import { getConsultantDashboardAssignments } from '@/lib/queries/querys'
 
 import { formatNextDeadline } from '@/lib/utils'
 import { Assignment } from '@/lib/types/types'

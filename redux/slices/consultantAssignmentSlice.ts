@@ -1,14 +1,11 @@
 import { db } from "@/lib/firebaseConfig";
 
-import { startOfWeek, endOfWeek } from 'date-fns';
-
-import { query, where, getDocs, collection, doc, orderBy, limit, getDoc } from 'firebase/firestore';
-import { Timestamp } from "firebase/firestore";
+import { doc, getDoc } from 'firebase/firestore';
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { Assignment } from "@/lib/types/types";
-import { getConsultantDashboardAssignments } from "@/lib/querys";
+import { getConsultantDashboardAssignments } from "@/lib/queries/querys";
 
 // Async thunk to fetch assignments from Firestore by an array of IDs
 export const fetchConsultantAssignments = createAsyncThunk(
@@ -53,35 +50,10 @@ export const fetchConsultantAssignments = createAsyncThunk(
   }
 );
 
-// TODOOOOOOOO: TRY TO PULL FROM THE QUERY TO REDUCE CODE, BUT WHY DOESN'T IT PULL THE SAME, ONE IS SNAPSHOT, ONE ISN'T. I DON'T UNDERSTAND HOW THIS ONE ISN'T PULLING ALL THE EXTRA INFO WITH IT JUST RETURNING THE SNAPSHOT AND NOT THE INDIVIDUAL DATA LIKE THE QUERY
 export const fetchConsultantDashboardAssignments = createAsyncThunk(
   "consultantDashboard/fetchConsultantDashboardAssignments",
   async (consultantId: string) => {
     try {
-    //   // Find today and six days later, encompasing a week
-    //   // const today = new Date()
-    //   // today.setDate(today.getDate())
-    //   // const sixDaysLater = new Date()
-    //   // sixDaysLater.setDate(today.getDate() + 6);
-
-    //       // Find assignments from two last month, this month, and next month
-    // const today = new Date();
-    // const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-    // const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); 
-      
-    //   // Count assignments with dueDates within current week
-    //   const q = query(
-    //       collection(db, 'assignments'),
-    //       where('consultantId', '==', consultantId),
-    //       // where('dueDate', '>=', Timestamp.fromDate(today)),
-    //       // where('dueDate', '<=', Timestamp.fromDate(sixDaysLater)),
-    //                 where('dueDate', '>=', Timestamp.fromDate(startDate)),
-    //                 where('dueDate', '<=', Timestamp.fromDate(endDate)),
-
-    //       // where('status', '==', 'In-Progress')
-    //   )
-      
-    //   const snapshot = await getDocs(q);
       const snapshot = await getConsultantDashboardAssignments(consultantId);
       console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
       return snapshot;
@@ -145,11 +117,6 @@ const consultantAssignmentsSlice = createSlice({
       return state;
     })
     .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
-      // action.payload is a QuerySnapshot, so map to Assignment[]
-      // return action.payload.docs.map(doc => ({
-      //   id: doc.id,
-      //   ...doc.data(),
-      // })) as Assignment[];
       return action.payload as Assignment[];
     })
   },

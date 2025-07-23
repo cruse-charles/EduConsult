@@ -3,7 +3,7 @@ import { BookOpen, Calendar, CheckCircle, Clock, Flag, Search, Users } from 'luc
 
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import { countOfInProgressStudents, countOverDueAssignmentsConsultantDashboard, getTasksDueThisWeekConsultantDashboard, findNextAssignmentDeadlineConsultantDashboard, getTasksDueThisWeekStudentDashboard, countCompletedAssignmentsStudentDashboard, countReviewedAssignmentsStudentDashboard, countTotalAssignmentsStudentDashboard } from '@/lib/querys'
+import { countOfInProgressStudents, countOverDueAssignmentsConsultantDashboard, getTasksDueThisWeekConsultantDashboard, findNextAssignmentDeadlineConsultantDashboard, getTasksDueThisWeekStudentDashboard, countCompletedAssignmentsStudentDashboard, countReviewedAssignmentsStudentDashboard, countTotalAssignmentsStudentDashboard } from '@/lib/queries/queryHighlights'
 import { useEffect, useState } from 'react'
 
 import { formatNextDeadline } from '@/lib/utils'

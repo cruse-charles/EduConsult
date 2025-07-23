@@ -6,7 +6,7 @@ import { fetchStudent } from "@/redux/slices/studentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
 import { Assignment, Student } from "@/lib/types/types";
-import { getStudentAssignments } from "@/lib/querys";
+import { getStudentAssignments } from "@/lib/queries/querys";
 
 import Highlights from "@/app/components/Highlights";
 import WeeklyCalendar from "./WeeklyCalendar";
