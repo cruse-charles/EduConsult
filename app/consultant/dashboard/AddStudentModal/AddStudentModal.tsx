@@ -207,33 +207,33 @@ function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalPro
         }
     }
 
-    // TODO: Add loading state and error handling for form submission
     return (
         <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
-                {/* <Button variant="default" className="w-full"> */}
                 <Button variant="default" className="w-full create-student-btn">
                     <Plus className="mr-2 h-4 w-4" />
                     Add Student
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        <User className="h-5 w-5" />
-                        Add New Student
-                    </DialogTitle>
-                    <DialogDescription>
-                        Fill out the student information below. All fields marked with * are required.
-                    </DialogDescription>
-                </DialogHeader>
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    <CreateStudentAccount formData={formData} handleInputChange={handleInputChange}/>
-                    <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
-                    <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} />
-                    <GoalsAndNotesSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} handleAcademicInfoChange={handleAcademicInfoChange} />
-                    <Button type='submit' disabled={isLoading}>Submit</Button>
-                </form>
+            <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden">
+                <div className="overflow-y-auto max-h-[90vh] rounded-lg p-6">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <User className="h-5 w-5" />
+                            Add New Student
+                        </DialogTitle>
+                        <DialogDescription>
+                            Fill out the student information below. All fields marked with * are required.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                        <CreateStudentAccount formData={formData} handleInputChange={handleInputChange}/>
+                        <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
+                        <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} />
+                        <GoalsAndNotesSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} handleAcademicInfoChange={handleAcademicInfoChange} />
+                        <Button type='submit' disabled={isLoading}>Submit</Button>
+                    </form>
+                </div>
             </DialogContent>
       </Dialog>
     )
