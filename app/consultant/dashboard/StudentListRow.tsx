@@ -20,9 +20,12 @@ const StudentListRow = ({student, handleStudentClick}: StudentListRowProps) => {
         const checkDeadline = async () => {
             const now = new Date()
 
-            if (!student.stats || !student.stats.nextDeadline || student.stats.nextDeadline === undefined) return
-            
-            if (student.stats.nextDeadline.toDate() < now) {
+            const next = student?.stats?.nextDeadline;
+            if (!next || typeof next.toDate !== "function") return;
+
+            // if (!student.stats || !student.stats.nextDeadline || student.stats.nextDeadline === undefined) return
+            const deadlineDate = next.toDate();
+            if (deadlineDate < now) {
                 const assignment = await nextDeadlineForStudent(student.id, user.id)
                 // @ts-ignore
                 setNextDeadline(assignment?.dueDate)
