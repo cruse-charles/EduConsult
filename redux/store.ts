@@ -3,22 +3,24 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import type { UnknownAction } from 'redux';
 
-import studentReducer from './slices/currentStudentSlice';
-import studentAssignmentReducer from './slices/currentStudentAssignmentsSlice';
+import currentStudentReducer from './slices/currentStudentSlice';
+import currentStudentAssignmentReducer from './slices/currentStudentAssignmentsSlice';
 import userReducer from './slices/userSlice';
 import consultantAssignmentReducer from './slices/consultantAssignmentSlice';
 import onboardingReducer from './slices/onboardingSlice';
-import currentAssignmentReducer from './slices/currentAssignmentSlice'
+import currentAssignmentReducer from './slices/currentAssignmentSlice';
+import studentsReducer from './slices/studentsSlice'
 import { resetStore } from './slices/resetSlice';
 
 // Combine all  individual slice reducers into a single app-level reducer
 const appReducer = combineReducers({
-  currentStudent: studentReducer,
-  currentStudentAssignments: studentAssignmentReducer,
+  currentStudent: currentStudentReducer,
+  currentStudentAssignments: currentStudentAssignmentReducer,
   consultantDashboardAssignments: consultantAssignmentReducer,
   user: userReducer,
   onboarding: onboardingReducer,
   currentAssignment: currentAssignmentReducer,
+  students: studentsReducer
 })
 
 type AppState = ReturnType<typeof appReducer>;
