@@ -7,7 +7,7 @@ import { Student } from '@/lib/types/types';
 
 
 export const fetchStudent = createAsyncThunk(
-    'student/fetchStudent',
+    'currentStudent/fetchStudent',
     async (studentId: string) => {
         const docRef = doc(db, "studentUsers", studentId);
         const docSnap = await getDoc(docRef);
@@ -18,7 +18,7 @@ export const fetchStudent = createAsyncThunk(
 const initialState: Partial<Student> = {}
 
 const studentSlice = createSlice({
-  name: 'student',
+  name: 'currentStudent',
   initialState,
   reducers: {
     updateFolders(state, action) {

@@ -14,7 +14,7 @@ import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 import { nextStep } from '@/lib/onBoardingUtils'
 
-import { addEntry, updateAssignmentSlice } from '@/redux/slices/studentAssignmentsSlice'
+import { addEntry, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { completeStep, next } from '@/redux/slices/onboardingSlice'
 import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 import { RootState } from '@/redux/store'

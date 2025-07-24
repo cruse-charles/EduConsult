@@ -17,7 +17,7 @@ import StudentCardContent from './StudentCardContent'
 import EditStudentCardContent from './EditStudentCardContent'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import { updateStudentInformation } from '@/redux/slices/studentSlice'
+import { updateStudentInformation } from '@/redux/slices/currentStudentSlice'
 import CustomToast from '@/app/components/CustomToast'
 import { toast } from 'sonner'
 

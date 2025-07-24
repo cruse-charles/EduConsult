@@ -18,8 +18,8 @@ import { updateInProgressCount } from '@/lib/statsUtils'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/studentAssignmentsSlice'
-import { checkReduxNextDeadline, removeAssignmentDocId, updateReduxInProgressCount } from '@/redux/slices/studentSlice'
+import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { checkReduxNextDeadline, removeAssignmentDocId, updateReduxInProgressCount } from '@/redux/slices/currentStudentSlice'
 import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 import { useEffect, useState } from 'react'

@@ -19,8 +19,8 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'next/navigation'
 import { RootState } from '@/redux/store'
-import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/studentAssignmentsSlice'
-import { removeAssignmentDocId } from '@/redux/slices/studentSlice'
+import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { removeAssignmentDocId } from '@/redux/slices/currentStudentSlice'
 
 interface AssignmentDetailProps {
     assignment?: Assignment;

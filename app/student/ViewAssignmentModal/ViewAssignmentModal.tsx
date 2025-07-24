@@ -13,7 +13,7 @@ import { fileUpload, uploadEntry, updateAssignmentStatus } from '@/lib/assignmen
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 
-import { addEntry, updateAssignmentSlice } from '@/redux/slices/studentAssignmentsSlice'
+import { addEntry, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'

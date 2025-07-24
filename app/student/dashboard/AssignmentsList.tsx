@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import ViewAssignmentModal from "../ViewAssignmentModal/ViewAssignmentModal";
 import StatusBadge from "@/app/components/StatusBadge";
 
-import { fetchAssignments, setAssignments } from "@/redux/slices/studentAssignmentsSlice";
+import { fetchAssignments, setAssignments } from "@/redux/slices/currentStudentAssignmentsSlice";
 import { Assignment, Student } from "@/lib/types/types";
 import { AppDispatch, RootState } from "@/redux/store";
 import { formatDueDate } from "@/lib/utils";

@@ -8,9 +8,9 @@ import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudent } from "@/redux/slices/studentSlice";
+import { fetchStudent } from "@/redux/slices/currentStudentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
-import { clearAssignments, fetchAssignments } from "@/redux/slices/studentAssignmentsSlice";
+import { clearAssignments, fetchAssignments } from "@/redux/slices/currentStudentAssignmentsSlice";
 
 function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval

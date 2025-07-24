@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudent } from "@/redux/slices/studentSlice";
+import { fetchStudent } from "@/redux/slices/currentStudentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
 import { Assignment, Student } from "@/lib/types/types";

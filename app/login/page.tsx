@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import { GraduationCap } from "lucide-react"
 import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
-import { fetchStudent } from "@/redux/slices/studentSlice"
+import { fetchStudent } from "@/redux/slices/currentStudentSlice"
 
 import { FirebaseUserInfo } from "@/lib/types/types"
 import { AppDispatch } from "@/redux/store"

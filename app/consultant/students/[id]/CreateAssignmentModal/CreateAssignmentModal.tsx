@@ -17,9 +17,9 @@ import { AssignmentFile, AssignmentFormData } from "@/lib/types/types"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
-import { updateFolders, updateAssignmentDocIds, updateReduxInProgressCount, checkReduxNextDeadline } from "@/redux/slices/studentSlice"
+import { updateFolders, updateAssignmentDocIds, updateReduxInProgressCount, checkReduxNextDeadline } from "@/redux/slices/currentStudentSlice"
 import { RootState } from "@/redux/store";
-import { addAssignment, fetchAssignments } from "@/redux/slices/studentAssignmentsSlice"
+import { addAssignment, fetchAssignments } from "@/redux/slices/currentStudentAssignmentsSlice"
 import { Timestamp } from "firebase/firestore";
 import { useFiles } from "@/hooks/useFiles"
 import { updateInProgressCount } from "@/lib/statsUtils"

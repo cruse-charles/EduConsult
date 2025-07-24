@@ -16,8 +16,8 @@ import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
 import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
 import EditFolderModal from "./EditFolderModal";
 
-import { deleteAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/studentAssignmentsSlice";
-import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from "@/redux/slices/studentSlice";
+import { deleteAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
+import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from "@/redux/slices/currentStudentSlice";
 import { deleteDashboardAssignment } from "@/redux/slices/consultantAssignmentSlice";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";

@@ -7,7 +7,7 @@ import { Assignment } from "@/lib/types/types";
 
 // Async thunk to fetch assignments from Firestore by an array of IDs
 export const fetchAssignments = createAsyncThunk(
-  "studentAssignments/fetchAssignments",
+  "currentStudentAssignments/fetchAssignments",
   async (assignmentsDocIds: string[], {rejectWithValue}) => {
     try {
       // Fetch all assignments in parallel
@@ -55,7 +55,7 @@ const initialState: Assignment[] = []
 
 // Create a slice for assignments
 const studentAssignmentsSlice = createSlice({
-  name: 'studentAssignments',
+  name: 'currentStudentAssignments',
   initialState,
   reducers: {
     // Replaces state with a new list of assignments
