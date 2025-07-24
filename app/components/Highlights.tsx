@@ -27,7 +27,7 @@ const Highlights = () => {
             countOfInProgressStudents(user.id).then(setStudentsInProgress)
             countOverDueAssignmentsConsultantDashboard(user.id).then(setOverDueAssignments)
             findNextAssignmentDeadlineConsultantDashboard(user.id).then(setNextAssignmentDeadline)
-        } else {
+        } else if (user.role === 'student') {
             getTasksDueThisWeekStudentDashboard(user.id).then((snapshot) => setTasksDueThisWeek(snapshot.size))
             countCompletedAssignmentsStudentDashboard(user.id).then(setCompletedAssignments)
             countReviewedAssignmentsStudentDashboard(user.id).then(setUnderReviewAssignments)

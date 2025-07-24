@@ -74,7 +74,7 @@ const page = () => {
     // TODO: We shouldn't be fetching students again, just adding to localstate/redux on submissions
     // Fetch students when user is available
     useEffect(() => {
-        if (user) fetchStudents(user as FirebaseUserInfo);
+        if (user && user.id) fetchStudents(user as FirebaseUserInfo);
     }, [user]);
 
     // TODO: Add students to local state/redux instead of re-fetching

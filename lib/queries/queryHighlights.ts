@@ -27,7 +27,6 @@ export const getTasksDueThisWeekConsultantDashboard = async (consultantId: strin
 
 // Function to count tasks due this week for a consultant view
 export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => {
-
     // Find the start and end of current week
     const start = startOfWeek(new Date())
     const end = endOfWeek(new Date())
@@ -43,6 +42,12 @@ export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => 
 
     const snapshot = await getDocs(q);
     return snapshot;
+
+    // try { 
+
+    // } catch (error) {
+    //     console.log('error', error)
+    // }
 }
 
 // Function to count students in progress (has In-Progress assighnemnts) for a consultant view
