@@ -7,18 +7,16 @@ export async function POST(request: NextRequest) {
   try {
     // Parse request body
     const { email, password, personalInformation, academicInformation, folders, consultantId, onboarding } = await request.json();
-    console.log('request', request)
-    console.log('consultantId', consultantId)
 
     // Verify consultant token from request headers
     const authHeader = request.headers.get('authorization');
-    console.log('authHeader', authHeader)
+
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
+    // Extract token
     const token = authHeader.split('Bearer ')[1];
-    console.log('token', token)
     
     // Verify the token and get user info
     let decodedToken;
@@ -41,8 +39,8 @@ export async function POST(request: NextRequest) {
       emailVerified: false,
     });
 
+    // Reference to the new student document
     const studentRef = adminDb.collection('studentUsers').doc(userRecord.uid);
-    
 
     // Create student document
     await studentRef.set({
@@ -67,7 +65,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      // studentId: userRecord.uid,
       student: createdStudentData,
       message: 'Student created successfully'
     });

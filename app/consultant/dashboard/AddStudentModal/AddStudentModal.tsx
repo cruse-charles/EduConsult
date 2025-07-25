@@ -26,14 +26,6 @@ import { completeStep } from "@/redux/slices/onboardingSlice";
 import { nextStep } from "@/lib/onBoardingUtils";
 import { addStudent } from "@/redux/slices/studentsSlice";
 
-interface AddStudentModalProps {
-    consultantDocRef: DocumentReference<DocumentData> | null;
-    onStudentAdded: () => void;
-}
-
-// TODO: Added students should be in redux, don't need to call again I guess but idk really if I want to do
-    // that in the dashboard
-// function AddStudentModal({consultantDocRef, onStudentAdded} : AddStudentModalProps) {
 function AddStudentModal() {
     let auth = getAuth(app);
     const dispatch = useDispatch()
@@ -106,22 +98,8 @@ function AddStudentModal() {
         e.preventDefault();
         setIsLoading(true);
 
-        // Check if consultantDocRef is provided
-        // if (!consultantDocRef) {
-        //     console.error("Consultant is not provided.");
-        //     return;
-        // }
-
-        // const consultantSnap = await getDoc(consultantDocRef)
-        // const consultantData = consultantSnap.data();
-
-        // TODO: Export the update/set doc stuff to studentUtils file
         // Create a new student document in the "studentUsers" collection
         try {
-
-            console.log('Current user:', auth.currentUser?.uid);
-            console.log('User from Redux:', user?.id);
-
             const idToken = await auth.currentUser?.getIdToken(true); // current consultant’s token
             console.log('idToken', idToken)
             const res = await fetch("/api/create-student", {
@@ -143,16 +121,14 @@ function AddStudentModal() {
                     }
                 }),
             });
-            console.log('before jsoning data')
+
+            // Handle response
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Failed to create student");
             
-            // Callback to refresh student list or perform any other action after adding a student
-            // onStudentAdded();
-            console.log('before disptaching add student')
-            // Add student to redux state
+            // Add response student data to redux state
             dispatch(addStudent(data.student))
-            console.log('after disptaching add student')
+
             // Close the dialog after submission
             setOpen(false);
             resetFormData()
