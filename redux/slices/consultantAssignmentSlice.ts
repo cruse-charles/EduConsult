@@ -8,48 +8,6 @@ import { Assignment } from "@/lib/types/types";
 import { getConsultantDashboardAssignments } from "@/lib/queries/querys";
 
 // Async thunk to fetch assignments from Firestore by an array of IDs
-// export const fetchConsultantAssignments = createAsyncThunk(
-//   "consultantAssignments/fetchAssignments",
-//   async (assignmentsDocIds: string[], {rejectWithValue}) => {
-//     try {
-//       // Fetch all assignments in parallel
-//       const assignments = await Promise.all(
-//         assignmentsDocIds.map(async (assignmentDocId) => {
-//           // Get a reference to the assignment document and fetch its snapshot
-//           const assignmentRef = doc(db, "assignments", assignmentDocId);
-//           const assignmentSnapshot = await getDoc(assignmentRef);
-
-//           if (!assignmentSnapshot.exists()) {
-//             throw new Error(`Assignment with ID ${assignmentDocId} not found`);
-//           }
-
-//           // Extract data from the snapshot
-//           const data = assignmentSnapshot.data();
-          
-//           // Ensure all required Assignment fields are present
-//           return {
-//             id: assignmentSnapshot.id,
-//             title: data?.title || '',
-//             type: data?.type || '',
-//             priority: data?.priority || '',
-//             dueDate: data?.dueDate || undefined,
-//             note: data?.note || '',
-//             createdAt: data?.createdAt || null,
-//             student: data?.student || '',
-//             folder: data?.folder || '',
-//             status: data?.status || '',
-//             timeline: data?.timeline || [],
-//             ...data,
-//           } as Assignment;
-//         })
-//       );
-//       return assignments;
-//     } catch (error) {
-//       return rejectWithValue((error as Error).message);
-//     }
-//   }
-// );
-
 export const fetchConsultantDashboardAssignments = createAsyncThunk(
   "consultantDashboard/fetchConsultantDashboardAssignments",
   async (consultantId: string) => {
@@ -109,13 +67,6 @@ const consultantAssignmentsSlice = createSlice({
   // Handle async actions using extraReducers for Inprogress, fulfilled, and rejected states
   extraReducers: (builder) => {
     builder
-    // .addCase(fetchConsultantAssignments.fulfilled, (state, action) => {
-    //   return action.payload;
-    // }) 
-    // .addCase(fetchConsultantAssignments.rejected, (state, action) => {
-    //   console.error("fetchConsultantAssignments rejected:", action.payload);
-    //   return state;
-    // })
     .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
       return action.payload as Assignment[];
     })
