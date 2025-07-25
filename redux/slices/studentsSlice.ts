@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebaseConfig";
-import { FirebaseUserInfo } from "@/lib/types/types";
+import { FirebaseUserInfo, Student } from "@/lib/types/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, DocumentData, DocumentReference, getDoc } from "firebase/firestore";
 
@@ -42,7 +42,7 @@ export const fetchStudents = createAsyncThunk(
 //   error: null,
 // };
 
-const initialState = []
+const initialState: Student[] = []
 
 // Create a slice for assignments
 const studentsSlice = createSlice({

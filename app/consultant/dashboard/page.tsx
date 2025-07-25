@@ -22,8 +22,6 @@ import { AsyncThunkAction, AsyncThunkConfig } from "@reduxjs/toolkit";
 
 const page = () => {
     // State to manage students and set reference to the consultant document
-    // const [students, setStudents] = useState<Student[]>([]);
-    const [consultantDocRef, setConsultantDocRef] = useState<DocumentReference<DocumentData> | null>(null);
     const [searchQuery, setSearchQuery] = useState("")
     const [showDropdown, setShowDropdown] = useState(false);
     const [loading, setLoading] = useState(false)
@@ -32,62 +30,10 @@ const page = () => {
     const students = useSelector((state: RootState) => state.students)
     const dispatch = useDispatch();
 
-    // // Function to fetch students for the current consultant user
-    // const fetchStudents = async (user: FirebaseUserInfo) => {
-    //     setLoading(true)
-    //     try {
-    //         // Get the consultant's document reference and snapshot
-    //         const ref = doc(db, "consultantUsers", user.id);
-    //         console.log('ref for fetching consultant doc', ref)
-
-    //         setConsultantDocRef(ref);
-    //         const consultantDocSnap = await getDoc(ref);
-
-    //         // If the consultant document does not exist, set students to an empty array
-    //         if (!consultantDocSnap.exists()) {
-    //             setStudents([]);
-    //             return;
-    //         }
-
-    //         // Extract student references from the consultant document
-    //         const consultantData = consultantDocSnap.data();
-    //         const studentRefs = consultantData.students || [];
-
-    //         // Fetch each student's document data
-    //         const studentDocs = await Promise.all(
-    //             studentRefs.map(async (studentRef: DocumentReference<DocumentData>) => {
-    //                 const studentDocSnap = await getDoc(studentRef);
-    //                 return studentDocSnap.exists()
-    //                     ? { id: studentDocSnap.id, ...studentDocSnap.data() }
-    //                     : null;
-    //             })
-    //         );
-
-    //         // Filter out any null values due to possible deleted students or missing data
-    //         setStudents(studentDocs.filter(Boolean));
-    //         setLoading(false)
-    //     } catch (error) {
-    //         console.log("Error fetching students:", error);
-    //         setStudents([]);
-    //         setLoading(false)
-    //     }
-    // };
-
-
-
-    // // TODO: We shouldn't be fetching students again, just adding to localstate/redux on submissions
-    // // Fetch students when user is available
-    // useEffect(() => {
-    //     if (user && user.id) fetchStudents(user as FirebaseUserInfo);
-    // }, [user]);
-
-    // // TODO: Add students to local state/redux instead of re-fetching
-    // const handleStudentAdded = () => {
-    //     if (user) fetchStudents(user as FirebaseUserInfo);
-    // }
-
+    // Fetch students for the current consultant user
     useEffect(() => {
         if (user && user.id) {
+            // @ts-ignore
             dispatch(fetchStudents(user));
         }
     }, [user, dispatch]);
@@ -164,7 +110,3 @@ const page = () => {
 };
 
 export default page;
-
-function dispatch(arg0: AsyncThunkAction<any[] | undefined, FirebaseUserInfo, AsyncThunkConfig>) {
-    throw new Error("Function not implemented.");
-}
