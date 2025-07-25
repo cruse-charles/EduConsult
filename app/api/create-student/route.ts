@@ -55,6 +55,10 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString(),
     });
 
+    // Retrieve student information
+    const studentSnap = await studentRef.get();
+    const createdStudentData = {id: studentRef.id, ...studentSnap.data()};
+
     // Update consultant's students array
     const consultantRef = adminDb.collection('consultantUsers').doc(consultantId);
     await consultantRef.update({
@@ -63,7 +67,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      studentId: userRecord.uid,
+      // studentId: userRecord.uid,
+      student: createdStudentData,
       message: 'Student created successfully'
     });
     

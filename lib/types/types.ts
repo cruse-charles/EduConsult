@@ -22,7 +22,7 @@ export interface StudentBase {
         inProgressAssignmentsCount: number;
         nextDeadline: Timestamp | undefined;
     }
-    consultant: DocumentReference<DocumentData> | null;
+    consultant: DocumentReference<DocumentData> | string;
     email: string;
     folders: string[];
     password: string;

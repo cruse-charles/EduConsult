@@ -68,7 +68,7 @@ function AddStudentModal() {
         },
         email: '',
         password: '',
-        consultant: null,
+        consultant: user.id,
         folders: []
     });
 
@@ -96,7 +96,7 @@ function AddStudentModal() {
         },
         email: '',
         password: '',
-        consultant: null,
+        consultant: user.id,
         folders: []
         })
     }
@@ -151,7 +151,7 @@ function AddStudentModal() {
             // onStudentAdded();
             console.log('before disptaching add student')
             // Add student to redux state
-            dispatch(addStudent(formData))
+            dispatch(addStudent(data.student))
             console.log('after disptaching add student')
             // Close the dialog after submission
             setOpen(false);
