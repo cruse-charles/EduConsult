@@ -16,7 +16,7 @@ function page() {
     // Retrieve the student ID from URL and initialize dispatch for data retrieval
     const dispatch = useDispatch<AppDispatch>()
     const { id: studentId } = useParams<{id: string}>();
-    const student = useSelector((state: RootState) => state.student)
+    const student = useSelector((state: RootState) => state.currentStudent)
 
     // TODO: Check if we want to combine these useEffects, and if we want to make a clearStudent
     useEffect(() => {

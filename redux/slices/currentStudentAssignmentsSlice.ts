@@ -44,6 +44,7 @@ export const fetchAssignments = createAsyncThunk(
           } as Assignment;
         })
       );
+      console.log('assignments', assignments)
       return assignments;
     } catch (error) {
       return rejectWithValue((error as Error).message);
