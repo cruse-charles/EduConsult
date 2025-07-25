@@ -45,9 +45,12 @@ const currentAssignmentSlice = createSlice({
                 status: '',
                 timeline: []
             }
+        },
+        updateCurrentAssignment(state, action) {
+            return action.payload
         }
     }
 })
 
-export const { setCurrentAssignment } = currentAssignmentSlice.actions
+export const { setCurrentAssignment, updateCurrentAssignment, clearCurrentAssignment } = currentAssignmentSlice.actions
 export default currentAssignmentSlice.reducer

@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 function page() {
     // Initialize dispatch for data retrieval and state management
     const dispatch = useDispatch<AppDispatch>()
-    const studentState = useSelector((state: RootState) => state.student)
+    const studentState = useSelector((state: RootState) => state.currentStudent)
     const user = useSelector((state: RootState) => state.user);
 
     const [student, setStudent] = useState<Student | null>(null);

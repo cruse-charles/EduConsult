@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
 
 function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
@@ -32,6 +33,7 @@ function AssignmentsList() {
     const [folders, setFolders] = useState<string[]>([])
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
     const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     // Manage sorting for assignments and folders
     const [folderSort, setFolderSort] = useState("")
@@ -144,6 +146,11 @@ function AssignmentsList() {
         setFolders(sortedFolders)
     }
 
+    const handleAssignmentClick = (assignment: Assignment) => {
+        setIsModalOpen(true)
+        dispatch(setCurrentAssignment(assignment))
+    }
+
     // TODO: A new folder isn't appearing when i create a new assignment with a new folder, but does on refresh
     return (
         <>
@@ -223,7 +230,8 @@ function AssignmentsList() {
                                 <CollapsibleContent>
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
-                                        <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
+                                        // <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
+                                        <div onClick={() => handleAssignmentClick(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
                                             <div className="flex items-center gap-3 flex-1">
                                                 <div className="flex items-center gap-2">
                                                     {assignment.type === "essay" && <FileText className="h-4 w-4 text-blue-500" />}
@@ -246,7 +254,8 @@ function AssignmentsList() {
                 </CardContent>
             </Card>
             {/* @ts-ignore */}
-            <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            <ViewAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+            {/* <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} /> */}
         </>
     )
 }

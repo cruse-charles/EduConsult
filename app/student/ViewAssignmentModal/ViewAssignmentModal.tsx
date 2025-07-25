@@ -17,22 +17,26 @@ import { addEntry, updateAssignmentSlice } from '@/redux/slices/currentStudentAs
 import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { updateCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 interface ViewAssignmentModalProps {
-    assignment: Assignment;
+    // assignment: Assignment;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentModalProps) {
+// function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentModalProps) {
+function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
+
 
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     const dispatch = useDispatch();
     
     const user = useSelector((state: RootState) => state.user)
-    const student = useSelector((state: RootState) => state.student)
-    const [currentAssignment, setCurrentAssignment] = useState(assignment)
+    const student = useSelector((state: RootState) => state.currentStudent)
+    // const [currentAssignment, setCurrentAssignment] = useState(assignment)
+    const assignment = useSelector((state: RootState) => state.currentAssignment)
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
@@ -42,9 +46,9 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
     const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(() => {
-        setCurrentAssignment(assignment);
-    }, [assignment]);
+    // useEffect(() => {
+    //     setCurrentAssignment(assignment);
+    // }, [assignment]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>{
         const {name, value} = e.target
@@ -87,13 +91,20 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
             })
     
             // Update local state to reflect new timeline entry, updating status if there is an entry from a student
+            // const updatedAssignment = {
+            //     ...currentAssignment,
+            //     timeline: [...(currentAssignment.timeline || []), entryData],
+            //     status: 'Submitted'
+            // };
+
             const updatedAssignment = {
-                ...currentAssignment,
-                timeline: [...(currentAssignment.timeline || []), entryData],
+                ...assignment,
+                timeline: [...(assignment.timeline || []), entryData],
                 status: 'Submitted'
             };
     
-            setCurrentAssignment(updatedAssignment);
+            // setCurrentAssignment(updatedAssignment);
+            dispatch(updateCurrentAssignment(updatedAssignment))
     
             dispatch(updateAssignmentSlice({ assignmentId: assignment.id, updateData: updatedAssignment }));
             // @ts-ignore
@@ -125,12 +136,12 @@ function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentMod
 
                     {/* Assignment Details Container*/}
                     <div className="lg:col-span-1 space-y-4">
-                        <AssignmentDetails assignment={currentAssignment} onOpenChange={onOpenChange} />
+                        <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} />
                     </div>
 
                     {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
-                        <AssignmentTimeline assignment={currentAssignment}/>
+                        <AssignmentTimeline assignment={assignment}/>
 
                         <Separator />
                         
