@@ -24,8 +24,8 @@ function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
 
     // Retrieve student and assignment information
-    const assignments: Assignment[] = useSelector((state: RootState) => state.studentAssignments)
-    const student = useSelector((state: RootState) => state.student)
+    const assignments: Assignment[] = useSelector((state: RootState) => state.currentStudentAssignments)
+    const student = useSelector((state: RootState) => state.currentStudent)
     
     // Manage state for assignment modal, folder rendering and opening, and loading state
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)

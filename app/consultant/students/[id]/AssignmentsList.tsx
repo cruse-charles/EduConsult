@@ -39,10 +39,8 @@ function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
     const { id } = useParams()
     const studentId = id as string
-    // const assignments = useSelector((state: RootState) => state.studentAssignments)
-        const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
+    const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
     const user = useSelector((state: RootState) => state.user)
-    // const folders = useSelector((state: RootState) => state.student.folders) || []
     const folders = useSelector((state: RootState) => state.currentStudent.folders) || []
     const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding);
 

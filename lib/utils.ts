@@ -41,11 +41,11 @@ export const formatDueDateAndTime = (dueDate: Date | Timestamp | undefined) => {
 
 // Formatting date display
 export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined) => {
-  // console.log('nextDeadline', nextDeadline)
   if (!nextDeadline || nextDeadline === undefined) return "No upcoming deadlines";
-  // const date = nextDeadline instanceof Date ? nextDeadline : nextDeadline.toDate();
 
   let date
+
+  if (date === undefined) return "No upcoming deadlines";
 
   if (nextDeadline instanceof Date) {
     // Already a Date
