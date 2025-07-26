@@ -73,6 +73,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
 
     const handleEditAssignmentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setIsLoading(true)
 
         // Error handling
         if (!assignment?.id || !formData.type || !formData.status || !formData.dueDate) {
@@ -96,6 +97,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
 
         toast(<CustomToast title="Successfully Updated Assignment" description='' status='success' />)
         setEdit(false)
+        setIsLoading(false)
     }
 
     const handleCancel = () => {
