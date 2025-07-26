@@ -36,6 +36,7 @@ const DashboardAssignmentList = () => {
         // @ts-ignore
         dispatch(fetchConsultantDashboardAssignments(user.id))
     }, [])
+
     
     const getDays = () => {
         const daysArray = []
@@ -46,8 +47,17 @@ const DashboardAssignmentList = () => {
         }
         return daysArray
     }
-
+    
     const days = getDays()
+    
+    useEffect(() => {
+        dashboardAssignments.filter((assignment) => {
+            console.log('formatNextDeadline dueDate',formatNextDeadline(assignment.dueDate))
+        })
+        days.map((day) => {
+            console.log('day', formatNextDeadline(day))
+        })
+    }, [dashboardAssignments])
 
     const formatDay = (date: Date) => {
         const isToday = new Date().toDateString() === date.toDateString()
@@ -71,18 +81,18 @@ const DashboardAssignmentList = () => {
             <Card>
                 <CardHeader>
                     <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
-                        <Calendar className="h-5 w-5" />
-                        In-Progress Assignments
-                    </CardTitle>
-                    <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" onClick={() => navigate("prev")}>
-                        <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => navigate("next")}>
-                        <ChevronRight className="h-4 w-4" />
-                        </Button>
-                    </div>
+                        <CardTitle className="flex items-center gap-2">
+                            <Calendar className="h-5 w-5" />
+                            In-Progress Assignments
+                        </CardTitle>
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" onClick={() => navigate("prev")}>
+                                <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => navigate("next")}>
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -133,7 +143,3 @@ const DashboardAssignmentList = () => {
 }
 
 export default DashboardAssignmentList
-
-function dispatch(arg0: any) {
-    throw new Error('Function not implemented.')
-}

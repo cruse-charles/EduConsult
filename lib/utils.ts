@@ -45,7 +45,7 @@ export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined) =
 
   let date
 
-  if (date === undefined) return "No upcoming deadlines";
+  // if (date === undefined) return "No upcoming deadlines";
 
   if (nextDeadline instanceof Date) {
     // Already a Date
@@ -60,6 +60,8 @@ export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined) =
   ) {
     // Serialized Firestore Timestamp from Redux / JSON
     date = new Date(nextDeadline.seconds * 1000);
+  } else {
+    return "Invalid date";
   }
   return format(date, "MMM d, yyyy");
 }
