@@ -2,14 +2,19 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { formatDueDateAndTime } from '@/lib/utils'
+import { RootState } from '@/redux/store'
 import { Clock, Download, FileText, MessageSquare, Settings, Upload } from 'lucide-react'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 interface AssignmentTimelineProps {
     assignment?: Assignment
 }
 
-function AssignmentTimeline({assignment}: AssignmentTimelineProps) {
+// function AssignmentTimeline({assignment}: AssignmentTimelineProps) {
+function AssignmentTimeline() {
+
+    const assignment = useSelector((state: RootState) => state.currentAssignment)
 
     // TODO: make status appear properly for icon usage here
     const getTimelineIcon = (type: string) => {

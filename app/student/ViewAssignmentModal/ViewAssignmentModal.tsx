@@ -78,30 +78,33 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
             const filesData = await fileUpload(files, student.id)
             entryData.files = filesData
     
+            // Create updated assignment with new timeline entry
+            const updatedAssignment = {
+                ...assignment,
+                timeline: [...(assignment.timeline || []), entryData],
+                status: 'Submitted'
+            };
             
+            // TODO: updateCurrentAssignment uses updatedAssignment, other dispatches should too
             // Upload entry to firestore
             await uploadEntry(entryData, assignment.id)
     
             
             // update redux state and reset form data
             dispatch(addEntry({ entryData, assignmentId: assignment.id }))
+            dispatch(updateCurrentAssignment(updatedAssignment))
             setFormData({
                 note: '',
                 files: []
             })
-    
+            
             // Update local state to reflect new timeline entry, updating status if there is an entry from a student
             // const updatedAssignment = {
-            //     ...currentAssignment,
-            //     timeline: [...(currentAssignment.timeline || []), entryData],
+                //     ...currentAssignment,
+                //     timeline: [...(currentAssignment.timeline || []), entryData],
             //     status: 'Submitted'
             // };
 
-            const updatedAssignment = {
-                ...assignment,
-                timeline: [...(assignment.timeline || []), entryData],
-                status: 'Submitted'
-            };
     
             // setCurrentAssignment(updatedAssignment);
             dispatch(updateCurrentAssignment(updatedAssignment))
@@ -136,12 +139,14 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
 
                     {/* Assignment Details Container*/}
                     <div className="lg:col-span-1 space-y-4">
-                        <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} />
+                        {/* <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} /> */}
+                        <AssignmentDetails onOpenChange={onOpenChange} />
                     </div>
 
                     {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
-                        <AssignmentTimeline assignment={assignment}/>
+                        {/* <AssignmentTimeline assignment={assignment}/> */}
+                        <AssignmentTimeline />
 
                         <Separator />
                         

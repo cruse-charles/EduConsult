@@ -23,14 +23,15 @@ import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/cur
 import { removeAssignmentDocId } from '@/redux/slices/currentStudentSlice'
 
 interface AssignmentDetailProps {
-    assignment?: Assignment;
+    // assignment?: Assignment;
     onOpenChange: (open: boolean) => void;
 }
 
 // TODO: Make a redux slice for the assignment being viewed, easier to get all this info, also delete 
 // code here related to consultant view
 
-function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
+// function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
+function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
     const user = useSelector((state: RootState) => state.user)
 
     const dispatch = useDispatch();
@@ -38,6 +39,7 @@ function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
     const [isLoading, setIsLoading] = useState(false)
     
     const { id: studentId } = useParams<{id:string}>();
+    const assignment = useSelector((state: RootState) => state.currentAssignment)
 
     // TODO: WHEN WE CHANGE THE DUEDATE, WE NEED TO UPDATE THE STUDENT'S STATS OBJECT ON EDIT TOO, ALSO DIDNT WORK FOR CREATION
     const [formData, setFormData] = useState({
