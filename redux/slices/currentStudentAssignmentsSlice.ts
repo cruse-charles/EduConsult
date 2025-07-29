@@ -81,7 +81,7 @@ const studentAssignmentsSlice = createSlice({
       }
     },
     // Updates a specific assignment in the state
-    updateAssignmentSlice(state, action) {
+    updateAssignmentsSlice(state, action) {
       const { assignmentId, updateData } = action.payload;
       const assignmentIndex = state.findIndex(assignment => assignment.id === assignmentId);
     
@@ -117,5 +117,5 @@ const studentAssignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteAssignmentSlice, clearAssignments, renameFolderInStudentAssignmentsSlice } = studentAssignmentsSlice.actions;
+export const { setAssignments, addAssignment, addEntry, updateAssignmentsSlice, deleteAssignmentSlice, clearAssignments, renameFolderInStudentAssignmentsSlice } = studentAssignmentsSlice.actions;
 export default studentAssignmentsSlice.reducer;

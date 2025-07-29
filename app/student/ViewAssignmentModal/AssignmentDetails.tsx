@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'next/navigation'
 import { RootState } from '@/redux/store'
-import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { removeAssignmentDocId } from '@/redux/slices/currentStudentSlice'
 
 interface AssignmentDetailProps {
@@ -93,7 +93,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
             return;
         }
 
-        dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: formData }))
+        dispatch(updateAssignmentsSlice({assignmentId: assignment?.id, updateData: formData }))
         // @ts-ignore
         await updateAssignment(formData, assignment?.id)
 

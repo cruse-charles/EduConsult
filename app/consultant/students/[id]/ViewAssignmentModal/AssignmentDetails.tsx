@@ -18,7 +18,7 @@ import { updateInProgressCount } from '@/lib/statsUtils'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import { deleteAssignmentSlice, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { checkReduxNextDeadline, removeAssignmentDocId, updateReduxInProgressCount } from '@/redux/slices/currentStudentSlice'
 import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
@@ -82,7 +82,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
         }
 
         // Update edited assignment in redux
-        dispatch(updateAssignmentSlice({assignmentId: assignment?.id, updateData: formData }))
+        dispatch(updateAssignmentsSlice({assignmentId: assignment?.id, updateData: formData }))
         
         // Adjust InProgress count depending on status, and nextDeadline in backend and redux
         updateInProgressCount(studentId, formData.status, assignment.status)

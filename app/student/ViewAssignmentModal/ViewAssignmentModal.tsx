@@ -13,7 +13,7 @@ import { fileUpload, uploadEntry, updateAssignmentStatus } from '@/lib/assignmen
 import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 
-import { addEntry, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -97,19 +97,9 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
                 note: '',
                 files: []
             })
-            
-            // Update local state to reflect new timeline entry, updating status if there is an entry from a student
-            // const updatedAssignment = {
-                //     ...currentAssignment,
-                //     timeline: [...(currentAssignment.timeline || []), entryData],
-            //     status: 'Submitted'
-            // };
+                
 
-    
-            // setCurrentAssignment(updatedAssignment);
-            dispatch(updateCurrentAssignment(updatedAssignment))
-    
-            dispatch(updateAssignmentSlice({ assignmentId: assignment.id, updateData: updatedAssignment }));
+            dispatch(updateAssignmentsSlice({ assignmentId: assignment.id, updateData: updatedAssignment }));
             // @ts-ignore
             await updateAssignmentStatus(assignment.id, 'Submitted', updatedAssignment)
     

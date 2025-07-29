@@ -29,7 +29,6 @@ function AssignmentsList() {
     const student = useSelector((state: RootState) => state.currentStudent)
     
     // Manage state for assignment modal, folder rendering and opening, and loading state
-    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
     const [folders, setFolders] = useState<string[]>([])
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
     const [loading, setLoading] = useState(true);
@@ -230,7 +229,6 @@ function AssignmentsList() {
                                 <CollapsibleContent>
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
-                                        // <div onClick={() => setSelectedAssignment(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">
                                         <div onClick={() => handleAssignmentClick(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted">    
                                             <div className="flex items-center gap-3 flex-1">
                                                 <div className="flex items-center gap-2">
@@ -255,7 +253,6 @@ function AssignmentsList() {
             </Card>
             {/* @ts-ignore */}
             <ViewAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
-            {/* <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} /> */}
         </>
     )
 }
