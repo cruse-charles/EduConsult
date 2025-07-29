@@ -49,16 +49,6 @@ const currentAssignmentSlice = createSlice({
         updateCurrentAssignment(state, action) {
             return action.payload
         },
-        // addEntry(state, action) {
-        //     // TODO: NEED TO ADD ENTRY TO CURRENT ASSIGNMENT WHEN STUDENT ADDS ENTRY, NEED TO ADD DISPATCH FOR IT TOO
-        //     const { entryData, assignmentId } = action.payload;
-        //     const assignmentIndex = state.findIndex(assignment => assignment.id === assignmentId);
-            
-        //     if (assignmentIndex !== -1) {
-        //         // Add the new entry to the timeline array
-        //         state[assignmentIndex].timeline.push(entryData);
-        //     }
-        // }
     }
 })
 

@@ -7,11 +7,6 @@ import { Clock, Download, FileText, MessageSquare, Settings, Upload } from 'luci
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-interface AssignmentTimelineProps {
-    assignment?: Assignment
-}
-
-// function AssignmentTimeline({assignment}: AssignmentTimelineProps) {
 function AssignmentTimeline() {
 
     const assignment = useSelector((state: RootState) => state.currentAssignment)

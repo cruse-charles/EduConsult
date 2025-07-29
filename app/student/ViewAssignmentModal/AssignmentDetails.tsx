@@ -11,7 +11,6 @@ import { toast } from 'sonner'
 import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, X } from 'lucide-react'
 
 import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
-import { Assignment } from '@/lib/types/types'
 import { cn, formatDueDate } from '@/lib/utils'
 import { updateInProgressCount } from '@/lib/statsUtils'
 
@@ -23,14 +22,9 @@ import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/cu
 import { removeAssignmentDocId } from '@/redux/slices/currentStudentSlice'
 
 interface AssignmentDetailProps {
-    // assignment?: Assignment;
     onOpenChange: (open: boolean) => void;
 }
 
-// TODO: Make a redux slice for the assignment being viewed, easier to get all this info, also delete 
-// code here related to consultant view
-
-// function AssignmentDetails({assignment, onOpenChange}: AssignmentDetailProps) {
 function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
     const user = useSelector((state: RootState) => state.user)
 
@@ -137,7 +131,6 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
         toast(<CustomToast title="Successfully Deleted Assignment" description='' status='success'/>)
     }
     
-    // TODO: MAKE STATUS CHANGE TO SUBMITTED AUTOMATICALLY WHEN STUDENT SUBMITS
     return (
          <>
             <div className="space-y-3">

@@ -33,7 +33,6 @@ export const fetchAssignments = createAsyncThunk(
             dueDate: data?.dueDate || undefined,
             note: data?.note || '',
             createdAt: data?.createdAt || null,
-            // student: data?.student || '',
             studentId: data?.studentId || '',
             studentFirstName: data?.studentFirstName || '',
             studentLastName: data?.studentLastName || '',
@@ -44,7 +43,6 @@ export const fetchAssignments = createAsyncThunk(
           } as Assignment;
         })
       );
-      console.log('assignments', assignments)
       return assignments;
     } catch (error) {
       return rejectWithValue((error as Error).message);
