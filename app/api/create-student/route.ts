@@ -38,31 +38,36 @@ export async function POST(request: NextRequest) {
       emailVerified: false,
     });
 
+    const studentId = userRecord.uid;
+
     // Reference to the new student document and consultant document
-    const studentRef = adminDb.collection('studentUsers').doc(userRecord.uid);
+    const studentRef = adminDb.collection('studentUsers').doc(studentId);
     const consultantRef = adminDb.collection('consultantUsers').doc(consultantId);
+
+    // Prepare student data
+    const studentData = {
+      personalInformation,
+      academicInformation,
+      consultant: consultantId,
+      folders: folders || [],
+      email,
+      onboarding,
+      createdAt: new Date().toISOString(),
+    };
 
     // Run firestore operations in parallel
     await Promise.all([
-      // Create student document
-      studentRef.set({
-        personalInformation: personalInformation,
-        academicInformation: academicInformation,
-        consultant: consultantId,
-        folders: folders || [],
-        email,
-        onboarding,
-        createdAt: new Date().toISOString(),
-      }),
-      // Update consultant's students array
+      // Create student document and update consultant's students array
+      studentRef.set(studentData),
       consultantRef.update({
         students: admin.firestore.FieldValue.arrayUnion(studentRef)
+        // students: admin.firestore.FieldValue.arrayUnion(studentId)
       })
     ])
 
     // Retrieve student information
-    const studentSnap = await studentRef.get();
-    const createdStudentData = {id: studentRef.id, ...studentSnap.data()};
+    // const studentSnap = await studentRef.get();
+    // const createdStudentData = {id: studentRef.id, ...studentSnap.data()};
 
 
 
@@ -90,7 +95,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      student: createdStudentData,
+      student: { id: studentId, ...studentData },
       message: 'Student created successfully'
     });
     
