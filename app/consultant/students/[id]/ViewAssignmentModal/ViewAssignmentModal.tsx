@@ -14,7 +14,7 @@ import { Assignment, AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 import { nextStep } from '@/lib/onBoardingUtils'
 
-import { addEntry, updateAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { completeStep, next } from '@/redux/slices/onboardingSlice'
 import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 import { RootState } from '@/redux/store'
@@ -108,7 +108,7 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
             };
     
             // setCurrentAssignment(updatedAssignment);
-            dispatch(updateAssignmentSlice({ assignmentId: assignment.id, updateData: updatedAssignment }));
+            dispatch(updateAssignmentsSlice({ assignmentId: assignment.id, updateData: updatedAssignment }));
             dispatch(setCurrentAssignment(updatedAssignment))
             // @ts-ignore
             await updateAssignment(updatedAssignment, assignment.id);

@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb, admin } from '@/lib/firebaseAdmin';
 
 export async function POST(request: NextRequest) {
-  console.log('Received request to create student');
   try {
     // Parse request body
     const { email, password, personalInformation, academicInformation, folders, consultantId, onboarding } = await request.json();
@@ -39,29 +38,55 @@ export async function POST(request: NextRequest) {
       emailVerified: false,
     });
 
-    // Reference to the new student document
+    // Reference to the new student document and consultant document
     const studentRef = adminDb.collection('studentUsers').doc(userRecord.uid);
+    const consultantRef = adminDb.collection('consultantUsers').doc(consultantId);
 
-    // Create student document
-    await studentRef.set({
-      personalInformation: personalInformation,
-      academicInformation: academicInformation,
-      consultant: consultantId,
-      folders: folders || [],
-      email,
-      onboarding,
-      createdAt: new Date().toISOString(),
-    });
+    // Run firestore operations in parallel
+    await Promise.all([
+      // Create student document
+      studentRef.set({
+        personalInformation: personalInformation,
+        academicInformation: academicInformation,
+        consultant: consultantId,
+        folders: folders || [],
+        email,
+        onboarding,
+        createdAt: new Date().toISOString(),
+      }),
+      // Update consultant's students array
+      consultantRef.update({
+        students: admin.firestore.FieldValue.arrayUnion(studentRef)
+      })
+    ])
 
     // Retrieve student information
     const studentSnap = await studentRef.get();
     const createdStudentData = {id: studentRef.id, ...studentSnap.data()};
 
-    // Update consultant's students array
-    const consultantRef = adminDb.collection('consultantUsers').doc(consultantId);
-    await consultantRef.update({
-      students: admin.firestore.FieldValue.arrayUnion(studentRef)
-    });
+
+
+    // old
+    // // Create student document
+    // await studentRef.set({
+    //   personalInformation: personalInformation,
+    //   academicInformation: academicInformation,
+    //   consultant: consultantId,
+    //   folders: folders || [],
+    //   email,
+    //   onboarding,
+    //   createdAt: new Date().toISOString(),
+    // });
+
+    // // Retrieve student information
+    // const studentSnap = await studentRef.get();
+    // const createdStudentData = {id: studentRef.id, ...studentSnap.data()};
+
+    // // Update consultant's students array
+    // await consultantRef.update({
+    //   students: admin.firestore.FieldValue.arrayUnion(studentRef)
+    // });
+    // old
 
     return NextResponse.json({ 
       success: true, 
