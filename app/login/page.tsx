@@ -74,10 +74,10 @@ const page = () => {
         const user = await getUserInfo(userCredential.user.uid);
 
         // Check if account has been verified
-        // if (!userCredential.user.emailVerified && user.role === 'consultant') {
-        //   toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
-        //   return
-        // }
+        if (!userCredential.user.emailVerified && user.role === 'consultant') {
+          toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
+          return
+        }
 
         // Add user info to Redux state
         dispatch(setUser({
