@@ -27,20 +27,12 @@ export const fetchStudents = createAsyncThunk(
                         : null;
                 })
             );
-
-            console.log('studentDocs',studentDocs)
             return studentDocs
         } catch (error) {
             console.log("Error fetching students:", error);
         }
     }
 ) 
-
-// const initialState = {
-//   students: [],
-//   loading: false,
-//   error: null,
-// };
 
 const initialState: Student[] = []
 

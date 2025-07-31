@@ -215,7 +215,7 @@ function AddStudentModal() {
                         <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
                         <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} />
                         <GoalsAndNotesSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} handleAcademicInfoChange={handleAcademicInfoChange} />
-                        <Button type='submit' disabled={isLoading}>Submit</Button>
+                        <Button type='submit' disabled={isLoading}>{isLoading ? 'Submiting...' : 'Submit'}</Button>
                     </form>
                 </div>
             </DialogContent>

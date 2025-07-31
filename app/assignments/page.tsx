@@ -24,7 +24,6 @@ const page = () => {
     useEffect(() => {
         const fetchAssignments = async () => {
             const assignmentData = user.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
-            console.log('assignmentData', assignmentData)
             setAssignments(assignmentData)
         }
 

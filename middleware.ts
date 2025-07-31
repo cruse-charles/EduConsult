@@ -19,8 +19,6 @@ export function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL("/unauthorized", req.url))
     }
 
-    console.log("Role from cookie:", role)
-
     return NextResponse.next()
 }
 

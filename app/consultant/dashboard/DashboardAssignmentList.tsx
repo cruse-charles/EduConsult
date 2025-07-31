@@ -50,15 +50,6 @@ const DashboardAssignmentList = () => {
     
     const days = getDays()
     
-    useEffect(() => {
-        dashboardAssignments.filter((assignment) => {
-            console.log('formatNextDeadline dueDate',formatNextDeadline(assignment.dueDate))
-        })
-        days.map((day) => {
-            console.log('day', formatNextDeadline(day))
-        })
-    }, [dashboardAssignments])
-
     const formatDay = (date: Date) => {
         const isToday = new Date().toDateString() === date.toDateString()
         return {

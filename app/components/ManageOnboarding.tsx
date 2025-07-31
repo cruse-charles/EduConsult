@@ -32,7 +32,6 @@ const ManageOnboarding = () => {
         const immediateElement = document.querySelector(step.target) as HTMLElement | null;
         if (immediateElement) {
             setTargetElement(immediateElement);
-            console.log('immediate element', immediateElement)
             return;
         }
 
