@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux'
 const WeeklyCalendar = () => {
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
-    const assignments = useSelector((state: RootState) => state.studentAssignments) as Assignment[]
+    const assignments = useSelector((state: RootState) => state.currentStudentAssignments) as Assignment[]
 
     const getDays = () => {
         const daysArray = []

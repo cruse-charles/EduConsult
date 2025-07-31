@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 
 function StudentProfileHeader() {
     const user = useSelector((state: RootState) => state.user)
-    const student = useSelector((state: RootState) => state.student)
+    const student = useSelector((state: RootState) => state.currentStudent)
 
     return (
         <div className="flex items-center gap-2">

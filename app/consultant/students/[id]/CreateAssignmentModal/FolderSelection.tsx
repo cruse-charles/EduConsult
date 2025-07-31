@@ -20,7 +20,7 @@ interface FolderSelectionProps {
 function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, setErrors, errors}: FolderSelectionProps) {
     
     // Retrieve student state from redux
-    const student = useSelector((state: RootState) => state.student)
+    const student = useSelector((state: RootState) => state.currentStudent)
 
     return (
         <>

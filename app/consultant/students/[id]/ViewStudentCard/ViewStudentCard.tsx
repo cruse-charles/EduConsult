@@ -27,7 +27,7 @@ function ViewStudentCard() {
     const router = useRouter();
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user)
-    const student = useSelector((state: RootState) => state.student) as Student
+    const student = useSelector((state: RootState) => state.currentStudent) as Student
 
     // TODO: Adjust loading state
     // if (!student) return <div>Loading...</div>
