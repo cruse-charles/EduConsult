@@ -94,14 +94,12 @@ const page = () => {
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password)
         const user = userCredential.user;
 
-        // new
         // Set custom claims for the new user to assign 'consultant' role
         fetch('/api/create-consultant', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({uid: user.uid})
         })
-        // new
 
         // Send email verification
         await sendEmailVerification(user)
@@ -211,14 +209,14 @@ const page = () => {
           <p className="text-sm text-muted-foreground">Enter your information to get started</p>
         </div>
             <div className="grid gap-4">
-              <Button
+              {/* <Button
                 variant="outline"
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
                 className="w-full"
               >
                 Continue With Google
-              </Button>
+              </Button> */}
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

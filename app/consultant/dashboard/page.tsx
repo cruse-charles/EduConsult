@@ -4,10 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-import { getDoc, doc, DocumentReference, DocumentData } from "firebase/firestore";
-import { db,  } from "@/lib/firebaseConfig";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebaseConfig";
 
-import { FirebaseUserInfo, Student } from "@/lib/types/types";
+import { FirebaseUserInfo } from "@/lib/types/types";
 
 import AddStudentModal from "./AddStudentModal/AddStudentModal";
 import Highlights from "../../components/Highlights";
@@ -18,118 +18,71 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { fetchStudents } from "@/redux/slices/studentsSlice";
-import { AsyncThunkAction, AsyncThunkConfig } from "@reduxjs/toolkit";
 import { setUser } from "@/redux/slices/userSlice";
 import { setOnboardingState } from "@/redux/slices/onboardingSlice";
 
 const page = () => {
+    const dispatch = useDispatch();
+    
     // State to manage students and set reference to the consultant document
     const [searchQuery, setSearchQuery] = useState("")
     const [showDropdown, setShowDropdown] = useState(false);
     const [loading, setLoading] = useState(false)
 
-    // const user = useSelector((state: RootState) => state.user);
+    // Retrieve state variables
     const userId = useSelector((state: RootState) => state.user.id);
     const students = useSelector((state: RootState) => state.students)
-    const dispatch = useDispatch();
 
-    // let user
-
-            const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
-            try {
-                // Check if id is for a consultant
-                const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
-                if (consultantDoc.exists()) {
-                    const data = consultantDoc.data()
-                    return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant', onboarding: data.onboarding}
-                }
-                
-                throw new Error("User not found")
-                
-            } catch (error) {
-                console.log(error)
-                throw error
+    // Function to retreive consultant info
+    const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
+        try {
+            const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
+            if (consultantDoc.exists()) {
+                const data = consultantDoc.data()
+                return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant', onboarding: data.onboarding}
             }
+                
+            throw new Error("User not found")
+                
+        } catch (error) {
+            console.log(error)
+            throw error
         }
-
-
-    // // Fetch students for the current consultant user
-    // useEffect(() => {
-
-        // const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
-        //     try {
-        //         // Check if id is for a consultant
-        //         const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
-        //         if (consultantDoc.exists()) {
-        //             const data = consultantDoc.data()
-        //             return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant', onboarding: data.onboarding}
-        //         }
-                
-        //         throw new Error("User not found")
-                
-        //     } catch (error) {
-        //         console.log(error)
-        //         throw error
-        //     }
-        // }
-
-    //     const user = await getUserInfo(userId)
-
-    //     if (user && user.id) {
-    //         // @ts-ignore
-    //         dispatch(fetchStudents(user));
-    //     }
-
-    //     // Add user info to Redux state
-    //     dispatch(setUser({
-    //       id: user.id,
-    //       firstName: user.firstName,
-    //       lastName: user.lastName,
-    //       email: user.email,
-    //       role: user.role,
-    //     }))
-
-    //     // add onboarding state to redux
-    //     dispatch(setOnboardingState({
-    //       isComplete: user.onboarding.isComplete,
-    //       onboardingStep: user.onboarding.onboardingStep
-    //     }))
-    // }, [user, dispatch]);
-
+    }
 
     useEffect(() => {
         const fetchUserData = async () => {
             if (!userId) return;
 
             try {
-            const user = await getUserInfo(userId);
+                const user = await getUserInfo(userId);
 
-            // Add user info to Redux
-            dispatch(setUser({
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                role: user.role,
-            }));
+                // Add user info to Redux
+                dispatch(setUser({
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role,
+                }));
 
-            dispatch(setOnboardingState({
-                isComplete: user.onboarding.isComplete,
-                onboardingStep: user.onboarding.onboardingStep,
-            }));
+                dispatch(setOnboardingState({
+                    isComplete: user.onboarding.isComplete,
+                    onboardingStep: user.onboarding.onboardingStep,
+                }));
 
-            // Fetch students if consultant
-            if (user.role === "consultant") {
-                // @ts-ignore
-                dispatch(fetchStudents(user));
-            }
+                // Fetch students if consultant
+                if (user.role === "consultant") {
+                    // @ts-ignore
+                    dispatch(fetchStudents(user));
+                }
             } catch (error) {
-            console.error("Failed to fetch user info:", error);
+                console.error("Failed to fetch user info:", error);
             }
         };
 
         fetchUserData();
-}, [userId, dispatch]);
+    }, [userId, dispatch]);
 
 
     const filteredStudents = students.filter((student) => 
@@ -173,9 +126,8 @@ const page = () => {
                                 )}
                              </div>
 
-                        {/* Add Student Container */}
-                        {/* <AddStudentModal consultantDocRef={consultantDocRef} onStudentAdded={handleStudentAdded}/> */}
-                        <AddStudentModal/>
+                            {/* Add Student Container */}
+                            <AddStudentModal/>
                         </div>
                     </div>
 

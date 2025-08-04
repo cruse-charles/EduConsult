@@ -2,7 +2,6 @@
 
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
-import { doc, getDoc, setDoc } from "firebase/firestore"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -14,11 +13,9 @@ import { Label } from "@/components/ui/label"
 import { GraduationCap } from "lucide-react"
 import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
-import { fetchStudent } from "@/redux/slices/currentStudentSlice"
 
 import { FirebaseUserInfo } from "@/lib/types/types"
 import { AppDispatch } from "@/redux/store"
-import { setOnboardingState } from "@/redux/slices/onboardingSlice"
 import CustomToast from "../components/CustomToast"
 import { toast } from "sonner"
 
@@ -69,16 +66,9 @@ const page = () => {
         // Sign in and get user crednetials
         const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
 
-        // old
-        // Retrieve user info
-        // const user = await getUserInfo(userCredential.user.uid);
-        // old
-
-        // new
         // Set user and refresh token to get claim
         const user = userCredential.user
         user.getIdToken(true)
-        
 
         // get claims
         const token = await userCredential.user.getIdTokenResult();
@@ -86,15 +76,11 @@ const page = () => {
         console.log('token', token)
         console.log('role', role)
 
-        // Add user info to Redux state
+        // Add user info from token to Redux state
         dispatch(setUser({
           id: token.claims.user_id,
-          // firstName: user.firstName,
-          // lastName: user.lastName,
-          // email: user.email,
           role: role,
         }))
-        // new
 
         // If the user is a student then set their data in student slice and redirect to student profile
         if (role === "consultant") {
@@ -102,47 +88,7 @@ const page = () => {
         } else if (role === "student") {
             router.push("/student/dashboard");
         }
-        // new
-
-        // Check if account has been verified
-        // if (!userCredential.user.emailVerified && user.role === 'consultant') {
-        //   toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
-        //   return
-        // }
-
-        // old
-        // Add user info to Redux state
-        // dispatch(setUser({
-        //   id: user.id,
-        //   firstName: user.firstName,
-        //   lastName: user.lastName,
-        //   email: user.email,
-        //   role: user.role,
-        // }))
-
-        // // add onboarding state to redux
-        // dispatch(setOnboardingState({
-        //   isComplete: user.onboarding.isComplete,
-        //   onboardingStep: user.onboarding.onboardingStep
-        // }))
-
-        // // Call API to set cookie
-        // await fetch("/api/set-session", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ role: user.role }),
-        // });
-
-        // // If the user is a student then set their data in student slice and redirect to student profile
-        // if (user.role === 'student') {
-        //   // dispatch(fetchStudent(user.id))
-        //   router.push(`/student/dashboard`)
-        // } else {
-        //   // Navigate to dashboard
-        //   router.push('/consultant/dashboard')
-        // }
-        // old
-
+      
       } catch (error) {
         // Set errors if login fails
         setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
@@ -164,30 +110,6 @@ const page = () => {
       return { firstName, lastName }
     }
 
-    // Retrieve user's info
-    const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
-      try {
-        // Check if id is for a consultant
-        const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
-        if (consultantDoc.exists()) {
-          const data = consultantDoc.data()
-          return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant', onboarding: data.onboarding}
-        }
-
-        // TODO: Add onboarding for students
-        // Check if id is for a student
-        const studentDoc = await getDoc(doc(db, "studentUsers", userId))
-        if (studentDoc.exists()) {
-          const data = studentDoc.data()
-          return {id: studentDoc.id, firstName: data.personalInformation.firstName, lastName: data.personalInformation.lastName, email: data.email, role: 'student', onboarding: data.onboarding}
-        }
-
-        throw new Error("User not found")
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
-    }
 
     // TODO: Think this is copy-pasted with signup for googleSignIn, so export it
     // TODO: Double check the id stuff with google sign ins
