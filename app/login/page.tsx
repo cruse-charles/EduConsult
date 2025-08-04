@@ -86,6 +86,16 @@ const page = () => {
         console.log('token', token)
         console.log('role', role)
 
+        // Add user info to Redux state
+        dispatch(setUser({
+          id: token.claims.user_id,
+          // firstName: user.firstName,
+          // lastName: user.lastName,
+          // email: user.email,
+          role: role,
+        }))
+        // new
+
         // If the user is a student then set their data in student slice and redirect to student profile
         if (role === "consultant") {
             router.push("/consultant/dashboard");
