@@ -14,14 +14,18 @@ import { completeStep } from "@/redux/slices/onboardingSlice";
 import { nextStep } from "@/lib/onBoardingUtils";
 import { RootState } from "@/redux/store";
 
-interface StudentTableProps {
-    students: Student[];
-    loading: boolean;
-}
+// interface StudentTableProps {
+//     students: Student[];
+//     loading: boolean;
+// }
 
-const StudentTable = ({students, loading}: StudentTableProps) => {
+// const StudentTable = ({students, loading}: StudentTableProps) => {
+const StudentTable = () => {
     const router = useRouter();
     const dispatch = useDispatch()
+
+    // const students = useSelector((state: RootState) => state.students)
+    const students = useSelector((state: RootState) => state.students.studentList)
     const user = useSelector((state: RootState) => state.user)
     const { isComplete } = useSelector((state: RootState) => state.onboarding)
 
@@ -78,13 +82,13 @@ const StudentTable = ({students, loading}: StudentTableProps) => {
 
 
     // Show loading screen while students are fetching
-    if (loading) {
-        return (
-            Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full rounded-md" />
-            )
-        ))
-    }
+    // if (loading) {
+    //     return (
+    //         Array.from({ length: 3 }).map((_, i) => (
+    //             <Skeleton key={i} className="h-12 w-full rounded-md" />
+    //         )
+    //     ))
+    // }
 
     return (
         <div>

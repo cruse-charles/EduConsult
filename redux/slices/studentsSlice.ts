@@ -34,7 +34,13 @@ export const fetchStudents = createAsyncThunk(
     }
 ) 
 
-const initialState: Student[] = []
+// const initialState: Student[] = []
+interface StudentsState {
+  studentList: Student[];
+  loading: boolean;
+  error: string | null;
+}
+const initialState: StudentsState = {studentList: [], loading: false, error: null};
 
 // Create a slice for assignments
 const studentsSlice = createSlice({
@@ -43,29 +49,32 @@ const studentsSlice = createSlice({
   reducers: {
     setStudents(state, action) {
     //   state.students = action.payload;
-        return action.payload
+        // return action.payload
+        state.studentList = action.payload
+        return state
     },
     addStudent(state, action) {
-        state.push(action.payload);
+        // state.push(action.payload);
+        state.studentList.push(action.payload);
         return state;
     }
   },
   extraReducers: (builder) => {
     builder
-    //   .addCase(fetchStudents.pending, (state) => {
-    //     // state.loading = true;
-    //     // state.error = null;
-    //   })
+      .addCase(fetchStudents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchStudents.fulfilled, (state, action) => {
-        // state.loading = false;
-        // state.students = action.payload || [];
-        return action.payload;
+        state.loading = false;
+        state.studentList = action.payload || [];
+        // return action.payload;
       })
       .addCase(fetchStudents.rejected, (state, action) => {
-        // state.loading = false;
-        // state.error = action.error.message || "Failed to fetch students";
-            console.error("fetchAssignments rejected:", action.payload);
-            return state;
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch students";
+        console.error("fetchAssignments rejected:", action.payload);
+        // return state;
       });
   },
 });

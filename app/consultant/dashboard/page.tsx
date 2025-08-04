@@ -11,7 +11,7 @@ import { FirebaseUserInfo } from "@/lib/types/types";
 
 import AddStudentModal from "./AddStudentModal/AddStudentModal";
 import Highlights from "../../components/Highlights";
-import StudentTable from "./StudentList";
+import StudentTable from "./StudentTable";
 import DashboardAssignmentList from "./DashboardAssignmentList";
 
 import { useEffect, useState } from "react";
@@ -31,7 +31,8 @@ const page = () => {
 
     // Retrieve state variables
     const userId = useSelector((state: RootState) => state.user.id);
-    const students = useSelector((state: RootState) => state.students)
+    // const students = useSelector((state: RootState) => state.students)
+    const students = useSelector((state: RootState) => state.students.studentList)
 
     // Function to retreive consultant info
     const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
@@ -83,7 +84,6 @@ const page = () => {
 
         fetchUserData();
     }, [userId, dispatch]);
-
 
     const filteredStudents = students.filter((student) => 
         `${student.personalInformation.firstName} ${student.personalInformation.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
@@ -143,7 +143,8 @@ const page = () => {
                                 <TabsTrigger value="calendar">Calendar</TabsTrigger>
                             </TabsList>
                             <TabsContent value="students" className="space-y-4">
-                                <StudentTable students={students} loading={loading}/>
+                                {/* <StudentTable students={students} loading={loading}/> */}
+                                <StudentTable />
                             </TabsContent>
                             <TabsContent value="calendar" className="space-y-4">
                                 <DashboardAssignmentList />
