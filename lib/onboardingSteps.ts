@@ -68,6 +68,6 @@ export const onboardingSteps = [
     content: "See a calendar with your assignments.",
     actionRequired: "viewCalendar",
     page: '9/9',
-    path: '/consultant/students'
+    path: '/assignments'
   },
 ]

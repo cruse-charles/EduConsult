@@ -17,11 +17,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 function page() {
     // Initialize dispatch for data retrieval and state management
     const dispatch = useDispatch<AppDispatch>()
-    const studentState = useSelector((state: RootState) => state.currentStudent)
+    // const studentState = useSelector((state: RootState) => state.currentStudent)
     const user = useSelector((state: RootState) => state.user);
 
-    const [student, setStudent] = useState<Student | null>(null);
-    const [assignments, setAssignments] = useState<Assignment[]>([])
+    // const [student, setStudent] = useState<Student | null>(null);
+    // const [assignments, setAssignments] = useState<Assignment[]>([])
     
     useEffect(() => {
         dispatch(fetchStudent(user.id))
@@ -29,20 +29,20 @@ function page() {
 
 
     // Update local student state when studentState in Redux store changes
-    useEffect(() => {
-        if (studentState) {
-            setStudent(studentState as Student);
-        }
-    }, [studentState]);
+    // useEffect(() => {
+    //     if (studentState) {
+    //         setStudent(studentState as Student);
+    //     }
+    // }, [studentState]);
 
-    useEffect(() => {
-        const fetchAssignments = async () => {
-            const assignmentsData = await getStudentAssignments(user.id);
-            setAssignments(assignmentsData)
-        }
+    // useEffect(() => {
+    //     const fetchAssignments = async () => {
+    //         const assignmentsData = await getStudentAssignments(user.id);
+    //         setAssignments(assignmentsData)
+    //     }
 
-        fetchAssignments()
-    }, [])
+    //     fetchAssignments()
+    // }, [])
 
     return (
             <div className="min-h-screen bg-background">

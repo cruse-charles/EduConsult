@@ -66,15 +66,26 @@ const page = () => {
         // Sign in and get user crednetials
         const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
 
+        // Check if account has been verified
+        // if (!userCredential.user.emailVerified && user.role === 'consultant') {
+        //   toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
+        //   return
+        // }
+        
         // Set user and refresh token to get claim
         const user = userCredential.user
         user.getIdToken(true)
-
-        // get claims
+        
+        // Retrieve claims
         const token = await userCredential.user.getIdTokenResult();
         const role = token.claims.role;
-        console.log('token', token)
-        console.log('role', role)
+        
+        // Call API to set cookie
+        await fetch("/api/set-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: role }),
+        });
 
         // Add user info from token to Redux state
         dispatch(setUser({
