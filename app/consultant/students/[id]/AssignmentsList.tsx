@@ -154,8 +154,6 @@ function AssignmentsList() {
 
     // Function to delete a folder and assignments within it
     const handleDeleteFolder = async (folderName: string) => {
-        console.log('foldernmae', folderName)
-
         try {
             // Delete folder and assignments in database
             await deleteFolder(studentId, folderName)

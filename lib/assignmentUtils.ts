@@ -42,8 +42,6 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
 
     try {
         const assignmentDocId = nanoid()
-        console.log("Consultant on uplaoding assignment", consultantId)
-    
 
         // Create a new Doc
         const assignmentDocRef = doc(db, "assignments", assignmentDocId)
@@ -71,7 +69,6 @@ export const updateAssignment = async (assignmentData: UpdateAssignment, assignm
     try {
         // Get reference to the assignment document
         const assignmentDocRef = doc(db, "assignments", assignmentId);
-        console.log('UpdateAssignmet in utils, assignmentData', assignmentData)
 
         // Update doc
         // @ts-ignore
@@ -124,7 +121,6 @@ export const deleteAssignment = async (assignmentId: string, studentId: string) 
         })
 
         // TODO: Have a popup that confirms deleted assignment and created and updated
-        console.log("Assignment deleted successfully")
     } catch (error) {
         console.log("Error deleting assignment", error)
         throw error

@@ -68,10 +68,31 @@ const page = () => {
       try {
         // Sign in and get user crednetials
         const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
-        console.log('userCredential', userCredential)
 
+        // old
         // Retrieve user info
-        const user = await getUserInfo(userCredential.user.uid);
+        // const user = await getUserInfo(userCredential.user.uid);
+        // old
+
+        // new
+        // Set user and refresh token to get claim
+        const user = userCredential.user
+        user.getIdToken(true)
+        
+
+        // get claims
+        const token = await userCredential.user.getIdTokenResult();
+        const role = token.claims.role;
+        console.log('token', token)
+        console.log('role', role)
+
+        // If the user is a student then set their data in student slice and redirect to student profile
+        if (role === "consultant") {
+            router.push("/consultant/dashboard");
+        } else if (role === "student") {
+            router.push("/student/dashboard");
+        }
+        // new
 
         // Check if account has been verified
         // if (!userCredential.user.emailVerified && user.role === 'consultant') {
@@ -79,41 +100,42 @@ const page = () => {
         //   return
         // }
 
+        // old
         // Add user info to Redux state
-        dispatch(setUser({
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-        }))
+        // dispatch(setUser({
+        //   id: user.id,
+        //   firstName: user.firstName,
+        //   lastName: user.lastName,
+        //   email: user.email,
+        //   role: user.role,
+        // }))
 
-        // add onboarding state to redux
-        dispatch(setOnboardingState({
-          isComplete: user.onboarding.isComplete,
-          onboardingStep: user.onboarding.onboardingStep
-        }))
+        // // add onboarding state to redux
+        // dispatch(setOnboardingState({
+        //   isComplete: user.onboarding.isComplete,
+        //   onboardingStep: user.onboarding.onboardingStep
+        // }))
 
-        // Call API to set cookie
-        await fetch("/api/set-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: user.role }),
-        });
+        // // Call API to set cookie
+        // await fetch("/api/set-session", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({ role: user.role }),
+        // });
 
-        // If the user is a student then set their data in student slice and redirect to student profile
-        if (user.role === 'student') {
-          dispatch(fetchStudent(user.id))
-          router.push(`/student/dashboard`)
-        } else {
-          // Navigate to dashboard
-          router.push('/consultant/dashboard')
-        }
+        // // If the user is a student then set their data in student slice and redirect to student profile
+        // if (user.role === 'student') {
+        //   // dispatch(fetchStudent(user.id))
+        //   router.push(`/student/dashboard`)
+        // } else {
+        //   // Navigate to dashboard
+        //   router.push('/consultant/dashboard')
+        // }
+        // old
 
       } catch (error) {
         // Set errors if login fails
         setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
-        console.log('error logging in', error)
       } finally {
         setIsLoading(false)
       }
@@ -160,61 +182,61 @@ const page = () => {
     // TODO: Think this is copy-pasted with signup for googleSignIn, so export it
     // TODO: Double check the id stuff with google sign ins
     // Handle Google sign-in
-    const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
-      setIsLoading(false)
+    // const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    //   e.preventDefault()
+    //   setIsLoading(false)
 
-      // Firebase function to sign in with Google
-      signInWithPopup(auth, googleProvider)
-        .then( async (result) => {
+    //   // Firebase function to sign in with Google
+    //   signInWithPopup(auth, googleProvider)
+    //     .then( async (result) => {
         
-          // Check if this is a new user (first time signing in with Google)
-          const user = result.user
-          const userDocRef = doc(db, "consultantUsers", user.uid)
-          const userDoc = await getDoc(userDocRef)
+    //       // Check if this is a new user (first time signing in with Google)
+    //       const user = result.user
+    //       const userDocRef = doc(db, "consultantUsers", user.uid)
+    //       const userDoc = await getDoc(userDocRef)
 
-          // Parse the display name into first and last name
-          const { firstName, lastName } = parseDisplayName(user.displayName)
+    //       // Parse the display name into first and last name
+    //       const { firstName, lastName } = parseDisplayName(user.displayName)
                         
-          // If user document doesn't exist, create it (new user)
-          if (!userDoc.exists()) {
-              await setDoc(userDocRef, {
-                  email: user.email,
-                  firstName: firstName,
-                  lastName: lastName,
-                  photoURL: user.photoURL,
-                  students: [],
-                  createdAt: new Date(),
-                  signInMethod: 'google'
-              })
-          }
+    //       // If user document doesn't exist, create it (new user)
+    //       if (!userDoc.exists()) {
+    //           await setDoc(userDocRef, {
+    //               email: user.email,
+    //               firstName: firstName,
+    //               lastName: lastName,
+    //               photoURL: user.photoURL,
+    //               students: [],
+    //               createdAt: new Date(),
+    //               signInMethod: 'google'
+    //           })
+    //       }
 
-          const userInfo = await getUserInfo(user.uid);
+    //       const userInfo = await getUserInfo(user.uid);
 
-          // Add user info to Redux state
-          dispatch(setUser({
-            id: userInfo.id,
-            firstName: userInfo.firstName,
-            lastName: userInfo.lastName,
-            email: userInfo.email,
-            role: userInfo.role
-          }))
+    //       // Add user info to Redux state
+    //       dispatch(setUser({
+    //         id: userInfo.id,
+    //         firstName: userInfo.firstName,
+    //         lastName: userInfo.lastName,
+    //         email: userInfo.email,
+    //         role: userInfo.role
+    //       }))
 
-          // If the user is a student then set their data in Redux
-          if (userInfo.role === 'student') {
-            dispatch(fetchStudent(userInfo.id))
-          }
+    //       // If the user is a student then set their data in Redux
+    //       if (userInfo.role === 'student') {
+    //         dispatch(fetchStudent(userInfo.id))
+    //       }
                 
-          // Redirect to dashboard after successful sign-in
-          router.push('/dashboard');
-          setIsLoading(false)
-        })
-        .catch((error) => {
-          console.log('error loggin in', error)
-          console.group(error.message)
-          setIsLoading(false)
-        })
-    }
+    //       // Redirect to dashboard after successful sign-in
+    //       router.push('/dashboard');
+    //       setIsLoading(false)
+    //     })
+    //     .catch((error) => {
+    //       console.log('error loggin in', error)
+    //       console.group(error.message)
+    //       setIsLoading(false)
+    //     })
+    // }
 
     // Handles input changes and updates state accordingly
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +290,7 @@ const page = () => {
                     {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                   </div>
                   <Button disabled={isLoading}>{isLoading ? "Logging in..." : "Login"}</Button>
-                  <Button onClick={handleGoogleSignIn} variant='outline'>Continue With Google</Button>
+                  {/* <Button onClick={handleGoogleSignIn} variant='outline'>Continue With Google</Button> */}
                 </div>
               </form>
               <div className="text-center text-sm">

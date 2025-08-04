@@ -10,7 +10,6 @@ export const useStudent = (id: string) => {
         const fetchstudent = async () => {
             const docRef = doc(db, "studentUsers", id);
             const docSnap = await getDoc(docRef);
-            // console.log(docSnap.data())
             setStudent({id: docSnap.id, ...docSnap.data()} as Student);
         }
         fetchstudent()

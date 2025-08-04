@@ -100,7 +100,6 @@ function AddStudentModal() {
         // Create a new student document in the "studentUsers" collection
         try {
             const idToken = await auth.currentUser?.getIdToken(true); // current consultant’s token
-            console.log('idToken', idToken)
             const res = await fetch("/api/create-student", {
                 method: "POST",
                 headers: {
@@ -144,7 +143,6 @@ function AddStudentModal() {
 
         } catch (error) {
             setIsLoading(false)
-            console.log('error creating student', error)
             toast(<CustomToast title="Student Account Not Created" description={`${error}`} status="error"/>)
         }
     }

@@ -42,12 +42,6 @@ export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => 
 
     const snapshot = await getDocs(q);
     return snapshot;
-
-    // try { 
-
-    // } catch (error) {
-    //     console.log('error', error)
-    // }
 }
 
 // Function to count students in progress (has In-Progress assighnemnts) for a consultant view
@@ -60,7 +54,6 @@ export const countOfInProgressStudents = async (consultantId: string) => {
     )
 
     const snapshot = await getDocs(q);
-    // console.log('countOfInProgressStudents', snapshot)
     return snapshot.size;
 }
 

@@ -41,13 +41,10 @@ const studentSlice = createSlice({
       if (!state.stats) return;
 
       const { newStatus, oldStatus } = action.payload;
-      console.log('in reducer action payload', action.payload)
-      console.log('newstatus && oldstatus', newStatus, oldStatus)
 
       // Case 1: Create new In-Progress
       if (newStatus === "In-Progress" && !oldStatus) {
         state.stats.inProgressAssignmentsCount += 1;
-        console.log('Case 1')
         return;
       }
 
@@ -57,14 +54,12 @@ const studentSlice = createSlice({
           0,
           state.stats.inProgressAssignmentsCount - 1
         );
-        console.log('Case 2')
         return;
       }
 
       // Case 3: Non-In-Progress → In-Progress
       if (oldStatus !== "In-Progress" && newStatus === "In-Progress") {
         state.stats.inProgressAssignmentsCount += 1;
-        console.log('Case 3')
         return;
       }
 
@@ -72,7 +67,6 @@ const studentSlice = createSlice({
       if (oldStatus === 'In-Progress' && newStatus === 'Deleted') {
         state.stats.inProgressAssignmentsCount = Math.max(0, state.stats.inProgressAssignmentsCount - 1)
       }
-      console.log('Case4')
       return
     },
     updateStudentInformation(state, action) {

@@ -13,7 +13,6 @@ export const fetchConsultantDashboardAssignments = createAsyncThunk(
   async (consultantId: string) => {
     try {
       const snapshot = await getConsultantDashboardAssignments(consultantId);
-      console.log('getTasksDueThisWeekConsultantDashboard', snapshot);
       return snapshot;
     } catch (error) {
       console.error("Error fetching consultant dashboard assignments:", error);

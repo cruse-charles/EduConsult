@@ -94,6 +94,15 @@ const page = () => {
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password)
         const user = userCredential.user;
 
+        // new
+        // Set custom claims for the new user to assign 'consultant' role
+        fetch('/api/create-consultant', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({uid: user.uid})
+        })
+        // new
+
         // Send email verification
         await sendEmailVerification(user)
 
@@ -158,7 +167,6 @@ const page = () => {
       // Firebase function to sign in with Google
       signInWithPopup(auth, googleProvider)
         .then( async (result) => {
-          console.log(result)
 
           // Check if this is a new user (first time signing in with Google)
           const user = result.user
@@ -179,7 +187,6 @@ const page = () => {
                   createdAt: new Date(),
                   signInMethod: 'google'
               })
-              console.log('New Google user document created with parsed names:', { firstName, lastName })
           }
 
           router.push('/dashboard');
