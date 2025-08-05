@@ -142,7 +142,6 @@ const page = () => {
                                 <TabsTrigger value="calendar">Calendar</TabsTrigger>
                             </TabsList>
                             <TabsContent value="students" className="space-y-4">
-                                {/* <StudentTable students={students} loading={loading}/> */}
                                 <StudentTable />
                             </TabsContent>
                             <TabsContent value="calendar" className="space-y-4">
