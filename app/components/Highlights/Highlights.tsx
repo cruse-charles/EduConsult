@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { formatNextDeadline } from '@/lib/utils'
 import { Assignment } from '@/lib/types/types'
 import HighlightCard from './HighlightCard'
-import { getConsultantHighlightConfig } from './consultantHighlightsConfig'
+import { getConsultantHighlightConfig, getStudentHighlightConfig } from './consultantHighlightsConfig'
 
 const Highlights = () => {
 
@@ -42,9 +42,9 @@ const Highlights = () => {
     // }, [user, tasksDueThisWeek])
 
     useEffect(() => {
-        setLoading(true)
-
+        
         const loadHighlights = async () => {
+            setLoading(true)
             if (user.role === 'consultant') {
                 const [tasksDueThisWeek, studentsInProgress, overDueAssignments, nextAssignment] = await Promise.all([
                     getTasksDueThisWeekConsultantDashboard(user.id),
@@ -59,17 +59,31 @@ const Highlights = () => {
                     nextAssignment: nextAssignment,
                     overDueAssignments: overDueAssignments
                 })
+            } else if (user.role === 'student') {
+                const [tasksDueThisWeek, completedAssignments, reviewedAssignments, totalAssignments] = await Promise.all([
+                    getTasksDueThisWeekStudentDashboard(user.id),
+                    countCompletedAssignmentsStudentDashboard(user.id),
+                    countReviewedAssignmentsStudentDashboard(user.id),
+                    countTotalAssignmentsStudentDashboard(user.id)
+                ])
+
+                setData({
+                    tasksDueThisWeek: tasksDueThisWeek,
+                    totalAssignments: totalAssignments,
+                    underReview: reviewedAssignments,
+                    completed: completedAssignments
+                })
             }
+            setLoading(false)
         }
 
         loadHighlights()
 
-        setLoading(false)
     }, [user.id])
 
 
-    // const highlightConfig = user.role === 'consultant' ? getConsultantHighlightConfig(data) : getStudentHighlightConfig(data);
-    const highlightConfig = getConsultantHighlightConfig(data);
+    const highlightConfig = user.role === 'consultant' ? getConsultantHighlightConfig(data) : getStudentHighlightConfig(data);
+    // const highlightConfig = getConsultantHighlightConfig(data);
 
 
     return (
