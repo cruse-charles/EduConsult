@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components/ui/skeleton'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { nextDeadlineForStudent } from '@/lib/queries/querys'
 import { Student } from '@/lib/types/types'
@@ -15,6 +16,7 @@ const StudentListRow = ({student, handleStudentClick}: StudentListRowProps) => {
 
     const user = useSelector((state: RootState) => state.user)
     const [nextDeadline, setNextDeadline] = useState(student?.stats?.nextDeadline)
+    const { loading } = useSelector((state: RootState) => state.students)
 
     useEffect(() => {
         const checkDeadline = async () => {
@@ -39,18 +41,37 @@ const StudentListRow = ({student, handleStudentClick}: StudentListRowProps) => {
     }, [])
 
     return (
-        <TableRow className="cursor-pointer student-row" onClick={() => handleStudentClick(student.id)}>
-            <TableCell>
+        loading ? (
+            <TableRow>
+                <TableCell>
+                    <Skeleton className="h-6 w-full rounded-md" />
+                </TableCell>
+                <TableCell>
+                    <Skeleton className="h-6 w-full rounded-md" />
+                </TableCell>
+                <TableCell>
+                    <Skeleton className="h-6 w-full rounded-md" />
+                </TableCell>
+            </TableRow>
+        ) : (
+            <TableRow
+                className="cursor-pointer student-row"
+                onClick={() => handleStudentClick(student.id)}
+            >
+                <TableCell>
                     {student.personalInformation.firstName} {student.personalInformation.lastName}
-            </TableCell>
-            <TableCell>
-                <span className="font-medium">{student.stats?.inProgressAssignmentsCount || 0}</span>
-            </TableCell>
-            <TableCell>
-                <span>{formatNextDeadline(nextDeadline)}</span>
-            </TableCell>
-        </TableRow>
-    )
+                </TableCell>
+                <TableCell>
+                    <span className="font-medium">
+                        {student.stats?.inProgressAssignmentsCount || 0}
+                    </span>
+                </TableCell>
+                <TableCell>
+                    <span>{formatNextDeadline(nextDeadline)}</span>
+                </TableCell>
+            </TableRow>
+        )
+    );
 }
 
 export default StudentListRow

@@ -31,7 +31,6 @@ const page = () => {
 
     // Retrieve state variables
     const userId = useSelector((state: RootState) => state.user.id);
-    // const students = useSelector((state: RootState) => state.students)
     const students = useSelector((state: RootState) => state.students.studentList)
 
     // Function to retreive consultant info

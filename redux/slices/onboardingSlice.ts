@@ -2,6 +2,7 @@ import { onboardingSteps } from "@/lib/onboardingSteps";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    // TODO: Start this with true then set to false if onboarding isn't complete, I see it on login
     isComplete: false,
     onboardingStep: 0,
 }

@@ -1,31 +1,24 @@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { Student } from "@/lib/types/types";
-
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation";
+
 import StudentListRow from "./StudentListRow";
+
 import { useDispatch, useSelector } from "react-redux";
 import { completeStep } from "@/redux/slices/onboardingSlice";
-import { nextStep } from "@/lib/onBoardingUtils";
 import { RootState } from "@/redux/store";
+import { nextStep } from "@/lib/onBoardingUtils";
 
-// interface StudentTableProps {
-//     students: Student[];
-//     loading: boolean;
-// }
-
-// const StudentTable = ({students, loading}: StudentTableProps) => {
 const StudentTable = () => {
     const router = useRouter();
     const dispatch = useDispatch()
 
-    // const students = useSelector((state: RootState) => state.students)
-    const students = useSelector((state: RootState) => state.students.studentList)
+    const {studentList: students, loading} = useSelector((state: RootState) => state.students)
     const user = useSelector((state: RootState) => state.user)
     const { isComplete } = useSelector((state: RootState) => state.onboarding)
 
@@ -79,16 +72,6 @@ const StudentTable = () => {
         await nextStep(user.id)
         router.push(`/consultant/students/${studentId}`);
     }
-
-
-    // Show loading screen while students are fetching
-    // if (loading) {
-    //     return (
-    //         Array.from({ length: 3 }).map((_, i) => (
-    //             <Skeleton key={i} className="h-12 w-full rounded-md" />
-    //         )
-    //     ))
-    // }
 
     return (
         <div>
