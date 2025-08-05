@@ -103,7 +103,7 @@ const ManageOnboarding = () => {
         dispatch(next())
         await nextStep(user.id)
 
-        if (onboardingStep === onboardingSteps.length - 1) {
+        if (onboardingStep >= onboardingSteps.length - 1) {
             dispatch(completeOnboarding())
             await completeOnboardingFirebase(user.id)
         }

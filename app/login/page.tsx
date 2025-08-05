@@ -103,7 +103,6 @@ const page = () => {
       } catch (error) {
         // Set errors if login fails
         setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
-      } finally {
         setIsLoading(false)
       }
     }

@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { RootState } from "@/redux/store";
 import { nextStep } from "@/lib/onBoardingUtils";
+import { onboardingSteps } from "@/lib/onboardingSteps";
 
 const StudentTable = () => {
     const router = useRouter();
@@ -20,7 +21,7 @@ const StudentTable = () => {
 
     const {studentList: students, loading} = useSelector((state: RootState) => state.students)
     const user = useSelector((state: RootState) => state.user)
-    const { isComplete } = useSelector((state: RootState) => state.onboarding)
+    const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 
     // State to manage sorting by column and order
     const [sortBy, setSortBy] = useState("name")
@@ -68,7 +69,14 @@ const StudentTable = () => {
 
     // Navigate to the student's detailed page
     const handleStudentClick = async (studentId: string) => {
-        if (!isComplete) dispatch(completeStep("fetchStudentProfile"))
+        if (!isComplete) {
+            const currentStep = onboardingSteps[onboardingStep].actionRequired
+
+            if (currentStep === "fetchStudentProfile") {
+                dispatch(completeStep("fetchStudentProfile"))
+            }
+        } 
+            
         await nextStep(user.id)
         router.push(`/consultant/students/${studentId}`);
     }
