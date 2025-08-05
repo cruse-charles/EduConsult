@@ -8,7 +8,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { Assignment, Student } from "@/lib/types/types";
 import { getStudentAssignments } from "@/lib/queries/querys";
 
-import Highlights from "@/app/components/Highlights";
+import Highlights from "@/app/components/Highlights/Highlights";
 import WeeklyCalendar from "./WeeklyCalendar";
 import AssignmentsList from "./AssignmentsList";
 

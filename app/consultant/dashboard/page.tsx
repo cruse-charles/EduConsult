@@ -10,7 +10,7 @@ import { db } from "@/lib/firebaseConfig";
 import { FirebaseUserInfo } from "@/lib/types/types";
 
 import AddStudentModal from "./AddStudentModal/AddStudentModal";
-import Highlights from "../../components/Highlights";
+import Highlights from "../../components/Highlights/Highlights";
 import StudentTable from "./StudentTable";
 import DashboardAssignmentList from "./DashboardAssignmentList";
 
