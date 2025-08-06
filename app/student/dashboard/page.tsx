@@ -13,6 +13,7 @@ import WeeklyCalendar from "./WeeklyCalendar";
 import AssignmentsList from "./AssignmentsList";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { fetchUser } from "@/redux/slices/userSlice";
 
 function page() {
     // Initialize dispatch for data retrieval and state management
@@ -23,8 +24,10 @@ function page() {
     // const [student, setStudent] = useState<Student | null>(null);
     // const [assignments, setAssignments] = useState<Assignment[]>([])
     
+    // TODO: FETCH USER LIKE WE DID IN THE CONSULTANT DASHBOARD PAGE AGAIN AFTER JUST HAVING ID
     useEffect(() => {
-        dispatch(fetchStudent(user.id))
+        // dispatch(fetchStudent(user.id))
+        dispatch(fetchUser(user.id))
     }, [])
 
 
