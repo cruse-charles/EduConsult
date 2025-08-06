@@ -85,7 +85,7 @@ const page = () => {
     // }, [userId, dispatch]);
 
     useEffect(() => {
-        dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
+        if (userId) dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
     }, [userId])
 
     const filteredStudents = students.filter((student) => 

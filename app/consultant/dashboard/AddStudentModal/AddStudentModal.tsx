@@ -108,7 +108,7 @@ function AddStudentModal() {
                 },
                 body: JSON.stringify({
                     email: formData.email,
-                    password: formData.password,
+                    role: "student",
                     personalInformation: formData.personalInformation,
                     academicInformation: formData.academicInformation,
                     folders: formData.folders,
