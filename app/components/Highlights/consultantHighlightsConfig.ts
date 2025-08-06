@@ -26,7 +26,9 @@ export const getConsultantHighlightConfig = (data) => [
   {
     title: "Overdue Assignments",
     icon: Flag,
-    content: `${data.overdue} Overdue`,
+    content: 
+        data.overdue ?  `${data.overdue} Overdue` : `No Overdue Assignments`,
+        // console.log('data overdue', data.overdue),
     detail: "",
   },
 ]
