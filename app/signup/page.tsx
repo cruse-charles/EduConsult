@@ -18,6 +18,8 @@ import { setUser } from "@/redux/slices/userSlice"
 import CustomToast from "../components/CustomToast"
 import { toast } from "sonner"
 
+// TODOOOOOO: MAKE DATA STRUCTURE THE SAME WITH CONSULTANT AS STUDENT, NEED PERSONAL INFORMATION OBJS AND SUCH
+
 const page = () => {
     // Initialize Firebase Auth instance using the configured app
     let auth = getAuth(app);

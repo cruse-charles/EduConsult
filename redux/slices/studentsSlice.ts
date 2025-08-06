@@ -6,10 +6,17 @@ import { doc, DocumentData, DocumentReference, getDoc } from "firebase/firestore
 // Function to fetch students for the current consultant user
 export const fetchStudents = createAsyncThunk(
     "consultantDashboard/fetchStudents",
-    async (user: FirebaseUserInfo, {rejectWithValue}) => {
+    // async (user: FirebaseUserInfo, {rejectWithValue}) => {
+    //     try {
+    //         // Get the consultant's document reference and snapshot
+    //         const ref = doc(db, "consultantUsers", user.id);    
+    //         const consultantDocSnap = await getDoc(ref);
+
+
+        async (userId:string, {rejectWithValue}) => {
         try {
             // Get the consultant's document reference and snapshot
-            const ref = doc(db, "consultantUsers", user.id);    
+            const ref = doc(db, "consultantUsers", userId);    
             const consultantDocSnap = await getDoc(ref);
     
             // Extract student references from the consultant document

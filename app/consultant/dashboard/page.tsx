@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { fetchStudents } from "@/redux/slices/studentsSlice";
-import { setUser } from "@/redux/slices/userSlice";
+import { setUser, fetchUser } from "@/redux/slices/userSlice";
 import { setOnboardingState } from "@/redux/slices/onboardingSlice";
 
 const page = () => {
@@ -50,39 +50,43 @@ const page = () => {
         }
     }
 
+    // useEffect(() => {
+    //     const fetchUserData = async () => {
+    //         if (!userId) return;
+
+    //         try {
+    //             const user = await getUserInfo(userId);
+
+    //             // Add user info to Redux
+    //             dispatch(setUser({
+    //                 id: user.id,
+    //                 firstName: user.firstName,
+    //                 lastName: user.lastName,
+    //                 email: user.email,
+    //                 role: user.role,
+    //             }));
+
+    //             dispatch(setOnboardingState({
+    //                 isComplete: user.onboarding.isComplete,
+    //                 onboardingStep: user.onboarding.onboardingStep,
+    //             }));
+
+    //             // Fetch students if consultant
+    //             if (user.role === "consultant") {
+    //                 // @ts-ignore
+    //                 dispatch(fetchStudents(user));
+    //             }
+    //         } catch (error) {
+    //             console.error("Failed to fetch user info:", error);
+    //         }
+    //     };
+
+    //     fetchUserData();
+    // }, [userId, dispatch]);
+
     useEffect(() => {
-        const fetchUserData = async () => {
-            if (!userId) return;
-
-            try {
-                const user = await getUserInfo(userId);
-
-                // Add user info to Redux
-                dispatch(setUser({
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    role: user.role,
-                }));
-
-                dispatch(setOnboardingState({
-                    isComplete: user.onboarding.isComplete,
-                    onboardingStep: user.onboarding.onboardingStep,
-                }));
-
-                // Fetch students if consultant
-                if (user.role === "consultant") {
-                    // @ts-ignore
-                    dispatch(fetchStudents(user));
-                }
-            } catch (error) {
-                console.error("Failed to fetch user info:", error);
-            }
-        };
-
-        fetchUserData();
-    }, [userId, dispatch]);
+        dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
+    }, [userId])
 
     const filteredStudents = students.filter((student) => 
         `${student.personalInformation.firstName} ${student.personalInformation.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())

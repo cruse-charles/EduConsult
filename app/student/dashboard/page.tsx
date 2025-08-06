@@ -18,7 +18,7 @@ function page() {
     
     // Fetch user data on component mount
     useEffect(() => {
-        dispatch(fetchUser(user.id))
+        dispatch(fetchUser({ userId: user.id, database: "studentUsers" }))
     }, [])
 
     return (
