@@ -27,9 +27,7 @@ export const getConsultantHighlightConfig = (data) => [
   {
     title: "Overdue Assignments",
     icon: Flag,
-    content: 
-        data.overdue ?  `${data.overdue} Overdue` : `No Overdue Assignments`,
-        // console.log('data overdue', data.overdue),
+    content: data.overdue ?  `${data.overdue} Overdue` : `No Overdue Assignments`,
     detail: "",
   },
 ]
@@ -41,7 +39,7 @@ export const getStudentHighlightConfig = (data) => [
     title: "All Assignments",
     icon: BookOpen,
     content: `${data.totalAssignments} total assignments`,
-    // detail: "Across all applications",
+    detail: "Across all applications",
   },
   {
     title: "Tasks Due This Week",
