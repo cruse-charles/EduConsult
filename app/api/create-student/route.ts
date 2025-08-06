@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     // new
     // Set custom claims for the new student
-    await adminAuth.setCustomUserClaims(studentId, { role: 'consultant' })
+    await adminAuth.setCustomUserClaims(studentId, { role: 'student' })
     // new
 
     // Reference to the new student document and consultant document
