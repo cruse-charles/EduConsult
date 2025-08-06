@@ -1,12 +1,8 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudent } from "@/redux/slices/currentStudentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
-
-import { Assignment, Student } from "@/lib/types/types";
-import { getStudentAssignments } from "@/lib/queries/querys";
 
 import Highlights from "@/app/components/Highlights/Highlights";
 import WeeklyCalendar from "./WeeklyCalendar";
@@ -18,34 +14,12 @@ import { fetchUser } from "@/redux/slices/userSlice";
 function page() {
     // Initialize dispatch for data retrieval and state management
     const dispatch = useDispatch<AppDispatch>()
-    // const studentState = useSelector((state: RootState) => state.currentStudent)
     const user = useSelector((state: RootState) => state.user);
-
-    // const [student, setStudent] = useState<Student | null>(null);
-    // const [assignments, setAssignments] = useState<Assignment[]>([])
     
-    // TODO: FETCH USER LIKE WE DID IN THE CONSULTANT DASHBOARD PAGE AGAIN AFTER JUST HAVING ID
+    // Fetch user data on component mount
     useEffect(() => {
-        // dispatch(fetchStudent(user.id))
         dispatch(fetchUser(user.id))
     }, [])
-
-
-    // Update local student state when studentState in Redux store changes
-    // useEffect(() => {
-    //     if (studentState) {
-    //         setStudent(studentState as Student);
-    //     }
-    // }, [studentState]);
-
-    // useEffect(() => {
-    //     const fetchAssignments = async () => {
-    //         const assignmentsData = await getStudentAssignments(user.id);
-    //         setAssignments(assignmentsData)
-    //     }
-
-    //     fetchAssignments()
-    // }, [])
 
     return (
             <div className="min-h-screen bg-background">
