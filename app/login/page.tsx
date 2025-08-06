@@ -65,7 +65,7 @@ const page = () => {
       try {
         // Sign in and get user crednetials
         const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
-
+        console.log('UserCrednetial', userCredential)
         // Check if account has been verified
         // if (!userCredential.user.emailVerified && user.role === 'consultant') {
         //   toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
@@ -79,6 +79,8 @@ const page = () => {
         // Retrieve claims
         const token = await userCredential.user.getIdTokenResult();
         const role = token.claims.role;
+
+        console.log('token', token)
         
         // Call API to set cookie
         await fetch("/api/set-session", {
@@ -92,6 +94,8 @@ const page = () => {
           id: token.claims.user_id,
           role: role,
         }))
+        
+        console.log('role', role)
 
         // If the user is a student then set their data in student slice and redirect to student profile
         if (role === "consultant") {
@@ -99,7 +103,7 @@ const page = () => {
         } else if (role === "student") {
             router.push("/student/dashboard");
         }
-      
+      console.log('after router push')
       } catch (error) {
         // Set errors if login fails
         setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })

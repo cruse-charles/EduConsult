@@ -1,6 +1,7 @@
 import { BookOpen, Calendar, Users, Flag, Clock, Search, CheckCircle } from "lucide-react"
 import { formatNextDeadline } from "@/lib/utils"
 
+// @ts-ignore
 export const getConsultantHighlightConfig = (data) => [
   {
     title: "Students In-Progress",
@@ -34,6 +35,7 @@ export const getConsultantHighlightConfig = (data) => [
 ]
 
 
+// @ts-ignore
 export const getStudentHighlightConfig = (data) => [
   {
     title: "Total Assignments",

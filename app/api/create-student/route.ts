@@ -39,6 +39,11 @@ export async function POST(request: NextRequest) {
 
     const studentId = userRecord.uid;
 
+    // new
+    // Set custom claims for the new student
+    await adminAuth.setCustomUserClaims(studentId, { role: 'consultant' })
+    // new
+
     // Reference to the new student document and consultant document
     const studentRef = adminDb.collection('studentUsers').doc(studentId);
     const consultantRef = adminDb.collection('consultantUsers').doc(consultantId);
