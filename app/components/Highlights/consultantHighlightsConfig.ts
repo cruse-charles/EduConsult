@@ -38,16 +38,16 @@ export const getConsultantHighlightConfig = (data) => [
 // @ts-ignore
 export const getStudentHighlightConfig = (data) => [
   {
-    title: "Total Assignments",
+    title: "All Assignments",
     icon: BookOpen,
-    content: `${data.totalAssignments} Assignments total`,
-    detail: "Across all applications",
+    content: `${data.totalAssignments} total assignments`,
+    // detail: "Across all applications",
   },
   {
-    title: "In-Progress Tasks",
+    title: "Tasks Due This Week",
     icon: Clock,
     content: `${data.tasksDueThisWeek} ${data.tasksDueThisWeek === 1 ? "task" : "tasks"} due this week`,
-    detail: "Your attention is needed",
+    detail: "Total tasks you need to complete",
   },
   {
     title: "Under Review",

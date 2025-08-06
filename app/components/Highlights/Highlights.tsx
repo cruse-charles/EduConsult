@@ -68,7 +68,7 @@ const Highlights = () => {
                 ])
 
                 setData({
-                    tasksDueThisWeek: tasksDueThisWeek,
+                    tasksDueThisWeek: tasksDueThisWeek.size,
                     totalAssignments: totalAssignments,
                     underReview: reviewedAssignments,
                     completed: completedAssignments
