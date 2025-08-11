@@ -15,7 +15,7 @@ import CustomToast from "@/app/components/CustomToast";
 import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
 import GoalsAndNotesSection from "./GoalsAndNotesSection";
-import CreateStudentAccount from "./CreateStudentAccount";
+import StudentAccountForm from "./StudentAccountForm";
 
 import { StudentFormData } from "@/lib/types/types";
 
@@ -25,7 +25,7 @@ import { completeStep } from "@/redux/slices/onboardingSlice";
 import { nextStep } from "@/lib/onBoardingUtils";
 import { addStudent } from "@/redux/slices/studentsSlice";
 
-function AddStudentModal() {
+function CreateStudentModal() {
     let auth = getAuth(app);
     const dispatch = useDispatch()
     const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
@@ -209,7 +209,7 @@ function AddStudentModal() {
                         </DialogDescription>
                     </DialogHeader>
                     <form className="space-y-6" onSubmit={handleSubmit}>
-                        <CreateStudentAccount formData={formData} handleInputChange={handleInputChange}/>
+                        <StudentAccountForm formData={formData} handleInputChange={handleInputChange}/>
                         <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
                         <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} />
                         <GoalsAndNotesSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} handleAcademicInfoChange={handleAcademicInfoChange} />
@@ -221,4 +221,4 @@ function AddStudentModal() {
     )
 }
 
-export default AddStudentModal
+export default CreateStudentModal

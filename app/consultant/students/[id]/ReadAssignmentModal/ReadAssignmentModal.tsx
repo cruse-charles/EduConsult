@@ -23,12 +23,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-interface ViewAssignmentModalProps {
+interface ReadAssignmentModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
+function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
 
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
@@ -183,4 +183,4 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
     )
 }
 
-export default ViewAssignmentModal
+export default ReadAssignmentModal

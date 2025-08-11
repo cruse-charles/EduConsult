@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 
-import ViewAssignmentModal from './ViewAssignmentModal/ViewAssignmentModal'
+import ReadAssignmentModal from './ReadAssignmentModal/ReadAssignmentModal'
 
 // TODO: Possibly delete this file, moved it all into the page. Don't see why not just have it all there.
 const StudentCalendar = () => {
@@ -105,7 +105,7 @@ const StudentCalendar = () => {
             })}
         </div>
         {/* @ts-ignore */}
-        <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+        <ReadAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
 
     </>
     )

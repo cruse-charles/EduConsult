@@ -12,7 +12,7 @@ import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 
 import CustomToast from "@/app/components/CustomToast";
 import StatusBadge from "@/app/components/StatusBadge";
-import ViewAssignmentModal from "./ViewAssignmentModal/ViewAssignmentModal";
+import ReadAssignmentModal from "./ReadAssignmentModal/ReadAssignmentModal";
 import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
 import EditFolderModal from "./EditFolderModal";
 
@@ -326,7 +326,7 @@ function AssignmentsList() {
                     </div>  
                 </CardContent>
             </Card>
-            <ViewAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+            <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
             <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} handleSave={handleEditFolder} oldFolderName={selectedFolder}/>
         </>
     )

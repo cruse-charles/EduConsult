@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 
-import ViewAssignmentModal from '../consultant/students/[id]/ViewAssignmentModal/ViewAssignmentModal'
+import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal/ReadAssignmentModal'
 import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/querys'
 
 // TODO: Add loading state
@@ -121,7 +121,7 @@ const page = () => {
             })}
         </div>
         {/* @ts-ignore */}
-        <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+        <ReadAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
 
     </>
     )

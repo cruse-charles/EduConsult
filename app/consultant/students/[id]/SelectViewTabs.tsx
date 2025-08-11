@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import AssignmentsList from "./AssignmentsList";
 import StudentCalendar from "./StudentCalendar";
-import ViewStudentCard from "./ViewStudentCard/ViewStudentCard";
+import ReadStudentCard from "./ReadStudentCard/ReadStudentCard";
 
 // TODO: AssignmentList needs to be added here I think for it to 'render' and not render depending on tab selected
 // Currently, it's always rendering that assigment list
@@ -30,7 +30,7 @@ function SelectViewTabs() {
                 </Card>
             </TabsContent>
             <TabsContent value="school-info">
-                <ViewStudentCard />
+                <ReadStudentCard />
             </TabsContent>
         </Tabs>
     )

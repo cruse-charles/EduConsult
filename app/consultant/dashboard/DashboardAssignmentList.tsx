@@ -1,4 +1,4 @@
-import ViewAssignmentModal from '../students/[id]/ViewAssignmentModal/ViewAssignmentModal'
+import ReadAssignmentModal from '../students/[id]/ReadAssignmentModal/ReadAssignmentModal'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -128,7 +128,7 @@ const DashboardAssignmentList = () => {
                 </CardContent>
             </Card>
             {/* @ts-ignore */}
-            <ViewAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            <ReadAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
         </>
     )
 }

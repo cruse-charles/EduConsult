@@ -7,12 +7,12 @@ import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-interface StudentListRowProps {
+interface StudentTableRowProps {
     student: Student;
     handleStudentClick: (id: string) => void;
 }
 
-const StudentListRow = ({student, handleStudentClick}: StudentListRowProps) => {
+const StudentTableRow = ({student, handleStudentClick}: StudentTableRowProps) => {
 
     const user = useSelector((state: RootState) => state.user)
     const [nextDeadline, setNextDeadline] = useState(student?.stats?.nextDeadline)
@@ -74,4 +74,4 @@ const StudentListRow = ({student, handleStudentClick}: StudentListRowProps) => {
     );
 }
 
-export default StudentListRow
+export default StudentTableRow

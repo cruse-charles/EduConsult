@@ -7,7 +7,7 @@ import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation";
 
-import StudentListRow from "./StudentListRow";
+import StudentTableRow from "./StudentTableRow";
 
 import { useDispatch, useSelector } from "react-redux";
 import { completeStep } from "@/redux/slices/onboardingSlice";
@@ -105,7 +105,7 @@ const StudentTable = () => {
                 </TableHeader>
                 <TableBody>
                     {sortedStudents.map((student) => (
-                        <StudentListRow student={student} handleStudentClick={handleStudentClick} key={student.id}/>
+                        <StudentTableRow student={student} handleStudentClick={handleStudentClick} key={student.id}/>
                     ))}
                 </TableBody>
             </Table>

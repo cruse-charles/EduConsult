@@ -8,7 +8,7 @@ interface CreateStudentAccountProps {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const CreateStudentAccount = ({formData, handleInputChange}: CreateStudentAccountProps) => {
+const StudentAccountForm = ({formData, handleInputChange}: CreateStudentAccountProps) => {
     return (
         <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
           <div className="flex items-center gap-2">
@@ -26,7 +26,7 @@ const CreateStudentAccount = ({formData, handleInputChange}: CreateStudentAccoun
                 name="email"
                 type="email"
                 placeholder="student@example.com"
-                value={formData.email}
+                value={formData.personalInformation.email}
                 onChange={handleInputChange}
                 required
               />
@@ -51,4 +51,4 @@ const CreateStudentAccount = ({formData, handleInputChange}: CreateStudentAccoun
     )
 }
 
-export default CreateStudentAccount
+export default StudentAccountForm

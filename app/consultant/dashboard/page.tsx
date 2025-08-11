@@ -9,20 +9,20 @@ import { db } from "@/lib/firebaseConfig";
 
 import { FirebaseUserInfo } from "@/lib/types/types";
 
-import AddStudentModal from "./AddStudentModal/AddStudentModal";
+import CreateStudentModal from "./CreateStudentModal/CreateStudentModal";
 import Highlights from "../../components/Highlights/Highlights";
 import StudentTable from "./StudentTable";
 import DashboardAssignmentList from "./DashboardAssignmentList";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { fetchStudents } from "@/redux/slices/studentsSlice";
 import { setUser, fetchUser } from "@/redux/slices/userSlice";
 import { setOnboardingState } from "@/redux/slices/onboardingSlice";
 
 const page = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     
     // State to manage students and set reference to the consultant document
     const [searchQuery, setSearchQuery] = useState("")
@@ -79,7 +79,7 @@ const page = () => {
                              </div>
 
                             {/* Add Student Container */}
-                            <AddStudentModal/>
+                            <CreateStudentModal/>
                         </div>
                     </div>
 
