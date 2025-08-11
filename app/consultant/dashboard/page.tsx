@@ -33,57 +33,6 @@ const page = () => {
     const userId = useSelector((state: RootState) => state.user.id);
     const students = useSelector((state: RootState) => state.students.studentList)
 
-    // Function to retreive consultant info
-    const getUserInfo = async (userId: string): Promise<FirebaseUserInfo> => {
-        try {
-            const consultantDoc = await getDoc(doc(db, "consultantUsers", userId))
-            if (consultantDoc.exists()) {
-                const data = consultantDoc.data()
-                return {id: consultantDoc.id, firstName: data.firstName, lastName: data.lastName, email: data.email, role: 'consultant', onboarding: data.onboarding}
-            }
-                
-            throw new Error("User not found")
-                
-        } catch (error) {
-            console.log(error)
-            throw error
-        }
-    }
-
-    // useEffect(() => {
-    //     const fetchUserData = async () => {
-    //         if (!userId) return;
-
-    //         try {
-    //             const user = await getUserInfo(userId);
-
-    //             // Add user info to Redux
-    //             dispatch(setUser({
-    //                 id: user.id,
-    //                 firstName: user.firstName,
-    //                 lastName: user.lastName,
-    //                 email: user.email,
-    //                 role: user.role,
-    //             }));
-
-    //             dispatch(setOnboardingState({
-    //                 isComplete: user.onboarding.isComplete,
-    //                 onboardingStep: user.onboarding.onboardingStep,
-    //             }));
-
-    //             // Fetch students if consultant
-    //             if (user.role === "consultant") {
-    //                 // @ts-ignore
-    //                 dispatch(fetchStudents(user));
-    //             }
-    //         } catch (error) {
-    //             console.error("Failed to fetch user info:", error);
-    //         }
-    //     };
-
-    //     fetchUserData();
-    // }, [userId, dispatch]);
-
     useEffect(() => {
         if (userId) dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
     }, [userId])

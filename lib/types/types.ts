@@ -23,9 +23,9 @@ export interface StudentBase {
         nextDeadline: Timestamp | undefined;
     }
     consultant: DocumentReference<DocumentData> | string;
-    email: string;
     folders: string[];
     password: string;
+    role: string;
 }
 
 // Interface to add additional information about student

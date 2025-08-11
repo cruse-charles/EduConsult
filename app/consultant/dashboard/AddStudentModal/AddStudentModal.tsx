@@ -57,10 +57,10 @@ function AddStudentModal() {
             inProgressAssignmentsCount: 0,
             nextDeadline: undefined,
         },
-        email: '',
         password: '',
         consultant: user.id,
-        folders: []
+        folders: [],
+        role: 'student',
     });
 
     const resetFormData = () => {
@@ -85,10 +85,10 @@ function AddStudentModal() {
             inProgressAssignmentsCount: 0,
             nextDeadline: undefined,
         },
-        email: '',
         password: '',
         consultant: user.id,
-        folders: []
+        folders: [],
+        role: 'student'
         })
     }
 
@@ -107,7 +107,7 @@ function AddStudentModal() {
                     Authorization: `Bearer ${idToken}`,
                 },
                 body: JSON.stringify({
-                    email: formData.email,
+                    email: formData.personalInformation.email,
                     role: "student",
                     personalInformation: formData.personalInformation,
                     academicInformation: formData.academicInformation,

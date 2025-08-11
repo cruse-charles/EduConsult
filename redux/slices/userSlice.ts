@@ -1,22 +1,9 @@
 import { db } from "@/lib/firebaseConfig";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, getDoc } from "firebase/firestore";
+
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setOnboardingState } from "./onboardingSlice";
-// import { useDispatch } from "react-redux";
 import { fetchStudents } from "./studentsSlice";
-
-// export const fetchUser = createAsyncThunk(
-//     'user/fetchUser',
-//     async (studentId: string) => {
-//         const docRef = doc(db, "studentUsers", studentId);
-//         const docSnap = await getDoc(docRef);
-//         console.log('data from fetchUser thunk:', docSnap.data());
-//         const docData = docSnap.data()
-//         return {id: docSnap.id, firstName: docData?.personalInformation.firstName, lastName: docData?.personalInformation.lastName, email: docData?.email, role: 'student'};
-//     }
-// );
-
-// const dispatch = useDispatch();
 
 
 export const fetchUser = createAsyncThunk(
@@ -29,7 +16,6 @@ export const fetchUser = createAsyncThunk(
         console.log('data from fetchUser thunk:', docSnap.data());
         const userData = docSnap.data()
         
-        
         dispatch(setOnboardingState({
             isComplete: userData?.onboarding.isComplete,
             onboardingStep: userData?.onboarding.onboardingStep,
@@ -37,12 +23,7 @@ export const fetchUser = createAsyncThunk(
         
         if (database === 'consultantUsers') dispatch(fetchStudents(userId));
         
-        
-        return {id: docSnap.id, firstName: userData?.personalInformation.firstName, lastName: userData?.personalInformation.lastName, email: userData?.email, role: userData?.role};
-    
-        
-    
-    
+        return {id: docSnap.id, firstName: userData?.personalInformation.firstName, lastName: userData?.personalInformation.lastName, email: userData?.personalInformation.email, role: userData?.role};
     }
 );
 
