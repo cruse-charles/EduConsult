@@ -11,7 +11,6 @@ export const fetchStudent = createAsyncThunk(
     async (studentId: string) => {
         const docRef = doc(db, "studentUsers", studentId);
         const docSnap = await getDoc(docRef);
-        console.log('data from fetchStudent thunk:', docSnap.data());
         return {id: docSnap.id, ...docSnap.data()};
     }
 );

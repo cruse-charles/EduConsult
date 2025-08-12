@@ -10,7 +10,7 @@ export const onboardingSteps = [
     id: "create-student",
     target: ".create-student-btn",
     content: "Click Add Student to create your first student.",
-    actionRequired: "studentCreated", // only advance after user clicks
+    actionRequired: "clickAddStudentButton", // only advance after user clicks
     page: '2/9',
     path: '/consultant/dashboard'
   },
@@ -26,7 +26,7 @@ export const onboardingSteps = [
     id: "click-create-assignment",
     target: ".create-assignment",
     content: "Create an assignment for a student.",
-    actionRequired: "createAssignment",
+    actionRequired: "clickCreateAssignmentButton",
     page: '4/9',
     path: '/consultant/students'
   },

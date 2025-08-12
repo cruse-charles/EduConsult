@@ -97,8 +97,8 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
 
 
     // Restrict which steps can have the 'next' button
-    // const allowedNextSteps = [0, 7, 8]
-    const allowedNextSteps = [0, 1,2,3,4,5,6, 7, 8]
+    const allowedNextSteps = [0, 7, 8]
+    // const allowedNextSteps = [0, 1,2,3,4,5,6, 7, 8]
 
 
     return (

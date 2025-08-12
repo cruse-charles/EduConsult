@@ -29,6 +29,7 @@ import { toast } from "sonner"
 import CustomToast from "@/app/components/CustomToast"
 import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
+import { onboardingSteps } from "@/lib/onboardingSteps"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -223,6 +224,19 @@ function CreateAssignmentModal() {
         setErrors({})
     }
 
+    const handleNewAssignmentClick = () => {
+        setOpen(true)
+
+        // Proceed to next step for tooltip and update backend
+        if (!isComplete && onboardingStep === 3) {
+            const currentStep = onboardingSteps[onboardingStep].actionRequired
+        
+            if (currentStep === "clickCreateAssignmentButton") {
+                dispatch(completeStep("clickCreateAssignmentButton"))
+            }
+        }  
+    }
+
     // TODO: Currently imported into SelectViewTabs, should be imported into AssignmentsList and moved to top left
     return (
         <Dialog open={open} onOpenChange={(isOpen) => {
@@ -230,7 +244,8 @@ function CreateAssignmentModal() {
             if (!isOpen) resetForm()
         }}>
             <DialogTrigger asChild>
-                <Button onClick={() => setOpen(true)} className="create-assignment">
+                {/* <Button onClick={() => setOpen(true)} className="create-assignment"> */}
+                <Button onClick={handleNewAssignmentClick} className="create-assignment">
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
                 </Button>

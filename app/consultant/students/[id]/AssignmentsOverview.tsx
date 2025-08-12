@@ -10,6 +10,7 @@ import { Timestamp } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
+// TODO: Use HighlightCard component to DRY this
 function AssignmentsOverview() {
     // Retrieve student and user from redux
     const student = useSelector((state: RootState) => state.currentStudent)
@@ -23,6 +24,7 @@ function AssignmentsOverview() {
         
 
     // TODO: If an assignment is changed from In-Progress by the user, this won't update until the page is refreshed
+    // TODO: Add loading states
     useEffect(() => {
         if (!student.id) return
         countCompletedTasksForStudentConsultantView(student?.id, user.id).then(setCountOfCompletedTasks)

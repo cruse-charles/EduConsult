@@ -33,6 +33,7 @@ const page = () => {
     const userId = useSelector((state: RootState) => state.user.id);
     const students = useSelector((state: RootState) => state.students.studentList)
 
+        // TODO: ADD COMMENTS TO THIS AND EVERYTHING ELSE CHANGED FROM THIS COMMIT
     useEffect(() => {
         if (userId) dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
     }, [userId])

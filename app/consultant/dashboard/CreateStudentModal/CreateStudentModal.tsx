@@ -24,6 +24,7 @@ import { RootState } from "@/redux/store";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { nextStep } from "@/lib/onBoardingUtils";
 import { addStudent } from "@/redux/slices/studentsSlice";
+import { onboardingSteps } from "@/lib/onboardingSteps";
 
 function CreateStudentModal() {
     let auth = getAuth(app);
@@ -132,11 +133,11 @@ function CreateStudentModal() {
             resetFormData()
             setIsLoading(false);
 
-            // Proceed to next step for tooltip and update backend
-            if (!isComplete) {
-                dispatch(completeStep("studentCreated"))
-                await nextStep(user.id)
-            }
+            // // Proceed to next step for tooltip and update backend
+            // if (!isComplete) {
+            //     dispatch(completeStep("studentCreated"))
+            //     await nextStep(user.id)
+            // }
             
             // Success Message
             toast(<CustomToast title="Student Account Created" description="" status="success"/>)
@@ -145,6 +146,19 @@ function CreateStudentModal() {
             setIsLoading(false)
             toast(<CustomToast title="Student Account Not Created" description={`${error}`} status="error"/>)
         }
+    }
+
+    const handleCreateStudentClick = async () => {
+        
+        // Proceed to next step for tooltip and update backend
+        if (!isComplete && onboardingStep === 1) {
+            const currentStep = onboardingSteps[onboardingStep].actionRequired
+
+            if (currentStep === "clickAddStudentButton") {
+                dispatch(completeStep("clickAddStudentButton"))
+            }
+            await nextStep(user.id)
+        }      
     }
 
     // Handles changes in personal information fields
@@ -192,7 +206,7 @@ function CreateStudentModal() {
     return (
         <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
-                <Button variant="default" className="w-full create-student-btn">
+                <Button onClick={handleCreateStudentClick} variant="default" className="w-full create-student-btn">
                     <Plus className="mr-2 h-4 w-4" />
                     Add Student
                 </Button>
