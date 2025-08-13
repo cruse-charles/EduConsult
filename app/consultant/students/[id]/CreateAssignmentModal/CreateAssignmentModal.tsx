@@ -201,6 +201,7 @@ function CreateAssignmentModal() {
             dispatch(updateReduxInProgressCount({newStatus: assignmentData.status}))
             dispatch(checkReduxNextDeadline(assignmentData.dueDate))
 
+            // TODO FIX THIS TO BE MORE COMPLETE
             // Updating onboarding if necessary
             if (!isComplete) {
                 dispatch(completeStep("createAssignment"))

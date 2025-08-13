@@ -65,7 +65,7 @@ const page = () => {
       try {
         // Sign in and get user crednetials
         const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
-        console.log('UserCrednetial', userCredential)
+        // console.log('UserCrednetial', userCredential)
         // Check if account has been verified
         // if (!userCredential.user.emailVerified && user.role === 'consultant') {
         //   toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
@@ -80,7 +80,7 @@ const page = () => {
         const token = await userCredential.user.getIdTokenResult();
         const role = token.claims.role;
 
-        console.log('token', token)
+        // console.log('token', token)
         
         // Call API to set cookie
         await fetch("/api/set-session", {

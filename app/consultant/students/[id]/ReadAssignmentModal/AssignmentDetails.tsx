@@ -84,7 +84,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
         dispatch(updateReduxInProgressCount({oldStatus: assignment.status, newStatus: formData.status}))
         dispatch(checkReduxNextDeadline(formData.dueDate))
         // @ts-ignore
-        await updateAssignment(formData, assignment?.id, studentId)
+        await updateAssignment(formData, assignment?.id, studentId, user.id)
 
         // Update current assignment in redux
         dispatch(setCurrentAssignment({...assignment, ...formData}))

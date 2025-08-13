@@ -48,7 +48,7 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
         await setDoc(assignmentDocRef, assignmentData)
 
         // Update nextDeadline field for student
-        await updateNextDeadlineForStudent(studentId, assignmentData.dueDate)
+        await updateNextDeadlineForStudent(studentId, assignmentData.dueDate, consultantId)
     
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {
@@ -65,17 +65,17 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
 }
 
 // Update an assignment from consultant view
-export const updateAssignment = async (assignmentData: UpdateAssignment, assignmentId: string, studentId: string) => {
+export const updateAssignment = async (assignmentData: UpdateAssignment, assignmentId: string, studentId: string, consultantId: string) => {
     try {
         // Get reference to the assignment document
         const assignmentDocRef = doc(db, "assignments", assignmentId);
 
-        // Update doc
+        // Update assignment doc
         // @ts-ignore
         await updateDoc(assignmentDocRef, assignmentData);
 
         // Update nextDeadline field for student
-        await updateNextDeadlineForStudent(studentId, assignmentData.dueDate)
+        await updateNextDeadlineForStudent(studentId, assignmentData.dueDate, consultantId);
     } catch (error) {
         console.log('Error updating assignment in updateAssignment', error)
         throw error
