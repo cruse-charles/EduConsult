@@ -196,7 +196,7 @@ function AssignmentsList() {
     // Handle opening folders and onboarding if necessary
     const handleOpenFolder = async (folder: string) => {
         setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])
-        if (!isComplete) {
+        if (!isComplete && onboardingStep === 4) {
             dispatch(completeStep("openFolder"))
             await nextStep(user.id)
         }
@@ -209,7 +209,7 @@ function AssignmentsList() {
         dispatch(setCurrentAssignment(assignment))
 
         // Check if onboarding is complete for tooltip to render
-        if (!isComplete) {
+        if (!isComplete && onboardingStep === 5) {
             dispatch(completeStep("viewAssignment"))
             await nextStep(user.id)
         }

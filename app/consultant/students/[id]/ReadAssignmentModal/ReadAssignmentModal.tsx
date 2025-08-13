@@ -37,7 +37,7 @@ function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
     // Retrieve data for current user, if onboarding is commplete and assignment being viewed
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user)
-    const { isComplete } = useSelector((state: RootState) => state.onboarding)
+    const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
     const assignment = useSelector((state: RootState) => state.currentAssignment)
 
     // Form data for user to submit feedback 
@@ -114,7 +114,7 @@ function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
             await updateAssignment(updatedAssignment, assignment.id);
     
             // Next step in onboarding if not completed
-            if (!isComplete) {
+            if (!isComplete && onboardingStep === 6) {
                 dispatch(completeStep('createEntry'))
                 await nextStep(user.id)
             }
