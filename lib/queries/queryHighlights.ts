@@ -112,10 +112,12 @@ export const countTotalAssignmentsStudentDashboard = async (studentId: string) =
 
 export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId: string) => {
     
+    // TODO: This query is used in a few places for finding next deadlines, see if we can export it 
     const q = query(
         collection(db, 'assignments'),
         where('consultantId', '==', consultantId),
         where('dueDate', '>=', Timestamp.fromDate(new Date())),
+        where('status', '==', 'In-Progress'),
         orderBy('dueDate', 'asc'),
         limit(1)
     )
