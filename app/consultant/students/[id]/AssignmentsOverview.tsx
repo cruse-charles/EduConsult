@@ -15,6 +15,7 @@ function AssignmentsOverview() {
     // Retrieve student and user from redux
     const student = useSelector((state: RootState) => state.currentStudent)
     const user = useSelector((state: RootState) => state.user)
+    const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
 
     const [countOfCompletedTasks, setCountOfCompletedTasks] = useState(0)
     const [nextDeadlineAssignment, setNextDeadlineAssignment] = useState<Assignment>()
@@ -22,19 +23,13 @@ function AssignmentsOverview() {
     const deadline = student?.stats?.nextDeadline
     const ts = deadline?.seconds ? new Timestamp(deadline.seconds, deadline.nanoseconds) : deadline
         
-
-    // TODO: If an assignment is changed from In-Progress by the user, this won't update until the page is refreshed
+    // TODO: the changing deadline logic from stats utils to redux so it updates right on change
     // TODO: Add loading states
     useEffect(() => {
         if (!student.id) return
         countCompletedTasksForStudentConsultantView(student?.id, user.id).then(setCountOfCompletedTasks)
         nextDeadlineForStudent(student?.id, user.id).then(setNextDeadlineAssignment)
-    }, [student.id])
-
-    useEffect(() => {
-        if (!student.id) return
-        nextDeadlineForStudent(student?.id, user.id).then(setNextDeadlineAssignment)
-    }, [student?.stats?.nextDeadline])
+    }, [student.id, assignments])
 
     return (
         // TODO: Need to style these a bit more, either font size or coloring

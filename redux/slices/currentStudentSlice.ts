@@ -37,6 +37,7 @@ const studentSlice = createSlice({
       if (!state.assignmentDocIds) return
       state.assignmentDocIds = state.assignmentDocIds.filter((assignmentDocId) => assignmentDocId != deletedAssignmentDocId)
     },
+    // TODO: Simplify this I think to match what is in stats utils, I think.. 
     updateReduxInProgressCount(state, action) {
       if (!state.stats) return;
 
