@@ -64,12 +64,12 @@ export const updateInProgressCount = async (studentId: string, newStatus: string
         // Use increment to update the count without reads
         
         // Creating a document, automatically InProgress
-        if (newStatus === 'In-Progress' && !oldStatus) {
-            await updateDoc(studentDocRef, {
-                "stats.inProgressAssignmentsCount": increment(1)
-            })
-            return
-        }
+        // if (newStatus === 'In-Progress' && !oldStatus) {
+        //     await updateDoc(studentDocRef, {
+        //         "stats.inProgressAssignmentsCount": increment(1)
+        //     })
+        //     return
+        // }
         
         // Changing status from InProgress to non-InProgress
         if (oldStatus === 'In-Progress' && newStatus != 'In-Progress') {

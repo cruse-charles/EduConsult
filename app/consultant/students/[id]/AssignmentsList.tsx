@@ -90,7 +90,6 @@ function AssignmentsList() {
     // TODO: Finish this function
     const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
         let count = 0
-        console.log('in getCompletedCount assignments', assignmentsInFolder)
         assignmentsInFolder.forEach((assignment) => assignment.status == 'Completed' ? count++ : null)
         return count
     }

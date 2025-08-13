@@ -39,6 +39,7 @@ export const nextDeadlineForStudent = async (studentId: string, consultantId: st
         where('consultantId', '==', consultantId),
         where('studentId', '==', studentId),
         where('dueDate', '>=', Timestamp.fromDate(new Date())),
+        where('status', '==', 'In-Progress'),
         orderBy('dueDate', 'asc'),
         limit(1)
     )

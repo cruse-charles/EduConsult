@@ -64,11 +64,6 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
             ...prev,
             [name]: value
         }))
-
-        // Adjust in-progressCount if status changes
-        if (name === 'status') {
-            updateInProgressCount(studentId, value)
-        } 
     }
 
     const handleEditAssignmentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -85,7 +80,6 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
         dispatch(updateAssignmentsSlice({assignmentId: assignment?.id, updateData: formData }))
         
         // Adjust InProgress count depending on status, and nextDeadline in backend and redux
-        console.log('before updateinprogresscount)')
         updateInProgressCount(studentId, formData.status, assignment.status)
         dispatch(updateReduxInProgressCount({oldStatus: assignment.status, newStatus: formData.status}))
         dispatch(checkReduxNextDeadline(formData.dueDate))
