@@ -23,10 +23,24 @@ function StudentCardContent({student}: {student: Student}) {
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">School:</div>
                 <div>{student?.academicInformation?.currentSchool}</div>
+
                 <div className="text-muted-foreground">Grade:</div>
                 <div>{student?.academicInformation?.grade}</div>
+
                 <div className="text-muted-foreground">GPA: </div>
                 <div>{student?.academicInformation?.gpa}</div>
+
+                <div className="text-muted-foreground">SAT: </div>
+                <div>{student?.academicInformation?.sat}</div>
+
+                <div className="text-muted-foreground">ACT: </div>
+                <div>{student?.academicInformation?.act}</div>
+
+                <div className="text-muted-foreground">TOEFL: </div>
+                <div>{student?.academicInformation?.toefl}</div>
+
+                <div className="text-muted-foreground">IELTS: </div>
+                <div>{student?.academicInformation?.ielts}</div>
             </div>
         </div>
 

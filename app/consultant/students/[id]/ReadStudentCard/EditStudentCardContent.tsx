@@ -70,6 +70,18 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
                 
                 <div className="text-muted-foreground">GPA:</div>
                 <Input className='h-7' step="any" name='gpa' value={safeValue(editStudent?.academicInformation.gpa)} onChange={handleAcademicInfoChange}/>
+                
+                <div className="text-muted-foreground">SAT Score:</div>
+                <Input className='h-7' step="any" name='sat' value={safeValue(editStudent?.academicInformation.sat)} onChange={handleAcademicInfoChange}/>
+                
+                <div className="text-muted-foreground">ACT Score:</div>
+                <Input className='h-7' step="any" name='act' value={safeValue(editStudent?.academicInformation.act)} onChange={handleAcademicInfoChange}/>
+                
+                <div className="text-muted-foreground">TOEFL Score:</div>
+                <Input className='h-7' step="any" name='toefl' value={safeValue(editStudent?.academicInformation?.toefl)} onChange={handleAcademicInfoChange}/>
+
+                <div className="text-muted-foreground">IELTS Score:</div>
+                <Input className='h-7' step="any" name='ielts' value={safeValue(editStudent?.academicInformation?.ielts)} onChange={handleAcademicInfoChange}/>
             </div>
         </div>
 
