@@ -72,7 +72,7 @@ export const getStudentProfileConsultantViewHighightConfig = (data) => [
   {
     title: "Next Deadline",
     icon: Calendar,
-    content: `${data.nextDeadline ? 'Next Deadline:' : 'No upcoming deadlines'} ${data.nextDeadline ? data.nextDeadline : ''}`,
+    content: `${data.nextDeadlineAssignment ? 'Next Deadline:' : 'No upcoming deadlines'} ${data.nextDeadlineAssignment ? data.nextDeadlineAssignment : ''}`,
     detail: `Assignment: ${data.nextDeadlineAssignmentTitle}`,
   },
   {

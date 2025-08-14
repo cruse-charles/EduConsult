@@ -41,7 +41,6 @@ export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => 
     )
 
     const snapshot = await getDocs(q);
-    console.log('snapshot tasks due this week student', snapshot)
     return snapshot;
 }
 

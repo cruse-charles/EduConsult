@@ -13,7 +13,6 @@ export const fetchUser = createAsyncThunk(
 
         const docRef = doc(db, database, userId);
         const docSnap = await getDoc(docRef);
-        console.log('data from fetchUser thunk:', docSnap.data());
         const userData = docSnap.data()
         
         dispatch(setOnboardingState({

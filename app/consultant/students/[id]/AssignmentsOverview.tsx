@@ -21,33 +21,64 @@ function AssignmentsOverview() {
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
 
-    const deadline = student?.stats?.nextDeadline
-    const ts = deadline?.seconds ? new Timestamp(deadline.seconds, deadline.nanoseconds) : deadline
+    
+    // TODO: Adjust student schema to have completed tasks and pull from there for this info
+    // useEffect(() => {
+    //     console.log('student nextDeadline', student?.stats?.nextDeadline)
+    //     const loadHighlights = async () => {
+    //         if (!student.id) return
+    //         setLoading(true)
+            
+    //         const [countOfCompletedTasks, nextDeadlineAssignment] = await Promise.all([
+    //             countCompletedTasksForStudentConsultantView(student?.id, user.id),
+    //             nextDeadlineForStudent(student?.id, user.id)
+    //         ])
+
+    //     const formattedDeadline = formatNextDeadline(student?.stats?.nextDeadline);
+    //     console.log('Formatted deadline:', formattedDeadline); // Add this
+
+    //         setData({
+    //             inProgressAssignmentsCount: student?.stats?.inProgressAssignmentsCount,
+    //             countOfCompletedTasks: countOfCompletedTasks,
+    //             // nextDeadlineAssignment: formatNextDeadline(nextDeadlineAssignment?.dueDate) || 'N/A',
+    //             nextDeadlineAssignment: formatNextDeadline(formattedDeadline) || 'N/A',
+    //             nextDeadlineAssignmentTitle: nextDeadlineAssignment?.title || 'N/A'
+    //         })
+
+    //         setLoading(false)
+    //     }
+
+    //     loadHighlights()
+
+    // }, [student, assignments])
 
     useEffect(() => {
+    if (!student?.id || !student?.stats?.nextDeadline) return; // Add this guard
+    
+    console.log('student nextDeadline', student?.stats?.nextDeadline)
+    const loadHighlights = async () => {
+        setLoading(true)
         
-        const loadHighlights = async () => {
-            if (!student.id) return
-            setLoading(true)
+        const [countOfCompletedTasks, nextDeadlineAssignment] = await Promise.all([
+            countCompletedTasksForStudentConsultantView(student.id, user.id),
+            nextDeadlineForStudent(student.id, user.id)
+        ])
 
-            const [countOfCompletedTasks, nextDeadlineAssignment] = await Promise.all([
-                countCompletedTasksForStudentConsultantView(student?.id, user.id),
-                nextDeadlineForStudent(student?.id, user.id)
-            ])
+        const formattedDeadline = formatNextDeadline(student.stats.nextDeadline);
 
-            setData({
-                inProgressAssignmentsCount: student?.stats?.inProgressAssignmentsCount,
-                countOfCompletedTasks: countOfCompletedTasks,
-                nextDeadlineAssignment: formatNextDeadline(nextDeadlineAssignment?.dueDate) || 'N/A',
-                nextDeadlineAssignmentTitle: nextDeadlineAssignment?.title || 'N/A'
-            })
+        setData({
+            inProgressAssignmentsCount: student.stats.inProgressAssignmentsCount,
+            countOfCompletedTasks: countOfCompletedTasks,
+            nextDeadlineAssignment: formattedDeadline,
+            nextDeadlineAssignmentTitle: nextDeadlineAssignment?.title || 'N/A'
+        })
 
-            setLoading(false)
-        }
+        setLoading(false)
+    }
 
-        loadHighlights()
+    loadHighlights()
 
-    }, [student.id, assignments])
+}, [student.id, student?.stats?.nextDeadline, assignments])
 
     const highlightConfig = getStudentProfileConsultantViewHighightConfig(data)
 
