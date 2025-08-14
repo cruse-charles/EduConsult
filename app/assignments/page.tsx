@@ -7,18 +7,23 @@ import { formatNextDeadline } from '@/lib/utils'
 
 import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/querys'
 import { Assignment } from '@/lib/types/types'
 
 import StatusBadge from '../components/StatusBadge'
+import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
+import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal/ReadAssignmentModal'
 
 // TODO: Add loading state
 const page = () => {
+    const dispatch = useDispatch()
+
     // Retrieve user details and assignment state
     const user = useSelector((state: RootState) => state.user)
     const [assignments, setAssignments] = useState<Assignment[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     // Fetch user's assignments 
     useEffect(() => {
@@ -29,6 +34,11 @@ const page = () => {
 
         fetchAssignments()
     },[user.id])
+
+    const handleAssignmentClick = (assignment: Assignment) => {
+        setIsModalOpen(true)
+        dispatch(setCurrentAssignment(assignment))
+    }
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -48,7 +58,7 @@ const page = () => {
                         </TableHeader>
                         <TableBody>
                         {assignments.map((assignment) => (
-                            <TableRow key={assignment.id}>
+                            <TableRow key={assignment.id} onClick={() => handleAssignmentClick(assignment)} className='cursor-pointer'>
                             <TableCell className="font-medium">{assignment.title}</TableCell>
                             {/* TODO: Change student to an object with id, firstName, lastName */}
                             {/* <TableCell>{assignment.studentFirstName} {assignment.studentLastName}</TableCell> */}
@@ -78,6 +88,7 @@ const page = () => {
                     )}
                     </div>
             </main>
+            <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
         </div>
     )
 }
