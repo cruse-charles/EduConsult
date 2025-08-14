@@ -13,7 +13,7 @@ function GoalsAndNotesSection({formData, handleAcademicInfoChange, handlePersona
     return (
         <>
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-muted-foreground">Goals & Notes</h3>
+                <h3 className="text-md font-medium text-muted-foreground">Goals & Notes</h3>
                 <div className="space-y-2">
                     <Label htmlFor="targetSchools">Target Schools</Label>
                     <Input

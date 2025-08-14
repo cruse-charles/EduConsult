@@ -53,6 +53,8 @@ function CreateStudentModal() {
             sat: null,
             toefl: null,
             targetSchools: '',
+            act: null,
+            ielts: null,
         },
         stats: {
             inProgressAssignmentsCount: 0,
@@ -81,6 +83,8 @@ function CreateStudentModal() {
             sat: null,
             toefl: null,
             targetSchools: '',
+            act: null,
+            ielts: null,
         },
         stats: {
             inProgressAssignmentsCount: 0,

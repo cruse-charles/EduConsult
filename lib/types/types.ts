@@ -9,6 +9,8 @@ export interface StudentBase {
         toefl: number | null;
         targetSchools: string;
         grade: number | null;
+        ielts: string | null;
+        act: number | null;
     };
     personalInformation: {
         firstName: string;

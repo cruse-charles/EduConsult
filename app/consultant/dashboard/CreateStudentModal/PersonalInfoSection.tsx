@@ -23,7 +23,7 @@ function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoS
                 </div>
             </div>
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-muted-foreground">Additional Contact Information</h3>
+                <h3 className="text-md font-medium text-muted-foreground">Additional Contact Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* <div className="space-y-2">
                         <Label htmlFor="email">
