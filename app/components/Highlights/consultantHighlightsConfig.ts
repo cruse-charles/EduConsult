@@ -60,3 +60,25 @@ export const getStudentHighlightConfig = (data) => [
     detail: "All done!",
   },
 ]
+
+// @ts-ignore
+export const getStudentProfileConsultantViewHighightConfig = (data) => [
+  {
+    title: "In-Progress Assignments",
+    icon: BookOpen,
+    content: `${data.inProgressAssignmentsCount} assignments`,
+    detail: "Across all applications!",
+  },
+  {
+    title: "Next Deadline",
+    icon: Calendar,
+    content: `${data.nextDeadline ? 'Next Deadline:' : 'No upcoming deadlines'} ${data.nextDeadline ? data.nextDeadline : ''}`,
+    detail: `Assignment: ${data.nextDeadlineAssignmentTitle}`,
+  },
+  {
+    title: "Completed",
+    icon: CheckCircle,
+    content: `${data.countOfCompletedTasks} assignments completed`,
+    detail: "All done!",
+  },
+]
