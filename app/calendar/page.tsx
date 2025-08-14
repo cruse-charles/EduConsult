@@ -9,19 +9,22 @@ import { Assignment } from '@/lib/types/types'
 
 import { useEffect, useState } from 'react'
 import { RootState } from '@/redux/store'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal/ReadAssignmentModal'
 import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/querys'
+import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 // TODO: Add loading state
 const page = () => {
+    const dispatch = useDispatch()
     const user = useSelector((state: RootState) => state.user)
 
     // Manage state for current date, assignment modal, and all assignments
     const [currentDate, setCurrentDate] = useState(new Date())
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
     const [assignments, setAssignments] = useState<Assignment[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     
     // Fetch user's assignments 
@@ -67,6 +70,11 @@ const page = () => {
         return currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })
     }
 
+    const handleAssignmentClick = (assignment: Assignment) => {
+        setIsModalOpen(true)
+        dispatch(setCurrentAssignment(assignment))
+    }
+
     return (
         <>
         <div className="flex items-center justify-between">
@@ -108,7 +116,7 @@ const page = () => {
                                     formatNextDeadline(day) === formatNextDeadline(assignment.dueDate)
                                 ))
                                 .map((assignment) => (
-                                    <div key={assignment.id} className="p-1 mb-1 cursor-pointer rounded-md border border-blue-200 bg-blue-50" onClick={()=> setSelectedAssignment(assignment)}>
+                                    <div key={assignment.id} onClick={() => handleAssignmentClick(assignment)} className="p-1 mb-1 cursor-pointer rounded-md border border-blue-200 bg-blue-50" >
                                         <div className="text-xs font-medium truncate">
                                             {assignment.title}
                                         </div>
@@ -121,7 +129,7 @@ const page = () => {
             })}
         </div>
         {/* @ts-ignore */}
-        <ReadAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+        <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
 
     </>
     )
