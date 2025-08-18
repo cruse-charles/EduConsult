@@ -103,15 +103,10 @@ const StudentTable = () => {
                         </TableHead>
                     </TableRow>
                 </TableHeader>
-                {/* <TableBody>
-                    {sortedStudents.map((student) => (
-                        <StudentTableRow student={student} handleStudentClick={handleStudentClick} key={student.id}/>
-                    ))}
-                </TableBody> */}
-                                <TableBody>
+                <TableBody>
                     {loading ? (
                         // Render skeleton rows when loading (even if students is empty)
-                        Array.from({ length: 5 }).map((_, i) => ( // Adjust length as needed, e.g., 5 for typical page size
+                        Array.from({ length: 5 }).map((_, i) => ( 
                             <TableRow key={i}>
                                 <TableCell>
                                     <Skeleton className="h-6 w-full rounded-md" />
@@ -127,11 +122,7 @@ const StudentTable = () => {
                     ) : (
                         // Render actual rows when not loading
                         sortedStudents.map((student) => (
-                            <StudentTableRow
-                                student={student}
-                                handleStudentClick={handleStudentClick}
-                                key={student.id}
-                            />
+                            <StudentTableRow student={student} handleStudentClick={handleStudentClick} key={student.id} />
                         ))
                     )}
                 </TableBody>

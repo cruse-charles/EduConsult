@@ -42,36 +42,19 @@ const StudentTableRow = ({student, handleStudentClick}: StudentTableRowProps) =>
     }, [])
 
     return (
-        // loading ? (
-        //     <TableRow>
-        //         <TableCell>
-        //             <Skeleton className="h-6 w-full rounded-md" />
-        //         </TableCell>
-        //         <TableCell>
-        //             <Skeleton className="h-6 w-full rounded-md" />
-        //         </TableCell>
-        //         <TableCell>
-        //             <Skeleton className="h-6 w-full rounded-md" />
-        //         </TableCell>
-        //     </TableRow>
-        // ) : (
-            <TableRow
-                className="cursor-pointer student-row"
-                onClick={() => handleStudentClick(student.id)}
-            >
-                <TableCell>
-                    {student.personalInformation.firstName} {student.personalInformation.lastName}
-                </TableCell>
-                <TableCell>
-                    <span className="font-medium">
-                        {student.stats?.inProgressAssignmentsCount || 0}
-                    </span>
-                </TableCell>
-                <TableCell>
-                    <span>{formatNextDeadline(nextDeadline)}</span>
-                </TableCell>
-            </TableRow>
-        // )
+        <TableRow className="cursor-pointer student-row" onClick={() => handleStudentClick(student.id)} >
+            <TableCell>
+                {student.personalInformation.firstName} {student.personalInformation.lastName}
+            </TableCell>
+            <TableCell>
+                <span className="font-medium">
+                    {student.stats?.inProgressAssignmentsCount || 0}
+                </span>
+            </TableCell>
+            <TableCell>
+                <span>{formatNextDeadline(nextDeadline)}</span>
+            </TableCell>
+        </TableRow>
     );
 }
 
