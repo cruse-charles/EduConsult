@@ -1,4 +1,4 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { Button } from "@/components/ui/button"
@@ -103,10 +103,37 @@ const StudentTable = () => {
                         </TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                {/* <TableBody>
                     {sortedStudents.map((student) => (
                         <StudentTableRow student={student} handleStudentClick={handleStudentClick} key={student.id}/>
                     ))}
+                </TableBody> */}
+                                <TableBody>
+                    {loading ? (
+                        // Render skeleton rows when loading (even if students is empty)
+                        Array.from({ length: 5 }).map((_, i) => ( // Adjust length as needed, e.g., 5 for typical page size
+                            <TableRow key={i}>
+                                <TableCell>
+                                    <Skeleton className="h-6 w-full rounded-md" />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className="h-6 w-full rounded-md" />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className="h-6 w-full rounded-md" />
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        // Render actual rows when not loading
+                        sortedStudents.map((student) => (
+                            <StudentTableRow
+                                student={student}
+                                handleStudentClick={handleStudentClick}
+                                key={student.id}
+                            />
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </div>

@@ -1,5 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 import { TableCell, TableRow } from '@/components/ui/table'
+
 import { nextDeadlineForStudent } from '@/lib/queries/querys'
 import { Student } from '@/lib/types/types'
 import { formatNextDeadline } from '@/lib/utils'
@@ -41,19 +42,19 @@ const StudentTableRow = ({student, handleStudentClick}: StudentTableRowProps) =>
     }, [])
 
     return (
-        loading ? (
-            <TableRow>
-                <TableCell>
-                    <Skeleton className="h-6 w-full rounded-md" />
-                </TableCell>
-                <TableCell>
-                    <Skeleton className="h-6 w-full rounded-md" />
-                </TableCell>
-                <TableCell>
-                    <Skeleton className="h-6 w-full rounded-md" />
-                </TableCell>
-            </TableRow>
-        ) : (
+        // loading ? (
+        //     <TableRow>
+        //         <TableCell>
+        //             <Skeleton className="h-6 w-full rounded-md" />
+        //         </TableCell>
+        //         <TableCell>
+        //             <Skeleton className="h-6 w-full rounded-md" />
+        //         </TableCell>
+        //         <TableCell>
+        //             <Skeleton className="h-6 w-full rounded-md" />
+        //         </TableCell>
+        //     </TableRow>
+        // ) : (
             <TableRow
                 className="cursor-pointer student-row"
                 onClick={() => handleStudentClick(student.id)}
@@ -70,7 +71,7 @@ const StudentTableRow = ({student, handleStudentClick}: StudentTableRowProps) =>
                     <span>{formatNextDeadline(nextDeadline)}</span>
                 </TableCell>
             </TableRow>
-        )
+        // )
     );
 }
 

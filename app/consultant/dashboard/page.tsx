@@ -22,13 +22,12 @@ const page = () => {
     // State to manage students and set reference to the consultant document
     const [searchQuery, setSearchQuery] = useState("")
     const [showDropdown, setShowDropdown] = useState(false);
-    const [loading, setLoading] = useState(false)
 
     // Retrieve state variables
     const userId = useSelector((state: RootState) => state.user.id);
     const students = useSelector((state: RootState) => state.students.studentList)
 
-        // TODO: ADD COMMENTS TO THIS AND EVERYTHING ELSE CHANGED FROM THIS COMMIT
+    // Fetch user and user's student info
     useEffect(() => {
         if (userId) {
             dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));

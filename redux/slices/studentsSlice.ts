@@ -47,7 +47,7 @@ interface StudentsState {
   loading: boolean;
   error: string | null;
 }
-const initialState: StudentsState = {studentList: [], loading: false, error: null};
+const initialState: StudentsState = {studentList: [], loading: true, error: null};
 
 // Create a slice for assignments
 const studentsSlice = createSlice({
