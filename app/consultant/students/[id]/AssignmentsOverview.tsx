@@ -53,34 +53,40 @@ function AssignmentsOverview() {
     // }, [student, assignments])
 
     useEffect(() => {
-    if (!student?.id || !student?.stats?.nextDeadline) return; // Add this guard
-    
-    console.log('student nextDeadline', student?.stats?.nextDeadline)
-    const loadHighlights = async () => {
-        setLoading(true)
+        // if (!student?.id || !student?.stats?.nextDeadline) return;
         
-        const [countOfCompletedTasks, nextDeadlineAssignment] = await Promise.all([
-            countCompletedTasksForStudentConsultantView(student.id, user.id),
-            nextDeadlineForStudent(student.id, user.id)
-        ])
+        const loadHighlights = async () => {
+            setLoading(true)
+            
+            const [countOfCompletedTasks, nextDeadlineAssignment] = await Promise.all([
+                // @ts-ignore
+                countCompletedTasksForStudentConsultantView(student.id, user.id),
+                // @ts-ignore
+                nextDeadlineForStudent(student.id, user.id)
+            ])
 
-        const formattedDeadline = formatNextDeadline(student.stats.nextDeadline);
+            // const normalizedDeadline = student?.stats?.nextDeadline ?? null;
+            // const formattedDeadline = formatNextDeadline(normalizedDeadline);
 
-        setData({
-            inProgressAssignmentsCount: student.stats.inProgressAssignmentsCount,
-            countOfCompletedTasks: countOfCompletedTasks,
-            nextDeadlineAssignment: formattedDeadline,
-            nextDeadlineAssignmentTitle: nextDeadlineAssignment?.title || 'N/A'
-        })
+            setData({
+                inProgressAssignmentsCount: student?.stats?.inProgressAssignmentsCount,
+                countOfCompletedTasks: countOfCompletedTasks,
+                nextDeadlineAssignment: formatNextDeadline(student?.stats?.nextDeadline),
+                nextDeadlineAssignmentTitle: nextDeadlineAssignment?.title || 'N/A'
+            })
 
-        setLoading(false)
-    }
+            setLoading(false)
+        }
 
-    loadHighlights()
+        loadHighlights()
 
-}, [student.id, student?.stats?.nextDeadline, assignments])
+    }, [student.id, assignments])
 
     const highlightConfig = getStudentProfileConsultantViewHighightConfig(data)
+
+    useEffect(() => {
+        console.log('data', data)
+    }, [data])
 
     return (
         <div className="grid gap-4 md:grid-cols-3">

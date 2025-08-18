@@ -95,7 +95,7 @@ const page = () => {
           role: role,
         }))
         
-        console.log('role', role)
+        // console.log('role', role)
 
         // If the user is a student then set their data in student slice and redirect to student profile
         if (role === "consultant") {
@@ -103,7 +103,7 @@ const page = () => {
         } else if (role === "student") {
             router.push("/student/dashboard");
         }
-      console.log('after router push')
+      // console.log('after router push')
       } catch (error) {
         // Set errors if login fails
         setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })

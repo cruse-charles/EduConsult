@@ -66,7 +66,7 @@ export const getStudentProfileConsultantViewHighightConfig = (data) => [
   {
     title: "In-Progress Assignments",
     icon: BookOpen,
-    content: `${data.inProgressAssignmentsCount} assignments`,
+    content: `${data.inProgressAssignmentsCount} ${data.inProgressAssignmentsCount > 1 ? 'assignments' : 'assignment'}`,
     detail: "Across all applications!",
   },
   {
