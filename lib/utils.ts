@@ -39,50 +39,15 @@ export const formatDueDateAndTime = (dueDate: Date | Timestamp | undefined) => {
   return format(date, "MMM d, yyyy 'at' h:mm a");
 }
 
-// Formatting date display
-// export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined) => {
-//   if (!nextDeadline || nextDeadline === undefined) return "No upcoming deadlines";
-
-//   let date
-
-//   // if (date === undefined) return "No upcoming deadlines";
-
-//   if (nextDeadline instanceof Date) {
-//     // Already a Date
-//     date = nextDeadline;
-//   } else if (typeof nextDeadline.toDate === "function") {
-//     // Firestore Timestamp
-//     date = nextDeadline.toDate();
-//   } else if (
-//     typeof nextDeadline === "object" &&
-//     nextDeadline !== null &&
-//     "seconds" in nextDeadline
-//   ) {
-//     // Serialized Firestore Timestamp from Redux / JSON
-//     date = new Date(nextDeadline.seconds * 1000);
-//   } else {
-//     return "Invalid date";
-//   }
-//   return format(date, "MMM d, yyyy");
-// }
-
 export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined | any) => {
-  // console.log("formatNextDeadline input:", nextDeadline);
-  // console.log("has seconds?", "seconds" in nextDeadline);
-  // console.log("seconds value:", nextDeadline?.seconds);
-  // console.log("has toDate?", typeof nextDeadline.toDate);
-  // console.log("toDate function?", typeof nextDeadline.toDate === "function");
   
   if (!nextDeadline) return "No upcoming deadlines";
-  // console.log('in format next deadline')
 
   let date: Date;
 
   if (nextDeadline instanceof Date) {
-    // console.log('Hit Date branch');
     date = nextDeadline;
   } else if (typeof nextDeadline.toDate === "function") {
-    // console.log('Hit toDate branch');
     // Firestore Timestamp with toDate method
     date = nextDeadline.toDate();
   } else if (
@@ -90,7 +55,6 @@ export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined | 
     nextDeadline !== null &&
     "seconds" in nextDeadline
   ) {
-    // console.log('Hit seconds branch');
     // Serialized Firestore Timestamp from Redux / JSON
     date = new Date(nextDeadline.seconds * 1000);
   } else {
@@ -98,7 +62,6 @@ export const formatNextDeadline = (nextDeadline: Date | Timestamp | undefined | 
     return "No upcoming deadlines";
   }
   
-  // console.log('Final date:', date);
   return format(date, "MMM d, yyyy");
 }
 

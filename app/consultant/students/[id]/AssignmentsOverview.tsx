@@ -1,10 +1,9 @@
 import { getStudentProfileConsultantViewHighightConfig } from '@/app/components/Highlights/consultantHighlightsConfig'
 import HighlightCard from '@/app/components/Highlights/HighlightCard'
 
-import { evaluateNextDeadline, formatNextDeadline } from '@/lib/utils'
+import { formatNextDeadline } from '@/lib/utils'
 
 import { RootState } from '@/redux/store'
-import { Timestamp } from 'firebase/firestore'
 import { countCompletedTasksForStudentConsultantView, nextDeadlineForStudent } from '@/lib/queries/querys'
 
 import { useEffect, useState } from 'react'
@@ -64,9 +63,6 @@ function AssignmentsOverview() {
                 // @ts-ignore
                 nextDeadlineForStudent(student.id, user.id)
             ])
-
-            // const normalizedDeadline = student?.stats?.nextDeadline ?? null;
-            // const formattedDeadline = formatNextDeadline(normalizedDeadline);
 
             setData({
                 inProgressAssignmentsCount: student?.stats?.inProgressAssignmentsCount,

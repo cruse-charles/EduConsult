@@ -79,8 +79,6 @@ const page = () => {
         // Retrieve claims
         const token = await userCredential.user.getIdTokenResult();
         const role = token.claims.role;
-
-        // console.log('token', token)
         
         // Call API to set cookie
         await fetch("/api/set-session", {
@@ -95,8 +93,6 @@ const page = () => {
           role: role,
         }))
         
-        // console.log('role', role)
-
         // If the user is a student then set their data in student slice and redirect to student profile
         if (role === "consultant") {
             router.push("/consultant/dashboard");
