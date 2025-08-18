@@ -19,9 +19,7 @@ export const fetchUser = createAsyncThunk(
             isComplete: userData?.onboarding.isComplete,
             onboardingStep: userData?.onboarding.onboardingStep,
         }));
-        
-        if (database === 'consultantUsers') dispatch(fetchStudents(userId));
-        
+                
         return {id: docSnap.id, firstName: userData?.personalInformation.firstName, lastName: userData?.personalInformation.lastName, email: userData?.personalInformation.email, role: userData?.role};
     }
 );

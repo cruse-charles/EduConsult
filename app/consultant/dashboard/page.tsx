@@ -4,11 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-import { getDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebaseConfig";
-
-import { FirebaseUserInfo } from "@/lib/types/types";
-
 import CreateStudentModal from "./CreateStudentModal/CreateStudentModal";
 import Highlights from "../../components/Highlights/Highlights";
 import StudentTable from "./StudentTable";
@@ -17,9 +12,9 @@ import DashboardAssignmentList from "./DashboardAssignmentList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
+import { fetchUser } from "@/redux/slices/userSlice";
 import { fetchStudents } from "@/redux/slices/studentsSlice";
-import { setUser, fetchUser } from "@/redux/slices/userSlice";
-import { setOnboardingState } from "@/redux/slices/onboardingSlice";
+
 
 const page = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -35,7 +30,10 @@ const page = () => {
 
         // TODO: ADD COMMENTS TO THIS AND EVERYTHING ELSE CHANGED FROM THIS COMMIT
     useEffect(() => {
-        if (userId) dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
+        if (userId) {
+            dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
+            dispatch(fetchStudents(userId))
+        } 
     }, [userId])
 
     const filteredStudents = students.filter((student) => 
