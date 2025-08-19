@@ -117,33 +117,33 @@ function AssignmentsList() {
             const now = new Date()
 
             sortedFolders.sort((a, b) => {
-            const assignmentsA = getFilteredAssignments(a)
-            const assignmentsB = getFilteredAssignments(b)
+                const assignmentsA = getFilteredAssignments(a)
+                const assignmentsB = getFilteredAssignments(b)
 
-            // get soonest upcoming due date in folder A
-            const soonestDueDateA = assignmentsA
-                .map(assignment => {
-                    if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
-                    return assignment.dueDate as Date
-                })
-                .filter(dueDate => dueDate >= now) // ignore past due dates
-                .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
+                // get soonest upcoming due date in folder A
+                const soonestDueDateA = assignmentsA
+                    .map(assignment => {
+                        if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
+                        return assignment.dueDate as Date
+                    })
+                    .filter(dueDate => dueDate >= now) // ignore past due dates
+                    .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
 
-            // same for folder B
-            const soonestDueDateB = assignmentsB
-                .map(assignment => {
-                    if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
-                    return assignment.dueDate as Date
-                })
-                .filter(dueDate => dueDate >= now)
-                .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
+                // same for folder B
+                const soonestDueDateB = assignmentsB
+                    .map(assignment => {
+                        if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
+                        return assignment.dueDate as Date
+                    })
+                    .filter(dueDate => dueDate >= now)
+                    .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
 
-            // handle cases where a folder has no future due dates
-            if (!soonestDueDateA && !soonestDueDateB) return 0
-            if (!soonestDueDateA) return 1
-            if (!soonestDueDateB) return -1
+                // handle cases where a folder has no future due dates
+                if (!soonestDueDateA && !soonestDueDateB) return 0
+                if (!soonestDueDateA) return 1
+                if (!soonestDueDateB) return -1
 
-            return soonestDueDateA.getTime() - soonestDueDateB.getTime()
+                return soonestDueDateA.getTime() - soonestDueDateB.getTime()
             })
         }
 
