@@ -42,6 +42,53 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
         ...stepPositions[onboardingStep]
     }
 
+    // const highlightStyles = {
+    //     position: "absolute" as const,
+    //     top: rect.top + window.scrollY - 8,
+    //     left: rect.left + window.scrollX - 8,
+    //     width: rect.width + 16,
+    //     height: rect.height + 16,
+    //     border: "5px dashed #3b82f6",
+    //     borderRadius: "8px",
+    //     pointerEvents: "none",
+    //     zIndex: 10000,
+    //     boxSizing: "border-box" as const,
+    //     // boxShadow: "0 0 0 4px rgba(59,130,246,0.2)",
+    // };
+
+const highlightStyles = {
+  position: "absolute" as const,
+  top: rect.top + window.scrollY - 6,
+  left: rect.left + window.scrollX - 6,
+  width: rect.width + 12,
+  height: rect.height + 12,
+  borderRadius: "8px",
+  pointerEvents: "none",
+  zIndex: 10000,
+  
+  backgroundImage: `
+    linear-gradient(to right, #3b82f6 50%, transparent 50%),
+    linear-gradient(to right, #3b82f6 50%, transparent 50%),
+    linear-gradient(to bottom, #3b82f6 50%, transparent 50%),
+    linear-gradient(to bottom, #3b82f6 50%, transparent 50%)
+  `,
+  backgroundSize: `
+    16px 5px,
+    16px 5px,
+    5px 16px,
+    5px 16px
+  `,
+  backgroundPosition: `
+    0 0,
+    0 100%,
+    0 0,
+    100% 0
+  `,
+  backgroundRepeat: "repeat-x, repeat-x, repeat-y, repeat-y",
+  animation: "dash-move 2s linear infinite",
+};
+
+
     // TODO: Evaluate below and refator for better tooltip positioning, scrolling, and resizing window, etc
     // const [position, setPosition] = useState({ top: 0, left: 0 });
 
@@ -102,25 +149,30 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
 
 
     return (
-        <div
-        className="tooltip"
-        // @ts-ignore
-        style={tooltipStyles}>
-            <p>{content}</p>
-            <div className="flex items-center justify-between mt-2">
-                <div className="flex gap-2">
-                    {allowedNextSteps.includes(onboardingStep) && (
-                        <Button onClick={onNext} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
-                            Next
-                        </Button>
-                    )}
-                    {/* <Button onClick={onSkip} className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
-                        Skip
-                    </Button> */}
-                </div>
-                <span className="text-sm text-gray-500">{page}</span>
+        <>
+            {/* @ts-ignore */}
+            <div style={highlightStyles}>
+
             </div>
-        </div>
+            
+            {/* @ts-ignore */}
+            <div className="tooltip" style={tooltipStyles}>
+                <p>{content}</p>
+                <div className="flex items-center justify-between mt-2">
+                    <div className="flex gap-2">
+                        {allowedNextSteps.includes(onboardingStep) && (
+                            <Button onClick={onNext} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                Next
+                            </Button>
+                        )}
+                        {/* <Button onClick={onSkip} className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
+                            Skip
+                        </Button> */}
+                    </div>
+                    <span className="text-sm text-gray-500">{page}</span>
+                </div>
+            </div>
+        </>
     )
 }
 

@@ -94,3 +94,13 @@ html, body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes dash-move {
+  to {
+    background-position:
+      32px 0,
+      -32px 100%,
+      0 -32px,
+      100% 32px;
+  }
+}
