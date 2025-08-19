@@ -142,10 +142,6 @@ function CreateStudentModal() {
             if (!isComplete && currentStep == 'clickSubmitCreateStudentButton') {
                 dispatch(completeStep("clickSubmitCreateStudentButton"))
                 await nextStep(user.id)
-
-                // if (currentStep === "clickSubmitCreateStudentButton") {
-                // }
-
             }
             
             // Success Message

@@ -27,13 +27,8 @@ const onboardingSlice = createSlice({
             }
         },
         // Complete the current step if the required action is done
-        // TODO: Check if this if statement is needed, since we are already checking in component
         completeStep(state, action) {
-            // const currentActionRequired = onboardingSteps[state.onboardingStep].actionRequired
-            
-            // if (currentActionRequired === action.payload) {
-                state.onboardingStep += 1
-            // }
+            state.onboardingStep += 1
         },
         completeOnboarding(state) {
             state.isComplete = true

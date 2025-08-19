@@ -232,9 +232,6 @@ function CreateAssignmentModal() {
         const currentStep = onboardingSteps[onboardingStep].actionRequired
         if (!isComplete && currentStep === 'clickCreateAssignmentButton') {
             dispatch(completeStep("clickCreateAssignmentButton"))
-        
-            // if (currentStep === "clickCreateAssignmentButton") {
-            // }
         }  
     }
 

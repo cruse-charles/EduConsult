@@ -15,7 +15,6 @@ export const onboardingSteps = [
     path: '/consultant/dashboard'
   },
   {
-    // TODO: MAKE COMPLETED STEPS DYNAMIC, STOP WITH THE NUMBERS, HAVE TO CHANGE IT EVERYWHERE FOR ONE MORE STEP, REFERENCE ACTION REQUIRED
     id: "create-student",
     target: ".create-student-modal",
     content: "Fill in the information and then click submit.",
@@ -85,6 +84,6 @@ export const onboardingSteps = [
     content: "See a calendar with your assignments.",
     actionRequired: "viewCalendar",
     page: '11/11',
-    path: '/consultant/students'
+    path: '/assignments'
   },
 ]

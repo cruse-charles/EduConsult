@@ -23,31 +23,33 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
     if (!targetElement) return null;
     const rect = targetElement.getBoundingClientRect()
 
-    const stepPositions: Record<number, { top: number; left: number }>  = {
-        0: {top: rect.bottom + 10, left: rect.left},
-        1: {top: rect.bottom + 10, left: rect.left - 200},
-        2: {top: rect.bottom + 10, left: rect.left},
-        3: {top: rect.bottom + 10, left: rect.left - 100},
-        4: {top: rect.bottom + 10, left: rect.left},
-        5: {top: rect.bottom + 10, left: rect.left},
-        6: {top: rect.bottom + 30, left: rect.left + 500},
-        7: {top: rect.bottom + 10, left: rect.left},
-        8: {top: rect.bottom + 10, left: rect.left},
-        9: {top: rect.bottom + 10, left: rect.left}
-    }
+    // const stepPositions: Record<number, { top: number; left: number }>  = {
+    //     0: {top: rect.bottom + 10, left: rect.left},
+    //     1: {top: rect.bottom + 10, left: rect.left - 200},
+    //     2: {top: rect.bottom + 10, left: rect.left},
+    //     3: {top: rect.bottom + 10, left: rect.left - 100},
+    //     4: {top: rect.bottom + 10, left: rect.left},
+    //     5: {top: rect.bottom + 10, left: rect.left},
+    //     6: {top: rect.bottom + 30, left: rect.left + 500},
+    //     7: {top: rect.bottom + 10, left: rect.left},
+    //     8: {top: rect.bottom + 10, left: rect.left},
+    //     9: {top: rect.bottom + 10, left: rect.left},
+    //     10: {top: rect.bottom + 10, left: rect.left}
+    // }
 
-    // const stepPositions: Record<number, { top: number; left: number }> = {
-    //     0: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-    //     1: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 200 },
-    //     2: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-    //     3: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 100 },
-    //     4: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-    //     5: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-    //     6: { top: rect.bottom + window.scrollY + 30, left: rect.left + window.scrollX + 500 },
-    //     7: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-    //     8: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-    //     9: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-    // };
+    const stepPositions: Record<number, { top: number; left: number }> = {
+        0: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        1: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 200 },
+        2: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        3: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 100 },
+        4: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        5: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        6: { top: rect.bottom + window.scrollY + 30, left: rect.left + window.scrollX + 500 },
+        7: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        8: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        9: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        10: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX }
+    };
 
     const tooltipStyles = {
         ...baseTooltipStyle,
