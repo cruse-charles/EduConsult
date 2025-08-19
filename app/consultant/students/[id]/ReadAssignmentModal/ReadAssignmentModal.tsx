@@ -174,7 +174,7 @@ function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
                                 />
                             </div>
                             <FileUploadView handleFileUpload={handleFileUpload} removeFile={removeFile} files={files}/>
-                            <Button type='submit' className='mt-2 .create-entry' disabled={isLoading}>
+                            <Button type='submit' className='mt-2 create-entry' disabled={isLoading}>
                                 {buttonLabel}
                             </Button>
                         </form>

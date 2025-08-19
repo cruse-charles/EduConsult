@@ -246,12 +246,12 @@ function CreateAssignmentModal() {
         }}>
             <DialogTrigger asChild>
                 {/* <Button onClick={() => setOpen(true)} className="create-assignment"> */}
-                <Button onClick={handleNewAssignmentClick} className="create-assignment">
+                <Button onClick={handleNewAssignmentClick} className="create-assignment-btn">
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto create-assignment-modal">
 
                 {/* Dialog Header */}
                 <DialogHeader>

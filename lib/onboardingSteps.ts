@@ -3,7 +3,7 @@ export const onboardingSteps = [
     id: "Welcome",
     target: ".welcome-dashboard",
     content: "Let's take a quick tour of your dashboard to help you get started with managing your students and their applications.",
-    page: '1/10',
+    page: '1/11',
     path: '/consultant/dashboard'
   },
   {
@@ -11,7 +11,7 @@ export const onboardingSteps = [
     target: ".add-student-btn",
     content: "Click Add Student to create your first student.",
     actionRequired: "clickAddStudentButton", // only advance after user clicks
-    page: '2/10',
+    page: '2/11',
     path: '/consultant/dashboard'
   },
   {
@@ -20,7 +20,7 @@ export const onboardingSteps = [
     target: ".create-student-modal",
     content: "Fill in the information and then click submit.",
     actionRequired: "clickSubmitCreateStudentButton", // only advance after user clicks
-    page: '3/10',
+    page: '3/11',
     path: '/consultant/dashboard'
   },
   {
@@ -28,15 +28,23 @@ export const onboardingSteps = [
     target: ".student-row",
     content: "Click your student's name to view their proifle.",
     actionRequired: "fetchStudentProfile",
-    page: '4/10',
+    page: '4/11',
     path: '/consultant/dashboard'
   },  
   {
     id: "click-create-assignment",
-    target: ".create-assignment",
+    target: ".create-assignment-btn",
     content: "Create an assignment for a student.",
     actionRequired: "clickCreateAssignmentButton",
-    page: '5/10',
+    page: '5/11',
+    path: '/consultant/students'
+  },  
+  {
+    id: "create-assignment",
+    target: ".create-assignment-modal",
+    content: "Fill in the information for an assignment and create a folder for the its corresponding school, then click Create Assignment!",
+    actionRequired: "createAssignment",
+    page: '6/11',
     path: '/consultant/students'
   },
   {
@@ -44,7 +52,7 @@ export const onboardingSteps = [
     target: ".folder",
     content: "Click a folder to open it and see assignments within.",
     actionRequired: "openFolder",
-    page: '6/10',
+    page: '7/11',
     path: '/consultant/students'
   },
   {
@@ -52,15 +60,15 @@ export const onboardingSteps = [
     target: ".assignment",
     content: "View your assignment details by clicking on the assignment you created.",
     actionRequired: "viewAssignment",
-    page: '7/10',
+    page: '8/11',
     path: '/consultant/students'
   },
   {
     id: "create-entry",
     target: ".create-entry",
-    content: "Provide feedback on the student's assignment here.",
+    content: "Provide feedback on the student's assignment or return a revised document, then click here. A timeline of this assignment will be updated for both you and the student.",
     actionRequired: "createEntry",
-    page: '8/10',
+    page: '9/11',
     path: '/consultant/students'
   },
   {
@@ -68,7 +76,7 @@ export const onboardingSteps = [
     target: ".view-assignments",
     content: "See a list of all your assignments.",
     actionRequired: "viewAssignments",
-    page: '9/10',
+    page: '10/11',
     path: '/consultant/students'
   },
   {
@@ -76,7 +84,7 @@ export const onboardingSteps = [
     target: ".view-calendar",
     content: "See a calendar with your assignments.",
     actionRequired: "viewCalendar",
-    page: '10/10',
-    path: '/assignments'
+    page: '11/11',
+    path: '/consultant/students'
   },
 ]

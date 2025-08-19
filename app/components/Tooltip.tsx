@@ -36,6 +36,19 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
         9: {top: rect.bottom + 10, left: rect.left}
     }
 
+    // const stepPositions: Record<number, { top: number; left: number }> = {
+    //     0: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     1: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 200 },
+    //     2: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     3: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 100 },
+    //     4: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     5: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     6: { top: rect.bottom + window.scrollY + 30, left: rect.left + window.scrollX + 500 },
+    //     7: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     8: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     9: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    // };
+
     const tooltipStyles = {
         ...baseTooltipStyle,
         ...stepPositions[onboardingStep]
@@ -75,7 +88,7 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
 
 
     // Restrict which steps can have the 'next' button
-    const allowedNextSteps = [0, 7, 8]
+    const allowedNextSteps = [0, 8, 9, 10]
 
     return (
         <>
