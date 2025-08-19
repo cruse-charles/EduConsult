@@ -69,13 +69,14 @@ const StudentTable = () => {
 
     // Navigate to the student's detailed page
     const handleStudentClick = async (studentId: string) => {
-        if (!isComplete && onboardingStep === 2) {
-            const currentStep = onboardingSteps[onboardingStep].actionRequired
-
-            if (currentStep === "fetchStudentProfile") {
-                dispatch(completeStep("fetchStudentProfile"))
-            }
+        const currentStep = onboardingSteps[onboardingStep].actionRequired
+        
+        if (!isComplete && currentStep === 'fetchStudentProfile') {
+            dispatch(completeStep("fetchStudentProfile"))
             await nextStep(user.id)
+
+            // if (currentStep === "fetchStudentProfile") {
+            // }
         } 
             
         router.push(`/consultant/students/${studentId}`);

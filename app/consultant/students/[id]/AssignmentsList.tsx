@@ -20,6 +20,7 @@ import { deleteAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/
 import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from "@/redux/slices/currentStudentSlice";
 import { deleteDashboardAssignment } from "@/redux/slices/consultantAssignmentSlice";
 import { completeStep } from "@/redux/slices/onboardingSlice";
+import { onboardingSteps } from "@/lib/onboardingSteps";
 import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
@@ -195,7 +196,9 @@ function AssignmentsList() {
     // Handle opening folders and onboarding if necessary
     const handleOpenFolder = async (folder: string) => {
         setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])
-        if (!isComplete && onboardingStep === 4) {
+        
+        const currentStep = onboardingSteps[onboardingStep].actionRequired
+        if (!isComplete && currentStep === 'openFolder') {
             dispatch(completeStep("openFolder"))
             await nextStep(user.id)
         }
@@ -208,7 +211,8 @@ function AssignmentsList() {
         dispatch(setCurrentAssignment(assignment))
 
         // Check if onboarding is complete for tooltip to render
-        if (!isComplete && onboardingStep === 5) {
+        const currentStep = onboardingSteps[onboardingStep].actionRequired
+        if (!isComplete && currentStep === "viewAssignment") {
             dispatch(completeStep("viewAssignment"))
             await nextStep(user.id)
         }

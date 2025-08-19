@@ -16,6 +16,7 @@ import { nextStep } from '@/lib/onBoardingUtils'
 
 import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { completeStep, next } from '@/redux/slices/onboardingSlice'
+import { onboardingSteps } from "@/lib/onboardingSteps"
 import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 import { RootState } from '@/redux/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -114,7 +115,8 @@ function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
             await updateAssignment(updatedAssignment, assignment.id);
     
             // Next step in onboarding if not completed
-            if (!isComplete && onboardingStep === 6) {
+            const currentStep = onboardingSteps[onboardingStep].actionRequired
+            if (!isComplete && currentStep === 'createEntry') {
                 dispatch(completeStep('createEntry'))
                 await nextStep(user.id)
             }

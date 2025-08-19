@@ -15,7 +15,7 @@ export const onboardingSteps = [
     path: '/consultant/dashboard'
   },
   {
-    // TODO: THIS IS NOT CIRCLING THE MODAL, IT'S CIRCLING THE ADD STUDENT BUTTON, LOOK AT THE DISPATCH
+    // TODO: MAKE COMPLETED STEPS DYNAMIC, STOP WITH THE NUMBERS, HAVE TO CHANGE IT EVERYWHERE FOR ONE MORE STEP, REFERENCE ACTION REQUIRED
     id: "create-student",
     target: ".create-student-modal",
     content: "Fill in the information and then click submit.",

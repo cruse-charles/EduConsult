@@ -138,14 +138,14 @@ function CreateStudentModal() {
             setIsLoading(false);
 
             // // Proceed to next step for tooltip and update backend
-            if (!isComplete && onboardingStep === 2) {
-                const currentStep = onboardingSteps[onboardingStep].actionRequired
-
-                if (currentStep === "clickSubmitCreateStudentButton") {
-                    dispatch(completeStep("clickSubmitCreateStudentButton"))
-                }
-
+            const currentStep = onboardingSteps[onboardingStep].actionRequired
+            if (!isComplete && currentStep == 'clickSubmitCreateStudentButton') {
+                dispatch(completeStep("clickSubmitCreateStudentButton"))
                 await nextStep(user.id)
+
+                // if (currentStep === "clickSubmitCreateStudentButton") {
+                // }
+
             }
             
             // Success Message
@@ -157,15 +157,12 @@ function CreateStudentModal() {
         }
     }
 
-    const handleCreateStudentClick = async () => {
+    const handleAddStudentClick = async () => {
         
         // Proceed to next step for tooltip and update backend
-        if (!isComplete && onboardingStep === 1) {
-            const currentStep = onboardingSteps[onboardingStep].actionRequired
-
-            if (currentStep === "clickAddStudentButton") {
-                dispatch(completeStep("clickAddStudentButton"))
-            }
+        const currentStep = onboardingSteps[onboardingStep].actionRequired
+        if (!isComplete && currentStep == 'clickAddStudentButton') {
+            dispatch(completeStep("clickAddStudentButton"))
             await nextStep(user.id)
         }      
     }
@@ -214,14 +211,14 @@ function CreateStudentModal() {
 
     return (
         // @ts-ignore
-        <Dialog className='create-student-modal' open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
+        <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
-                <Button onClick={handleCreateStudentClick} variant="default" className="w-full add-student-btn">
+                <Button onClick={handleAddStudentClick} variant="default" className="w-full add-student-btn">
                     <Plus className="mr-2 h-4 w-4" />
                     Add Student
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden">
+            <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden create-student-modal">
                 <div className="overflow-y-auto max-h-[90vh] rounded-lg p-6">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
