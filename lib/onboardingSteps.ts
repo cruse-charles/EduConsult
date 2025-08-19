@@ -2,16 +2,25 @@ export const onboardingSteps = [
   {
     id: "Welcome",
     target: ".welcome-dashboard",
-    content: "Welcome to your dashbaord! Let's show you around!",
-    page: '1/9',
+    content: "Let's take a quick tour of your dashboard to help you get started with managing your students and their applications.",
+    page: '1/10',
     path: '/consultant/dashboard'
   },
   {
-    id: "create-student",
-    target: ".create-student-btn",
+    id: "add-student-btn",
+    target: ".add-student-btn",
     content: "Click Add Student to create your first student.",
     actionRequired: "clickAddStudentButton", // only advance after user clicks
-    page: '2/9',
+    page: '2/10',
+    path: '/consultant/dashboard'
+  },
+  {
+    // TODO: THIS IS NOT CIRCLING THE MODAL, IT'S CIRCLING THE ADD STUDENT BUTTON, LOOK AT THE DISPATCH
+    id: "create-student",
+    target: ".create-student-modal",
+    content: "Fill in the information and then click submit.",
+    actionRequired: "clickSubmitCreateStudentButton", // only advance after user clicks
+    page: '3/10',
     path: '/consultant/dashboard'
   },
   {
@@ -19,7 +28,7 @@ export const onboardingSteps = [
     target: ".student-row",
     content: "Click your student's name to view their proifle.",
     actionRequired: "fetchStudentProfile",
-    page: '3/9',
+    page: '4/10',
     path: '/consultant/dashboard'
   },  
   {
@@ -27,7 +36,7 @@ export const onboardingSteps = [
     target: ".create-assignment",
     content: "Create an assignment for a student.",
     actionRequired: "clickCreateAssignmentButton",
-    page: '4/9',
+    page: '5/10',
     path: '/consultant/students'
   },
   {
@@ -35,7 +44,7 @@ export const onboardingSteps = [
     target: ".folder",
     content: "Click a folder to open it and see assignments within.",
     actionRequired: "openFolder",
-    page: '5/9',
+    page: '6/10',
     path: '/consultant/students'
   },
   {
@@ -43,7 +52,7 @@ export const onboardingSteps = [
     target: ".assignment",
     content: "View your assignment details by clicking on the assignment you created.",
     actionRequired: "viewAssignment",
-    page: '6/9',
+    page: '7/10',
     path: '/consultant/students'
   },
   {
@@ -51,7 +60,7 @@ export const onboardingSteps = [
     target: ".create-entry",
     content: "Provide feedback on the student's assignment here.",
     actionRequired: "createEntry",
-    page: '7/9',
+    page: '8/10',
     path: '/consultant/students'
   },
   {
@@ -59,7 +68,7 @@ export const onboardingSteps = [
     target: ".view-assignments",
     content: "See a list of all your assignments.",
     actionRequired: "viewAssignments",
-    page: '8/9',
+    page: '9/10',
     path: '/consultant/students'
   },
   {
@@ -67,7 +76,7 @@ export const onboardingSteps = [
     target: ".view-calendar",
     content: "See a calendar with your assignments.",
     actionRequired: "viewCalendar",
-    page: '9/9',
+    page: '10/10',
     path: '/assignments'
   },
 ]

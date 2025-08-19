@@ -138,10 +138,15 @@ function CreateStudentModal() {
             setIsLoading(false);
 
             // // Proceed to next step for tooltip and update backend
-            // if (!isComplete) {
-            //     dispatch(completeStep("studentCreated"))
-            //     await nextStep(user.id)
-            // }
+            if (!isComplete && onboardingStep === 2) {
+                const currentStep = onboardingSteps[onboardingStep].actionRequired
+
+                if (currentStep === "clickSubmitCreateStudentButton") {
+                    dispatch(completeStep("clickSubmitCreateStudentButton"))
+                }
+
+                await nextStep(user.id)
+            }
             
             // Success Message
             toast(<CustomToast title="Student Account Created" description="" status="success"/>)
@@ -208,9 +213,10 @@ function CreateStudentModal() {
     }
 
     return (
-        <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
+        // @ts-ignore
+        <Dialog className='create-student-modal' open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
             <DialogTrigger asChild>
-                <Button onClick={handleCreateStudentClick} variant="default" className="w-full create-student-btn">
+                <Button onClick={handleCreateStudentClick} variant="default" className="w-full add-student-btn">
                     <Plus className="mr-2 h-4 w-4" />
                     Add Student
                 </Button>

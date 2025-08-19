@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 
 interface TooltipProps {
     targetElement: HTMLElement | null;
@@ -42,111 +41,41 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
         ...stepPositions[onboardingStep]
     }
 
-    // const highlightStyles = {
-    //     position: "absolute" as const,
-    //     top: rect.top + window.scrollY - 8,
-    //     left: rect.left + window.scrollX - 8,
-    //     width: rect.width + 16,
-    //     height: rect.height + 16,
-    //     border: "5px dashed #3b82f6",
-    //     borderRadius: "8px",
-    //     pointerEvents: "none",
-    //     zIndex: 10000,
-    //     boxSizing: "border-box" as const,
-    //     // boxShadow: "0 0 0 4px rgba(59,130,246,0.2)",
-    // };
-
-const highlightStyles = {
-  position: "absolute" as const,
-  top: rect.top + window.scrollY - 6,
-  left: rect.left + window.scrollX - 6,
-  width: rect.width + 12,
-  height: rect.height + 12,
-  borderRadius: "8px",
-  pointerEvents: "none",
-  zIndex: 10000,
-  
-  backgroundImage: `
-    linear-gradient(to right, #3b82f6 50%, transparent 50%),
-    linear-gradient(to right, #3b82f6 50%, transparent 50%),
-    linear-gradient(to bottom, #3b82f6 50%, transparent 50%),
-    linear-gradient(to bottom, #3b82f6 50%, transparent 50%)
-  `,
-  backgroundSize: `
-    16px 5px,
-    16px 5px,
-    5px 16px,
-    5px 16px
-  `,
-  backgroundPosition: `
-    0 0,
-    0 100%,
-    0 0,
-    100% 0
-  `,
-  backgroundRepeat: "repeat-x, repeat-x, repeat-y, repeat-y",
-  animation: "dash-move 2s linear infinite",
-};
-
-
-    // TODO: Evaluate below and refator for better tooltip positioning, scrolling, and resizing window, etc
-    // const [position, setPosition] = useState({ top: 0, left: 0 });
-
-    // // // Function to calculate position based on target element
-    // const calculatePosition = () => {
-    //     if (!targetElement) return;
+    const highlightStyles = {
+        position: "absolute" as const,
+        top: rect.top + window.scrollY - 6,
+        left: rect.left + window.scrollX - 6,
+        width: rect.width + 12,
+        height: rect.height + 12,
+        borderRadius: "8px",
+        pointerEvents: "none",
+        zIndex: 10000,
         
-    //     const rect = targetElement.getBoundingClientRect();
-        
-    //     const stepPositions: Record<number, { top: number; left: number }> = {
-    //         0: {top: rect.bottom + 10, left: rect.left},
-    //         1: {top: rect.bottom + 10, left: rect.left - 200},
-    //         2: {top: rect.bottom + 10, left: rect.left},
-    //         3: {top: rect.bottom + 10, left: rect.left - 100},
-    //         4: {top: rect.bottom + 10, left: rect.left},
-    //         5: {top: rect.bottom + 10, left: rect.left},
-    //         6: {top: rect.bottom + 30, left: rect.left + 500},
-    //         7: {top: rect.bottom + 10, left: rect.left},
-    //         8: {top: rect.bottom + 10, left: rect.left},
-    //         9: {top: rect.bottom + 10, left: rect.left}
-    //     };
-        
-    //     setPosition(stepPositions[onboardingStep]);
-    // };
-
-    // // Calculate position on mount and when dependencies change
-    // useEffect(() => {
-    //     calculatePosition();
-    // }, [targetElement, onboardingStep]);
-
-    // // Recalculate position on window resize or scroll
-    // useEffect(() => {
-    //     const handleUpdate = () => {
-    //         calculatePosition();
-    //     };
-
-    //     window.addEventListener('resize', handleUpdate);
-    //     window.addEventListener('scroll', handleUpdate, true); // Use capture to catch all scroll events
-        
-    //     return () => {
-    //         window.removeEventListener('resize', handleUpdate);
-    //         window.removeEventListener('scroll', handleUpdate, true);
-    //     };
-    // }, [targetElement, onboardingStep]);
-
-    // if (!targetElement) return null;
-
-    // const tooltipStyles = {
-    //     ...baseTooltipStyle,
-    //     ...position
-    // };
-
+        backgroundImage: `
+            linear-gradient(to right, #3b82f6 50%, transparent 50%),
+            linear-gradient(to right, #3b82f6 50%, transparent 50%),
+            linear-gradient(to bottom, #3b82f6 50%, transparent 50%),
+            linear-gradient(to bottom, #3b82f6 50%, transparent 50%)
+        `,
+        backgroundSize: `
+            16px 5px,
+            16px 5px,
+            5px 16px,
+            5px 16px
+        `,
+        backgroundPosition: `
+            0 0,
+            0 100%,
+            0 0,
+            100% 0
+        `,
+        backgroundRepeat: "repeat-x, repeat-x, repeat-y, repeat-y",
+        animation: "dash-move 2s linear infinite",
+    };
 
 
     // Restrict which steps can have the 'next' button
     const allowedNextSteps = [0, 7, 8]
-    // const allowedNextSteps = [0, 1,2,3,4,5,6, 7, 8]
-
 
     return (
         <>
