@@ -21,9 +21,6 @@ const baseTooltipStyle = {
 
 const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}: TooltipProps) => {
 
-    // if (!targetElement) return null;
-    // const rect = targetElement.getBoundingClientRect()
-
     const [rect, setRect] = useState<DOMRect | null>(null);
 
     useLayoutEffect(() => {
@@ -56,22 +53,8 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
             window.removeEventListener("scroll", measure);
         };
     }, [targetElement, onboardingStep]);
-    
-    if (!rect) return null;
 
-    // const stepPositions: Record<number, { top: number; left: number }>  = {
-    //     0: {top: rect.bottom + 10, left: rect.left},
-    //     1: {top: rect.bottom + 10, left: rect.left - 200},
-    //     2: {top: rect.bottom + 10, left: rect.left},
-    //     3: {top: rect.bottom + 10, left: rect.left - 100},
-    //     4: {top: rect.bottom + 10, left: rect.left},
-    //     5: {top: rect.bottom + 10, left: rect.left},
-    //     6: {top: rect.bottom + 30, left: rect.left + 500},
-    //     7: {top: rect.bottom + 10, left: rect.left},
-    //     8: {top: rect.bottom + 10, left: rect.left},
-    //     9: {top: rect.bottom + 10, left: rect.left},
-    //     10: {top: rect.bottom + 10, left: rect.left}
-    // }
+    if (!rect) return null;
 
     const stepPositions: Record<number, { top: number; left: number }> = {
         0: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
