@@ -35,7 +35,7 @@ const menuItems = (rolePrefix: string) => [
     title: "Assignments",
     url: `/assignments`,
     icon: BookOpen,
-    className: "view-assignments"
+    className: "view-assignments-SideBar"
   },
   {
     title: "Calendar",

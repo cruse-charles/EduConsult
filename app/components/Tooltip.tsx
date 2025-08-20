@@ -19,12 +19,31 @@ const baseTooltipStyle = {
   boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
 };
 
+function getScrollableParent(el: HTMLElement): HTMLElement | null {
+    let parent = el.parentElement;
+    while (parent) {
+        const { overflow, overflowY } = window.getComputedStyle(parent);
+        const isScrollable = /(auto|scroll)/.test(overflow + overflowY);
+        if (isScrollable && parent.scrollHeight > parent.clientHeight) {
+            return parent;
+        }
+        parent = parent.parentElement;
+    }
+    return null;
+}
+
 const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}: TooltipProps) => {
 
     const [rect, setRect] = useState<DOMRect | null>(null);
+    const [scrollableParent, setScrollableParent] = useState<HTMLElement | null>(null);
+
 
     useLayoutEffect(() => {
         if (!targetElement) return;
+
+        // Find the scrollable container (e.g. the modal) if any
+        const parent = getScrollableParent(targetElement);
+        setScrollableParent(parent);
 
         const measure = () => {
             setRect(targetElement.getBoundingClientRect());
@@ -47,28 +66,51 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
 
         window.addEventListener("scroll", measure);
 
+        // Also listen to scroll inside the modal/scrollable parent
+        if (parent) {
+            parent.addEventListener("scroll", measure);
+        }
+
         return () => {
             resizeObserver.disconnect();
             mutationObserver.disconnect();
             window.removeEventListener("scroll", measure);
+            if (parent) {
+                parent.removeEventListener("scroll", measure);
+            }
         };
     }, [targetElement, onboardingStep]);
 
     if (!rect) return null;
 
-    const stepPositions: Record<number, { top: number; left: number }> = {
-        0: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        1: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 200 },
-        2: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        3: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 100 },
-        4: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        5: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        6: { top: rect.bottom + window.scrollY + 30, left: rect.left + window.scrollX + 500 },
-        7: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        8: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        9: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        10: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        11: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    // const stepPositions: Record<number, { top: number; left: number }> = {
+    //     0: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     1: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 200 },
+    //     2: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     3: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX - 100 },
+    //     4: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     5: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     6: { top: rect.bottom + window.scrollY + 30, left: rect.left + window.scrollX + 500 },
+    //     7: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     8: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     9: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     10: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    //     11: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+    // };
+
+    const stepPositions: Record<number, { top: number; left: number, width?: number }> = {
+        0:  { top: rect.bottom + 10, left: rect.left },
+        1:  { top: rect.bottom + 10, left: rect.left - 200 },
+        2:  { top: rect.bottom + 10, left: rect.left },
+        3:  { top: rect.bottom + 10, left: rect.left - 100 },
+        4:  { top: rect.bottom + 10, left: rect.left },
+        5:  { top: rect.bottom + 10, left: rect.left },
+        6:  { top: rect.bottom + 30, left: rect.left + 500 },
+        7:  { top: rect.bottom + 10, left: rect.left },
+        8:  { top: rect.bottom - 200, left: rect.left - 300, width: 275 },
+        9:  { top: rect.bottom + 10, left: rect.left },
+        10: { top: rect.bottom + 10, left: rect.left },
+        11: { top: rect.bottom + 10, left: rect.left },
     };
 
     const tooltipStyles = {

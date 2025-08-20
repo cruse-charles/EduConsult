@@ -80,7 +80,7 @@ export const onboardingSteps = [
   },
   {
     id: "view-Assignments",
-    target: ".view-assignments",
+    target: ".view-assignments-SideBar",
     content: "See a list of all your assignments.",
     actionRequired: "viewAssignments",
     page: '11/12',
