@@ -12,11 +12,13 @@ function SelectViewTabs() {
 
     return (
         <Tabs defaultValue="assignments">
-            <TabsList className="view-tabs">
-                <TabsTrigger value="assignments">Assignments</TabsTrigger>
-                <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                <TabsTrigger value="school-info">Student Information</TabsTrigger>
-            </TabsList>
+            {/* <div className="view-tabs w-fit"> */}
+                <TabsList className="view-tabs">
+                    <TabsTrigger value="assignments">Assignments</TabsTrigger>
+                    <TabsTrigger value="calendar">Calendar</TabsTrigger>
+                    <TabsTrigger value="school-info">Student Information</TabsTrigger>
+                </TabsList>
+            {/* </div> */}
             <TabsContent value="assignments" className="space-y-4">
                 <div className="flex justify-between items-center">
                 </div>

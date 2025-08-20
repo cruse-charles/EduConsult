@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useLayoutEffect, useState } from "react";
 
 interface TooltipProps {
     targetElement: HTMLElement | null;
@@ -10,7 +11,7 @@ interface TooltipProps {
 }
 
 const baseTooltipStyle = {
-  position: "absolute",
+  position: "fixed",
   background: "white",
   padding: "1rem",
   borderRadius: "8px",
@@ -20,8 +21,43 @@ const baseTooltipStyle = {
 
 const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}: TooltipProps) => {
 
-    if (!targetElement) return null;
-    const rect = targetElement.getBoundingClientRect()
+    // if (!targetElement) return null;
+    // const rect = targetElement.getBoundingClientRect()
+
+    const [rect, setRect] = useState<DOMRect | null>(null);
+
+    useLayoutEffect(() => {
+        if (!targetElement) return;
+
+        const measure = () => {
+            setRect(targetElement.getBoundingClientRect());
+        };
+
+        measure();
+
+        // Observe both body AND the target element for size changes
+        const resizeObserver = new ResizeObserver(measure);
+        resizeObserver.observe(document.body);
+        resizeObserver.observe(targetElement);
+
+        // Catch DOM mutations (e.g. async data loading that shifts layout)
+        const mutationObserver = new MutationObserver(measure);
+        mutationObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+        });
+
+        window.addEventListener("scroll", measure);
+
+        return () => {
+            resizeObserver.disconnect();
+            mutationObserver.disconnect();
+            window.removeEventListener("scroll", measure);
+        };
+    }, [targetElement, onboardingStep]);
+    
+    if (!rect) return null;
 
     // const stepPositions: Record<number, { top: number; left: number }>  = {
     //     0: {top: rect.bottom + 10, left: rect.left},
