@@ -12,7 +12,7 @@ function SelectViewTabs() {
 
     return (
         <Tabs defaultValue="assignments">
-            <TabsList>
+            <TabsList className="view-tabs">
                 <TabsTrigger value="assignments">Assignments</TabsTrigger>
                 <TabsTrigger value="calendar">Calendar</TabsTrigger>
                 <TabsTrigger value="school-info">Student Information</TabsTrigger>

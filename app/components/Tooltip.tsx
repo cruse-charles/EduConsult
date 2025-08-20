@@ -48,7 +48,8 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
         7: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
         8: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
         9: { top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
-        10: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX }
+        10: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
+        11: {top: rect.bottom + window.scrollY + 10, left: rect.left + window.scrollX },
     };
 
     const tooltipStyles = {
@@ -90,7 +91,7 @@ const Tooltip = ({targetElement, content, onSkip, onNext, page, onboardingStep}:
 
 
     // Restrict which steps can have the 'next' button
-    const allowedNextSteps = [0, 8, 9, 10]
+    const allowedNextSteps = [0, 8, 9, 10, 11]
 
     return (
         <>
