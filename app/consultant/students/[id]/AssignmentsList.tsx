@@ -16,12 +16,12 @@ import ReadAssignmentModal from "./ReadAssignmentModal/ReadAssignmentModal";
 import CreateAssignmentModal from "./CreateAssignmentModal/CreateAssignmentModal";
 import EditFolderModal from "./EditFolderModal";
 
-import { deleteAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
+import { deleteAssignmentSlice, readAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
 import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from "@/redux/slices/currentStudentSlice";
 import { deleteDashboardAssignment } from "@/redux/slices/consultantAssignmentSlice";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { onboardingSteps } from "@/lib/onboardingSteps";
-import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
+import { readCurrentAssignment, setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
 import { Assignment } from "@/lib/types/types";
@@ -201,6 +201,9 @@ function AssignmentsList() {
 
         // Update hasRead in assignmentMeta for the assignment clicked
         await readAssignment(assignment.id, "consultantUsers", user.id)
+
+
+        dispatch(readAssignmentSlice(assignment.id))
 
         // Check if onboarding is complete for tooltip to render
         const currentStep = onboardingSteps[onboardingStep].actionRequired

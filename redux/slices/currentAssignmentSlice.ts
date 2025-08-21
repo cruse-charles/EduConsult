@@ -49,8 +49,14 @@ const currentAssignmentSlice = createSlice({
         updateCurrentAssignment(state, action) {
             return action.payload
         },
+        readCurrentAssignment(state) {
+            return {
+                ...state,
+                hasRead: true
+            }
+        }
     }
 })
 
-export const { setCurrentAssignment, updateCurrentAssignment, clearCurrentAssignment } = currentAssignmentSlice.actions
+export const { setCurrentAssignment, updateCurrentAssignment, clearCurrentAssignment, readCurrentAssignment } = currentAssignmentSlice.actions
 export default currentAssignmentSlice.reducer

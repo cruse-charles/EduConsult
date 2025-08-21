@@ -112,6 +112,13 @@ const studentAssignmentsSlice = createSlice({
           return assignment;
         }
       })
+    },
+    readAssignmentSlice(state, action) {
+      const assignment = state.find(assignment => assignment.id === action.payload);
+
+      if (assignment) {
+        assignment.hasRead = true
+      }
     }
   },
   // Handle async actions using extraReducers for in-rogress, fulfilled, and rejected states
@@ -127,5 +134,5 @@ const studentAssignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment, addEntry, updateAssignmentsSlice, deleteAssignmentSlice, clearAssignments, renameFolderInStudentAssignmentsSlice } = studentAssignmentsSlice.actions;
+export const { setAssignments, addAssignment, addEntry, updateAssignmentsSlice, deleteAssignmentSlice, clearAssignments, renameFolderInStudentAssignmentsSlice, readAssignmentSlice } = studentAssignmentsSlice.actions;
 export default studentAssignmentsSlice.reducer;
