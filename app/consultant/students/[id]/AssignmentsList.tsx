@@ -55,21 +55,6 @@ function AssignmentsList() {
     const [assignmentSort, setAssignmentSort] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    // Handle opening assignment modal and metadata
-    // const openAssignment = (open: boolean) => {
-    //     setIsModalOpen(open)
-
-    //     // Update lastSeenAt and hasRead
-        
-    // }
-
-    // State for loading
-    // const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        console.log('user', user)
-    }, [user])
-
     // Sort assignments
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []
@@ -211,8 +196,10 @@ function AssignmentsList() {
     const handleAssignmentClick = async (assignment: Assignment) => {
         setIsModalOpen(true)
 
+        // Update redux with the click on assignment
         dispatch(setCurrentAssignment(assignment))
 
+        // Update hasRead in assignmentMeta for the assignment clicked
         await readAssignment(assignment.id, "consultantUsers", user.id)
 
         // Check if onboarding is complete for tooltip to render

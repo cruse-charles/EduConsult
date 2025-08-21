@@ -140,7 +140,6 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
         toast(<CustomToast title="Successfully Deleted Assignment" description='' status='success'/>)
     }
     
-    // TODO: MAKE STATUS CHANGE TO SUBMITTED AUTOMATICALLY WHEN STUDENT SUBMITS
     return (
          <>
             <div className="space-y-3">

@@ -5,18 +5,19 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setOnboardingState } from "./onboardingSlice";
 import { fetchStudents } from "./studentsSlice";
 
-
+// Async thunk to fetch user data
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
     async ({ userId, database }: { userId: string; database: string }, thunkAPI) => {
         try {
             const { dispatch } = thunkAPI
     
+            // Fetch user data from Firestore
             const docRef = doc(db, database, userId);
             const docSnap = await getDoc(docRef);
             const userData = docSnap.data()
-            console.log('Fetched user data', userData)
     
+            // Fetch assignment metadata for the user
             const metaDataRef = collection(db, database, userId, "assignmentMeta")
             const metaDataSnap = await getDocs(metaDataRef)
             const assignmentMetaData = metaDataSnap.docs.map(doc => ({
@@ -24,8 +25,7 @@ export const fetchUser = createAsyncThunk(
                 ...doc.data()
             }))
     
-            console.log('Fetched meta data', assignmentMetaData)
-            
+            // Dispatch onboarding state to redux
             dispatch(setOnboardingState({
                 isComplete: userData?.onboarding.isComplete,
                 onboardingStep: userData?.onboarding.onboardingStep,

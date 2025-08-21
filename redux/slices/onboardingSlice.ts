@@ -1,4 +1,3 @@
-import { onboardingSteps } from "@/lib/onboardingSteps";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {

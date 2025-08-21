@@ -204,7 +204,7 @@ export const renameFolder = async (studentId: string, oldFolderName: string, new
     }
 }
 
-// TODO: Work on getting the functionality for updating meta data
+// When student opens an assignment, update the hasRead and lastSeenAt fields in the assignmentMeta subcollection for that assignment
 export const readAssignment = async(assignmentId: string, database: string, userId: string) => {
     try {
         const metaDataDocRef = doc(db, database, userId, "assignmentMeta", assignmentId)
