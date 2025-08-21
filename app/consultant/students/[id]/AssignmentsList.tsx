@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, Edit, FileText, Folder, FolderOpen, MoreHorizontal, Trash2, Upload } from "lucide-react";
+import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, Edit, FileText, Folder, FolderOpen, MoreHorizontal, Trash2, Upload, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -26,7 +26,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 
 import { Assignment } from "@/lib/types/types";
 import { formatDueDate } from "@/lib/utils";
-import { deleteFolder, renameFolder } from "@/lib/assignmentUtils";
+import { deleteFolder, readAssignment, renameFolder } from "@/lib/assignmentUtils";
 import { nextStep } from "@/lib/onBoardingUtils";
 
 import { useEffect, useState } from "react"
@@ -54,6 +54,14 @@ function AssignmentsList() {
     const [folderSort, setFolderSort] = useState("")
     const [assignmentSort, setAssignmentSort] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false)
+
+    // Handle opening assignment modal and metadata
+    // const openAssignment = (open: boolean) => {
+    //     setIsModalOpen(open)
+
+    //     // Update lastSeenAt and hasRead
+        
+    // }
 
     // State for loading
     // const [loading, setLoading] = useState(true);
@@ -98,15 +106,6 @@ function AssignmentsList() {
         assignmentsInFolder.forEach((assignment) => assignment.status == 'Completed' ? count++ : null)
         return count
     }
-
-    // Loading UI
-    // if (loading) {
-    //     return (
-    //         Array.from({ length: 3 }).map((_, i) => (
-    //             <Skeleton key={i} className="h-12 w-full rounded-md" />
-    //         ))
-    //     )
-    // }
 
     // Function to sort folders
     const sortFolders = () => {
@@ -214,6 +213,8 @@ function AssignmentsList() {
 
         dispatch(setCurrentAssignment(assignment))
 
+        await readAssignment(assignment.id, "consultantUsers", user.id)
+
         // Check if onboarding is complete for tooltip to render
         const currentStep = onboardingSteps[onboardingStep].actionRequired
         if (!isComplete && currentStep === "viewAssignment") {
@@ -222,6 +223,7 @@ function AssignmentsList() {
         }
     }
 
+    // Check if assignment has been updated that hasn't been seen yet
     const assignmentHasUpdate = (assignmentId: string) => {
         for (const metaData of user.assignmentMetaData) {
             if (metaData.id === assignmentId && metaData.hasRead === false) {
@@ -281,12 +283,12 @@ function AssignmentsList() {
                                     <div className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto folder">
                                         <div className="flex items-center gap-3">
                                             {openedFolders.includes(folder) ? (
-                                                <div className="relative">
                                                     <FolderOpen className="h-5 w-5 text-primary" />
+                                            ) : (
+                                                <div className="relative">
+                                                    <Folder className="h-5 w-5 text-muted-foreground" />
                                                     <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 ring-2 ring-white" />
                                                 </div>
-                                            ) : (
-                                                <Folder className="h-5 w-5 text-muted-foreground" />
                                             )}
                                             <div className="text-left">                                                <h3 className="font-medium">{folder}</h3>
                                                 <p className="text-sm text-muted-foreground">
@@ -348,6 +350,7 @@ function AssignmentsList() {
                 </CardContent>
             </Card>
             <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+            {/* <ReadAssignmentModal open={isModalOpen} onOpenChange={openAssignment} /> */}
             <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} handleSave={handleEditFolder} oldFolderName={selectedFolder}/>
         </>
     )

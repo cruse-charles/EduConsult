@@ -203,3 +203,17 @@ export const renameFolder = async (studentId: string, oldFolderName: string, new
         throw error
     }
 }
+
+// TODO: Work on getting the functionality for updating meta data
+export const readAssignment = async(assignmentId: string, database: string, userId: string) => {
+    try {
+        const metaDataDocRef = doc(db, database, userId, "assignmentMeta", assignmentId)
+        
+        await updateDoc(metaDataDocRef, {
+            hasRead: true,
+            lastSeenAt: Timestamp.now()
+        })
+    } catch (error) {
+        console.log("Error updataing assignment metadata in readAssignment", error)
+    }
+}
