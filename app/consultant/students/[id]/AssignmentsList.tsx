@@ -222,6 +222,16 @@ function AssignmentsList() {
         }
     }
 
+    const assignmentHasUpdate = (assignmentId: string) => {
+        for (const metaData of user.assignmentMetaData) {
+            if (metaData.id === assignmentId && metaData.hasRead === false) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     return (
         <>
             {/* Sorting Controls */}
@@ -272,8 +282,8 @@ function AssignmentsList() {
                                         <div className="flex items-center gap-3">
                                             {openedFolders.includes(folder) ? (
                                                 <div className="relative">
-                                                <FolderOpen className="h-5 w-5 text-primary" />
-                                                <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 ring-2 ring-white" />
+                                                    <FolderOpen className="h-5 w-5 text-primary" />
+                                                    <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 ring-2 ring-white" />
                                                 </div>
                                             ) : (
                                                 <Folder className="h-5 w-5 text-muted-foreground" />
@@ -317,7 +327,7 @@ function AssignmentsList() {
                                         <div onClick={() => handleAssignmentClick(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted assignment">   
                                             <div className="flex items-center gap-3 flex-1">
                                                 <div className="relative flex items-center gap-2">
-                                                    <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-blue-500 ring-2 ring-white" />
+                                                    {assignmentHasUpdate(assignment.id) && <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-blue-500 ring-2 ring-white" />}
                                                     {assignment.type === "Essay" && <FileText className="h-6 w-6 text-blue-500" />}
                                                     {assignment.type === "Document" && <BookOpen className="h-6 w-6 text-green-500" />}
                                                     {assignment.type === "Portfolio" && <Upload className="h-6 w-6 text-purple-500" />}
