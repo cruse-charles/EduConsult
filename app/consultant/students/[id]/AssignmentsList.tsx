@@ -58,6 +58,10 @@ function AssignmentsList() {
     // State for loading
     // const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        console.log('user', user)
+    }, [user])
+
     // Sort assignments
     const getFilteredAssignments = (folder: string) => {
         if (!assignments) return []

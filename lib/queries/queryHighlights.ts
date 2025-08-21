@@ -121,7 +121,6 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
         limit(1)
     )
     const snapshot = await getDocs(q);
-    console.log('snpashot', snapshot.docs[0]?.data())
 
     if (snapshot.docs.length > 0) {
         const docSnap = snapshot.docs[0]
