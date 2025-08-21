@@ -79,6 +79,7 @@ export interface AssignmentUpload extends AssignmentBase {
 export interface Assignment extends AssignmentBase {
     id: string;
     timeline: Entry[];
+    hasRead?: boolean;
 }
 
 // Structure for timeline entries
@@ -108,4 +109,9 @@ export interface FirebaseUserInfo {
     isComplete: boolean;
     onboardingStep: number;
   }
+  assignmentsMetaData: {
+    hasRead: boolean;
+    lastActivityAt: Timestamp;
+    lastSeenAt: Timestamp;
+  }[]
 }

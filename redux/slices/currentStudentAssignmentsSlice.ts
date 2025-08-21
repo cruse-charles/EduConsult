@@ -35,24 +35,7 @@ export const fetchAssignments = createAsyncThunk(
             id: assignmentDocId,
             ...assignmentData,
             hasRead: assignmentMetaData?.hasRead
-          }
-
-          // return {
-          //   id: assignmentSnapshot.id,
-          //   title: data?.title || '',
-          //   type: data?.type || '',
-          //   priority: data?.priority || '',
-          //   dueDate: data?.dueDate || undefined,
-          //   note: data?.note || '',
-          //   createdAt: data?.createdAt || null,
-          //   studentId: data?.studentId || '',
-          //   studentFirstName: data?.studentFirstName || '',
-          //   studentLastName: data?.studentLastName || '',
-          //   folder: data?.folder || '',
-          //   status: data?.status || '',
-          //   timeline: data?.timeline || [],
-          //   ...data,
-          // } as Assignment;
+          } as Assignment;
         })
       );
       return assignments;

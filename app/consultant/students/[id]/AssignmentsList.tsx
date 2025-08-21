@@ -202,7 +202,7 @@ function AssignmentsList() {
         // Update hasRead in assignmentMeta for the assignment clicked
         await readAssignment(assignment.id, "consultantUsers", user.id)
 
-
+        // Update hasRead in studentAssignmentsSlice
         dispatch(readAssignmentSlice(assignment.id))
 
         // Check if onboarding is complete for tooltip to render
@@ -211,17 +211,6 @@ function AssignmentsList() {
             dispatch(completeStep("viewAssignment"))
             await nextStep(user.id)
         }
-    }
-
-    // Check if assignment has been updated that hasn't been seen yet
-    const assignmentHasUpdate = (assignmentId: string) => {
-        for (const metaData of user.assignmentMetaData) {
-            if (metaData.id === assignmentId && metaData.hasRead === false) {
-                return true
-            }
-        }
-
-        return false
     }
 
     return (
