@@ -20,7 +20,7 @@ export const fetchUser = createAsyncThunk(
             // Fetch assignment metadata for the user
             const metaDataRef = collection(db, database, userId, "assignmentMeta")
             const metaDataSnap = await getDocs(metaDataRef)
-            const assignmentMetaData = metaDataSnap.docs.map(doc => ({
+            const assignmentsMetaData = metaDataSnap.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }))
@@ -31,7 +31,7 @@ export const fetchUser = createAsyncThunk(
                 onboardingStep: userData?.onboarding.onboardingStep,
             }));
                     
-            return {id: docSnap.id, firstName: userData?.personalInformation.firstName, lastName: userData?.personalInformation.lastName, email: userData?.personalInformation.email, role: userData?.role, assignmentMetaData};
+            return {id: docSnap.id, firstName: userData?.personalInformation.firstName, lastName: userData?.personalInformation.lastName, email: userData?.personalInformation.email, role: userData?.role, assignmentsMetaData};
         } catch (error) {
             console.log('Error fetching user data:', error);
             return thunkAPI.rejectWithValue(error)

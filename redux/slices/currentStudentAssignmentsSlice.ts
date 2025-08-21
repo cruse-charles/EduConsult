@@ -4,12 +4,16 @@ import { doc, getDoc } from 'firebase/firestore';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { Assignment } from "@/lib/types/types";
+import { RootState } from "../store";
 
 // Async thunk to fetch assignments from Firestore by an array of IDs
 export const fetchAssignments = createAsyncThunk(
   "currentStudentAssignments/fetchAssignments",
-  async (assignmentsDocIds: string[], {rejectWithValue}) => {
+  async (assignmentsDocIds: string[], {rejectWithValue, getState}) => {
     try {
+      const state = getState() as RootState;
+      const assignmentsMetaData = state.user.assignmentsMetaData
+
       // Fetch all assignments in parallel
       const assignments = await Promise.all(
         assignmentsDocIds.map(async (assignmentDocId) => {
@@ -22,25 +26,33 @@ export const fetchAssignments = createAsyncThunk(
           }
 
           // Extract data from the snapshot
-          const data = assignmentSnapshot.data();
+          const assignmentData = assignmentSnapshot.data();
+
+          const assignmentMetaData = assignmentsMetaData.find((meta) => meta.id === assignmentDocId)
           
           // Ensure all required Assignment fields are present
           return {
-            id: assignmentSnapshot.id,
-            title: data?.title || '',
-            type: data?.type || '',
-            priority: data?.priority || '',
-            dueDate: data?.dueDate || undefined,
-            note: data?.note || '',
-            createdAt: data?.createdAt || null,
-            studentId: data?.studentId || '',
-            studentFirstName: data?.studentFirstName || '',
-            studentLastName: data?.studentLastName || '',
-            folder: data?.folder || '',
-            status: data?.status || '',
-            timeline: data?.timeline || [],
-            ...data,
-          } as Assignment;
+            id: assignmentDocId,
+            ...assignmentData,
+            hasRead: assignmentMetaData?.hasRead
+          }
+
+          // return {
+          //   id: assignmentSnapshot.id,
+          //   title: data?.title || '',
+          //   type: data?.type || '',
+          //   priority: data?.priority || '',
+          //   dueDate: data?.dueDate || undefined,
+          //   note: data?.note || '',
+          //   createdAt: data?.createdAt || null,
+          //   studentId: data?.studentId || '',
+          //   studentFirstName: data?.studentFirstName || '',
+          //   studentLastName: data?.studentLastName || '',
+          //   folder: data?.folder || '',
+          //   status: data?.status || '',
+          //   timeline: data?.timeline || [],
+          //   ...data,
+          // } as Assignment;
         })
       );
       return assignments;
