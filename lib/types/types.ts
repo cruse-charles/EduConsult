@@ -116,6 +116,15 @@ export interface FirebaseUserInfo {
   }[]
 }
 
+export interface UserState {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  role: string
+  assignmentsMetaData: Record<string, AssignmentMetaData>
+}
+
 export type AssignmentMetaData = {
   hasRead: boolean
   lastSeenAt?: any

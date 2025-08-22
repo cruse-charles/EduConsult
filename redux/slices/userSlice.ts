@@ -3,8 +3,7 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setOnboardingState } from "./onboardingSlice";
-import { fetchStudents } from "./studentsSlice";
-import { AssignmentMetaData } from "@/lib/types/types";
+import { AssignmentMetaData, UserState } from "@/lib/types/types";
 
 // Async thunk to fetch user data
 export const fetchUser = createAsyncThunk(
@@ -21,13 +20,8 @@ export const fetchUser = createAsyncThunk(
             // Fetch assignment metadata for the user
             const metaDataRef = collection(db, database, userId, "assignmentMeta")
             const metaDataSnap = await getDocs(metaDataRef)
-            // const assignmentsMetaData = metaDataSnap.docs.map(doc => ({
-            //     id: doc.id,
-            //     ...doc.data()
-            // }))
 
             const assignmentsMetaData: Record<string, AssignmentMetaData> = {}
-            
             metaDataSnap.docs.forEach(doc => {
                 assignmentsMetaData[doc.id] = doc.data() as AssignmentMetaData
             })
@@ -46,15 +40,6 @@ export const fetchUser = createAsyncThunk(
         }
     }
 );
-
-interface UserState {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  role: string
-  assignmentsMetaData: Record<string, AssignmentMetaData>
-}
 
 const initialState: UserState = {
   id: '',
