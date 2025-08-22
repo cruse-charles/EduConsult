@@ -20,10 +20,17 @@ export const fetchUser = createAsyncThunk(
             // Fetch assignment metadata for the user
             const metaDataRef = collection(db, database, userId, "assignmentMeta")
             const metaDataSnap = await getDocs(metaDataRef)
-            const assignmentsMetaData = metaDataSnap.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }))
+            // const assignmentsMetaData = metaDataSnap.docs.map(doc => ({
+            //     id: doc.id,
+            //     ...doc.data()
+            // }))
+
+            const assignmentsMetaData = {}
+            
+            metaDataSnap.docs.forEach(doc => {
+                assignmentsMetaData[doc.id] = doc.data()
+            })
+    
     
             // Dispatch onboarding state to redux
             dispatch(setOnboardingState({
@@ -45,6 +52,7 @@ const initialState = {
     lastName: '',
     email: '',
     role: '',
+    assignmentsMetaData: {}
 }
 
 const userSlice = createSlice({

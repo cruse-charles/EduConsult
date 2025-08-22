@@ -28,8 +28,9 @@ export const fetchAssignments = createAsyncThunk(
           // Extract data from the snapshot
           const assignmentData = assignmentSnapshot.data();
 
-          const assignmentMetaData = assignmentsMetaData.find((meta) => meta.id === assignmentDocId)
-          
+          // const assignmentMetaData = assignmentsMetaData.find((meta) => meta.id === assignmentDocId)
+            const assignmentMetaData = assignmentsMetaData[assignmentDocId]
+
           // Ensure all required Assignment fields are present
           return {
             id: assignmentDocId,
@@ -98,6 +99,7 @@ const studentAssignmentsSlice = createSlice({
     },
     readAssignmentSlice(state, action) {
       const assignment = state.find(assignment => assignment.id === action.payload);
+      // state[action.payload].hasRead = true
 
       if (assignment) {
         assignment.hasRead = true
