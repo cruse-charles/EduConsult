@@ -115,3 +115,10 @@ export interface FirebaseUserInfo {
     lastSeenAt: Timestamp;
   }[]
 }
+
+export type AssignmentMetaData = {
+  hasRead: boolean
+  lastSeenAt?: any
+}
+
+export type AssignmentMetaDataMap = Record<string, AssignmentMetaData>

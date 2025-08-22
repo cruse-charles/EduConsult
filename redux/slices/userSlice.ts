@@ -4,6 +4,7 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setOnboardingState } from "./onboardingSlice";
 import { fetchStudents } from "./studentsSlice";
+import { AssignmentMetaData } from "@/lib/types/types";
 
 // Async thunk to fetch user data
 export const fetchUser = createAsyncThunk(
@@ -25,10 +26,10 @@ export const fetchUser = createAsyncThunk(
             //     ...doc.data()
             // }))
 
-            const assignmentsMetaData = {}
+            const assignmentsMetaData: Record<string, AssignmentMetaData> = {}
             
             metaDataSnap.docs.forEach(doc => {
-                assignmentsMetaData[doc.id] = doc.data()
+                assignmentsMetaData[doc.id] = doc.data() as AssignmentMetaData
             })
     
     
@@ -46,13 +47,22 @@ export const fetchUser = createAsyncThunk(
     }
 );
 
-const initialState = {
-    id: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    role: '',
-    assignmentsMetaData: {}
+interface UserState {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  role: string
+  assignmentsMetaData: Record<string, AssignmentMetaData>
+}
+
+const initialState: UserState = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  role: '',
+  assignmentsMetaData: {}
 }
 
 const userSlice = createSlice({
@@ -65,6 +75,12 @@ const userSlice = createSlice({
         updateUser(state, action) {
             return {...state, ...action.payload}
         },
+        readAssignmentUserSlice(state, action) {
+            const assignmentMetaData = state.assignmentsMetaData[action.payload]
+            if (assignmentMetaData) {
+                assignmentMetaData.hasRead = true
+            }
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -73,5 +89,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { setUser, updateUser } = userSlice.actions;
+export const { setUser, updateUser, readAssignmentUserSlice } = userSlice.actions;
 export default userSlice.reducer;

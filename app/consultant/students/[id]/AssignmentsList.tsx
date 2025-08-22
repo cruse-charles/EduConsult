@@ -34,6 +34,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 
 import { Timestamp } from "firebase/firestore";
+import { readAssignmentUserSlice } from "@/redux/slices/userSlice";
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
@@ -202,8 +203,9 @@ function AssignmentsList() {
         // Update hasRead in assignmentMeta for the assignment clicked
         await readAssignment(assignment.id, "consultantUsers", user.id)
 
-        // Update hasRead in studentAssignmentsSlice
+        // Update hasRead in studentAssignmentsSlice and userSlice
         dispatch(readAssignmentSlice(assignment.id))
+        dispatch(readAssignmentUserSlice(assignment.id))
 
         // Check if onboarding is complete for tooltip to render
         const currentStep = onboardingSteps[onboardingStep].actionRequired
