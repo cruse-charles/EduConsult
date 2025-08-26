@@ -371,8 +371,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, Edit, FileText, Folder, FolderOpen, MoreHorizontal, Trash2, Upload, Users } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
@@ -380,7 +378,6 @@ import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import CustomToast from "@/app/components/CustomToast";
 import StatusBadge from "@/app/components/StatusBadge";
 import ReadAssignmentModal from "../[id]/ReadAssignmentModal/ReadAssignmentModal";
-import CreateAssignmentModal from "../[id]/CreateAssignmentModal/CreateAssignmentModal";
 import EditFolderModal from "../[id]/EditFolderModal";
 
 import { deleteAssignmentSlice, readAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
@@ -388,7 +385,7 @@ import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from 
 import { deleteDashboardAssignment } from "@/redux/slices/consultantAssignmentSlice";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { onboardingSteps } from "@/lib/onboardingSteps";
-import { readCurrentAssignment, setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
+import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
 import { Assignment } from "@/lib/types/types";
@@ -396,13 +393,14 @@ import { formatDueDate } from "@/lib/utils";
 import { deleteFolder, readAssignment, renameFolder } from "@/lib/assignmentUtils";
 import { nextStep } from "@/lib/onBoardingUtils";
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 
-import { Timestamp } from "firebase/firestore";
 import { readAssignmentUserSlice } from "@/redux/slices/userSlice";
 import SortControls from "./SortControls";
+import { useSortedAssignments } from "@/hooks/useSortedAssignments";
+import AssignmentRow from "./AssignmentRow";
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
@@ -420,95 +418,13 @@ function AssignmentsList() {
 
     // State to manage which folders are open and sorting of folders/assignments
     const [openedFolders, setOpenedFolders] = useState<string[]>([])
-    const [folderSort, setFolderSort] = useState("")
-    const [assignmentSort, setAssignmentSort] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    // Sort assignments
-    const getFilteredAssignments = (folder: string) => {
-        if (!assignments) return []
-        
-        // Filter assignments by folder 
-        let folderAssignments = assignments.filter((assignment: Assignment) => assignment.folder === folder)
+    const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
+        getFilteredAssignments, sortedFolders, getCompletedCount
+    } = useSortedAssignments(assignments, folders)
 
-        // Sort by assignment name
-        if (assignmentSort === 'name') {
-            folderAssignments.sort((a,b) => a.title.localeCompare(b.title))
-        }
-
-        // Sort by assignment dueDate
-        if (assignmentSort === 'due') {
-            folderAssignments.sort((a,b) => {
-                const dataA = a.dueDate instanceof Timestamp ? a.dueDate.toDate() : a.dueDate as Date
-                const dataB = b.dueDate instanceof Timestamp ? b.dueDate.toDate() : b.dueDate as Date
-                return dataA.getTime() - dataB.getTime()
-            })
-        }
-
-        // Sort by assignment status
-        if (assignmentSort === 'status') {
-            const statusOrder = ['Overdue', 'In-Progress', 'Submitted', 'Under Review', 'Completed']
-            folderAssignments.sort((a,b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status))
-        }
-
-        return folderAssignments
-    }
-
-    // TODO: Finish this function
-    const getCompletedCount = (assignmentsInFolder: Assignment[]) => {
-        let count = 0
-        assignmentsInFolder.forEach((assignment) => assignment.status == 'Completed' ? count++ : null)
-        return count
-    }
-
-    // Function to sort folders
-    const sortFolders = () => {
-        let sortedFolders = [...folders]
-
-        // Sort by folder name
-        if (folderSort === 'name') {
-            sortedFolders.sort((a,b) => a.localeCompare(b))
-        }
-
-        // Sort folders by earliest assignment dueDate
-        if (folderSort === "due") {
-            const now = new Date()
-
-            sortedFolders.sort((a, b) => {
-                const assignmentsA = getFilteredAssignments(a)
-                const assignmentsB = getFilteredAssignments(b)
-
-                // get soonest upcoming due date in folder A
-                const soonestDueDateA = assignmentsA
-                    .map(assignment => {
-                        if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
-                        return assignment.dueDate as Date
-                    })
-                    .filter(dueDate => dueDate >= now) // ignore past due dates
-                    .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
-
-                // same for folder B
-                const soonestDueDateB = assignmentsB
-                    .map(assignment => {
-                        if (assignment.dueDate instanceof Timestamp) return assignment.dueDate.toDate()
-                        return assignment.dueDate as Date
-                    })
-                    .filter(dueDate => dueDate >= now)
-                    .sort((dueDate1, dueDate2) => dueDate1.getTime() - dueDate2.getTime())[0]
-
-                // handle cases where a folder has no future due dates
-                if (!soonestDueDateA && !soonestDueDateB) return 0
-                if (!soonestDueDateA) return 1
-                if (!soonestDueDateB) return -1
-
-                return soonestDueDateA.getTime() - soonestDueDateB.getTime()
-            })
-        }
-
-        return sortedFolders
-    }
-
-    const sortedFolders = sortFolders()
+ 
 
     // Function to delete a folder and assignments within it
     const handleDeleteFolder = async (folderName: string) => {
@@ -644,21 +560,22 @@ function AssignmentsList() {
                                 <CollapsibleContent>
                                 <div className="space-y-1">
                                     {getFilteredAssignments(folder).map((assignment) => (
-                                        <div onClick={() => handleAssignmentClick(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted assignment">   
-                                            <div className="flex items-center gap-3 flex-1">
-                                                <div className="relative flex items-center gap-2">
-                                                    {!assignment.hasRead && <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-blue-500 ring-2 ring-white" />}
-                                                    {assignment.type === "Essay" && <FileText className="h-6 w-6 text-blue-500" />}
-                                                    {assignment.type === "Document" && <BookOpen className="h-6 w-6 text-green-500" />}
-                                                    {assignment.type === "Portfolio" && <Upload className="h-6 w-6 text-purple-500" />}
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="font-medium">{assignment.title}</div>
-                                                    <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-3">{StatusBadge(assignment.status, assignment?.dueDate)}</div>
-                                        </div>
+                                        // <div onClick={() => handleAssignmentClick(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted assignment">   
+                                        //     <div className="flex items-center gap-3 flex-1">
+                                        //         <div className="relative flex items-center gap-2">
+                                        //             {!assignment.hasRead && <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-blue-500 ring-2 ring-white" />}
+                                        //             {assignment.type === "Essay" && <FileText className="h-6 w-6 text-blue-500" />}
+                                        //             {assignment.type === "Document" && <BookOpen className="h-6 w-6 text-green-500" />}
+                                        //             {assignment.type === "Portfolio" && <Upload className="h-6 w-6 text-purple-500" />}
+                                        //         </div>
+                                        //         <div className="flex-1">
+                                        //             <div className="font-medium">{assignment.title}</div>
+                                        //             <div className="text-sm text-muted-foreground">Due: {formatDueDate(assignment?.dueDate)}</div>
+                                        //         </div>
+                                        //     </div>
+                                        //     <div className="flex items-center gap-3">{StatusBadge(assignment.status, assignment?.dueDate)}</div>
+                                        // </div>
+                                        <AssignmentRow assignment={assignment} onClick={handleAssignmentClick}/>
                                     ))}
                                 </div>
                                 </CollapsibleContent>
