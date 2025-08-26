@@ -4,8 +4,20 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ChevronDown, Edit, Folder, FolderOpen, MoreHorizontal, Trash2 } from 'lucide-react'
 import React from 'react'
 import AssignmentRow from './AssignmentRow'
+import { Assignment } from '@/lib/types/types'
 
-const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick}) => {
+interface FolderRowProps {
+    folder: string
+    assignments: Assignment[]
+    completedCount: number
+    isOpen: boolean
+    handleOpenFolder: (folder: string) => void
+    onAssignmentClick: (assignment: Assignment) => void
+    setSelectedFolder: (folder: string) => void
+    handleDeleteFolder: (folder: string) => void
+}
+
+const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick, setSelectedFolder}: FolderRowProps) => {
     return (
         <Collapsible
             key={folder}
