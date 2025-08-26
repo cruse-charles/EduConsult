@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ChevronDown, Edit, Folder, FolderOpen, MoreHorizontal, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, MoreHorizontal, Trash2 } from 'lucide-react'
 import React from 'react'
 import AssignmentRow from './AssignmentRow'
 import { Assignment } from '@/lib/types/types'
@@ -17,7 +17,7 @@ interface FolderRowProps {
     handleDeleteFolder: (folder: string) => void
 }
 
-const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick, setSelectedFolder}: FolderRowProps) => {
+const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick, setSelectedFolder, isOpen, assignments, completedCount}: FolderRowProps) => {
     return (
         <Collapsible
             key={folder}
@@ -26,7 +26,7 @@ const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentCl
             <CollapsibleTrigger asChild>
                 <div className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto folder">
                     <div className="flex items-center gap-3">
-                        {openedFolders.includes(folder) ? (
+                        {isOpen ? (
                                 <FolderOpen className="h-5 w-5 text-primary" />
                         ) : (
                             <div className="relative">
@@ -37,7 +37,7 @@ const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentCl
                         <div className="text-left">                                                <h3 className="font-medium">{folder}</h3>
                             <p className="text-sm text-muted-foreground">
                                 {/* TODO: Add handling for just 1 assignment or no completed assignments */}
-                                {getFilteredAssignments(folder).length} assignments • {getCompletedCount(getFilteredAssignments(folder))} completed
+                                {assignments.length} assignments • {completedCount} completed
                             </p>
                         </div>
                     </div>
@@ -59,7 +59,7 @@ const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentCl
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    {openedFolders.includes(folder) ? (
+                    {isOpen ? (
                         <ChevronDown className="h-4 w-4" />
                     ) : (
                         <ChevronRight className="h-4 w-4" />
@@ -70,7 +70,7 @@ const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentCl
             <CollapsibleContent>
             {/* Assignments */}
             <div className="space-y-1">
-                {getFilteredAssignments(folder).map((assignment) => (
+                {assignments.map((assignment) => (
                     <AssignmentRow assignment={assignment} onClick={onAssignmentClick}/>
                 ))}
             </div>

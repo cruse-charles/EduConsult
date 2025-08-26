@@ -143,7 +143,7 @@ function AssignmentsList() {
                         {sortedFolders?.map((folder) => {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
-                                <FolderRow setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
+                                <FolderRow completedCount={getCompletedCount(folderAssignments)} isOpen={openedFolders.includes(folder)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
                             )
                         })}      
                     </div>  
