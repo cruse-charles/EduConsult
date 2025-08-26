@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Save, X } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+
+import { useEffect, useState } from 'react'
 
 interface EditFolderModalProps {
     open: boolean,

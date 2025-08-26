@@ -1,17 +1,13 @@
 'use client'
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, MoreHorizontal, Trash2, Upload, Users } from "lucide-react";
-import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 
 import CustomToast from "@/app/components/CustomToast";
 import ReadAssignmentModal from "../[id]/ReadAssignmentModal/ReadAssignmentModal";
 import EditFolderModal from "../[id]/EditFolderModal";
-import AssignmentRow from "./AssignmentRow";
+import FolderRow from "./FolderRow";
+import SortControls from "./SortControls";
 
 import { deleteAssignmentSlice, readAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
 import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from "@/redux/slices/currentStudentSlice";
@@ -20,6 +16,8 @@ import { completeStep } from "@/redux/slices/onboardingSlice";
 import { onboardingSteps } from "@/lib/onboardingSteps";
 import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import { readAssignmentUserSlice } from "@/redux/slices/userSlice";
+import { useSortedAssignments } from "@/hooks/useSortedAssignments";
 
 import { Assignment } from "@/lib/types/types";
 import { deleteFolder, readAssignment, renameFolder } from "@/lib/assignmentUtils";
@@ -29,10 +27,6 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 
-import { readAssignmentUserSlice } from "@/redux/slices/userSlice";
-import SortControls from "./SortControls";
-import { useSortedAssignments } from "@/hooks/useSortedAssignments";
-import FolderRow from "./FolderRow";
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
