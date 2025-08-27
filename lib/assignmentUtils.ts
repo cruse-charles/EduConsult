@@ -1,11 +1,12 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
-import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDocs, query, setDoc, Timestamp, updateDoc, where, writeBatch } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, where, writeBatch } from "firebase/firestore";
 
 import { Assignment, AssignmentBase, AssignmentUpload, Entry, UpdateAssignment } from "./types/types";
 import { updateNextDeadlineForStudent } from "./statsUtils";
 
 import { nanoid } from "@reduxjs/toolkit";
+import { getAuth } from "firebase/auth";
 
 export const fileUpload = async (files: File[], studentId: string) => {
     const filesData = []
@@ -164,8 +165,9 @@ export const deleteFolder = async (studentId: string, folderName: string) => {
     }
 }
 
-export const renameFolder = async (studentId: string, oldFolderName: string, newFolderName: string) => {
+export const renameFolder = async (studentId: string, oldFolderName: string, newFolderName: string, consultantId: string) => {
     try {
+
         // Reference for student
         const studentDocRef = doc(db, "studentUsers", studentId)
         
@@ -173,14 +175,34 @@ export const renameFolder = async (studentId: string, oldFolderName: string, new
         const q = query(
             collection(db, 'assignments'),
             where('folder', '==', oldFolderName),
-            where('studentId', '==', studentId)
+            where('studentId', '==', studentId),
+            where('consultantId', '==', consultantId)
         )
-
+        
         // Initialize batch
         const batch = writeBatch(db)
         
+        console.log('vars', studentId, oldFolderName, newFolderName)
+        console.log('q - ', q)
         // Rename folder for all assignments in the folder
         const snapshot = await getDocs(q);
+        
+        console.log('snapshot - ', snapshot)
+
+   
+    // Add this debug block
+    snapshot.forEach((docSnapshot) => {
+        console.log('assignment consultantId:', docSnapshot.data().consultantId)
+    })
+    
+    const auth = getAuth();
+    const currentUser = auth.currentUser
+    console.log('current auth uid:', currentUser?.uid)
+
+
+
+
+
         
         snapshot.forEach((docSnapshot) => {
             batch.update(docSnapshot.ref, {
@@ -189,14 +211,22 @@ export const renameFolder = async (studentId: string, oldFolderName: string, new
         });
 
         // Remove old name, then add new name
-        batch.update(studentDocRef, {
-            folders: arrayRemove(oldFolderName)
-        })
-        batch.update(studentDocRef, {
-            folders: arrayUnion(newFolderName)
-        })
+        // batch.update(studentDocRef, {
+        //     folders: arrayRemove(oldFolderName)
+        // })
+        // batch.update(studentDocRef, {
+        //     folders: arrayUnion(newFolderName)
+        // })
 
-        batch.commit()
+        const studentDoc = await getDoc(studentDocRef)
+        const currentFolders: string[] = studentDoc.data()?.folders || []
+        const updatedFolders = currentFolders.map((f: string) => 
+            f === oldFolderName ? newFolderName : f
+        )
+
+        batch.update(studentDocRef, { folders: updatedFolders })
+
+        await batch.commit()
 
     } catch (error) {
         console.log("Error renaming folder", error)

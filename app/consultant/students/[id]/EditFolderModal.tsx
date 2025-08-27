@@ -5,12 +5,12 @@ import { Input } from '@/components/ui/input'
 import { renameFolder } from '@/lib/assignmentUtils'
 import { renameFolderInStudentAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { renameFolderInStudentSlice } from '@/redux/slices/currentStudentSlice'
-import { AppDispatch } from '@/redux/store'
+import { AppDispatch, RootState } from '@/redux/store'
 import { Save, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
 
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
 interface EditFolderModalProps {
@@ -29,14 +29,21 @@ const EditFolderModal = ({open, onOpenChange, oldFolderName}: EditFolderModalPro
     const dispatch = useDispatch<AppDispatch>()
     const { id } = useParams()
     const studentId = id as string
+    const user = useSelector((state: RootState) => state.user)
+
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        // console.log('oldFolderName:', oldFolderName)
+        // console.log('studentId:', studentId)
+        // console.log('newFolderName:', newFolderName)
+
         try {
             // Update folder in Firebase
             if (oldFolderName) {
-                await renameFolder(studentId, oldFolderName, newFolderName)
+                await renameFolder(studentId, oldFolderName, newFolderName, user.id)
             }
 
             // Update folder in redux
