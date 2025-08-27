@@ -76,21 +76,21 @@ function AssignmentsList() {
     }
 
     // Function to edit folder name
-    const handleEditFolder = async (oldFolderName: string, newFolderName: string) => {
+    // const handleEditFolder = async (oldFolderName: string, newFolderName: string) => {
 
-        try {
-            // Update folder in Firebase
-            await renameFolder(studentId, oldFolderName, newFolderName)
+    //     try {
+    //         // Update folder in Firebase
+    //         await renameFolder(studentId, oldFolderName, newFolderName)
 
-            // Update folder in redux
-            // TODO: UPDATE REDUX ON CONSULTANTDASHBOARD ASSIGNMENTS
-            dispatch(renameFolderInStudentSlice({oldFolderName, newFolderName}))
-            dispatch(renameFolderInStudentAssignmentsSlice({oldFolderName, newFolderName}))
-        } catch (error) {
-            console.error("Error renaming folder:", error);
-            toast(<CustomToast title='Error renaming folders.' description="Please refresh and try again." status="error"/>)
-        }
-    }
+    //         // Update folder in redux
+    //         // TODO: UPDATE REDUX ON CONSULTANTDASHBOARD ASSIGNMENTS
+    //         dispatch(renameFolderInStudentSlice({oldFolderName, newFolderName}))
+    //         dispatch(renameFolderInStudentAssignmentsSlice({oldFolderName, newFolderName}))
+    //     } catch (error) {
+    //         console.error("Error renaming folder:", error);
+    //         toast(<CustomToast title='Error renaming folders.' description="Please refresh and try again." status="error"/>)
+    //     }
+    // }
 
     // Handle opening folders and onboarding if necessary
     const handleOpenFolder = async (folder: string) => {
@@ -144,7 +144,8 @@ function AssignmentsList() {
                 </CardContent>
             </Card>
             <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
-            <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} handleSave={handleEditFolder} oldFolderName={selectedFolder}/>
+            {/* <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} handleSave={handleEditFolder} oldFolderName={selectedFolder}/> */}
+            <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} oldFolderName={selectedFolder}/>
         </>
     )
 }

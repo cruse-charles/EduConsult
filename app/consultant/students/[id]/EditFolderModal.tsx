@@ -1,25 +1,51 @@
+import CustomToast from '@/app/components/CustomToast'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { renameFolder } from '@/lib/assignmentUtils'
+import { renameFolderInStudentAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { renameFolderInStudentSlice } from '@/redux/slices/currentStudentSlice'
+import { AppDispatch } from '@/redux/store'
 import { Save, X } from 'lucide-react'
+import { useParams } from 'next/navigation'
 
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { toast } from 'sonner'
 
 interface EditFolderModalProps {
     open: boolean,
     onOpenChange: (open: boolean) => void,
-    handleSave: (oldFolderName: string, newFolderName: string) => void,
+    // handleSave: (oldFolderName: string, newFolderName: string) => void,
     oldFolderName: string | null
 }
 
-const EditFolderModal = ({open, onOpenChange, handleSave, oldFolderName}: EditFolderModalProps) => {
+// const EditFolderModal = ({open, onOpenChange, handleSave, oldFolderName}: EditFolderModalProps) => {
+const EditFolderModal = ({open, onOpenChange, oldFolderName}: EditFolderModalProps) => {
+
     const [isLoading, setIsLoading] = useState(false)
     const [newFolderName, setNewFolderName] = useState('')
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const dispatch = useDispatch<AppDispatch>()
+    const { id } = useParams()
+    const studentId = id as string
+
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (oldFolderName) {
-            handleSave(oldFolderName, newFolderName)
+        try {
+            // Update folder in Firebase
+            if (oldFolderName) {
+                await renameFolder(studentId, oldFolderName, newFolderName)
+            }
+
+            // Update folder in redux
+            // TODO: UPDATE REDUX ON CONSULTANTDASHBOARD ASSIGNMENTS
+            dispatch(renameFolderInStudentSlice({oldFolderName, newFolderName}))
+            dispatch(renameFolderInStudentAssignmentsSlice({oldFolderName, newFolderName}))
+        } catch (error) {
+            console.error("Error renaming folder:", error);
+            toast(<CustomToast title='Error renaming folders.' description="Please refresh and try again." status="error"/>)
         }
     }
 
