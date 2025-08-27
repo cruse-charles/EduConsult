@@ -56,7 +56,7 @@ function AssignmentsList() {
     const handleDeleteFolder = async (folderName: string) => {
         try {
             // Delete folder and assignments in database
-            await deleteFolder(studentId, folderName)
+            await deleteFolder(studentId, folderName, user.id)
             
             // Remove folder from redux, studentSlice
             dispatch(removeFolder(folderName))
@@ -137,7 +137,7 @@ function AssignmentsList() {
                         {sortedFolders?.map((folder) => {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
-                                <FolderRow completedCount={getCompletedCount(folderAssignments)} isOpen={openedFolders.includes(folder)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
+                                <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} isOpen={openedFolders.includes(folder)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
                             )
                         })}      
                     </div>  

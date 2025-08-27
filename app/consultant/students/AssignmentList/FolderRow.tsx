@@ -71,7 +71,7 @@ const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentCl
             <CollapsibleContent>
                 <div className="space-y-1">
                     {assignments.map((assignment) => (
-                        <AssignmentRow assignment={assignment} onClick={onAssignmentClick}/>
+                        <AssignmentRow key={assignment.id} assignment={assignment} onClick={onAssignmentClick}/>
                     ))}
                 </div>
             </CollapsibleContent>

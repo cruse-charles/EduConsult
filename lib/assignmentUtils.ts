@@ -128,7 +128,7 @@ export const deleteAssignment = async (assignmentId: string, studentId: string) 
     }
 }
 
-export const deleteFolder = async (studentId: string, folderName: string) => {
+export const deleteFolder = async (studentId: string, folderName: string, consultantId: string) => {
     try {
         // Reference for student
         const studentDocRef = doc(db, "studentUsers", studentId)
@@ -137,7 +137,8 @@ export const deleteFolder = async (studentId: string, folderName: string) => {
         const q = query(
             collection(db, 'assignments'),
             where('folder', '==', folderName),
-            where('studentId', '==', studentId)
+            where('studentId', '==', studentId),
+            where('consultantId', '==', consultantId)
         )
         const snapshot = await getDocs(q);
 
