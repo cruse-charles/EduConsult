@@ -19,6 +19,8 @@ interface FolderRowProps {
 }
 
 const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick, setSelectedFolder, isOpen, assignments, completedCount}: FolderRowProps) => {
+    const hasUnread = assignments.some((assignment) => !assignment.hasRead)
+    
     return (
         <Collapsible key={folder} onOpenChange={() => handleOpenFolder(folder)}>
             <CollapsibleTrigger asChild>
@@ -29,7 +31,7 @@ const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentCl
                         ) : (
                             <div className="relative">
                                 <Folder className="h-5 w-5 text-muted-foreground" />
-                                <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 ring-2 ring-white" />
+                                {hasUnread && <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 ring-2 ring-white" />}
                             </div>
                         )}
                         <div className="text-left">                                                
