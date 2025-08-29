@@ -9,8 +9,8 @@ import EditFolderModal from "../[id]/EditFolderModal";
 import FolderRow from "./FolderRow";
 import SortControls from "./SortControls";
 
-import { deleteAssignmentSlice, readAssignmentSlice, renameFolderInStudentAssignmentsSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
-import { removeAssignmentDocId, removeFolder, renameFolderInStudentSlice } from "@/redux/slices/currentStudentSlice";
+import { deleteAssignmentSlice, readAssignmentSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
+import { removeAssignmentDocId, removeFolder } from "@/redux/slices/currentStudentSlice";
 import { deleteDashboardAssignment } from "@/redux/slices/consultantAssignmentSlice";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { onboardingSteps } from "@/lib/onboardingSteps";
@@ -20,7 +20,7 @@ import { readAssignmentUserSlice } from "@/redux/slices/userSlice";
 import { useSortedAssignments } from "@/hooks/useSortedAssignments";
 
 import { Assignment } from "@/lib/types/types";
-import { deleteFolder, readAssignment, renameFolder } from "@/lib/assignmentUtils";
+import { deleteFolder, readAssignment } from "@/lib/assignmentUtils";
 import { nextStep } from "@/lib/onBoardingUtils";
 
 import { useState } from "react"
@@ -76,8 +76,8 @@ function AssignmentsList() {
     }
 
     // Handle opening folders and onboarding if necessary
-    const handleOpenFolder = async (folder: string) => {
-        setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])
+    const handleOpenFolder = async () => {
+            // setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])
         
         const currentStep = onboardingSteps[onboardingStep].actionRequired
         if (!isComplete && currentStep === 'openFolder') {
@@ -120,7 +120,8 @@ function AssignmentsList() {
                         {sortedFolders?.map((folder) => {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
-                                <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} isOpen={openedFolders.includes(folder)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
+                                // <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} isOpen={openedFolders.includes(folder)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
+                                <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleDeleteFolder={handleDeleteFolder}/>
                             )
                         })}      
                     </div>  
