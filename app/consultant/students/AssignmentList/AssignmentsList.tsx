@@ -41,9 +41,7 @@ function AssignmentsList() {
     // State to manage modal popup for folders
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
 
-
     // State to manage which folders are open and sorting of folders/assignments
-    const [openedFolders, setOpenedFolders] = useState<string[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
@@ -52,28 +50,28 @@ function AssignmentsList() {
 
  
 
-    // Function to delete a folder and assignments within it
-    const handleDeleteFolder = async (folderName: string) => {
-        try {
-            // Delete folder and assignments in database
-            await deleteFolder(studentId, folderName, user.id)
+    // // Function to delete a folder and assignments within it
+    // const handleDeleteFolder = async (folderName: string) => {
+    //     try {
+    //         // Delete folder and assignments in database
+    //         await deleteFolder(studentId, folderName, user.id)
             
-            // Remove folder from redux, studentSlice
-            dispatch(removeFolder(folderName))
+    //         // Remove folder from redux, studentSlice
+    //         dispatch(removeFolder(folderName))
 
-            // Remove assignments from student slice, studentAssignmentsSlice, DashboardAssignmentsSlice
-            const assignmentsInFolder = assignments.filter((assignment: Assignment) => assignment.folder == folderName)
-            assignmentsInFolder.forEach((assignment) => {
-                dispatch(removeAssignmentDocId(assignment.id))
-                dispatch(deleteAssignmentSlice(assignment.id))
-                dispatch(deleteDashboardAssignment(assignment.id))
-            })
-        } catch (error) {
-            console.error("Error deleting folder:", error);
-            toast(<CustomToast title='Error deleting folders.' description="" status='error'/>)
-        }
+    //         // Remove assignments from student slice, studentAssignmentsSlice, DashboardAssignmentsSlice
+    //         const assignmentsInFolder = assignments.filter((assignment: Assignment) => assignment.folder == folderName)
+    //         assignmentsInFolder.forEach((assignment) => {
+    //             dispatch(removeAssignmentDocId(assignment.id))
+    //             dispatch(deleteAssignmentSlice(assignment.id))
+    //             dispatch(deleteDashboardAssignment(assignment.id))
+    //         })
+    //     } catch (error) {
+    //         console.error("Error deleting folder:", error);
+    //         toast(<CustomToast title='Error deleting folders.' description="" status='error'/>)
+    //     }
             
-    }
+    // }
 
     // Handle opening folders and onboarding if necessary
     const handleOpenFolder = async () => {
@@ -121,7 +119,7 @@ function AssignmentsList() {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
                                 // <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} isOpen={openedFolders.includes(folder)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
-                                <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleDeleteFolder={handleDeleteFolder}/>
+                                <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick}/>
                             )
                         })}      
                     </div>  

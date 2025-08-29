@@ -7,6 +7,15 @@ import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, MoreHorizontal, Tr
 
 import { Assignment } from '@/lib/types/types'
 import { useState } from 'react'
+import { deleteFolder } from '@/lib/assignmentUtils'
+import { removeAssignmentDocId, removeFolder } from '@/redux/slices/currentStudentSlice'
+import { deleteAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
+import { deleteDashboardAssignment } from '@/redux/slices/consultantAssignmentSlice'
+import { toast } from 'sonner'
+import CustomToast from '@/app/components/CustomToast'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@/redux/store'
+import { useParams } from 'next/navigation'
 
 interface FolderRowProps {
     folder: string
@@ -16,18 +25,48 @@ interface FolderRowProps {
     // handleOpenFolder: (folder: string) => void
     onAssignmentClick: (assignment: Assignment) => void
     setSelectedFolder: (folder: string) => void
-    handleDeleteFolder: (folder: string) => void
+    // handleDeleteFolder: (folder: string) => void
     onOpen: () => void
 }
 
 // const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick, setSelectedFolder, isOpen, assignments, completedCount}: FolderRowProps) => {
-const FolderRow = ({folder, handleDeleteFolder, onAssignmentClick, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+    const dispatch = useDispatch<AppDispatch>()
     const hasUnread = assignments.some((assignment) => !assignment.hasRead)
+
+    const { id } = useParams()
+    const studentId = id as string
+
+    const user = useSelector((state: RootState) => state.user)
+    
     const [isOpen, setIsOpen] = useState(false)
 
     const handleToggle = () => {
         setIsOpen(!isOpen)
         if (!isOpen) onOpen()
+    }
+
+    // Function to delete a folder and assignments within it
+    const handleDeleteFolder = async (folderName: string) => {
+        try {
+            // Delete folder and assignments in database
+            await deleteFolder(studentId, folderName, user.id)
+            
+            // Remove folder from redux, studentSlice
+            dispatch(removeFolder(folderName))
+
+            // Remove assignments from student slice, studentAssignmentsSlice, DashboardAssignmentsSlice
+            const assignmentsInFolder = assignments.filter((assignment: Assignment) => assignment.folder == folderName)
+            assignmentsInFolder.forEach((assignment) => {
+                dispatch(removeAssignmentDocId(assignment.id))
+                dispatch(deleteAssignmentSlice(assignment.id))
+                dispatch(deleteDashboardAssignment(assignment.id))
+            })
+        } catch (error) {
+            console.error("Error deleting folder:", error);
+            toast(<CustomToast title='Error deleting folders.' description="" status='error'/>)
+        }
+            
     }
     
     return (
