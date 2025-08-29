@@ -1,17 +1,13 @@
 'use client'
 
 import { Card, CardContent } from "@/components/ui/card";
-import { toast } from "sonner";
 
-import CustomToast from "@/app/components/CustomToast";
 import ReadAssignmentModal from "../[id]/ReadAssignmentModal/ReadAssignmentModal";
 import EditFolderModal from "../[id]/EditFolderModal";
 import FolderRow from "./FolderRow";
 import SortControls from "./SortControls";
 
-import { deleteAssignmentSlice, readAssignmentSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
-import { removeAssignmentDocId, removeFolder } from "@/redux/slices/currentStudentSlice";
-import { deleteDashboardAssignment } from "@/redux/slices/consultantAssignmentSlice";
+import { readAssignmentSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { onboardingSteps } from "@/lib/onboardingSteps";
 import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
@@ -20,7 +16,7 @@ import { readAssignmentUserSlice } from "@/redux/slices/userSlice";
 import { useSortedAssignments } from "@/hooks/useSortedAssignments";
 
 import { Assignment } from "@/lib/types/types";
-import { deleteFolder, readAssignment } from "@/lib/assignmentUtils";
+import { readAssignment } from "@/lib/assignmentUtils";
 import { nextStep } from "@/lib/onBoardingUtils";
 
 import { useState } from "react"
@@ -31,8 +27,6 @@ import { useParams } from "next/navigation";
 function AssignmentsList() {
     // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
-    const { id } = useParams()
-    const studentId = id as string
     const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
     const user = useSelector((state: RootState) => state.user)
     const folders = useSelector((state: RootState) => state.currentStudent.folders) || []
@@ -48,34 +42,9 @@ function AssignmentsList() {
         getFilteredAssignments, sortedFolders, getCompletedCount
     } = useSortedAssignments(assignments, folders)
 
- 
-
-    // // Function to delete a folder and assignments within it
-    // const handleDeleteFolder = async (folderName: string) => {
-    //     try {
-    //         // Delete folder and assignments in database
-    //         await deleteFolder(studentId, folderName, user.id)
-            
-    //         // Remove folder from redux, studentSlice
-    //         dispatch(removeFolder(folderName))
-
-    //         // Remove assignments from student slice, studentAssignmentsSlice, DashboardAssignmentsSlice
-    //         const assignmentsInFolder = assignments.filter((assignment: Assignment) => assignment.folder == folderName)
-    //         assignmentsInFolder.forEach((assignment) => {
-    //             dispatch(removeAssignmentDocId(assignment.id))
-    //             dispatch(deleteAssignmentSlice(assignment.id))
-    //             dispatch(deleteDashboardAssignment(assignment.id))
-    //         })
-    //     } catch (error) {
-    //         console.error("Error deleting folder:", error);
-    //         toast(<CustomToast title='Error deleting folders.' description="" status='error'/>)
-    //     }
-            
-    // }
-
-    // Handle opening folders and onboarding if necessary
+    // TODO: Could move this into FolderRow too
+    // Handle opening folders for onboarding
     const handleOpenFolder = async () => {
-            // setOpenedFolders((prev: string[]) => prev.includes(folder) ? prev.filter((f) => f != folder) : [...prev, folder])
         
         const currentStep = onboardingSteps[onboardingStep].actionRequired
         if (!isComplete && currentStep === 'openFolder') {
@@ -118,7 +87,6 @@ function AssignmentsList() {
                         {sortedFolders?.map((folder) => {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
-                                // <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} isOpen={openedFolders.includes(folder)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick} handleOpenFolder={handleOpenFolder} handleDeleteFolder={handleDeleteFolder}/>
                                 <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick}/>
                             )
                         })}      

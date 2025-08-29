@@ -31,14 +31,16 @@ interface FolderRowProps {
 
 // const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick, setSelectedFolder, isOpen, assignments, completedCount}: FolderRowProps) => {
 const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+    // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
-    const hasUnread = assignments.some((assignment) => !assignment.hasRead)
-
     const { id } = useParams()
     const studentId = id as string
-
     const user = useSelector((state: RootState) => state.user)
-    
+
+    // Determine if a folder has any unread assignments
+    const hasUnread = assignments.some((assignment) => !assignment.hasRead)
+
+    // Manage open/close of folder
     const [isOpen, setIsOpen] = useState(false)
 
     const handleToggle = () => {
