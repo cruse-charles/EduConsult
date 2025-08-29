@@ -17,11 +17,9 @@ import { toast } from 'sonner'
 interface EditFolderModalProps {
     open: boolean,
     onOpenChange: (open: boolean) => void,
-    // handleSave: (oldFolderName: string, newFolderName: string) => void,
     oldFolderName: string | null
 }
 
-// const EditFolderModal = ({open, onOpenChange, handleSave, oldFolderName}: EditFolderModalProps) => {
 const EditFolderModal = ({open, onOpenChange, oldFolderName}: EditFolderModalProps) => {
 
     const [isLoading, setIsLoading] = useState(false)
@@ -36,11 +34,6 @@ const EditFolderModal = ({open, onOpenChange, oldFolderName}: EditFolderModalPro
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
-        // console.log('oldFolderName:', oldFolderName)
-        // console.log('studentId:', studentId)
-        // console.log('newFolderName:', newFolderName)
-
         try {
             // Update folder in Firebase
             if (oldFolderName) {

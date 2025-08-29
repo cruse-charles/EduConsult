@@ -21,7 +21,7 @@ function page() {
     // TODO: Check if we want to combine these useEffects, and if we want to make a clearStudent
     useEffect(() => {
         // Clear previous student data and assignments
-        // dispatch(clearStudent()) // You'd need to create this action
+        // dispatch(clearStudent()) // TODO: create this action
         dispatch(clearAssignments())
         dispatch(fetchStudent(studentId))
     }, [studentId, dispatch])
@@ -32,17 +32,6 @@ function page() {
             dispatch(fetchAssignments(student.assignmentDocIds))
         }
     }, [student?.assignmentDocIds, dispatch])
-
-
-
-    // Loading page displayed while no student
-    // if (!student) {
-    //     return (
-    //         <div className="flex items-center justify-center min-h-screen">
-    //             <p className="text-lg text-muted-foreground">Loading student profile...</p>
-    //         </div>
-    //     );
-    // }
 
     return (
         // Page Containers

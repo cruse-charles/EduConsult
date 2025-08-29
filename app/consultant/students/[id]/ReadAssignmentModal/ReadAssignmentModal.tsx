@@ -22,7 +22,7 @@ import { RootState } from '@/redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 interface ReadAssignmentModalProps {
     open: boolean;

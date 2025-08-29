@@ -183,28 +183,9 @@ export const renameFolder = async (studentId: string, oldFolderName: string, new
         // Initialize batch
         const batch = writeBatch(db)
         
-        console.log('vars', studentId, oldFolderName, newFolderName)
-        console.log('q - ', q)
         // Rename folder for all assignments in the folder
         const snapshot = await getDocs(q);
-        
-        console.log('snapshot - ', snapshot)
-
-   
-    // Add this debug block
-    snapshot.forEach((docSnapshot) => {
-        console.log('assignment consultantId:', docSnapshot.data().consultantId)
-    })
     
-    const auth = getAuth();
-    const currentUser = auth.currentUser
-    console.log('current auth uid:', currentUser?.uid)
-
-
-
-
-
-        
         snapshot.forEach((docSnapshot) => {
             batch.update(docSnapshot.ref, {
                 folder: newFolderName
@@ -212,20 +193,12 @@ export const renameFolder = async (studentId: string, oldFolderName: string, new
         });
 
         // Remove old name, then add new name
-        // batch.update(studentDocRef, {
-        //     folders: arrayRemove(oldFolderName)
-        // })
-        // batch.update(studentDocRef, {
-        //     folders: arrayUnion(newFolderName)
-        // })
-
-        const studentDoc = await getDoc(studentDocRef)
-        const currentFolders: string[] = studentDoc.data()?.folders || []
-        const updatedFolders = currentFolders.map((f: string) => 
-            f === oldFolderName ? newFolderName : f
-        )
-
-        batch.update(studentDocRef, { folders: updatedFolders })
+        batch.update(studentDocRef, {
+            folders: arrayRemove(oldFolderName)
+        })
+        batch.update(studentDocRef, {
+            folders: arrayUnion(newFolderName)
+        })
 
         await batch.commit()
 

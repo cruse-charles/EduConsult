@@ -96,42 +96,41 @@ const SortControls = ({folderSort, assignmentSort, setFolderSort, setAssignmentS
         return sortedFolders
     }
     
-    const sortedFolders = sortFolders()
+    return (
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+                <div className="flex items-center gap-2">
+                    <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Sort folders by:</span>
+                    <Select value={folderSort} onValueChange={(value) => {setFolderSort(value); sortFolders()}}>
+                    <SelectTrigger className="w-40">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="name">Name</SelectItem>
+                        <SelectItem value="due">Closest Due Date</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
 
-return (
-    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex items-center gap-2">
-                <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Sort folders by:</span>
-                <Select value={folderSort} onValueChange={(value) => {setFolderSort(value); sortFolders()}}>
-                <SelectTrigger className="w-40">
-                    <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="name">Name</SelectItem>
-                    <SelectItem value="due">Closest Due Date</SelectItem>
-                </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">Sort assignments by:</span>
+                    <Select value={assignmentSort} onValueChange={(value) => setAssignmentSort(value)}>
+                    <SelectTrigger className="w-32">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="name">Name</SelectItem>
+                        <SelectItem value="due">Due Date</SelectItem>
+                        <SelectItem value="status">Status</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
             </div>
-
-            <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Sort assignments by:</span>
-                <Select value={assignmentSort} onValueChange={(value) => setAssignmentSort(value)}>
-                <SelectTrigger className="w-32">
-                    <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="name">Name</SelectItem>
-                    <SelectItem value="due">Due Date</SelectItem>
-                    <SelectItem value="status">Status</SelectItem>
-                </SelectContent>
-                </Select>
-            </div>
+                
+            <CreateAssignmentModal/>
         </div>
-            
-        <CreateAssignmentModal/>
-    </div>
-)}
+    )
+}
 
 export default SortControls
