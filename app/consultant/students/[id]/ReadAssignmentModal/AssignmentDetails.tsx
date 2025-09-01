@@ -41,7 +41,6 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
     const { id: studentId } = useParams<{id:string}>();
     const assignment = useSelector((state: RootState) => state.currentAssignment)
 
-
     // TODO: WHEN WE CHANGE THE DUEDATE, WE NEED TO UPDATE THE STUDENT'S STATS OBJECT ON EDIT TOO, ALSO DIDNT WORK FOR CREATION
     const [formData, setFormData] = useState({
         type: assignment?.type,
@@ -126,7 +125,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
         onOpenChange(false);
 
         // Delete Assignmnet in backend
-        await deleteAssignment(assignment?.id, studentId)
+        await deleteAssignment(assignment?.id, studentId, user.id)
         
         // Remove assignment from assignment list and list of AssignmentDocIds
         dispatch(deleteAssignmentSlice(assignment?.id))

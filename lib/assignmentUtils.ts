@@ -125,7 +125,7 @@ export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => 
 }
 
 // Deleting an assignment
-export const deleteAssignment = async (assignmentId: string, studentId: string) => {
+export const deleteAssignment = async (assignmentId: string, studentId: string, consultantId: string) => {
     try {
         await deleteDoc(doc(db, "assignments", assignmentId))
 
@@ -134,6 +134,10 @@ export const deleteAssignment = async (assignmentId: string, studentId: string) 
         await updateDoc(studentDocRef, {
             assignmentDocIds: arrayRemove(assignmentId)
         })
+
+        // Delete assignmentMetaData for consultant and student
+        await deleteDoc(doc(db, "studentUsers", studentId, "assignmentMeta", assignmentId))
+        await deleteDoc(doc(db, "consultantUsers", consultantId, "assignmentMeta", assignmentId))
 
         // TODO: Have a popup that confirms deleted assignment and created and updated
     } catch (error) {
