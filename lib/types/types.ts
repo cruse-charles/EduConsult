@@ -127,7 +127,8 @@ export interface UserState {
 
 export type AssignmentMetaData = {
   hasRead: boolean
-  lastSeenAt?: any
+  lastSeenAt?: Timestamp
+  lastActivityAt?: Timestamp
 }
 
 export type AssignmentMetaDataMap = Record<string, AssignmentMetaData>

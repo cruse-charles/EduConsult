@@ -2,11 +2,10 @@ import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase
 import { db, storage } from "@/lib/firebaseConfig";
 import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, where, writeBatch } from "firebase/firestore";
 
-import { Assignment, AssignmentBase, AssignmentUpload, Entry, UpdateAssignment } from "./types/types";
+import { Assignment, AssignmentUpload, Entry, UpdateAssignment, AssignmentMetaData } from "./types/types";
 import { updateNextDeadlineForStudent } from "./statsUtils";
 
 import { nanoid } from "@reduxjs/toolkit";
-import { getAuth } from "firebase/auth";
 
 export const fileUpload = async (files: File[], studentId: string) => {
     const filesData = []
@@ -39,7 +38,8 @@ export const fileUpload = async (files: File[], studentId: string) => {
     return filesData
 }
 
-export const uploadAssignment = async (assignmentData: AssignmentUpload, studentId: string, consultantId: string) => {
+// TODO: We are currently doing four separate writes, batch them to safegaurd against partial updates and improve performance
+export const uploadAssignment = async (assignmentData: AssignmentUpload, assignmentMetaData: AssignmentMetaData, studentId: string, consultantId: string) => {
 
     try {
         const assignmentDocId = nanoid()
@@ -58,18 +58,10 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
         })
 
         // Update assignmentMetaData subcollection for consultant and student
-        await setDoc(doc(db, "consultantUsers", consultantId, "assignmentMeta", assignmentDocId), {
-            hasRead: true,
-            lastSeenAt: Timestamp.now(),
-            lastActivityAt: Timestamp.now()
-        })
+        await setDoc(doc(db, "consultantUsers", consultantId, "assignmentMeta", assignmentDocId), assignmentMetaData)
 
         // Update assignmentMetaData subcollection for consultant
-        await setDoc(doc(db, "studentUsers", studentId, "assignmentMeta", assignmentDocId), {
-            hasRead: true,
-            lastSeenAt: Timestamp.now(),
-            lastActivityAt: Timestamp.now()
-        })
+        await setDoc(doc(db, "studentUsers", studentId, "assignmentMeta", assignmentDocId), assignmentMetaData)
     
         return assignmentDocId
     } catch (error) {
@@ -80,6 +72,7 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
 }
 
 // Update an assignment from consultant view
+// TODO: This function needs to update the AssignmentMeta for student
 export const updateAssignment = async (assignmentData: UpdateAssignment, assignmentId: string, studentId: string, consultantId: string) => {
     try {
         // Get reference to the assignment document
@@ -113,6 +106,7 @@ export const updateAssignmentStatus = async (assignmentId: string, status: strin
 }
 
 // Adding an entry to an assignment's timeline
+// TODO: This function needs to update the AssignmentMeta for both consultant and student
 export const uploadEntry = async (entryData: Entry, assignmentDocId: string) => {
     try {
         await updateDoc(doc(db, "assignments", assignmentDocId), {

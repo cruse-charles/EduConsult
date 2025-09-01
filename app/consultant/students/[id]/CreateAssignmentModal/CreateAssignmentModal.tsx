@@ -169,6 +169,12 @@ function CreateAssignmentModal() {
                     note: 'Assignment created and assigned to student.'
                 }]
             }
+
+            const assignmentMetaData = {
+                hasRead: true,
+                lastSeenAt: Timestamp.now(),
+                lastActivityAt: Timestamp.now()
+            }
     
             // Upload files to Firebase Storage
             const filesData = await fileUpload(files, studentId)
@@ -176,12 +182,13 @@ function CreateAssignmentModal() {
             
             // Create Assignment
             if (!user.role) return
-            const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
+            const assignmentDocId = await uploadAssignment(assignmentData, assignmentMetaData, studentId, user.id)
 
             // Create assignment with ID to add to redux for proper ordering
             const assignmentWithId = {
                 id: assignmentDocId,
                 ...assignmentData,
+                hasRead: true
             }
 
             // Add assignment to StudentAssignmentSlice
