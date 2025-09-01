@@ -33,9 +33,18 @@ const page = () => {
             dispatch(fetchUser({ userId: userId, database: "consultantUsers" }));
             dispatch(fetchStudents(userId))
         } 
+
+        console.log('USERID - ', userId)
     }, [userId])
 
-    const filteredStudents = students.filter((student) => 
+    useEffect(() => {
+        console.log('STUDENTS - ', students)
+    }, [students])
+
+    // const filteredStudents = students.filter((student) => 
+    //     `${student.personalInformation.firstName} ${student.personalInformation.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+    // )
+    const filteredStudents = (students ?? []).filter((student) => 
         `${student.personalInformation.firstName} ${student.personalInformation.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
     )
     

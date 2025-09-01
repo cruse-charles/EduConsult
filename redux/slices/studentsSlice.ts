@@ -13,7 +13,9 @@ export const fetchStudents = createAsyncThunk("consultantDashboard/fetchStudents
         
         // Extract student references from the consultant document
         const consultantData = consultantDocSnap.data();
-        if (!consultantData) throw Error
+        if (!consultantData) {
+          throw new Error("No Consultant Data Found")
+        }
         
         const studentRefs = consultantData.students || [];
 
@@ -36,7 +38,8 @@ export const fetchStudents = createAsyncThunk("consultantDashboard/fetchStudents
         );
       return studentDocs
     } catch (error) {
-        console.log("Error fetching students:", error);
+      console.log("Error fetching students:", error);
+      return  []
     }
   }
 ) 
