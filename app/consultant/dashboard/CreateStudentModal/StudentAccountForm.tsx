@@ -13,7 +13,7 @@ const StudentAccountForm = ({formData, handleInputChange}: CreateStudentAccountP
         <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
           <div className="flex items-center gap-2">
             <UserPlus className="h-5 w-5 text-primary" />
-            <h3 className="text-lg font-semibold">Account Creation</h3>
+            <h3 className="text-lg font-semibold">Student Account Creation</h3>
           </div>
           <p className="text-sm text-muted-foreground">Set up login credentials for the student's account</p>
 

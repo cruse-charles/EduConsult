@@ -20,9 +20,6 @@ async function loginAsConsultant(page) {
   // Wait for email input to be visible
   await page.waitForSelector('input[name="email"]');
 
-  // Wait for email input to be visible
-  await page.waitForSelector('input[name="email"]');
-
   // Fill in email and password
   await page.locator('input[name="email"]').fill(process.env.TEST_EMAIL!);
   await page.locator('input[name="password"]').fill(process.env.TEST_PASSWORD!);
@@ -81,4 +78,50 @@ test("create a student", async ({ page }) => {
 
   // Optionally, check for success toast or student in list
   await expect(page.getByText('Student Account Created')).toBeVisible();
+});
+
+test("create an assignment", async ({ page }) => {
+  await loginAsConsultant(page);
+
+  // Click on the first student row to go to student page
+  await page.locator('.student-row').first().click();
+
+  // Wait for student page to load
+  await page.waitForURL(/\/consultant\/students\/.+/);
+
+  // Click Create Assignment button
+  await page.locator('.create-assignment-btn').click();
+
+  // Wait for modal to open
+  await page.waitForSelector('.create-assignment-modal');
+
+  // Fill assignment details
+  await page.locator('input[name="title"]').fill('Playwright Test Assignment');
+  await page.locator('select[name="type"]').selectOption('Essay');
+  await page.locator('select[name="priority"]').selectOption('High');
+
+  // Select folder
+  await page.locator('select[name="folder"]').selectOption('create-new');
+
+  // Input folder name
+  await page.locator('input[name="folder-name"]').fill('Playwright Test Folder');
+
+  // Fill notes
+  await page.locator('textarea[name="notes"]').fill('Test notes for assignment');
+
+  // Set due date
+  await page.locator('input[name="dueDate"]').fill('2026-03-31');
+
+  // Click Create Assignment
+  await page.getByRole("button", { name: "Create Assignment" }).click();
+
+  // Wait for modal to close
+  await page.waitForSelector('.create-assignment-modal', { state: 'hidden' });
+
+  // Assert success
+  await expect(page.getByText('Assignment Created')).toBeVisible();
+});
+
+test("read an assignment", async ({ page }) => {
+
 });
