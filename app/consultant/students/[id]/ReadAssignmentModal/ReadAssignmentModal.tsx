@@ -115,7 +115,7 @@ function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
             await updateAssignment(updatedAssignment, assignment.id);
     
             // Next step in onboarding if not completed
-            const currentStep = onboardingSteps[onboardingStep].actionRequired
+            const currentStep = onboardingSteps[onboardingStep]?.actionRequired
             if (!isComplete && currentStep === 'createEntry') {
                 dispatch(completeStep('createEntry'))
                 await nextStep(user.id)

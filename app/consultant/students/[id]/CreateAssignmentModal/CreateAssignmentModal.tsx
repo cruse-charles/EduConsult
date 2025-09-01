@@ -229,7 +229,7 @@ function CreateAssignmentModal() {
         setOpen(true)
 
         // Proceed to next step for tooltip and update backend
-        const currentStep = onboardingSteps[onboardingStep].actionRequired
+        const currentStep = onboardingSteps[onboardingStep]?.actionRequired
         if (!isComplete && currentStep === 'clickCreateAssignmentButton') {
             dispatch(completeStep("clickCreateAssignmentButton"))
         }  

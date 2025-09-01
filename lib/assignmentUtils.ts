@@ -56,6 +56,13 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
             assignmentDocIds: arrayUnion(assignmentDocId),
             folders: arrayUnion(assignmentData.folder)
         })
+
+        // Update assignmentMetaData subcollection for consultant
+        await setDoc(doc(db, "consultantUsers", consultantId, "assignmentMeta", assignmentDocId), {
+            hasRead: true,
+            lastSeenAt: Timestamp.now(),
+            lastActivityAt: Timestamp.now()
+        })        
     
         return assignmentDocId
     } catch (error) {

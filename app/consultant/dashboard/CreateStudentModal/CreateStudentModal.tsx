@@ -138,7 +138,7 @@ function CreateStudentModal() {
             setIsLoading(false);
 
             // // Proceed to next step for tooltip and update backend
-            const currentStep = onboardingSteps[onboardingStep].actionRequired
+            const currentStep = onboardingSteps[onboardingStep]?.actionRequired
             if (!isComplete && currentStep == 'clickSubmitCreateStudentButton') {
                 dispatch(completeStep("clickSubmitCreateStudentButton"))
                 await nextStep(user.id)
@@ -156,7 +156,7 @@ function CreateStudentModal() {
     const handleAddStudentClick = async () => {
         
         // Proceed to next step for tooltip and update backend
-        const currentStep = onboardingSteps[onboardingStep].actionRequired
+        const currentStep = onboardingSteps[onboardingStep]?.actionRequired
         if (!isComplete && currentStep == 'clickAddStudentButton') {
             dispatch(completeStep("clickAddStudentButton"))
             await nextStep(user.id)

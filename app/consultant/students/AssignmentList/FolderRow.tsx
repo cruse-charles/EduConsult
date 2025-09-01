@@ -21,15 +21,11 @@ interface FolderRowProps {
     folder: string
     assignments: Assignment[]
     completedCount: number
-    // isOpen: boolean
-    // handleOpenFolder: (folder: string) => void
     onAssignmentClick: (assignment: Assignment) => void
     setSelectedFolder: (folder: string) => void
-    // handleDeleteFolder: (folder: string) => void
     onOpen: () => void
 }
 
-// const FolderRow = ({folder, handleOpenFolder, handleDeleteFolder, onAssignmentClick, setSelectedFolder, isOpen, assignments, completedCount}: FolderRowProps) => {
 const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
     // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
@@ -72,7 +68,6 @@ const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, c
     }
     
     return (
-        // <Collapsible key={folder} onOpenChange={() => handleOpenFolder(folder)}>
         <Collapsible key={folder} onOpenChange={handleToggle}>
             <CollapsibleTrigger asChild>
                 <div className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer border-b w-full h-auto folder">
