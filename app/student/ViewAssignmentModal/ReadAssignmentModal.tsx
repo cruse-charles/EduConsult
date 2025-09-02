@@ -77,6 +77,10 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
             // @ts-ignore
             const filesData = await fileUpload(files, student.id)
             entryData.files = filesData
+
+            // const assignmentMetaData = {
+            //     hasRead: 
+            // }
     
             // Create updated assignment with new timeline entry
             const updatedAssignment = {
@@ -87,7 +91,7 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
             
             // TODO: updateCurrentAssignment uses updatedAssignment, other dispatches should too
             // Upload entry to firestore
-            await uploadEntry(entryData, assignment.id)
+            await uploadEntry(entryData, assignment.id, assignment.consultantId, assignment.studentId, user.id)
     
             
             // update redux state and reset form data

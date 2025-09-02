@@ -56,9 +56,10 @@ export interface AssignmentBase {
     dueDate: Date | undefined | Timestamp;
     note: string;
     createdAt: Date | null | Timestamp;
-    studentId?: string;
+    studentId: string;
     studentFirstName?: string;
     studentLastName?: string;
+    consultantId: string;
     consultantFirstName?: string;
     consultantLastName?: string;
     folder: string;

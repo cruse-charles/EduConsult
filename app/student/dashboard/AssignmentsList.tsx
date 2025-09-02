@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDown, BookOpen, ChevronDown, ChevronRight, FileText, Folder, FolderOpen, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-import ViewAssignmentModal from "../ViewAssignmentModal/ViewAssignmentModal";
+import ViewAssignmentModal from "../ViewAssignmentModal/ReadAssignmentModal";
 import StatusBadge from "@/app/components/StatusBadge";
 
 import { fetchAssignments, setAssignments } from "@/redux/slices/currentStudentAssignmentsSlice";

@@ -92,7 +92,7 @@ function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
             entryData.files = filesData
     
             // Upload entry to firestore
-            await uploadEntry(entryData, assignment.id)
+            await uploadEntry(entryData, assignment.id, assignment.consultantId, assignment.studentId, user.id)
     
             // update redux state and reset form data
             dispatch(addEntry({ entryData, assignmentId: assignment.id }))
