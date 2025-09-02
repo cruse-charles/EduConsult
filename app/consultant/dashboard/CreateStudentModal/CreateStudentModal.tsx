@@ -104,7 +104,11 @@ function CreateStudentModal() {
 
         // Create a new student document in the "studentUsers" collection
         try {
+            // console.log('beginning of form')
+
             const idToken = await auth.currentUser?.getIdToken(true); // current consultant’s token
+            // console.log('tokenId - ', idToken)
+
             const res = await fetch("/api/create-student", {
                 method: "POST",
                 headers: {
@@ -118,12 +122,15 @@ function CreateStudentModal() {
                     academicInformation: formData.academicInformation,
                     folders: formData.folders,
                     consultantId: user.id,
+                    password: formData.password,
                     onboarding: {
                         isComplete: false,
                         onboardingStep: 0
                     }
                 }),
             });
+
+            // console.log('after fetch to create')
 
             // Handle response
             const data = await res.json();

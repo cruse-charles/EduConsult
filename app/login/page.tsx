@@ -28,7 +28,7 @@ const page = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     // State to manage form input data for email and password, loading state, and errors
-    const [userData, setuserData] = useState({
+    const [userData, setUserData] = useState({
         email: '',
         password: '',
     })
@@ -102,6 +102,7 @@ const page = () => {
       // console.log('after router push')
       } catch (error) {
         // Set errors if login fails
+        console.log('error signing in -', error)
         setErrors({email: 'Invalid email or password', password: 'Invalid email or password' })
         setIsLoading(false)
       }
@@ -184,7 +185,7 @@ const page = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const {name, value} = e.target
 
-      setuserData((prevData) => ({
+      setUserData((prevData) => ({
           ...prevData,
           [name]: value,
       }))
