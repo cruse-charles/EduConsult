@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       onboarding,
       createdAt: new Date().toISOString(),
       // TODO: TAKE OUT PASSWORD AFTER DEBUGGING
-      password
+      // password
     };
 
     // Run firestore operations in parallel, create student document and update consultant's students array

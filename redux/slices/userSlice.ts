@@ -33,7 +33,8 @@ export const fetchUser = createAsyncThunk(
                 onboardingStep: userData?.onboarding.onboardingStep,
             }));
                     
-            return {id: docSnap.id, firstName: userData?.personalInformation.firstName, lastName: userData?.personalInformation.lastName, email: userData?.personalInformation.email, role: userData?.role, assignmentsMetaData};
+            // return {id: docSnap.id, firstName: userData?.personalInformation.firstName, lastName: userData?.personalInformation.lastName, email: userData?.personalInformation.email, role: userData?.role, assignmentsMetaData};
+            return {id: docSnap.id, ...userData, assignmentsMetaData};
         } catch (error) {
             console.log('Error fetching user data:', error);
             return thunkAPI.rejectWithValue(error)

@@ -6,7 +6,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 
 import Highlights from "@/app/components/Highlights/Highlights";
 import WeeklyCalendar from "./WeeklyCalendar";
-import AssignmentsList from "./AssignmentsList";
+import AssignmentsList from "../AssignmentList/AssignmentsList";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchUser } from "@/redux/slices/userSlice";
