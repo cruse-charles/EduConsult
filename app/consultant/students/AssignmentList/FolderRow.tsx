@@ -60,6 +60,8 @@ const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, c
                 dispatch(deleteAssignmentSlice(assignment.id))
                 dispatch(deleteDashboardAssignment(assignment.id))
             })
+
+            toast(<CustomToast title='Folder deleted successfully.' description="" status='success'/>)
         } catch (error) {
             console.error("Error deleting folder:", error);
             toast(<CustomToast title='Error deleting folders.' description="" status='error'/>)
