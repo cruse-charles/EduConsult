@@ -113,7 +113,7 @@ export const updateAssignmentStatus = async (assignmentId: string, status: strin
 }
 
 // Adding an entry to an assignment's timeline
-// TODO: This function needs to update the AssignmentMeta for both consultant and student
+// TODO: This function needs permissions for the student to update the assignmentMetaData in consultantUsers 
 export const uploadEntry = async (entryData: Entry, assignmentDocId: string, consultantId: string, studentId: string, userId: string) => {
     try {
         await updateDoc(doc(db, "assignments", assignmentDocId), {

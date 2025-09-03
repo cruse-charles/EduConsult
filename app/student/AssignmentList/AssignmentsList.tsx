@@ -65,7 +65,7 @@ function AssignmentsList() {
         dispatch(setCurrentAssignment(assignment))
 
         // Update hasRead in assignmentMeta for the assignment clicked
-        await readAssignment(assignment.id, "consultantUsers", user.id)
+        await readAssignment(assignment.id, "studentUsers", user.id)
 
         // Update hasRead in studentAssignmentsSlice and userSlice
         dispatch(readAssignmentSlice(assignment.id))
