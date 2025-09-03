@@ -43,12 +43,14 @@ export const fetchUser = createAsyncThunk(
 );
 
 const initialState: UserState = {
-  id: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  role: '',
-  assignmentsMetaData: {}
+    id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: '',
+    assignmentDocIds: [],
+    folders: [],
+    assignmentsMetaData: {}
 }
 
 const userSlice = createSlice({

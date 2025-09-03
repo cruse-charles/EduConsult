@@ -118,12 +118,14 @@ export interface FirebaseUserInfo {
 }
 
 export interface UserState {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  role: string
-  assignmentsMetaData: Record<string, AssignmentMetaData>
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  assignmentsMetaData: Record<string, AssignmentMetaData>;
+assignmentDocIds: string[];
+  folders: string[];
 }
 
 export type AssignmentMetaData = {
