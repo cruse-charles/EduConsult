@@ -1,7 +1,26 @@
 import { Assignment } from "@/lib/types/types"
 import { createSlice} from "@reduxjs/toolkit"
 
-const initialState: Assignment = {
+// const initialState: Assignment = {
+//     id: '',
+//     title: '',
+//     type: '',
+//     priority: '',
+//     dueDate: undefined ,
+//     note: '',
+//     createdAt: null,
+//     studentId: '',
+//     studentFirstName: '',
+//     studentLastName: '',
+//     consultantId: '',
+//     consultantFirstName: '',
+//     consultantLastName: '',
+//     folder: '',
+//     status: '',
+//     timeline: []
+// }
+
+const assignment: Assignment = {
     id: '',
     title: '',
     type: '',
@@ -12,6 +31,7 @@ const initialState: Assignment = {
     studentId: '',
     studentFirstName: '',
     studentLastName: '',
+    consultantId: '',
     consultantFirstName: '',
     consultantLastName: '',
     folder: '',
@@ -19,32 +39,40 @@ const initialState: Assignment = {
     timeline: []
 }
 
+const initialState = {
+    assignment: assignment,
+    isModalOpen: false
+}
+
+
 
 const currentAssignmentSlice = createSlice({
     name: 'currentAssignment',
     initialState,
     reducers: {
         setCurrentAssignment(state, action) {
-            return action.payload
+            state.assignment = action.payload
         },
         clearCurrentAssignment(state, action) {
-            return {    
-                id: '',
-                title: '',
-                type: '',
-                priority: '',
-                dueDate: undefined ,
-                note: '',
-                createdAt: null,
-                studentId: '',
-                studentFirstName: '',
-                studentLastName: '',
-                consultantFirstName: '',
-                consultantLastName: '',
-                folder: '',
-                status: '',
-                timeline: []
-            }
+            // return {    
+            //     id: '',
+            //     title: '',
+            //     type: '',
+            //     priority: '',
+            //     dueDate: undefined ,
+            //     note: '',
+            //     createdAt: null,
+            //     studentId: '',
+            //     studentFirstName: '',
+            //     studentLastName: '',
+            //     consultantId: '',
+            //     consultantFirstName: '',
+            //     consultantLastName: '',
+            //     folder: '',
+            //     status: '',
+            //     timeline: []
+            // }
+            return initialState
         },
         updateCurrentAssignment(state, action) {
             return action.payload
@@ -54,9 +82,15 @@ const currentAssignmentSlice = createSlice({
                 ...state,
                 hasRead: true
             }
+        },
+        openCurrentAssignmentModal(state) {
+            state.isModalOpen = true
+        },
+        closeCurrentAssignmentModal(state) {
+            state.isModalOpen = false
         }
     }
 })
 
-export const { setCurrentAssignment, updateCurrentAssignment, clearCurrentAssignment, readCurrentAssignment } = currentAssignmentSlice.actions
+export const { setCurrentAssignment, updateCurrentAssignment, clearCurrentAssignment, readCurrentAssignment, openCurrentAssignmentModal, closeCurrentAssignmentModal } = currentAssignmentSlice.actions
 export default currentAssignmentSlice.reducer

@@ -36,7 +36,8 @@ function AssignmentsList() {
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
 
     // State to manage which folders are open and sorting of folders/assignments
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    // const [isModalOpen, setIsModalOpen] = useState(false)
+    const isModalOpen = useSelector((state: RootState) => state.currentAssignment.isModalOpen)
 
     const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
         getFilteredAssignments, sortedFolders, getCompletedCount
@@ -54,26 +55,26 @@ function AssignmentsList() {
     }
 
     // Handle clicking assignment to open modal for details
-    const handleAssignmentClick = async (assignment: Assignment) => {
-        setIsModalOpen(true)
+    // const handleAssignmentClick = async (assignment: Assignment) => {
+    //     // setIsModalOpen(true)
 
-        // Update redux with the click on assignment
-        dispatch(setCurrentAssignment(assignment))
+    //     // Update redux with the click on assignment
+    //     dispatch(setCurrentAssignment(assignment))
 
-        // Update hasRead in assignmentMeta for the assignment clicked
-        await readAssignment(assignment.id, "consultantUsers", user.id)
+    //     // Update hasRead in assignmentMeta for the assignment clicked
+    //     await readAssignment(assignment.id, "consultantUsers", user.id)
 
-        // Update hasRead in studentAssignmentsSlice and userSlice
-        dispatch(readAssignmentSlice(assignment.id))
-        dispatch(readAssignmentUserSlice(assignment.id))
+    //     // Update hasRead in studentAssignmentsSlice and userSlice
+    //     dispatch(readAssignmentSlice(assignment.id))
+    //     dispatch(readAssignmentUserSlice(assignment.id))
 
-        // Check if onboarding is complete for tooltip to render
-        const currentStep = onboardingSteps[onboardingStep]?.actionRequired
-        if (!isComplete && currentStep === "viewAssignment") {
-            dispatch(completeStep("viewAssignment"))
-            await nextStep(user.id)
-        }
-    }
+    //     // Check if onboarding is complete for tooltip to render
+    //     const currentStep = onboardingSteps[onboardingStep]?.actionRequired
+    //     if (!isComplete && currentStep === "viewAssignment") {
+    //         dispatch(completeStep("viewAssignment"))
+    //         await nextStep(user.id)
+    //     }
+    // }
 
     return (
         <>
@@ -87,13 +88,15 @@ function AssignmentsList() {
                         {sortedFolders?.map((folder) => {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
-                                <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick}/>
+                                // <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder} onAssignmentClick={handleAssignmentClick}/>
+                                <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder}/>
                             )
                         })}      
                     </div>  
                 </CardContent>
             </Card>
-            <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+            {/* <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} /> */}
+            <ReadAssignmentModal />
             <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} oldFolderName={selectedFolder}/>
         </>
     )

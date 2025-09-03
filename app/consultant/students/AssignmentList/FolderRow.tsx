@@ -21,12 +21,14 @@ interface FolderRowProps {
     folder: string
     assignments: Assignment[]
     completedCount: number
-    onAssignmentClick: (assignment: Assignment) => void
+    // onAssignmentClick: (assignment: Assignment) => void
     setSelectedFolder: (folder: string) => void
     onOpen: () => void
 }
 
-const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+// const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+const FolderRow = ({folder, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+
     // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
     const { id } = useParams()
@@ -121,7 +123,8 @@ const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, c
             <CollapsibleContent>
                 <div className="space-y-1">
                     {assignments.map((assignment) => (
-                        <AssignmentRow key={assignment.id} assignment={assignment} onClick={onAssignmentClick}/>
+                        // <AssignmentRow key={assignment.id} assignment={assignment} onClick={onAssignmentClick}/>
+                        <AssignmentRow key={assignment.id} assignment={assignment} />
                     ))}
                 </div>
             </CollapsibleContent>

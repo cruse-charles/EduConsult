@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { checkReduxNextDeadline, removeAssignmentDocId, updateReduxInProgressCount } from '@/redux/slices/currentStudentSlice'
-import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
+import { closeCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
@@ -30,7 +30,9 @@ interface AssignmentDetailProps {
     onOpenChange: (open: boolean) => void;
 }
 
-function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
+// function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
+function AssignmentDetails() {
+
 
     const user = useSelector((state: RootState) => state.user)
 
@@ -39,7 +41,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
     const [isLoading, setIsLoading] = useState(false)
     
     const { id: studentId } = useParams<{id:string}>();
-    const assignment = useSelector((state: RootState) => state.currentAssignment)
+    const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
 
     // TODO: WHEN WE CHANGE THE DUEDATE, WE NEED TO UPDATE THE STUDENT'S STATS OBJECT ON EDIT TOO, ALSO DIDNT WORK FOR CREATION
     const [formData, setFormData] = useState({
@@ -122,7 +124,8 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
         
         // Exit edit mode and close modal
         setEdit(false)
-        onOpenChange(false);
+        // onOpenChange(false);
+        dispatch(closeCurrentAssignmentModal())
 
         // Delete Assignmnet in backend
         await deleteAssignment(assignment?.id, studentId, user.id)
