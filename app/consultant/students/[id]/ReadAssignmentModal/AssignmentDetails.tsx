@@ -12,7 +12,6 @@ import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'luc
 import CustomToast from '@/app/components/CustomToast'
 
 import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
-import { Assignment } from '@/lib/types/types'
 import { cn, formatDueDate } from '@/lib/utils'
 import { updateInProgressCount } from '@/lib/statsUtils'
 
@@ -22,15 +21,9 @@ import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/cu
 import { checkReduxNextDeadline, removeAssignmentDocId, updateReduxInProgressCount } from '@/redux/slices/currentStudentSlice'
 import { closeCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'next/navigation'
 
-interface AssignmentDetailProps {
-    assignment?: Assignment;
-    onOpenChange: (open: boolean) => void;
-}
-
-// function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
 function AssignmentDetails() {
 
 
@@ -124,7 +117,6 @@ function AssignmentDetails() {
         
         // Exit edit mode and close modal
         setEdit(false)
-        // onOpenChange(false);
         dispatch(closeCurrentAssignmentModal())
 
         // Delete Assignmnet in backend

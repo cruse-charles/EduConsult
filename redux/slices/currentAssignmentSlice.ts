@@ -1,25 +1,6 @@
 import { Assignment } from "@/lib/types/types"
 import { createSlice} from "@reduxjs/toolkit"
 
-// const initialState: Assignment = {
-//     id: '',
-//     title: '',
-//     type: '',
-//     priority: '',
-//     dueDate: undefined ,
-//     note: '',
-//     createdAt: null,
-//     studentId: '',
-//     studentFirstName: '',
-//     studentLastName: '',
-//     consultantId: '',
-//     consultantFirstName: '',
-//     consultantLastName: '',
-//     folder: '',
-//     status: '',
-//     timeline: []
-// }
-
 const assignment: Assignment = {
     id: '',
     title: '',
@@ -44,8 +25,6 @@ const initialState = {
     isModalOpen: false
 }
 
-
-
 const currentAssignmentSlice = createSlice({
     name: 'currentAssignment',
     initialState,
@@ -54,24 +33,6 @@ const currentAssignmentSlice = createSlice({
             state.assignment = action.payload
         },
         clearCurrentAssignment(state, action) {
-            // return {    
-            //     id: '',
-            //     title: '',
-            //     type: '',
-            //     priority: '',
-            //     dueDate: undefined ,
-            //     note: '',
-            //     createdAt: null,
-            //     studentId: '',
-            //     studentFirstName: '',
-            //     studentLastName: '',
-            //     consultantId: '',
-            //     consultantFirstName: '',
-            //     consultantLastName: '',
-            //     folder: '',
-            //     status: '',
-            //     timeline: []
-            // }
             return initialState
         },
         updateCurrentAssignment(state, action) {

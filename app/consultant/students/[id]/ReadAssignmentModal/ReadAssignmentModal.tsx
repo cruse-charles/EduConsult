@@ -10,12 +10,12 @@ import AssignmentTimeline from './AssignmentTimeline'
 import CustomToast from '@/app/components/CustomToast'
 
 import { fileUpload, uploadEntry, updateAssignment } from '@/lib/assignmentUtils'
-import { Assignment, AssignmentFile } from '@/lib/types/types'
+import { AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 import { nextStep } from '@/lib/onBoardingUtils'
 
 import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
-import { completeStep, next } from '@/redux/slices/onboardingSlice'
+import { completeStep } from '@/redux/slices/onboardingSlice'
 import { onboardingSteps } from "@/lib/onboardingSteps"
 import { closeCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 import { RootState } from '@/redux/store'
@@ -24,14 +24,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-interface ReadAssignmentModalProps {
-    // open: boolean;
-    // onOpenChange: (open: boolean) => void;
-}
-
-// function ReadAssignmentModal({open, onOpenChange}: ReadAssignmentModalProps) {
 function ReadAssignmentModal() {
-
 
     // Hook to manage file state, fetching studentId
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
@@ -141,7 +134,6 @@ function ReadAssignmentModal() {
     const buttonLabel = isLoading ? 'Submitting...' : baseButtonLabel;
 
     return (
-        // <Dialog open={open} onOpenChange={onOpenChange}>
         <Dialog open={isModalOpen} onOpenChange={(open) => !open && dispatch(closeCurrentAssignmentModal())}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
@@ -155,14 +147,12 @@ function ReadAssignmentModal() {
 
                     {/* Assignment Details Container*/}
                     <div className="lg:col-span-1 space-y-4">
-                        {/* <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} /> */}
                         <AssignmentDetails />
                     </div>
 
                     {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
                         <AssignmentTimeline assignment={assignment}/>
-
 
                         <Separator />
                         

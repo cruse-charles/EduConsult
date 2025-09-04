@@ -15,12 +15,10 @@ import { nextStep } from '@/lib/onBoardingUtils'
 
 interface AssignmentRowProps {
     assignment: Assignment
-    // onClick: (assignment: Assignment) => void
 }
 
-// const AssignmentRow = ({assignment, onClick}: AssignmentRowProps) => {
 const AssignmentRow = ({assignment}: AssignmentRowProps) => {
-
+    // Retrieve data from redux
     const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
     const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding);
@@ -28,7 +26,7 @@ const AssignmentRow = ({assignment}: AssignmentRowProps) => {
 
     // Handle clicking assignment to open modal for details
     const handleAssignmentClick = async () => {
-        // setIsModalOpen(true)
+        // Open modal for assignment details
         dispatch(openCurrentAssignmentModal())
 
         // Update redux with the click on assignment
@@ -51,7 +49,6 @@ const AssignmentRow = ({assignment}: AssignmentRowProps) => {
 
 
     return (
-        // <div onClick={() => onClick(assignment)} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted assignment"> 
         <div onClick={handleAssignmentClick} key={assignment.id} className="flex items-center justify-between p-4 pl-12 hover:bg-muted/30 cursor-pointer border-b border-muted assignment">     
             <div className="flex items-center gap-3 flex-1">
                 <div className="relative flex items-center gap-2">
