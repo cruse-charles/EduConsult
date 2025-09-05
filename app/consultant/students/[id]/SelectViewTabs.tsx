@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import AssignmentsList from "../AssignmentList/AssignmentsList";
 import StudentCalendar from "./StudentCalendar";
-import ReadStudentCard from "./ReadStudentCard/ReadStudentCard";
+import ReadStudentCard from "./ReadStudentCard/StudentCard";
 
 // TODO: AssignmentList needs to be added here I think for it to 'render' and not render depending on tab selected
 // Currently, it's always rendering that assigment list

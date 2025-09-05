@@ -82,6 +82,9 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
 
                 <div className="text-muted-foreground">IELTS Score:</div>
                 <Input className='h-7' step="any" name='ielts' value={safeValue(editStudent?.academicInformation?.ielts)} onChange={handleAcademicInfoChange}/>
+
+                <div className="text-muted-foreground">Intended Major:</div>
+                <Input className='h-7' step="any" name='intendedMajor' value={editStudent?.academicInformation?.intendedMajor} onChange={handleAcademicInfoChange}/>
             </div>
         </div>
 

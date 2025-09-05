@@ -41,6 +41,9 @@ function StudentCardContent({student}: {student: Student}) {
 
                 <div className="text-muted-foreground">IELTS: </div>
                 <div>{student?.academicInformation?.ielts}</div>
+
+                <div className="text-muted-foreground">Intended Major: </div>
+                <div>{student?.academicInformation?.intendedMajor}</div>
             </div>
         </div>
 
