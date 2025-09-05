@@ -29,7 +29,7 @@ function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
 
     // Retrieve user and currentAssignment
     const user = useSelector((state: RootState) => state.user)
-    const assignment = useSelector((state: RootState) => state.currentAssignment)
+    const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
 
     return (
          <>

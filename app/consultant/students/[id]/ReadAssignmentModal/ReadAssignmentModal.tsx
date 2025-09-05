@@ -34,8 +34,7 @@ function ReadAssignmentModal() {
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user)
     const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
-    const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
-    const isModalOpen = useSelector((state: RootState) => state.currentAssignment.isModalOpen)
+    const {assignment, isModalOpen} = useSelector((state: RootState) => state.currentAssignment)
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({

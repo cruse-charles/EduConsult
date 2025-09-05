@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 
 function AssignmentTimeline() {
 
-    const assignment = useSelector((state: RootState) => state.currentAssignment)
+    const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
 
     // TODO: make status appear properly for icon usage here
     const getTimelineIcon = (type: string) => {

@@ -36,7 +36,7 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
     const user = useSelector((state: RootState) => state.user)
     const student = useSelector((state: RootState) => state.currentStudent)
     // const [currentAssignment, setCurrentAssignment] = useState(assignment)
-    const assignment = useSelector((state: RootState) => state.currentAssignment)
+    const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
