@@ -11,6 +11,7 @@ export interface StudentBase {
         grade: number | null;
         ielts: number | null;
         act: number | null;
+        intendedMajor: string;
     };
     personalInformation: {
         firstName: string;
