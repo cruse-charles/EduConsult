@@ -16,22 +16,25 @@ import CustomToast from '@/app/components/CustomToast'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
 import { useParams } from 'next/navigation'
+import { onboardingSteps } from '@/lib/onboardingSteps'
+import { completeStep } from '@/redux/slices/onboardingSlice'
+import { nextStep } from '@/lib/onBoardingUtils'
 
 interface FolderRowProps {
     folder: string
     assignments: Assignment[]
     completedCount: number
     setSelectedFolder: (folder: string) => void
-    onOpen: () => void
 }
 
-const FolderRow = ({folder, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+const FolderRow = ({folder, setSelectedFolder, assignments, completedCount}: FolderRowProps) => {
 
     // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
     const { id } = useParams()
     const studentId = id as string
     const user = useSelector((state: RootState) => state.user)
+    const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding);
 
     // Determine if a folder has any unread assignments
     const hasUnread = assignments.some((assignment) => !assignment.hasRead)
@@ -39,9 +42,14 @@ const FolderRow = ({folder, setSelectedFolder, assignments, completedCount, onOp
     // Manage open/close of folder
     const [isOpen, setIsOpen] = useState(false)
 
-    const handleToggle = () => {
+    const handleToggle = async () => {
         setIsOpen(!isOpen)
-        if (!isOpen) onOpen()
+
+        const currentStep = onboardingSteps[onboardingStep]?.actionRequired
+        if (!isComplete && currentStep === 'openFolder') {
+            dispatch(completeStep("openFolder"))
+            await nextStep(user.id)
+        }
     }
 
     // Function to delete a folder and assignments within it

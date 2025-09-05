@@ -20,11 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
-    const dispatch = useDispatch<AppDispatch>()
+    // const dispatch = useDispatch<AppDispatch>()
     const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
-    const user = useSelector((state: RootState) => state.user)
+    // const user = useSelector((state: RootState) => state.user)
     const folders = useSelector((state: RootState) => state.currentStudent.folders) || []
-    const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding);
+    // const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding);
 
     // State to manage modal popup for folders
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
@@ -33,17 +33,6 @@ function AssignmentsList() {
     const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
         getFilteredAssignments, sortedFolders, getCompletedCount
     } = useSortedAssignments(assignments, folders)
-
-    // TODO: Could move this into FolderRow too
-    // Handle opening folders for onboarding
-    const handleOpenFolder = async () => {
-        
-        const currentStep = onboardingSteps[onboardingStep]?.actionRequired
-        if (!isComplete && currentStep === 'openFolder') {
-            dispatch(completeStep("openFolder"))
-            await nextStep(user.id)
-        }
-    }
 
     return (
         <>
@@ -57,7 +46,7 @@ function AssignmentsList() {
                         {sortedFolders?.map((folder) => {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
-                                <FolderRow key={folder} onOpen={handleOpenFolder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder}/>
+                                <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder}/>
                             )
                         })}      
                     </div>  
