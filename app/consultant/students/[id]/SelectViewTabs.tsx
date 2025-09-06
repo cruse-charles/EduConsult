@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import AssignmentsList from "../AssignmentList/AssignmentsList";
+import AssignmentsList from "./AssignmentList/AssignmentsList";
 import StudentCalendar from "./StudentCalendar";
 import ReadStudentCard from "./ReadStudentCard/StudentCard";
 

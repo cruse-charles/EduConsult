@@ -2,8 +2,8 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import ReadAssignmentModal from "../[id]/ReadAssignmentModal/ReadAssignmentModal";
-import EditFolderModal from "../[id]/UpdateFolderModal";
+import ReadAssignmentModal from "../ReadAssignmentModal/ReadAssignmentModal";
+import UpdateFolderModal from "../UpdateFolderModal";
 import FolderRow from "./FolderRow";
 import SortControls from "./SortControls";
 
@@ -48,7 +48,7 @@ function AssignmentsList() {
                 </CardContent>
             </Card>
             <ReadAssignmentModal />
-            <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} oldFolderName={selectedFolder}/>
+            <UpdateFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} oldFolderName={selectedFolder}/>
         </>
     )
 }

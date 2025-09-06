@@ -1,4 +1,4 @@
-import ViewAssignmentModal from '../ViewAssignmentModal/ReadAssignmentModal'
+import ViewAssignmentModal from './ReadAssignmentModal/ReadAssignmentModal'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

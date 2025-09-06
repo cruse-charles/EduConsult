@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 // TODO: Use HighlightCard component to DRY this
-function AssignmentsOverview() {
+function AssignmentsHighlights() {
     // Retrieve student and user from redux
     const student = useSelector((state: RootState) => state.currentStudent)
     const user = useSelector((state: RootState) => state.user)
@@ -93,4 +93,4 @@ function AssignmentsOverview() {
     )
 }
 
-export default AssignmentsOverview
+export default AssignmentsHighlights

@@ -14,13 +14,13 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
-interface EditFolderModalProps {
+interface UpdateFolderModalProps {
     open: boolean,
     onOpenChange: (open: boolean) => void,
     oldFolderName: string | null
 }
 
-const EditFolderModal = ({open, onOpenChange, oldFolderName}: EditFolderModalProps) => {
+const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModalProps) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [newFolderName, setNewFolderName] = useState('')
@@ -77,4 +77,4 @@ const EditFolderModal = ({open, onOpenChange, oldFolderName}: EditFolderModalPro
     )
 }
 
-export default EditFolderModal
+export default UpdateFolderModal

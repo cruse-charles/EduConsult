@@ -2,32 +2,35 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import ReadAssignmentModal from "../[id]/ReadAssignmentModal/ReadAssignmentModal";
-import EditFolderModal from "../[id]/UpdateFolderModal";
-import FolderRow from "./FolderRow";
-import SortControls from "./SortControls";
-
-import { RootState } from "@/redux/store";
+import { fetchAssignments } from "@/redux/slices/currentStudentAssignmentsSlice";
+import { AppDispatch, RootState } from "@/redux/store";
 import { useSortedAssignments } from "@/hooks/useSortedAssignments";
 
-import { nextStep } from "@/lib/onBoardingUtils";
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
 
-import { useState } from "react"
-import { useSelector } from "react-redux";
+import ReadAssignmentModal from "../ReadAssignmentModal/ReadAssignmentModal";
+import SortControls from "./SortControls";
+import FolderRow from "./FolderRow";
 
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
+    const dispatch = useDispatch<AppDispatch>()
     const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
-    const folders = useSelector((state: RootState) => state.currentStudent.folders) || []
+    const user = useSelector((state: RootState) => state.user)
+    const folders = useSelector((state: RootState) => state.user.folders) || []
 
-    // State to manage modal popup for folders
-    const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
-
-    // State to manage which folders are open and sorting of folders/assignments
     const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
         getFilteredAssignments, sortedFolders, getCompletedCount
     } = useSortedAssignments(assignments, folders)
+
+    // Then fetch assignments when student data loads
+    useEffect(() => {
+        if (user?.assignmentDocIds) {
+            dispatch(fetchAssignments(user.assignmentDocIds))
+        }
+    }, [user?.assignmentDocIds, dispatch])
 
     return (
         <>
@@ -41,16 +44,29 @@ function AssignmentsList() {
                         {sortedFolders?.map((folder) => {
                             const folderAssignments = getFilteredAssignments(folder)
                             return (
-                                <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} setSelectedFolder={setSelectedFolder} assignments={folderAssignments} folder={folder}/>
+                                <FolderRow key={folder} completedCount={getCompletedCount(folderAssignments)} assignments={folderAssignments} folder={folder} />
                             )
                         })}      
                     </div>  
                 </CardContent>
             </Card>
             <ReadAssignmentModal />
-            <EditFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} oldFolderName={selectedFolder}/>
         </>
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 export default AssignmentsList

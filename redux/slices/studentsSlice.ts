@@ -1,44 +1,44 @@
 import { db } from "@/lib/firebaseConfig";
-import { FirebaseUserInfo, Student } from "@/lib/types/types";
+import { Student } from "@/lib/types/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, DocumentData, DocumentReference, getDoc } from "firebase/firestore";
 
 // Function to fetch students for the current consultant user
-export const fetchStudents = createAsyncThunk(
-    "consultantDashboard/fetchStudents",
-    // async (user: FirebaseUserInfo, {rejectWithValue}) => {
-    //     try {
-    //         // Get the consultant's document reference and snapshot
-    //         const ref = doc(db, "consultantUsers", user.id);    
-    //         const consultantDocSnap = await getDoc(ref);
+export const fetchStudents = createAsyncThunk("consultantDashboard/fetchStudents",
+  async (userId:string, {rejectWithValue}) => {
+    try {
+        // Get the consultant's document reference and snapshot
+        const ref = doc(db, "consultantUsers", userId);    
+        const consultantDocSnap = await getDoc(ref);
+        
+        // Extract student references from the consultant document
+        const consultantData = consultantDocSnap.data();
+        if (!consultantData) throw Error
+        
+        const studentRefs = consultantData.students || [];
 
-
-        async (userId:string, {rejectWithValue}) => {
-        try {
-            // Get the consultant's document reference and snapshot
-            const ref = doc(db, "consultantUsers", userId);    
-            const consultantDocSnap = await getDoc(ref);
-    
-            // Extract student references from the consultant document
-            const consultantData = consultantDocSnap.data();
-            if (!consultantData) throw Error
-
-            const studentRefs = consultantData.students || [];
-    
-            // Fetch each student's document data
-            const studentDocs = await Promise.all(
-                studentRefs.map(async (studentRef: DocumentReference<DocumentData>) => {
-                    const studentDocSnap = await getDoc(studentRef);
-                    return studentDocSnap.exists()
-                        ? { id: studentDocSnap.id, ...studentDocSnap.data() }
-                        : null;
-                })
-            );
-            return studentDocs
-        } catch (error) {
-            console.log("Error fetching students:", error);
-        }
+        // Fetch each student's document data, evaluate each document
+        const studentDocs = await Promise.all(
+            studentRefs.map(async (studentRef: DocumentReference<DocumentData>) => {
+              try {
+                const studentDocSnap = await getDoc(studentRef);
+                if (studentDocSnap.exists()) {
+                  return { id: studentDocSnap.id, ...studentDocSnap.data() }
+                } else {
+                  console.log('Student doc does not exist', studentRef.path)
+                  return null
+                }
+              } catch (error) {
+                console.log('Error fetching student doc:', studentRef.path, error);
+                return null;
+              }
+            })
+        );
+      return studentDocs
+    } catch (error) {
+        console.log("Error fetching students:", error);
     }
+  }
 ) 
 
 // const initialState: Student[] = []

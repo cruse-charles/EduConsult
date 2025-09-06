@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
-import AssignmentsOverview from "./AssignmentsOverview";
+import AssignmentsHighlights from "./AssignmentsHighlights";
 import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";
 
@@ -44,7 +44,7 @@ function page() {
                 {/* Main Content Container */}
                 <div className="md:col-span-2 space-y-6">
                     {/* Task Summary Section */}
-                    <AssignmentsOverview />
+                    <AssignmentsHighlights />
 
                     {/* Student Details Section */}
                     <SelectViewTabs />

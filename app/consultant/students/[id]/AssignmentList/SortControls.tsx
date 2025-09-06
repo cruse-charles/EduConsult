@@ -1,7 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowUpDown } from 'lucide-react';
 
-import CreateAssignmentModal from '../[id]/CreateAssignmentModal/CreateAssignmentModal';
+import CreateAssignmentModal from '../CreateAssignmentModal/CreateAssignmentModal';
 
 interface SortControlsProps {
     folderSort: string
