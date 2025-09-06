@@ -97,6 +97,7 @@ function AssignmentsList() {
                     </div>  
                 </CardContent>
             </Card>
+            {/* TODO: RE-DO READASSIGNMENT MODAL FOR STUDENTS TO MATCH WITH CONSULTANTS */}
             <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
         </>
     )

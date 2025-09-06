@@ -128,7 +128,7 @@ const DashboardAssignmentList = () => {
                 </CardContent>
             </Card>
             {/* @ts-ignore */}
-            <ReadAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+            <ReadAssignmentModal />
         </>
     )
 }

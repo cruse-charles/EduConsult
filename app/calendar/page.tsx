@@ -129,7 +129,7 @@ const page = () => {
             })}
         </div>
         {/* @ts-ignore */}
-        <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+        <ReadAssignmentModal />
 
     </>
     )

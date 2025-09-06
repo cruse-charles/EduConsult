@@ -88,7 +88,7 @@ const page = () => {
                     )}
                     </div>
             </main>
-            <ReadAssignmentModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+            <ReadAssignmentModal />
         </div>
     )
 }

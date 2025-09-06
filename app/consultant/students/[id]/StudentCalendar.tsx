@@ -105,7 +105,7 @@ const StudentCalendar = () => {
             })}
         </div>
         {/* @ts-ignore */}
-        <ReadAssignmentModal assignment={selectedAssignment} open={!!selectedAssignment} onOpenChange={(open: boolean) => !open && setSelectedAssignment(null)} />
+        <ReadAssignmentModal />
 
     </>
     )
