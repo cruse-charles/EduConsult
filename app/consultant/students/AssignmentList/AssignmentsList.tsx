@@ -7,24 +7,19 @@ import EditFolderModal from "../[id]/EditFolderModal";
 import FolderRow from "./FolderRow";
 import SortControls from "./SortControls";
 
-import { completeStep } from "@/redux/slices/onboardingSlice";
-import { onboardingSteps } from "@/lib/onboardingSteps";
-import { AppDispatch, RootState } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { useSortedAssignments } from "@/hooks/useSortedAssignments";
 
 import { nextStep } from "@/lib/onBoardingUtils";
 
 import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
-    // const dispatch = useDispatch<AppDispatch>()
     const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
-    // const user = useSelector((state: RootState) => state.user)
     const folders = useSelector((state: RootState) => state.currentStudent.folders) || []
-    // const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding);
 
     // State to manage modal popup for folders
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)

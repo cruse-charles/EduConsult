@@ -1,8 +1,9 @@
-import { Assignment } from '@/lib/types/types'
-
-import { formatDueDate } from '@/lib/utils'
-import StatusBadge from '@/app/components/StatusBadge'
 import { BookOpen, FileText, Upload } from 'lucide-react'
+import StatusBadge from '@/app/components/StatusBadge'
+
+import { Assignment } from '@/lib/types/types'
+import { formatDueDate } from '@/lib/utils'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
 import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
@@ -16,7 +17,6 @@ interface AssignmentRowProps {
     // onClick: (assignment: Assignment) => void
 }
 
-// const AssignmentRow = ({assignment, onClick}: AssignmentRowProps) => {
 const AssignmentRow = ({assignment}: AssignmentRowProps) => {
 
     const dispatch = useDispatch<AppDispatch>()

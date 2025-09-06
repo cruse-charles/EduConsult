@@ -11,24 +11,15 @@ import { toast } from 'sonner'
 import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'lucide-react'
 
 import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
-import { cn, formatDueDate } from '@/lib/utils'
-import { updateInProgressCount } from '@/lib/statsUtils'
+import { formatDueDate } from '@/lib/utils'
 
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'next/navigation'
+import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
-import { removeAssignmentDocId } from '@/redux/slices/currentStudentSlice'
 
-// interface AssignmentDetailProps {
-//     onOpenChange: (open: boolean) => void;
-// }
 
 function AssignmentDetails() {
 
     // Retrieve user and currentAssignment
-    const user = useSelector((state: RootState) => state.user)
     const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
 
     return (

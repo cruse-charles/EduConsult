@@ -2,21 +2,17 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import { fetchAssignments, readAssignmentSlice } from "@/redux/slices/currentStudentAssignmentsSlice";
-import { Assignment } from "@/lib/types/types";
+import { fetchAssignments } from "@/redux/slices/currentStudentAssignmentsSlice";
 import { AppDispatch, RootState } from "@/redux/store";
-import { setCurrentAssignment } from "@/redux/slices/currentAssignmentSlice";
 import { useSortedAssignments } from "@/hooks/useSortedAssignments";
-import ReadAssignmentModal from "../ViewAssignmentModal/ReadAssignmentModal";
 import { onboardingSteps } from "@/lib/onboardingSteps";
 import { completeStep } from "@/redux/slices/onboardingSlice";
 import { nextStep } from "@/lib/onBoardingUtils";
-import { readAssignment } from "@/lib/assignmentUtils";
-import { readAssignmentUserSlice } from "@/redux/slices/userSlice";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 
+import ReadAssignmentModal from "../ViewAssignmentModal/ReadAssignmentModal";
 import SortControls from "./SortControls";
 import FolderRow from "./FolderRow";
 
@@ -57,28 +53,6 @@ function AssignmentsList() {
         }
     }
 
-    // // Handle clicking assignment to open modal for details
-    // const handleAssignmentClick = async (assignment: Assignment) => {
-    //     setIsModalOpen(true)
-
-    //     // Update redux with the click on assignment
-    //     dispatch(setCurrentAssignment(assignment))
-
-    //     // Update hasRead in assignmentMeta for the assignment clicked
-    //     await readAssignment(assignment.id, "studentUsers", user.id)
-
-    //     // Update hasRead in studentAssignmentsSlice and userSlice
-    //     dispatch(readAssignmentSlice(assignment.id))
-    //     dispatch(readAssignmentUserSlice(assignment.id))
-
-    //     // Check if onboarding is complete for tooltip to render
-    //     const currentStep = onboardingSteps[onboardingStep]?.actionRequired
-    //     if (!isComplete && currentStep === "viewAssignment") {
-    //         dispatch(completeStep("viewAssignment"))
-    //         await nextStep(user.id)
-    //     }
-    // }
-
     return (
         <>
             {/* Sorting Controls */}
@@ -97,7 +71,6 @@ function AssignmentsList() {
                     </div>  
                 </CardContent>
             </Card>
-            {/* TODO: RE-DO READASSIGNMENT MODAL FOR STUDENTS TO MATCH WITH CONSULTANTS */}
             <ReadAssignmentModal />
         </>
     )

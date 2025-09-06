@@ -10,7 +10,7 @@ import AssignmentDetails from './AssignmentDetails'
 import AssignmentTimeline from './AssignmentTimeline'
 
 import { fileUpload, uploadEntry, updateAssignmentStatus } from '@/lib/assignmentUtils'
-import { Assignment, AssignmentFile } from '@/lib/types/types'
+import { AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/useFiles'
 
 import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
@@ -18,12 +18,6 @@ import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeCurrentAssignmentModal, updateCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
-
-// interface ViewAssignmentModalProps {
-//     // assignment: Assignment;
-//     open: boolean;
-//     onOpenChange: (open: boolean) => void;
-// }
 
 function ViewAssignmentModal() {
 
@@ -34,7 +28,6 @@ function ViewAssignmentModal() {
     
     const user = useSelector((state: RootState) => state.user)
     const student = useSelector((state: RootState) => state.currentStudent)
-    // const [currentAssignment, setCurrentAssignment] = useState(assignment)
     const {assignment, isModalOpen} = useSelector((state: RootState) => state.currentAssignment)
 
     // Form data for user to submit feedback 
@@ -132,13 +125,11 @@ function ViewAssignmentModal() {
 
                     {/* Assignment Details Container*/}
                     <div className="lg:col-span-1 space-y-4">
-                        {/* <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} /> */}
                         <AssignmentDetails />
                     </div>
 
                     {/* Timeline & Feedback Submission Container*/}
                     <div className="lg:col-span-2 space-y-4">
-                        {/* <AssignmentTimeline assignment={assignment}/> */}
                         <AssignmentTimeline />
 
                         <Separator />
