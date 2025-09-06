@@ -21,11 +21,11 @@ import { RootState } from '@/redux/store'
 import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { removeAssignmentDocId } from '@/redux/slices/currentStudentSlice'
 
-interface AssignmentDetailProps {
-    onOpenChange: (open: boolean) => void;
-}
+// interface AssignmentDetailProps {
+//     onOpenChange: (open: boolean) => void;
+// }
 
-function AssignmentDetails({onOpenChange}: AssignmentDetailProps) {
+function AssignmentDetails() {
 
     // Retrieve user and currentAssignment
     const user = useSelector((state: RootState) => state.user)

@@ -1,17 +1,11 @@
 
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, MoreHorizontal, Trash2 } from 'lucide-react'
+import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { ChevronDown, ChevronRight, Folder, FolderOpen, MoreHorizontal } from 'lucide-react'
 
 import { Assignment } from '@/lib/types/types'
 import { useState } from 'react'
-import { deleteFolder } from '@/lib/assignmentUtils'
-import { removeAssignmentDocId, removeFolder } from '@/redux/slices/currentStudentSlice'
-import { deleteAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
-import { deleteDashboardAssignment } from '@/redux/slices/consultantAssignmentSlice'
-import { toast } from 'sonner'
-import CustomToast from '@/app/components/CustomToast'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
 import { useParams } from 'next/navigation'
@@ -21,18 +15,12 @@ interface FolderRowProps {
     folder: string
     assignments: Assignment[]
     completedCount: number
-    onAssignmentClick: (assignment: Assignment) => void
+    // onAssignmentClick: (assignment: Assignment) => void
     setSelectedFolder: (folder: string) => void
     onOpen: () => void
 }
 
-const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
-    // Retrieve data from redux/URL
-    const dispatch = useDispatch<AppDispatch>()
-    const { id } = useParams()
-    const studentId = id as string
-    const user = useSelector((state: RootState) => state.user)
-
+const FolderRow = ({folder, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
     // Determine if a folder has any unread assignments
     const hasUnread = assignments.some((assignment) => !assignment.hasRead)
 
@@ -72,16 +60,6 @@ const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, c
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
-                        {/* <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => setSelectedFolder(folder)}>
-                                <Edit className="h-4 w-4 mr-2" />
-                                Rename Folder
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600" onClick={(e) => handleDeleteFolder(folder)}>
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete Folder
-                            </DropdownMenuItem>
-                        </DropdownMenuContent> */}
                     </DropdownMenu>
                     {isOpen ? (
                         <ChevronDown className="h-4 w-4" />
@@ -96,7 +74,7 @@ const FolderRow = ({folder, onAssignmentClick, setSelectedFolder, assignments, c
             <CollapsibleContent>
                 <div className="space-y-1">
                     {assignments.map((assignment) => (
-                        <AssignmentRow key={assignment.id} assignment={assignment} onClick={onAssignmentClick}/>
+                        <AssignmentRow key={assignment.id} assignment={assignment} />
                     ))}
                 </div>
             </CollapsibleContent>

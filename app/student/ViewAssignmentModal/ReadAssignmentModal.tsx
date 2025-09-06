@@ -17,16 +17,15 @@ import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentA
 import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
+import { closeCurrentAssignmentModal, updateCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
-interface ViewAssignmentModalProps {
-    // assignment: Assignment;
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-}
+// interface ViewAssignmentModalProps {
+//     // assignment: Assignment;
+//     open: boolean;
+//     onOpenChange: (open: boolean) => void;
+// }
 
-// function ViewAssignmentModal({assignment, open, onOpenChange}: ViewAssignmentModalProps) {
-function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
+function ViewAssignmentModal() {
 
 
     // Hook to manage file state, fetching studentId
@@ -36,7 +35,7 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
     const user = useSelector((state: RootState) => state.user)
     const student = useSelector((state: RootState) => state.currentStudent)
     // const [currentAssignment, setCurrentAssignment] = useState(assignment)
-    const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
+    const {assignment, isModalOpen} = useSelector((state: RootState) => state.currentAssignment)
 
     // Form data for user to submit feedback 
     const [formData, setFormData] = useState({
@@ -120,7 +119,7 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
     const buttonLabel = isLoading ? 'Submitting...' : 'Submit Assignment';
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={isModalOpen} onOpenChange={(open)=> !open && dispatch(closeCurrentAssignmentModal())}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
@@ -134,7 +133,7 @@ function ViewAssignmentModal({open, onOpenChange}: ViewAssignmentModalProps) {
                     {/* Assignment Details Container*/}
                     <div className="lg:col-span-1 space-y-4">
                         {/* <AssignmentDetails assignment={assignment} onOpenChange={onOpenChange} /> */}
-                        <AssignmentDetails onOpenChange={onOpenChange} />
+                        <AssignmentDetails />
                     </div>
 
                     {/* Timeline & Feedback Submission Container*/}

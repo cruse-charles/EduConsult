@@ -27,6 +27,7 @@ interface FolderRowProps {
     setSelectedFolder: (folder: string) => void
 }
 
+// TODO: Add opening state of folders into redux as well
 const FolderRow = ({folder, setSelectedFolder, assignments, completedCount}: FolderRowProps) => {
 
     // Retrieve data from redux/URL
