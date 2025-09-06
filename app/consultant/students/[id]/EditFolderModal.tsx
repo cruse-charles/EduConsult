@@ -44,6 +44,7 @@ const EditFolderModal = ({open, onOpenChange, oldFolderName}: EditFolderModalPro
             // TODO: UPDATE REDUX ON CONSULTANTDASHBOARD ASSIGNMENTS
             dispatch(renameFolderInStudentSlice({oldFolderName, newFolderName}))
             dispatch(renameFolderInStudentAssignmentsSlice({oldFolderName, newFolderName}))
+            toast(<CustomToast title='Folder Renamed' description={`Folder has been renamed to ${newFolderName}.`} status="success"/>)
         } catch (error) {
             console.error("Error renaming folder:", error);
             toast(<CustomToast title='Error renaming folders.' description="Please refresh and try again." status="error"/>)

@@ -6,21 +6,16 @@ import { ChevronDown, ChevronRight, Folder, FolderOpen, MoreHorizontal } from 'l
 
 import { Assignment } from '@/lib/types/types'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@/redux/store'
-import { useParams } from 'next/navigation'
+
 import AssignmentRow from './AssignmentRow'
 
 interface FolderRowProps {
     folder: string
     assignments: Assignment[]
     completedCount: number
-    // onAssignmentClick: (assignment: Assignment) => void
-    setSelectedFolder: (folder: string) => void
-    onOpen: () => void
 }
 
-const FolderRow = ({folder, setSelectedFolder, assignments, completedCount, onOpen}: FolderRowProps) => {
+const FolderRow = ({folder, assignments, completedCount}: FolderRowProps) => {
     // Determine if a folder has any unread assignments
     const hasUnread = assignments.some((assignment) => !assignment.hasRead)
 
@@ -29,7 +24,13 @@ const FolderRow = ({folder, setSelectedFolder, assignments, completedCount, onOp
 
     const handleToggle = () => {
         setIsOpen(!isOpen)
-        if (!isOpen) onOpen()
+
+        // TODO: Insert onboarding
+        // const currentStep = onboardingSteps[onboardingStep]?.actionRequired
+        // if (!isComplete && currentStep === 'openFolder') {
+            // dispatch(completeStep("openFolder"))
+            // await nextStep(user.id)
+        // }
     }
    
     return (
