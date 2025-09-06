@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 
 import CreateStudentModal from "./CreateStudentModal/CreateStudentModal";
 import Highlights from "../../components/Highlights/Highlights";
-import StudentTable from "./StudentTable";
+import StudentTable from "./StudentTable/StudentTable";
 import DashboardAssignmentList from "./DashboardAssignmentList";
 
 import { useEffect, useState } from "react";
