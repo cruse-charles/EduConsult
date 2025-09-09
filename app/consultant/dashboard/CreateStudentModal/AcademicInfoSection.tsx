@@ -45,16 +45,16 @@ function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoS
                         <Input id="satScore" placeholder="1450" value={safeValue(formData.academicInformation.sat)} name="sat" onChange={handleAcademicInfoChange} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="act">ACT Score</Label>
-                        <Input id="toeflScore" placeholder="30" value={safeValue(formData.academicInformation.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
+                        <Label htmlFor="actScore">ACT Score</Label>
+                        <Input id="actScore" placeholder="30" value={safeValue(formData.academicInformation.act)} name="act" onChange={handleAcademicInfoChange} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="toeflScore">TOEFL Score</Label>
                         <Input id="toeflScore" placeholder="105" value={safeValue(formData.academicInformation.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="ielts">IELTS Score</Label>
-                        <Input id="toeflScore" placeholder="6.5" value={safeValue(formData.academicInformation.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
+                        <Label htmlFor="ieltsScore">IELTS Score</Label>
+                        <Input id="ieltsScore" placeholder="6.5" value={safeValue(formData.academicInformation.ielts)} name="ielts" onChange={handleAcademicInfoChange} />
                     </div>
                 </div>
             </div>
