@@ -66,7 +66,7 @@ function ReadAssignmentModal() {
                 type: user.role === 'consultant' ? 'Feedback' : 'Submission',
                 uploadedAt: new Date(),
                 uploadedById: user.id,
-                uploadedByName: user.firstName + ' ' + user.lastName
+                uploadedByName: user?.personalInformation?.firstName + ' ' + user?.personalInformation?.lastName
             }
     
             // TODO: Make this a red inline error
