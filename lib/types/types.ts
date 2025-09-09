@@ -103,8 +103,10 @@ export interface UpdateAssignment {
 
 export interface FirebaseUserInfo {
   id: string;
-  firstName: string;
-  lastName: string;
+  personalInformation: {
+    firstName: string;
+    lastName: string;
+  }
   email: string;
   role: 'consultant' | 'student';
   onboarding: {
@@ -119,14 +121,16 @@ export interface FirebaseUserInfo {
 }
 
 export interface UserState {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  assignmentsMetaData: Record<string, AssignmentMetaData>;
-assignmentDocIds: string[];
-  folders: string[];
+    id: string;
+    personalInformation: {
+        firstName: string;
+        lastName: string;
+    }
+    email: string;
+    role: string;
+    assignmentsMetaData: Record<string, AssignmentMetaData>;
+    assignmentDocIds: string[];
+    folders: string[];
 }
 
 export type AssignmentMetaData = {

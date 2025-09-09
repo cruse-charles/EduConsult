@@ -44,8 +44,10 @@ export const fetchUser = createAsyncThunk(
 
 const initialState: UserState = {
     id: '',
-    firstName: '',
-    lastName: '',
+    personalInformation: {
+        firstName: '',
+        lastName: '',
+    },
     email: '',
     role: '',
     assignmentDocIds: [],

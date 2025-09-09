@@ -63,8 +63,8 @@ function CreateAssignmentModal() {
         studentFirstName: student?.personalInformation?.firstName,
         studentLastName: student?.personalInformation?.lastName,
         consultantId: user.id,
-        consultantFirstName: user.firstName,
-        consultantLastName: user.lastName,
+        consultantFirstName: user?.personalInformation?.firstName,
+        consultantLastName: user?.personalInformation?.lastName,
         dueDate: undefined,
         note: "",
         files: [],
@@ -86,8 +86,8 @@ function CreateAssignmentModal() {
             studentFirstName: student?.personalInformation?.firstName,
             studentLastName: student?.personalInformation?.lastName,
             consultantId: user.id,
-            consultantFirstName: user.firstName,
-            consultantLastName: user.lastName,
+            consultantFirstName: user?.personalInformation?.firstName,
+            consultantLastName: user?.personalInformation?.lastName,
             dueDate: undefined,
             note: "",
             files: [],
@@ -159,18 +159,20 @@ function CreateAssignmentModal() {
                 studentId: studentId,
                 studentFirstName: student?.personalInformation?.firstName,
                 studentLastName: student?.personalInformation?.lastName,
-                consultantFirstName: user.firstName,
-                consultantLastName: user.lastName,
+                consultantFirstName: user?.personalInformation?.firstName,
+                consultantLastName: user?.personalInformation?.lastName,
                 consultantId: user.id,
                 timeline: [{
                     files: [] as AssignmentFile[],
                     type: 'Assignment Created',
                     uploadedAt: Timestamp.fromDate(new Date()),
-                    uploadedByName: `${user.firstName} ${user.lastName}`,
+                    uploadedByName: `${user?.personalInformation?.firstName} ${user?.personalInformation?.lastName}`,
                     uploadedById: user.id,
                     note: 'Assignment created and assigned to student.'
                 }]
             }
+
+            console.log('assignmentData - ', assignmentData)
     
             // Upload files to Firebase Storage
             const filesData = await fileUpload(files, studentId)
