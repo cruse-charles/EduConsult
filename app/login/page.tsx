@@ -209,8 +209,9 @@ const page = () => {
               <form onSubmit={handleSubmit}>
                 <div className="grid gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label id='email' htmlFor="email">Email</Label>
                     <Input
+                        id='email'
                         onChange={handleInputChange}
                         name="email"
                         placeholder="name@example.com"
@@ -221,9 +222,10 @@ const page = () => {
                     {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label id='password' htmlFor="password">Password</Label>
                     <Input
                         onChange={handleInputChange}
+                        id='password'
                         name="password"
                         placeholder="••••••••"
                         type="password"
