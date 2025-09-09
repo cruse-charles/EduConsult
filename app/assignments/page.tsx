@@ -13,7 +13,7 @@ import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/q
 import { Assignment } from '@/lib/types/types'
 
 import StatusBadge from '../components/StatusBadge'
-import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
+import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal/ReadAssignmentModal'
 
 // TODO: Add loading state
@@ -36,7 +36,7 @@ const page = () => {
     },[user.id])
 
     const handleAssignmentClick = (assignment: Assignment) => {
-        setIsModalOpen(true)
+        dispatch(openCurrentAssignmentModal())
         dispatch(setCurrentAssignment(assignment))
     }
 

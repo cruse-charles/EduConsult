@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal/ReadAssignmentModal'
 import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/querys'
-import { setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
+import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 // TODO: Add loading state
 const page = () => {
@@ -71,7 +71,7 @@ const page = () => {
     }
 
     const handleAssignmentClick = (assignment: Assignment) => {
-        setIsModalOpen(true)
+        dispatch(openCurrentAssignmentModal())
         dispatch(setCurrentAssignment(assignment))
     }
 

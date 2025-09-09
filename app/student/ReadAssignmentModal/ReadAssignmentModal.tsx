@@ -7,7 +7,7 @@ import CustomToast from '@/app/components/CustomToast'
 
 import FileUploadView from '../../consultant/students/[id]/CreateAssignmentModal/FileUploadView'
 import AssignmentDetails from './AssignmentDetails'
-import AssignmentTimeline from './AssignmentTimeline'
+
 
 import { fileUpload, uploadEntry, updateAssignmentStatus } from '@/lib/assignmentUtils'
 import { AssignmentFile } from '@/lib/types/types'
@@ -18,6 +18,7 @@ import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeCurrentAssignmentModal, updateCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
+import AssignmentTimeline from './AssignmentTimeline'
 
 function ViewAssignmentModal() {
 
