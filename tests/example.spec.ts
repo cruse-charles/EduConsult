@@ -68,7 +68,7 @@ test("create a student", async ({ page }) => {
   await page.locator('input[name="targetSchools"]').fill('Harvard, MIT');
   await page.locator('input[name="act"]').fill('30');
   await page.locator('input[name="ielts"]').fill('7.0');
-    await page.locator('input[name="intendedMajor"]').fill('Business');
+  await page.locator('input[name="intendedMajor"]').fill('Business');
 
   // Fill Goals and Notes (assuming additional fields)
   // If there are more, add here

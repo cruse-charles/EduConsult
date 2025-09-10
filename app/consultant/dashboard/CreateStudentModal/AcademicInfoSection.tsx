@@ -30,9 +30,9 @@ function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoS
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="intendedMajor">
-                            Intended Major <span className="text-red-500">*</span>
+                            Intended Major
                         </Label>
-                        <Input id="intendedMajor" placeholder="Computer Science" value={formData.academicInformation.intendedMajor} name="intendedMajor" onChange={handleAcademicInfoChange} required />
+                        <Input id="intendedMajor" placeholder="Computer Science" value={formData.academicInformation.intendedMajor} name="intendedMajor" onChange={handleAcademicInfoChange} />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

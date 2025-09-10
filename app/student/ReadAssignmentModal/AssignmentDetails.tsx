@@ -1,16 +1,8 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import { Label } from '@/components/ui/label'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { Textarea } from '@/components/ui/textarea'
-import CustomToast from '@/app/components/CustomToast'
-import { toast } from 'sonner'
-import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'lucide-react'
 
-import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
+import { CalendarIcon, Clock, FileText, User} from 'lucide-react'
+
 import { formatDueDate } from '@/lib/utils'
 
 import { useSelector } from 'react-redux'

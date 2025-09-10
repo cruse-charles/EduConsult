@@ -66,10 +66,6 @@ function ViewAssignmentModal() {
             // @ts-ignore
             const filesData = await fileUpload(files, student.id)
             entryData.files = filesData
-
-            // const assignmentMetaData = {
-            //     hasRead: 
-            // }
     
             // Create updated assignment with new timeline entry
             const updatedAssignment = {
