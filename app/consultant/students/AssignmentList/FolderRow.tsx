@@ -1,4 +1,3 @@
-import AssignmentRow from './AssignmentRow'
 
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -19,6 +18,7 @@ import { useParams } from 'next/navigation'
 import { onboardingSteps } from '@/lib/onboardingSteps'
 import { completeStep } from '@/redux/slices/onboardingSlice'
 import { nextStep } from '@/lib/onBoardingUtils'
+import AssignmentRow from './AssignmentRow'
 
 interface FolderRowProps {
     folder: string
