@@ -22,9 +22,7 @@ const page = () => {
 
     // Manage state for current date, assignment modal, and all assignments
     const [currentDate, setCurrentDate] = useState(new Date())
-    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
     const [assignments, setAssignments] = useState<Assignment[]>([])
-    const [isModalOpen, setIsModalOpen] = useState(false)
 
     
     // Fetch user's assignments 

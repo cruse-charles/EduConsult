@@ -23,7 +23,6 @@ const page = () => {
     // Retrieve user details and assignment state
     const user = useSelector((state: RootState) => state.user)
     const [assignments, setAssignments] = useState<Assignment[]>([])
-    const [isModalOpen, setIsModalOpen] = useState(false)
 
     // Fetch user's assignments 
     useEffect(() => {
