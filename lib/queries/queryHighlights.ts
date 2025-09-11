@@ -130,4 +130,6 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
             ...docSnap.data()
         } as Assignment
     }
+
+    return undefined
 }

@@ -91,7 +91,7 @@ const page = () => {
                     </div>
 
                     {/* Highlights */}
-                    {/* <Highlights /> */}
+                    <Highlights />
 
     
                     {/* Tabs Container */}

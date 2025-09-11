@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 
 import HighlightCard from './HighlightCard'
 import { getConsultantHighlightConfig, getStudentHighlightConfig } from './consultantHighlightsConfig'
+import { Assignment } from '@/lib/types/types'
 
 const Highlights = () => {
 
@@ -12,6 +13,7 @@ const Highlights = () => {
     const user = useSelector((state: RootState) => state.user)
 
     // State to hold data for highlights and loading state
+    // TODO: Add state to this that matches, create two different states which will match with role
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
 
