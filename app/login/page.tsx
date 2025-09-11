@@ -3,7 +3,7 @@
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { app, db } from "@/lib/firebaseConfig"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 
@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux"
 import { setUser } from "@/redux/slices/userSlice"
 
 import { FirebaseUserInfo } from "@/lib/types/types"
-import { AppDispatch } from "@/redux/store"
+import { AppDispatch, persistor } from "@/redux/store"
 import CustomToast from "../components/CustomToast"
 import { toast } from "sonner"
 
@@ -26,6 +26,11 @@ const page = () => {
     let googleProvider = new GoogleAuthProvider();
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
+
+    // Clear redux persistance for clean state on login
+    useEffect(() => {
+      persistor.purge()
+    }, [])
 
     // State to manage form input data for email and password, loading state, and errors
     const [userData, setUserData] = useState({

@@ -22,7 +22,7 @@ import { getAuth, signOut } from 'firebase/auth'
 import { resetStore } from '@/redux/slices/resetSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePathname, useRouter } from 'next/navigation'
-import { RootState } from '@/redux/store'
+import { persistor, RootState } from '@/redux/store'
 
 
 const menuItems = (rolePrefix: string) => [
@@ -71,9 +71,10 @@ const AppSidebar = () => {
     return null
   }
     
-  // Handle user sign out
+  // Handle user sign out and purge redux persistence
   const handleLogout = async () => {
       try {
+          await persistor.purge()
           await signOut(auth)
           router.push('/')
           setTimeout(() => dispatch(resetStore()), 400); // Delay Redux clear to prevent authgaurd redirect
