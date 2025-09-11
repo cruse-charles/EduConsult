@@ -91,21 +91,21 @@ const page = () => {
                     </div>
 
                     {/* Highlights */}
-                    <Highlights />
+                    {/* <Highlights /> */}
 
     
                     {/* Tabs Container */}
                     <div className="">
                         <Tabs defaultValue="students">
                             <TabsList>
-                                <TabsTrigger value="students">Students</TabsTrigger>
-                                <TabsTrigger value="calendar">Calendar</TabsTrigger>
+                                {/* <TabsTrigger value="students">Students</TabsTrigger> */}
+                                {/* <TabsTrigger value="calendar">Calendar</TabsTrigger> */}
                             </TabsList>
                             <TabsContent value="students" className="space-y-4">
-                                <StudentTable />
+                                {/* <StudentTable /> */}
                             </TabsContent>
                             <TabsContent value="calendar" className="space-y-4">
-                                <DashboardAssignmentList />
+                                {/* <DashboardAssignmentList /> */}
                             </TabsContent>
                         </Tabs>
                     </div>
