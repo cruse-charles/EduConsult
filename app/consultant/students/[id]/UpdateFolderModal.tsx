@@ -1,3 +1,4 @@
+import ConfirmationDialog from '@/app/components/ConfirmationDialog'
 import CustomToast from '@/app/components/CustomToast'
 
 import { Button } from '@/components/ui/button'
@@ -59,37 +60,31 @@ const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModa
     }, [oldFolderName])
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        Enter New Folder Name
-                    </DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <Input value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)}/>
-                        <div className="flex justify-between items-center">
-                        {/* LEFT SIDE */}
-                        <Button variant="destructive" type="button">
-                            Delete
-                        </Button>
+        <>
+            <Dialog open={open} onOpenChange={onOpenChange}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            Enter New Folder Name
+                        </DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <Input value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)}/>
+                            <div className="flex justify-between items-center">
+                            {/* LEFT SIDE */}
+                            <Button variant="destructive" type="button" onClick={() => setConfirmOpen(true)}> Delete</Button>
 
-                        {/* RIGHT SIDE */}
-                        <div className="flex gap-2">
-                            <Button variant="outline" type="submit">
-                            <Save className="h-4 w-4" />
-                            {isLoading ? 'Saving...' : 'Save'}
-                            </Button>
-
-                            <Button variant="outline" onClick={() => onOpenChange(false)}>
-                            <X className="h-4 w-4" />
-                            Cancel
-                            </Button>
-                        </div>
-                        </div>
-                </form>
-            </DialogContent>
-        </Dialog>
+                            {/* RIGHT SIDE */}
+                            <div className="flex gap-2">
+                                <Button variant="outline" type="submit"> <Save className="h-4 w-4" /> {isLoading ? 'Saving...' : 'Save'} </Button>
+                                <Button variant="outline" onClick={() => onOpenChange(false)}> <X className="h-4 w-4" /> Cancel </Button>
+                            </div>
+                            </div>
+                    </form>
+                </DialogContent>
+            </Dialog>
+            <ConfirmationDialog open={confirmOpen} onOpenChange={setConfirmOpen} onConfirm={() => {}} />
+        </>
     )
 }
 

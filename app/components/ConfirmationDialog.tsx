@@ -1,6 +1,6 @@
-import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { useState } from 'react'
 
 interface ConfirmationDialogProps {
   open: boolean
@@ -9,7 +9,7 @@ interface ConfirmationDialogProps {
 }
 
 const ConfirmationDialog = ({ open, onOpenChange, onConfirm}: ConfirmationDialogProps) => {
-  const [isProcessing, setIsProcessing] = React.useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const handleConfirm = async () => {
     try {

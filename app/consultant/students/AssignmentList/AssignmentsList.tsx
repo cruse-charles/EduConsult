@@ -12,8 +12,9 @@ import { useSortedAssignments } from "@/hooks/useSortedAssignments";
 
 import { nextStep } from "@/lib/onBoardingUtils";
 
-import { useState } from "react"
+import { useState, createContext } from "react"
 import { useSelector } from "react-redux";
+import ConfirmationDialog from "@/app/components/ConfirmationDialog";
 
 
 function AssignmentsList() {
@@ -24,13 +25,19 @@ function AssignmentsList() {
     // State to manage modal popup for folders
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
 
+    // Context to delete assignments and folders, and state to manage confirmation dialog
+    const DeleteConfirmContext = createContext({openConfirm: (onConfirm: () => void) => {}})
+    const [confirmAction, setConfirmAction] = useState<(() => void) | null>(null)
+    const openConfirm = (onConfirm: () => void) => setConfirmAction(() => onConfirm)
+    const closeConfirm = () => setConfirmAction(null)
+
     // State to manage which folders are open and sorting of folders/assignments
     const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
         getFilteredAssignments, sortedFolders, getCompletedCount
     } = useSortedAssignments(assignments, folders)
 
     return (
-        <>
+        <DeleteConfirmContext.Provider value={{ openConfirm }}>
             {/* Sorting Controls */}
             <SortControls folderSort={folderSort} assignmentSort={assignmentSort} setFolderSort={setFolderSort} setAssignmentSort={setAssignmentSort} />
 
@@ -49,7 +56,13 @@ function AssignmentsList() {
             </Card>
             <ReadAssignmentModal />
             <UpdateFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} oldFolderName={selectedFolder}/>
-        </>
+            <ConfirmationDialog open={!!confirmAction} onOpenChange={(open) => !open && closeConfirm()}                     
+                onConfirm={async () => {
+                    if (confirmAction) await confirmAction()
+                    closeConfirm()
+                }}
+            />
+        </DeleteConfirmContext.Provider>
     )
 }
 
