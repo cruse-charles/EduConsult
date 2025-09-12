@@ -24,6 +24,7 @@ const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModa
 
     const [isLoading, setIsLoading] = useState(false)
     const [newFolderName, setNewFolderName] = useState('')
+    const [confirmOpen, setConfirmOpen] = useState(false)
 
     const dispatch = useDispatch<AppDispatch>()
     const { id } = useParams()
@@ -67,10 +68,25 @@ const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModa
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <Input value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)}/>
-                    <div className="flex justify-end gap-2">
-                        <Button variant='outline' type='submit'> <Save className="h-4 w-4" /> {isLoading ? 'Saving...' : 'Save'}</Button>
-                        <Button variant='outline' onClick={() => onOpenChange(false)}><X className="h-4 w-4" /> Cancel</Button>
-                    </div>
+                        <div className="flex justify-between items-center">
+                        {/* LEFT SIDE */}
+                        <Button variant="destructive" type="button">
+                            Delete
+                        </Button>
+
+                        {/* RIGHT SIDE */}
+                        <div className="flex gap-2">
+                            <Button variant="outline" type="submit">
+                            <Save className="h-4 w-4" />
+                            {isLoading ? 'Saving...' : 'Save'}
+                            </Button>
+
+                            <Button variant="outline" onClick={() => onOpenChange(false)}>
+                            <X className="h-4 w-4" />
+                            Cancel
+                            </Button>
+                        </div>
+                        </div>
                 </form>
             </DialogContent>
         </Dialog>

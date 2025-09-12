@@ -126,10 +126,11 @@ test("create an assignment", async ({ page }) => {
   // Wait for modal to close
   await page.waitForSelector('.create-assignment-modal', { state: 'hidden' });
 
+  // TODO: Make this retrieve the assignment too and click on the assignment for info match
   // Assert success
   await expect(page.getByText('Assignment Created')).toBeVisible();
 });
 
 test("read an assignment on dashboard", async ({ page }) => {
-  
+
 });
