@@ -39,13 +39,13 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
                         }
                     }}>
                 <SelectTrigger>
-                    <SelectValue placeholder="Select or create folder, e.g., Stanford Folder " />
+                    <SelectValue role='select-folder' placeholder="Select or create folder, e.g., Stanford Folder " />
                 </SelectTrigger>
                 <SelectContent>
                     {student.folders?.map((folder: string) => (
                         <SelectItem key={folder} value={folder}>{folder}</SelectItem>
                     ))}
-                    <SelectItem value="create-new">+ Create New Folder</SelectItem>
+                    <SelectItem role='option' value="create-new">+ Create New Folder</SelectItem>
                 </SelectContent>
                 </Select>
                 {errors?.folder && <p className="text-sm text-red-500">{errors.folder}</p>}

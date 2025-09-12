@@ -33,14 +33,14 @@ function TypeTitlePriority({formData, handleInputChange, setErrors, errors}: Typ
                         <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="Essay">Essay</SelectItem>
-                        <SelectItem value="Application">Application</SelectItem>
-                        <SelectItem value="Document">Document</SelectItem>
-                        <SelectItem value="Portfolio">Portfolio</SelectItem>
-                        <SelectItem value="Test Prep">Test Preparation</SelectItem>
-                        <SelectItem value="Recommendation Letter">Recommendation Letter</SelectItem>
-                        <SelectItem value="Interview Prep">Interview Preparation</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
+                        <SelectItem role='option' value="Essay">Essay</SelectItem>
+                        <SelectItem role='option' value="Application">Application</SelectItem>
+                        <SelectItem role='option' value="Document">Document</SelectItem>
+                        <SelectItem role='option' value="Portfolio">Portfolio</SelectItem>
+                        <SelectItem role='option' value="Test Prep">Test Preparation</SelectItem>
+                        <SelectItem role='option' value="Recommendation Letter">Recommendation Letter</SelectItem>
+                        <SelectItem role='option' value="Interview Prep">Interview Preparation</SelectItem>
+                        <SelectItem role='option' value="Other">Other</SelectItem>
                     </SelectContent>
                     </Select>
                     {errors?.type && <p className="text-sm text-red-500">{errors.type}</p>}
@@ -52,10 +52,10 @@ function TypeTitlePriority({formData, handleInputChange, setErrors, errors}: Typ
                         <SelectValue placeholder="Select priority" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="Low">Low</SelectItem>
-                        <SelectItem value="Medium">Medium</SelectItem>
-                        <SelectItem value="High">High</SelectItem>
-                        <SelectItem value="Urgent">Urgent</SelectItem>
+                        <SelectItem role='option' value="Low">Low</SelectItem>
+                        <SelectItem role='option' value="Medium">Medium</SelectItem>
+                        <SelectItem role='option' value="High">High</SelectItem>
+                        <SelectItem role='option' value="Urgent">Urgent</SelectItem>
                     </SelectContent>
                     </Select>
                 </div>

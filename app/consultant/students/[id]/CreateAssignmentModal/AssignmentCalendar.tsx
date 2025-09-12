@@ -33,7 +33,7 @@ function AssignmentCalendar({dueDate, setDueDate, setErrors, errors}: Assignment
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
-                        <Calendar mode="single" selected={dueDate} onSelect={setDueDate} />
+                        <Calendar id='calendar' mode="single" selected={dueDate} onSelect={setDueDate} />
                     </PopoverContent>
                 </Popover>
                 {errors?.dueDate && <p className="text-sm text-red-500">{errors.dueDate}</p>}

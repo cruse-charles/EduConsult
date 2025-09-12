@@ -96,21 +96,29 @@ test("create an assignment", async ({ page }) => {
   await page.waitForSelector('.create-assignment-modal');
 
   // Fill assignment details
-  await page.locator('input[name="title"]').fill('Playwright Test Assignment');
-  await page.locator('select[name="type"]').selectOption('Essay');
-  await page.locator('select[name="priority"]').selectOption('High');
+  await page.locator('input[id="title"]').fill('Playwright Test Assignment');
+
+  // Select type: click trigger, then select option
+  await page.locator('button:has-text("Select type")').click();
+  await page.locator('div[role="option"]:has-text("Essay")').click();
+
+  // Select priority: click trigger, then select option
+  await page.locator('button:has-text("Select priority")').click();
+  await page.locator('div[role="option"]:has-text("High")').click();
 
   // Select folder
-  await page.locator('select[name="folder"]').selectOption('create-new');
+  await page.locator('button:has-text("Select or create folder, e.g., Stanford Folder ")').click();
+  await page.locator('div[role="option"]:has-text("+ Create New Folder")').click();
 
   // Input folder name
-  await page.locator('input[name="folder-name"]').fill('Playwright Test Folder');
+  await page.locator('input[id="folder"]').fill('Playwright Test Folder');
 
+  // Set due date: click the calendar button to open popover, then select date
+  await page.locator('button:has-text("Pick a date")').click();
+  await page.getByRole('gridcell', { name: '28' }).click();
+  
   // Fill notes
-  await page.locator('textarea[name="notes"]').fill('Test notes for assignment');
-
-  // Set due date
-  await page.locator('input[name="dueDate"]').fill('2026-03-31');
+  await page.locator('textarea[id="notes"]').fill('Test notes for assignment');
 
   // Click Create Assignment
   await page.getByRole("button", { name: "Create Assignment" }).click();
@@ -122,6 +130,6 @@ test("create an assignment", async ({ page }) => {
   await expect(page.getByText('Assignment Created')).toBeVisible();
 });
 
-test("read an assignment", async ({ page }) => {
+test("read an assignment on dashboard", async ({ page }) => {
 
 });
