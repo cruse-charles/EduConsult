@@ -14,6 +14,7 @@ import { fetchConsultantDashboardAssignments } from '@/redux/slices/consultantAs
 import { RootState } from '@/redux/store'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 const DashboardAssignmentList = () => {
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
@@ -36,6 +37,11 @@ const DashboardAssignmentList = () => {
         // @ts-ignore
         dispatch(fetchConsultantDashboardAssignments(user.id))
     }, [])
+
+    const handleAssignmentClick = (assignment: Assignment) => {
+        dispatch(openCurrentAssignmentModal())
+        dispatch(setCurrentAssignment(assignment))
+    }
 
     
     const getDays = () => {
@@ -106,7 +112,7 @@ const DashboardAssignmentList = () => {
                                     {dashboardAssignments
                                         .filter(assignment => formatNextDeadline(day) === formatNextDeadline(assignment.dueDate))
                                         .map((assignment) => (
-                                            <div key={assignment.id} onClick={()=> setSelectedAssignment(assignment)} className="p-2 rounded-md border cursor-pointer hover:bg-muted/50 transition-colors border-blue-200 bg-blue-50">
+                                            <div key={assignment.id} onClick={()=> handleAssignmentClick(assignment)} className="p-2 rounded-md border cursor-pointer hover:bg-muted/50 transition-colors border-blue-200 bg-blue-50">
                                                 <div className="space-y-1">
                                                     <div className="text-sm font-medium truncate">
                                                         {assignment.title}
