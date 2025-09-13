@@ -16,6 +16,7 @@ import { useState, createContext } from "react"
 import { useSelector } from "react-redux";
 import ConfirmationDialog from "@/app/components/ConfirmationDialog";
 
+export const DeleteConfirmContext = createContext({openConfirm: (onConfirm: () => void) => {}})
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
@@ -26,7 +27,6 @@ function AssignmentsList() {
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
 
     // Context to delete assignments and folders, and state to manage confirmation dialog
-    const DeleteConfirmContext = createContext({openConfirm: (onConfirm: () => void) => {}})
     const [confirmAction, setConfirmAction] = useState<(() => void) | null>(null)
     const openConfirm = (onConfirm: () => void) => setConfirmAction(() => onConfirm)
     const closeConfirm = () => setConfirmAction(null)

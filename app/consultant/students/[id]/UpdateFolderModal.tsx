@@ -23,17 +23,18 @@ interface UpdateFolderModalProps {
 
 const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModalProps) => {
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [newFolderName, setNewFolderName] = useState('')
-    const [confirmOpen, setConfirmOpen] = useState(false)
-
+    // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
     const { id } = useParams()
     const studentId = id as string
     const user = useSelector((state: RootState) => state.user)
+    
+    // State to manage new folder name input and loading state for async actions
+    const [isLoading, setIsLoading] = useState(false)
+    const [newFolderName, setNewFolderName] = useState('')
+    const [confirmOpen, setConfirmOpen] = useState(false)
 
-
-
+    // Handle renaming folder
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
@@ -53,6 +54,7 @@ const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModa
         }
     }
 
+    // Set old folder name as default value when modal open
     useEffect(() => {
         if (oldFolderName) {
             setNewFolderName(oldFolderName)
