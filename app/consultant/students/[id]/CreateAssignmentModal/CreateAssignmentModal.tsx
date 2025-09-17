@@ -172,7 +172,7 @@ function CreateAssignmentModal() {
                 }]
             }
 
-            console.log('assignmentData - ', assignmentData)
+            // console.log('assignmentData - ', assignmentData)
     
             // Upload files to Firebase Storage
             const filesData = await fileUpload(files, studentId)

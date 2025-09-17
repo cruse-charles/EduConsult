@@ -23,7 +23,7 @@ export const fetchStudents = createAsyncThunk("consultantDashboard/fetchStudents
         const studentDocs = await Promise.all(
             studentRefs.map(async (studentRef: DocumentReference<DocumentData>) => {
               try {
-                console.log("studentRef:", studentRef);
+                // console.log("studentRef:", studentRef);
                 const studentDocSnap = await getDoc(studentRef);
                 if (studentDocSnap.exists()) {
                   return { id: studentDocSnap.id, ...studentDocSnap.data() }

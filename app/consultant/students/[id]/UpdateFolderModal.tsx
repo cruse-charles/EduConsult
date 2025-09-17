@@ -32,7 +32,6 @@ const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModa
     // State to manage new folder name input and loading state for async actions
     const [isLoading, setIsLoading] = useState(false)
     const [newFolderName, setNewFolderName] = useState('')
-    const [confirmOpen, setConfirmOpen] = useState(false)
 
     // Handle renaming folder
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -74,7 +73,7 @@ const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModa
                         <Input value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)}/>
                             <div className="flex justify-between items-center">
                             {/* LEFT SIDE */}
-                            <Button variant="destructive" type="button" onClick={() => setConfirmOpen(true)}> Delete</Button>
+                            {/* <Button variant="destructive" type="button" onClick={() => setConfirmOpen(true)}> Delete</Button> */}
 
                             {/* RIGHT SIDE */}
                             <div className="flex gap-2">
@@ -85,7 +84,6 @@ const UpdateFolderModal = ({open, onOpenChange, oldFolderName}: UpdateFolderModa
                     </form>
                 </DialogContent>
             </Dialog>
-            <ConfirmationDialog open={confirmOpen} onOpenChange={setConfirmOpen} onConfirm={() => {}} />
         </>
     )
 }

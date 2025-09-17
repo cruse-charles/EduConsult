@@ -34,12 +34,12 @@ const page = () => {
             dispatch(fetchStudents(userId))
         } 
 
-        console.log('USERID - ', userId)
+        // console.log('USERID - ', userId)
     }, [userId])
 
-    useEffect(() => {
-        console.log('STUDENTS - ', students)
-    }, [students])
+    // useEffect(() => {
+    //     console.log('STUDENTS - ', students)
+    // }, [students])
 
     // const filteredStudents = students.filter((student) => 
     //     `${student.personalInformation.firstName} ${student.personalInformation.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())

@@ -80,9 +80,9 @@ function AssignmentsHighlights() {
 
     const highlightConfig = getStudentProfileConsultantViewHighightConfig(data)
 
-    useEffect(() => {
-        console.log('data', data)
-    }, [data])
+    // useEffect(() => {
+    //     console.log('data', data)
+    // }, [data])
 
     return (
         <div className="grid gap-4 md:grid-cols-3">

@@ -1,3 +1,6 @@
+import AssignmentRow from './AssignmentRow'
+import CustomToast from '@/app/components/CustomToast'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -5,20 +8,20 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, MoreHorizontal, Trash2 } from 'lucide-react'
 
 import { Assignment } from '@/lib/types/types'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { useParams } from 'next/navigation'
+
+import { nextStep } from '@/lib/onBoardingUtils'
+import { completeStep } from '@/redux/slices/onboardingSlice'
+import { onboardingSteps } from '@/lib/onboardingSteps'
 import { deleteFolder } from '@/lib/assignmentUtils'
 import { removeAssignmentDocId, removeFolder } from '@/redux/slices/currentStudentSlice'
 import { deleteAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { deleteDashboardAssignment } from '@/redux/slices/consultantAssignmentSlice'
-import { toast } from 'sonner'
-import CustomToast from '@/app/components/CustomToast'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
-import { useParams } from 'next/navigation'
-import { onboardingSteps } from '@/lib/onboardingSteps'
-import { completeStep } from '@/redux/slices/onboardingSlice'
-import { nextStep } from '@/lib/onBoardingUtils'
-import AssignmentRow from './AssignmentRow'
+import { DeleteConfirmContext } from '../[id]/AssignmentList/DeleteConfirmContext'
+
 
 interface FolderRowProps {
     folder: string
@@ -42,6 +45,11 @@ const FolderRow = ({folder, setSelectedFolder, assignments, completedCount}: Fol
 
     // Manage open/close of folder
     const [isOpen, setIsOpen] = useState(false)
+
+    // Context to delete folder
+    const deleteContext = useContext(DeleteConfirmContext)
+    console.log('deleteContext', deleteContext) // Is this the real openConfirm or the default?
+
 
     const handleToggle = async () => {
         setIsOpen(!isOpen)
@@ -111,10 +119,30 @@ const FolderRow = ({folder, setSelectedFolder, assignments, completedCount}: Fol
                                 <Edit className="h-4 w-4 mr-2" />
                                 Rename Folder
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600" onClick={(e) => handleDeleteFolder(folder)}>
+                            {/* <DropdownMenuItem className="text-red-600" onClick={(e) => {
+                                console.log('selected folder')
+                                e.preventDefault();
+                                e.stopPropagation();
+                                deleteContext?.openConfirm( async () => {
+                                    await handleDeleteFolder(folder)
+                                })
+                            }}>
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete Folder
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
+                            <DropdownMenuItem asChild>
+  <button
+    className="text-red-600 w-full text-left"
+    onClick={() => {
+      deleteContext.openConfirm(async () => {
+        await handleDeleteFolder(folder)
+      })
+    }}
+  >
+    <Trash2 className="h-4 w-4 mr-2" />
+    Delete Folder
+  </button>
+</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                     {isOpen ? (

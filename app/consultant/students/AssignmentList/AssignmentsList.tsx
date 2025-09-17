@@ -15,8 +15,10 @@ import { nextStep } from "@/lib/onBoardingUtils";
 import { useState, createContext } from "react"
 import { useSelector } from "react-redux";
 import ConfirmationDialog from "@/app/components/ConfirmationDialog";
+import { DeleteConfirmContext } from "../[id]/AssignmentList/DeleteConfirmContext";
 
-export const DeleteConfirmContext = createContext({openConfirm: (onConfirm: () => void) => {}})
+// export const DeleteConfirmContext = createContext({openConfirm: (onConfirm: () => void) => {}})
+// export const DeleteConfirmContext = createContext<{ openConfirm: (onConfirm: () => void) => void }>({openConfirm: () => {}})
 
 function AssignmentsList() {
     // Retrieve data from redux/URL
@@ -27,9 +29,15 @@ function AssignmentsList() {
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
 
     // Context to delete assignments and folders, and state to manage confirmation dialog
-    const [confirmAction, setConfirmAction] = useState<(() => void) | null>(null)
-    const openConfirm = (onConfirm: () => void) => setConfirmAction(() => onConfirm)
+    const [confirmAction, setConfirmAction] = useState<{fn: () => void} | null>(null)
+    console.log('confirmAction', confirmAction)  // outside return, inside component
+    // const openConfirm = (onConfirm: () => void) => setConfirmAction({fn: onConfirm})
+    const openConfirm = (onConfirm: () => void) => {
+        console.log('openConfirm called', onConfirm)
+        setConfirmAction({fn: onConfirm})
+    }
     const closeConfirm = () => setConfirmAction(null)
+
 
     // State to manage which folders are open and sorting of folders/assignments
     const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
@@ -58,7 +66,7 @@ function AssignmentsList() {
             <UpdateFolderModal open={!!selectedFolder} onOpenChange={(open: boolean) => !open && setSelectedFolder(null)} oldFolderName={selectedFolder}/>
             <ConfirmationDialog open={!!confirmAction} onOpenChange={(open) => !open && closeConfirm()}                     
                 onConfirm={async () => {
-                    if (confirmAction) await confirmAction()
+                    if (confirmAction) await confirmAction.fn()
                     closeConfirm()
                 }}
             />
