@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, MoreHorizontal, Trash2 } from 'lucide-react'
 
 import { Assignment } from '@/lib/types/types'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { deleteFolder } from '@/lib/assignmentUtils'
 import { removeAssignmentDocId, removeFolder } from '@/redux/slices/currentStudentSlice'
 import { deleteAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
@@ -19,6 +19,7 @@ import { useParams } from 'next/navigation'
 import { onboardingSteps } from '@/lib/onboardingSteps'
 import { completeStep } from '@/redux/slices/onboardingSlice'
 import { nextStep } from '@/lib/onBoardingUtils'
+import { DeleteConfirmContext } from './DeleteConfirmContext'
 
 interface FolderRowProps {
     folder: string
@@ -29,6 +30,10 @@ interface FolderRowProps {
 
 // TODO: Add opening state of folders into redux as well
 const FolderRow = ({folder, setSelectedFolder, assignments, completedCount}: FolderRowProps) => {
+
+
+    const deleteContext = useContext(DeleteConfirmContext)
+    
 
     // Retrieve data from redux/URL
     const dispatch = useDispatch<AppDispatch>()
@@ -111,7 +116,18 @@ const FolderRow = ({folder, setSelectedFolder, assignments, completedCount}: Fol
                                 <Edit className="h-4 w-4 mr-2" />
                                 Rename Folder
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600" onClick={(e) => handleDeleteFolder(folder)}>
+                            {/* <DropdownMenuItem className="text-red-600" onClick={(e) => handleDeleteFolder(folder)}>
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete Folder
+                            </DropdownMenuItem> */}
+                            <DropdownMenuItem className="text-red-600" onClick={(e) => {
+                                console.log('selected folder')
+                                e.preventDefault();
+                                e.stopPropagation();
+                                deleteContext?.openConfirm( async () => {
+                                    await handleDeleteFolder(folder)
+                                })
+                            }}>
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete Folder
                             </DropdownMenuItem>
