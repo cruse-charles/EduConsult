@@ -21,11 +21,13 @@ import { deleteAssignmentSlice, updateAssignmentsSlice } from '@/redux/slices/cu
 import { checkReduxNextDeadline, removeAssignmentDocId, updateReduxInProgressCount } from '@/redux/slices/currentStudentSlice'
 import { closeCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useParams } from 'next/navigation'
+import { DeleteConfirmContext } from '../AssignmentList/AssignmentsList'
 
 function AssignmentDetails() {
-
+    // Context to delete folder
+    const deleteContext = useContext(DeleteConfirmContext)
 
     const user = useSelector((state: RootState) => state.user)
 
@@ -146,7 +148,15 @@ function AssignmentDetails() {
                                 Edit
                             </Button>
                         ) : (
-                            <Button variant='destructive' size="sm" onClick={() => handleDelete()} className="gap-2">
+                            // <Button variant='destructive' size="sm" onClick={() => handleDelete()} className="gap-2">
+                            //     <Trash />
+                            //     Delete
+                            // </Button>
+                            <Button variant='destructive' size="sm" className="gap-2" onClick={() => {
+                                deleteContext?.openConfirm( async() => {
+                                    await handleDelete()
+                                })
+                            }} >
                                 <Trash />
                                 Delete
                             </Button>
