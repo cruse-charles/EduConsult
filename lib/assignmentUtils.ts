@@ -1,6 +1,6 @@
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "@/lib/firebaseConfig";
-import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, where, writeBatch } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, increment, query, setDoc, Timestamp, updateDoc, where, writeBatch } from "firebase/firestore";
 
 import { Assignment, AssignmentUpload, Entry, UpdateAssignment } from "./types/types";
 import { updateNextDeadlineForStudent } from "./statsUtils";
@@ -143,8 +143,22 @@ export const uploadEntry = async (entryData: Entry, assignmentDocId: string, con
 // Deleting an assignment
 export const deleteAssignment = async (assignmentId: string, studentId: string, consultantId: string) => {
     try {
+        // Retrieve assignment status to update in-progress count in highlights if needed
+        const assignmentDocRef = doc(db, "assignments", assignmentId)
+        const assignmentDocSnap = await getDoc(assignmentDocRef)
+        const assignmentData = assignmentDocSnap.data()
+        const assignmentStatus = assignmentData?.status
+
+        if (assignmentStatus === "In-Progress") {
+            await updateDoc(doc(db, "studentUsers", studentId), {
+                "stats.inProgressAssignmentsCount": increment(-1)
+            })
+        }
+
+        // Delete assignment document
         await deleteDoc(doc(db, "assignments", assignmentId))
 
+        // Remove assignment ID from student document
         const studentDocRef = doc(db, "studentUsers", studentId)
 
         await updateDoc(studentDocRef, {
@@ -166,6 +180,9 @@ export const deleteFolder = async (studentId: string, folderName: string, consul
     try {
         // Reference for student
         const studentDocRef = doc(db, "studentUsers", studentId)
+
+        // Count for inProgress assignments as we delete 
+        let inProgressCount = 0
         
         // Query assignments in the specified folder for the student
         const q = query(
@@ -174,23 +191,43 @@ export const deleteFolder = async (studentId: string, folderName: string, consul
             where('studentId', '==', studentId),
             where('consultantId', '==', consultantId)
         )
-        const snapshot = await getDocs(q);
+        const assignmentsSnapshot = await getDocs(q);
 
         // Initialize batch
         const batch = writeBatch(db)
 
         // Delete all assignments in the folder from assignments collection and remove their IDs from student doc
-        snapshot.forEach((docSnapshot) => {
-            batch.delete(docSnapshot.ref);
-            batch.update(studentDocRef, {
-                assignmentDocIds: arrayRemove(docSnapshot.id),
-            });
-        });
+        assignmentsSnapshot.forEach((assignmentDocSnapshot) => {
+            const assignmentData = assignmentDocSnapshot.data()
 
+            // Increment count of in-progress assignments that we update stat highlights for later 
+            if (assignmentData.status === "In-Progress") {
+                inProgressCount++
+                console.log('inProgressCount - ', inProgressCount)
+            }
+
+            // Delete assignment doc and remove from student assignmentDocIds array
+            batch.delete(assignmentDocSnapshot.ref);
+            batch.update(studentDocRef, {
+                assignmentDocIds: arrayRemove(assignmentDocSnapshot.id),
+            });
+            
+        });
+        
+        // Decrement in-progress count for student
+        if (inProgressCount > 0) {
+            batch.update(studentDocRef, {
+                "stats.inProgressAssignmentsCount": increment(-inProgressCount),
+            })
+        }
+
+        // TODO: DELETE ASSIGNMENT METADATA FROM BOTH USERS
+        
         // Remove folder name from student doc
         batch.update(studentDocRef, {
             folders: arrayRemove(folderName),
         });
+
 
         // Commit all at once
         await batch.commit();        
