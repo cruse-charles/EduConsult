@@ -128,7 +128,8 @@ function CreateStudentModal() {
                     onboarding: {
                         isComplete: false,
                         onboardingStep: 0
-                    }
+                    },
+                    stats: formData.stats
                 }),
             });
 
