@@ -26,18 +26,19 @@ import { useParams } from 'next/navigation'
 import { DeleteConfirmContext } from '../AssignmentList/AssignmentsList'
 
 function AssignmentDetails() {
-    // Context to delete folder
+    // Context to delete folder and dispatching actions
     const deleteContext = useContext(DeleteConfirmContext)
-
-    const user = useSelector((state: RootState) => state.user)
-
     const dispatch = useDispatch();
-    const [edit, setEdit] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    
+
+    // Retrieve data from redux/url
+    const user = useSelector((state: RootState) => state.user)
     const { id: studentId } = useParams<{id:string}>();
     const assignment = useSelector((state: RootState) => state.currentAssignment.assignment)
 
+    // State for editing and loading states
+    const [edit, setEdit] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    
     // TODO: WHEN WE CHANGE THE DUEDATE, WE NEED TO UPDATE THE STUDENT'S STATS OBJECT ON EDIT TOO, ALSO DIDNT WORK FOR CREATION
     const [formData, setFormData] = useState({
         type: assignment?.type,
@@ -85,7 +86,7 @@ function AssignmentDetails() {
         // Update current assignment in redux
         dispatch(setCurrentAssignment({...assignment, ...formData}))
         
-
+        // Show success toast and exit editing mode
         toast(<CustomToast title="Successfully Updated Assignment" description='' status='success' />)
         setEdit(false)
         setIsLoading(false)
@@ -148,10 +149,6 @@ function AssignmentDetails() {
                                 Edit
                             </Button>
                         ) : (
-                            // <Button variant='destructive' size="sm" onClick={() => handleDelete()} className="gap-2">
-                            //     <Trash />
-                            //     Delete
-                            // </Button>
                             <Button variant='destructive' size="sm" className="gap-2" onClick={() => {
                                 deleteContext?.openConfirm( async() => {
                                     await handleDelete()
