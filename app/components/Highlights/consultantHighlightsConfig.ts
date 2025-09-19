@@ -62,23 +62,52 @@ export const getStudentHighlightConfig = (data) => [
 ]
 
 // @ts-ignore
-export const getStudentProfileConsultantViewHighightConfig = (data) => [
-  {
-    title: "In-Progress Assignments",
-    icon: BookOpen,
-    content: `${data.inProgressAssignmentsCount} ${data.inProgressAssignmentsCount == 1 ? 'assignment' : 'assignments'}`,
-    detail: "Across all applications!",
-  },
-  {
-    title: "Next Deadline",
-    icon: Calendar,
-    content: `${data.nextDeadlineAssignment ? 'Next Deadline:' : 'No upcoming deadlines'} ${data.nextDeadlineAssignment ? data.nextDeadlineAssignment : ''}`,
-    detail: `Assignment: ${data.nextDeadlineAssignmentTitle}`,
-  },
-  {
-    title: "Completed",
-    icon: CheckCircle,
-    content: `${data.countOfCompletedTasks} assignments completed`,
-    detail: "All done!",
-  },
-]
+// export const getStudentProfileConsultantViewHighightConfig = (data) => [
+//   {
+//     title: "In-Progress Assignments",
+//     icon: BookOpen,
+//     content: `${data.inProgressAssignmentsCount} ${data.inProgressAssignmentsCount == 1 ? 'assignment' : 'assignments'}`,
+//     detail: "Across all applications!",
+//   },
+//   {
+//     title: "Next Deadline",
+//     icon: Calendar,
+//     content: `${data.nextDeadlineAssignment ? 'Next Deadline:' : 'No upcoming deadlines'} ${data.nextDeadlineAssignment ? data.nextDeadlineAssignment : ''}`,
+//     detail: `Assignment: ${data.nextDeadlineAssignmentTitle}`,
+//   },
+//   {
+//     title: "Completed",
+//     icon: CheckCircle,
+//     content: `${data.countOfCompletedTasks} assignments completed`,
+//     detail: "All done!",
+//   },
+// ]
+
+export const getStudentProfileConsultantViewHighightConfig = (data) => {
+  const inProgressCount = data.inProgressAssignmentsCount
+
+  const inProgressContent =
+    inProgressCount == null ? "No in-progress assignments"
+      : `${inProgressCount} ${inProgressCount === 1 ? 'assignment' : 'assignments'}`
+
+  return [
+    {
+      title: "In-Progress Assignments",
+      icon: BookOpen,
+      content: inProgressContent,
+      detail: "Across all applications!",
+    },
+    {
+      title: "Next Deadline",
+      icon: Calendar,
+      content: `${data.nextDeadlineAssignment ? 'Next Deadline:' : 'No upcoming deadlines'} ${data.nextDeadlineAssignment ? data.nextDeadlineAssignment : ''}`,
+      detail: `Assignment: ${data.nextDeadlineAssignmentTitle}`,
+    },
+    {
+      title: "Completed",
+      icon: CheckCircle,
+      content: `${data.countOfCompletedTasks} assignments completed`,
+      detail: "All done!",
+    },
+  ]
+}
