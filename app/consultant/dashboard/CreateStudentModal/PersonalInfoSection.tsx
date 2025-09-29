@@ -15,11 +15,11 @@ function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoS
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="firstName">First Name <span className="text-red-500">*</span></Label>
-                        <Input id="firstName" placeholder="Enter first name" value={formData.personalInformation.firstName} name="firstName" onChange={handlePersonalInfoChange} required />
+                        <Input id="firstName" placeholder="Enter first name" value={formData.profile.firstName} name="firstName" onChange={handlePersonalInfoChange} required />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name <span className="text-red-500">*</span></Label>
-                        <Input id="lastName" placeholder="Enter last name" value={formData.personalInformation.lastName} name="lastName" onChange={handlePersonalInfoChange} required />
+                        <Input id="lastName" placeholder="Enter last name" value={formData.profile.lastName} name="lastName" onChange={handlePersonalInfoChange} required />
                     </div>
                 </div>
             </div>
@@ -36,12 +36,12 @@ function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoS
                     </div> */}
                     <div className="space-y-2">
                         <Label htmlFor="phone">Phone Number</Label>
-                        <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" value={formData.personalInformation.phone} name="phone" onChange={handlePersonalInfoChange} />
+                        <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" value={formData.profile.phone} name="phone" onChange={handlePersonalInfoChange} />
                     </div>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="other">Other</Label>
-                    <Input id="other" placeholder="Other Contact Info" value={formData.personalInformation.other} name="other" onChange={handlePersonalInfoChange} />
+                    <Input id="other" placeholder="Other Contact Info" value={formData.profile.other} name="other" onChange={handlePersonalInfoChange} />
                 </div>
             </div>
         </>
