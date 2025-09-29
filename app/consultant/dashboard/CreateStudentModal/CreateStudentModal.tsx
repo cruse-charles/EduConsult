@@ -218,6 +218,8 @@ function CreateStudentModal() {
     return (
         // @ts-ignore
         <Dialog open={open} onOpenChange={(isOpen)=> {setOpen(isOpen); resetFormData();}}>
+            
+            {/* Add Student Button */}
             <DialogTrigger asChild>
                 <Button onClick={handleAddStudentClick} variant="default" className="w-full add-student-btn">
                     <Plus className="mr-2 h-4 w-4" />
@@ -225,6 +227,8 @@ function CreateStudentModal() {
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden create-student-modal">
+                
+                {/*  Modal Container */}
                 <div className="overflow-y-auto max-h-[90vh] rounded-lg p-6">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
@@ -235,6 +239,8 @@ function CreateStudentModal() {
                             Fill out the student information below. All fields marked with * are required.
                         </DialogDescription>
                     </DialogHeader>
+
+                    {/* Form Components */}
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <StudentAccountForm formData={formData} handleInputChange={handleInputChange}/>
                         <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
