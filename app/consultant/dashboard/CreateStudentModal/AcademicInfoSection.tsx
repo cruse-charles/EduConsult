@@ -20,41 +20,41 @@ function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoS
                         <Label htmlFor="currentSchool">
                             Current School <span className="text-red-500">*</span>
                         </Label>
-                        <Input id="currentSchool" placeholder="Lincoln High School" value={formData.academicInformation.currentSchool} name="currentSchool" onChange={handleAcademicInfoChange} required />
+                        <Input id="currentSchool" placeholder="Lincoln High School" value={formData.academics.currentSchool} name="currentSchool" onChange={handleAcademicInfoChange} required />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="grade">
                             Grade Level <span className="text-red-500">*</span>
                         </Label>
-                        <Input id="grade" placeholder="12" value={safeValue(formData.academicInformation.grade)} name="grade" onChange={handleAcademicInfoChange} required />
+                        <Input id="grade" placeholder="12" value={safeValue(formData.academics.grade)} name="grade" onChange={handleAcademicInfoChange} required />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="intendedMajor">
                             Intended Major
                         </Label>
-                        <Input id="intendedMajor" placeholder="Computer Science" value={formData.academicInformation.intendedMajor} name="intendedMajor" onChange={handleAcademicInfoChange} />
+                        <Input id="intendedMajor" placeholder="Computer Science" value={formData.academics.intendedMajor} name="intendedMajor" onChange={handleAcademicInfoChange} />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="gpa">GPA</Label>
-                        <Input id="gpa" step="any" placeholder="3.85" value={safeValue(formData.academicInformation.gpa)} name="gpa" onChange={handleAcademicInfoChange} />
+                        <Input id="gpa" step="any" placeholder="3.85" value={safeValue(formData.academics.gpa)} name="gpa" onChange={handleAcademicInfoChange} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="satScore">SAT Score</Label>
-                        <Input id="satScore" placeholder="1450" value={safeValue(formData.academicInformation.sat)} name="sat" onChange={handleAcademicInfoChange} />
+                        <Input id="satScore" placeholder="1450" value={safeValue(formData.academics.sat)} name="sat" onChange={handleAcademicInfoChange} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="actScore">ACT Score</Label>
-                        <Input id="actScore" placeholder="30" value={safeValue(formData.academicInformation.act)} name="act" onChange={handleAcademicInfoChange} />
+                        <Input id="actScore" placeholder="30" value={safeValue(formData.academics.act)} name="act" onChange={handleAcademicInfoChange} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="toeflScore">TOEFL Score</Label>
-                        <Input id="toeflScore" placeholder="105" value={safeValue(formData.academicInformation.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
+                        <Input id="toeflScore" placeholder="105" value={safeValue(formData.academics.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="ieltsScore">IELTS Score</Label>
-                        <Input id="ieltsScore" placeholder="6.5" value={safeValue(formData.academicInformation.ielts)} name="ielts" onChange={handleAcademicInfoChange} />
+                        <Input id="ieltsScore" placeholder="6.5" value={safeValue(formData.academics.ielts)} name="ielts" onChange={handleAcademicInfoChange} />
                     </div>
                 </div>
             </div>
