@@ -19,7 +19,7 @@ function GoalsAndNotesSection({formData, handleAcademicInfoChange, handlePersona
                     <Input
                     id="targetSchools"
                     placeholder="Stanford University, Harvard University, MIT"
-                    value={formData.academicInformation.targetSchools}
+                    value={formData.academics.targetSchools}
                     name="targetSchools"
                     onChange={handleAcademicInfoChange}
                     />
@@ -30,7 +30,7 @@ function GoalsAndNotesSection({formData, handleAcademicInfoChange, handlePersona
                     <Textarea
                     id="notes"
                     placeholder="Any additional information about the student..."
-                    value={formData.personalInformation.notes}
+                    value={formData.profile.notes}
                     name="notes"
                     onChange={handlePersonalInfoChange}
                     rows={3}
