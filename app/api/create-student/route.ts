@@ -5,7 +5,8 @@ import { adminAuth, adminDb, admin } from '@/lib/firebaseAdmin';
 export async function POST(request: NextRequest) {
   try {
     // Parse request body
-    const { email, password, personalInformation, academicInformation, folders, consultantId, onboarding, stats } = await request.json();
+    // const { email, password, personalInformation, academicInformation, folders, consultantId, onboarding, stats } = await request.json();
+    const { email, password, profile, academics, system, onboarding, stats } = await request.json();
 
     // Verify consultant token from request headers
     const authHeader = request.headers.get('authorization');
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Verify the requesting user is the consultant
-    if (decodedToken.uid !== consultantId) {
+    if (decodedToken.uid !== system.consultantId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -44,15 +45,14 @@ export async function POST(request: NextRequest) {
 
     // Reference to the new student document and consultant document
     const studentRef = adminDb.collection('studentUsers').doc(studentId);
-    const consultantRef = adminDb.collection('consultantUsers').doc(consultantId);
+    const consultantRef = adminDb.collection('consultantUsers').doc(system.consultantId);
 
     // Prepare student data
     const studentData = {
-      personalInformation,
-      academicInformation,
-      consultant: consultantId,
-      folders: folders || [],
-      email,
+      profile,
+      academics,
+      system,
+      // email,
       onboarding,
       stats,
       createdAt: new Date().toISOString(),

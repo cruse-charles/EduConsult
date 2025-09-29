@@ -26,7 +26,7 @@ const StudentAccountForm = ({formData, handleInputChange}: CreateStudentAccountP
                 name="email"
                 type="email"
                 placeholder="student@example.com"
-                value={formData.personalInformation.email}
+                value={formData.profile.email}
                 onChange={handleInputChange}
                 required
               />
