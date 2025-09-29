@@ -10,6 +10,7 @@ interface PersonalInfoSectionProps {
 function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoSectionProps) {
     return (
         <>
+        {/* Student Names */}
             <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -22,6 +23,8 @@ function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoS
                     </div>
                 </div>
             </div>
+
+            {/* Contact Information */}
             <div className="space-y-4">
                 <h3 className="text-md font-medium text-muted-foreground">Additional Contact Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -37,8 +40,8 @@ function PersonalInfoSection({formData, handlePersonalInfoChange}: PersonalInfoS
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="wechat">Other</Label>
-                    <Input id="wechat" placeholder="Other Contact Info" value={formData.personalInformation.other} name="other" onChange={handlePersonalInfoChange} />
+                    <Label htmlFor="other">Other</Label>
+                    <Input id="other" placeholder="Other Contact Info" value={formData.personalInformation.other} name="other" onChange={handlePersonalInfoChange} />
                 </div>
             </div>
         </>
