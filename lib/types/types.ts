@@ -2,7 +2,15 @@ import { Timestamp, DocumentReference, DocumentData } from "firebase/firestore";
 
 // Base to create/use a student
 export interface StudentBase {
-    academicInformation: {
+    profile: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        other: string;
+        notes: string;
+    };
+    academics: {
         currentSchool: string;
         gpa: number | null;
         sat: number | null;
@@ -13,22 +21,19 @@ export interface StudentBase {
         act: number | null;
         intendedMajor: string;
     };
-    personalInformation: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        phone: string;
-        other: string;
-        notes: string;
-    };
     stats: {
         inProgressAssignmentsCount: number;
         nextDeadline: Timestamp | undefined;
+    },
+    system: {
+        consultant: DocumentReference<DocumentData> | string;
+        folders: string[];
+        role: string;  
+    };
+    ui: {
+        color: string;
     }
-    consultant: DocumentReference<DocumentData> | string;
-    folders: string[];
     password: string;
-    role: string;
 }
 
 // Interface to add additional information about student

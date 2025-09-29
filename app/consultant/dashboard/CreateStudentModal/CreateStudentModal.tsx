@@ -38,7 +38,7 @@ function CreateStudentModal() {
 
     // State to manage form input data for student
     const [formData, setFormData] = useState<StudentFormData>({
-        personalInformation: {
+        profile: {
             firstName: '',
             lastName: '',
             email: '',
@@ -46,7 +46,7 @@ function CreateStudentModal() {
             other: '',
             notes: '',
         },
-        academicInformation: {
+        academics: {
             currentSchool: '',
             grade: null,
             gpa: null,
@@ -61,41 +61,51 @@ function CreateStudentModal() {
             inProgressAssignmentsCount: 0,
             nextDeadline: undefined,
         },
+        system: {
+            consultant: user.id,
+            folders: [],
+            role: 'student'
+        },
+        ui: {
+            color: '#3b82f6'
+        },
         password: '',
-        consultant: user.id,
-        folders: [],
-        role: 'student',
     });
 
     const resetFormData = () => {
         setFormData({
-        personalInformation: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            other: '',
-            notes: '',
-        },
-        academicInformation: {
-            currentSchool: '',
-            grade: null,
-            gpa: null,
-            sat: null,
-            toefl: null,
-            intendedMajor: '',
-            targetSchools: '',
-            act: null,
-            ielts: null,
-        },
-        stats: {
-            inProgressAssignmentsCount: 0,
-            nextDeadline: undefined,
-        },
-        password: '',
-        consultant: user.id,
-        folders: [],
-        role: 'student'
+            profile: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                other: '',
+                notes: '',
+            },
+            academics: {
+                currentSchool: '',
+                grade: null,
+                gpa: null,
+                sat: null,
+                toefl: null,
+                intendedMajor: '',
+                targetSchools: '',
+                act: null,
+                ielts: null,
+            },
+            stats: {
+                inProgressAssignmentsCount: 0,
+                nextDeadline: undefined,
+            },
+            ui: {
+                color: '#3b82f6'
+            },
+            system: {
+                consultant: user.id,
+                folders: [],
+                role: 'student'
+            },
+            password: '',
         })
     }
 
@@ -117,19 +127,33 @@ function CreateStudentModal() {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${idToken}`,
                 },
+                // body: JSON.stringify({
+                //     email: formData.personalInformation.email,
+                //     role: "student",
+                //     personalInformation: formData.personalInformation,
+                //     academicInformation: formData.academicInformation,
+                //     folders: formData.folders,
+                //     consultantId: user.id,
+                //     password: formData.password,
+                //     onboarding: {
+                //         isComplete: false,
+                //         onboardingStep: 0
+                //     },
+                //     stats: formData.stats,
+                //     ui: formData.ui
+                // }),
                 body: JSON.stringify({
-                    email: formData.personalInformation.email,
-                    role: "student",
-                    personalInformation: formData.personalInformation,
-                    academicInformation: formData.academicInformation,
-                    folders: formData.folders,
-                    consultantId: user.id,
+                    email: formData.profile.email,
                     password: formData.password,
+                    personalInformation: formData.profile,
+                    academicInformation: formData.academics,
+                    system: formData.system,
                     onboarding: {
                         isComplete: false,
                         onboardingStep: 0
                     },
-                    stats: formData.stats
+                    stats: formData.stats,
+                    ui: formData.ui
                 }),
             });
 
@@ -178,8 +202,8 @@ function CreateStudentModal() {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            personalInformation: {
-                ...prevData.personalInformation,
+            profile: {
+                ...prevData.profile,
                 [name]: value,
             }
         }))
@@ -190,8 +214,8 @@ function CreateStudentModal() {
         const { name, value} = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            academicInformation: {
-                ...prevData.academicInformation,
+            academics: {
+                ...prevData.academics,
                 [name]: value,
             }
         }))
@@ -208,7 +232,7 @@ function CreateStudentModal() {
             setFormData((prev) => ({
                 ...prev,
                 personalInformation: {
-                    ...prev.personalInformation,
+                    ...prev.profile,
                     email: value
                 }
             }))
