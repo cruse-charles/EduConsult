@@ -5,7 +5,6 @@ import { adminAuth, adminDb, admin } from '@/lib/firebaseAdmin';
 export async function POST(request: NextRequest) {
   try {
     // Parse request body
-    // const { email, password, personalInformation, academicInformation, folders, consultantId, onboarding, stats } = await request.json();
     const { email, password, profile, academics, system, onboarding, stats } = await request.json();
 
     // Verify consultant token from request headers

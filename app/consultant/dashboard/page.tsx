@@ -34,26 +34,11 @@ const page = () => {
             dispatch(fetchStudents(userId))
         } 
 
-        // console.log('USERID - ', userId)
     }, [userId])
 
-    useEffect(() => {
-        console.log('STUDENTS - ', students)
-    }, [])
-
-    // const filteredStudents = students.filter((student) => 
-    //     `${student.personalInformation.firstName} ${student.personalInformation.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
-    // )
     const filteredStudents = (students ?? []).filter((student) => 
         `${student.profile.firstName} ${student.profile.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    // const filteredStudents = (students ?? [])
-    // .filter((student) => student != null) // 👈 CRITICAL LINE
-    // .filter((student) => {
-    //     console.log('student', students)
-    //     const fullName = `${student.profile.firstName} ${student.profile.lastName}`.toLowerCase()
-    //     return fullName.includes(searchQuery.toLowerCase())
-    // })
     
     return (
         <div className="flex min-h-screen">
