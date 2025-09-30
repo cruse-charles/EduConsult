@@ -74,11 +74,16 @@ const studentSlice = createSlice({
       return {...state, ...action.payload}
     },
     removeFolder(state, action) {
-      state.folders = state.folders?.filter((folder) => folder !== action.payload)
+      if (!state.system?.folders) return;
+      // state.folders = state.folders?.filter((folder) => folder !== action.payload)
+      state.system.folders = state.system.folders?.filter((folder) => folder !== action.payload)
     },
     renameFolderInStudentSlice(state, action) {
-      const { oldFolderName, newFolderName } = action.payload;
-      state.folders = state.folders?.map((folder) => folder === oldFolderName ? newFolderName : folder);
+      if (!state.system?.folders) return;
+      // const { oldFolderName, newFolderName } = action.payload;
+      // state.folders = state.folders?.map((folder) => folder === oldFolderName ? newFolderName : folder);
+        const { oldFolderName, newFolderName } = action.payload;
+      state.system.folders = state.system.folders?.map((folder) => folder === oldFolderName ? newFolderName : folder);
     },
     checkReduxNextDeadline(state, action) {
       if (!state.stats) {
