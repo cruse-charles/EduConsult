@@ -127,8 +127,8 @@ function CreateStudentModal() {
                 body: JSON.stringify({
                     email: formData.profile.email,
                     password: formData.password,
-                    personalInformation: formData.profile,
-                    academicInformation: formData.academics,
+                    profile: formData.profile,
+                    academics: formData.academics,
                     system: formData.system,
                     onboarding: {
                         isComplete: false,
@@ -211,8 +211,8 @@ function CreateStudentModal() {
         if (name === 'email') {
             setFormData((prev) => ({
                 ...prev,
-                academics: {
-                    ...prev.academics,
+                profile: {
+                    ...prev.profile,
                     email: value
                 }
             }))
