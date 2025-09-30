@@ -44,7 +44,7 @@ const StudentTableRow = ({student, handleStudentClick}: StudentTableRowProps) =>
     return (
         <TableRow className="cursor-pointer student-row" onClick={() => handleStudentClick(student.id)} >
             <TableCell>
-                {student.personalInformation.firstName} {student.personalInformation.lastName}
+                {student.profile.firstName} {student.profile.lastName}
             </TableCell>
             <TableCell>
                 <span className="font-medium">

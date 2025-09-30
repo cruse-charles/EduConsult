@@ -43,7 +43,7 @@ const StudentTable = () => {
         // Determine comparison based on column selected with sortBy
         switch (sortBy) {
             case "name":
-                comparison = a.personalInformation.firstName.localeCompare(b.personalInformation.firstName)
+                comparison = a.profile.firstName.localeCompare(b.profile.firstName)
                 break
             case "In-Progress":
                 comparison = (a.stats?.inProgressAssignmentsCount || 0) - (b.stats?.inProgressAssignmentsCount || 0)
