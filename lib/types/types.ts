@@ -26,7 +26,7 @@ export interface StudentBase {
         nextDeadline: Timestamp | undefined;
     },
     system: {
-        consultant: DocumentReference<DocumentData> | string;
+        consultantId: DocumentReference<DocumentData> | string;
         folders: string[];
         role: string;  
     };

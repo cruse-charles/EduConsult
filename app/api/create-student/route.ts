@@ -7,6 +7,8 @@ export async function POST(request: NextRequest) {
     // Parse request body
     const { email, password, profile, academics, system, onboarding, stats } = await request.json();
 
+    console.log('Received data - ', { email, password, profile, academics, system, onboarding, stats })
+
     // Verify consultant token from request headers
     const authHeader = request.headers.get('authorization');
 
@@ -40,7 +42,10 @@ export async function POST(request: NextRequest) {
     const studentId = userRecord.uid;
 
     // Set custom claims for the new student
-    await adminAuth.setCustomUserClaims(studentId, { role: 'student' })
+    // await adminAuth.setCustomUserClaims(studentId, { role: 'student' })
+    await adminAuth.setCustomUserClaims(studentId, { 
+      role: system.role
+    })
 
     // Reference to the new student document and consultant document
     const studentRef = adminDb.collection('studentUsers').doc(studentId);

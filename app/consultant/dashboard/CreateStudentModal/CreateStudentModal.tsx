@@ -62,7 +62,7 @@ function CreateStudentModal() {
             nextDeadline: undefined,
         },
         system: {
-            consultant: user.id,
+            consultantId: user.id,
             folders: [],
             role: 'student'
         },
@@ -101,7 +101,7 @@ function CreateStudentModal() {
                 color: '#3b82f6'
             },
             system: {
-                consultant: user.id,
+                consultantId: user.id,
                 folders: [],
                 role: 'student'
             },
