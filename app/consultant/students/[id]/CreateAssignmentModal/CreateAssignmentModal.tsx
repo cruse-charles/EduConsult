@@ -120,7 +120,7 @@ function CreateAssignmentModal() {
         }
         
         // Only validate folder name if user is creating a new folder
-        if (newFolder && student.folders?.includes(formData.folder)) {
+        if (newFolder && student.system?.folders?.includes(formData.folder)) {
             newErrors.folderName = 'Folder name already used.'
         }
 

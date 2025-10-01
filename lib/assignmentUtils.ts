@@ -53,7 +53,7 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
         // Update folder names in student's doc
         await updateDoc(doc(db, "studentUsers", studentId), {
             assignmentDocIds: arrayUnion(assignmentDocId),
-            folders: arrayUnion(assignmentData.folder)
+            "system.folders": arrayUnion(assignmentData.folder)
         })
 
         // Update assignmentMetaData subcollection for consultant and student
@@ -225,7 +225,7 @@ export const deleteFolder = async (studentId: string, folderName: string, consul
         
         // Remove folder name from student doc
         batch.update(studentDocRef, {
-            folders: arrayRemove(folderName),
+            "system.folders": arrayRemove(folderName),
         });
 
 
@@ -265,10 +265,10 @@ export const renameFolder = async (studentId: string, oldFolderName: string, new
 
         // Remove old name, then add new name
         batch.update(studentDocRef, {
-            folders: arrayRemove(oldFolderName)
+            "system.folders": arrayRemove(oldFolderName)
         })
         batch.update(studentDocRef, {
-            folders: arrayUnion(newFolderName)
+            "system.folders": arrayUnion(newFolderName)
         })
 
         await batch.commit()
