@@ -18,7 +18,7 @@ function StudentProfileHeader() {
                     <ArrowLeft className="h-4 w-4" />
                 </Link>
             </Button>
-            <h1 className="text-2xl font-bold">{student?.personalInformation?.firstName} {student?.personalInformation?.lastName}</h1>
+            <h1 className="text-2xl font-bold">{student?.profile?.firstName} {student?.profile?.lastName}</h1>
         </div>
     )
 }

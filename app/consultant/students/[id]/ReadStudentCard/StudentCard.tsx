@@ -82,8 +82,8 @@ function ViewStudentCard() {
             // Update the student document in Firestore with the edited data
             const studentRef = doc(db, "studentUsers", student.id);
             await updateDoc(studentRef, {
-                personalInformation: editStudent.personalInformation,
-                academicInformation: editStudent.academicInformation,
+                personalInformation: editStudent.profile,
+                academicInformation: editStudent.profile,
             })
 
             // Update Redux
@@ -105,8 +105,8 @@ function ViewStudentCard() {
 
         setEditStudent((prev) => ({
             ...prev,
-            personalInformation: {
-                ...prev.personalInformation,
+            profile: {
+                ...prev.profile,
                 [name]: value
             }
         }))
@@ -121,7 +121,7 @@ function ViewStudentCard() {
                     {!editMode && 
                         <>
                             <CardTitle className="text-xl">
-                                {student?.personalInformation?.firstName} {student?.personalInformation?.lastName}
+                                {student?.profile?.firstName} {student?.profile?.lastName}
                                 {/* {editStudent?.personalInformation?.firstName} {editStudent?.personalInformation?.lastName} */}
                             </CardTitle>
                             <Button onClick={ ()=> setEditMode(true)} variant="outline" className="self-start md:self-auto">
@@ -134,9 +134,9 @@ function ViewStudentCard() {
                         <>
                             <div className='flex flex-col gap-2'>
                                 <Label className='text-muted-foreground'>First Name</Label>
-                                <Input className='h-7' name='firstName' value={editStudent.personalInformation.firstName} onChange={handleNameChange}/>
+                                <Input className='h-7' name='firstName' value={editStudent.profile.firstName} onChange={handleNameChange}/>
                                 <Label className='text-muted-foreground'>Last Name</Label>
-                                <Input className='h-7' name='lastName' value={editStudent.personalInformation.lastName} onChange={handleNameChange}/>   
+                                <Input className='h-7' name='lastName' value={editStudent.profile.lastName} onChange={handleNameChange}/>   
                             </div>
                             <div className='flex flex-col gap-1'>
                                 <Button variant="outline" disabled={isLoading} onClick={handleSave}>Save</Button>

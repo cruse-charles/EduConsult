@@ -25,7 +25,7 @@ export const DeleteConfirmContext = createContext<{
 function AssignmentsList() {
     // Retrieve data from redux/URL
     const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
-    const folders = useSelector((state: RootState) => state.currentStudent.folders) || []
+    const folders = useSelector((state: RootState) => state.currentStudent.system?.folders) || []
 
     // State to manage modal popup for folders
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)

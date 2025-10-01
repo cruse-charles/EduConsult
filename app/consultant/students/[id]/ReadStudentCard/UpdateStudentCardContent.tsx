@@ -23,8 +23,8 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
         setEditStudent((prev) => (
             {
                 ...prev,
-                personalInformation: {
-                    ...prev.personalInformation,
+                profile: {
+                    ...prev.profile,
                     [name]: value
                 }
             }
@@ -37,8 +37,8 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
         setEditStudent((prev) => (
             {
                 ...prev,
-                academicInformation: {
-                    ...prev.academicInformation,
+                academics: {
+                    ...prev.academics,
                     [name]: value
                 }
             }
@@ -51,9 +51,9 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
             <div className="text-sm font-medium">Contact Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">Email:</div>
-                <Input className='h-7' name='email' type='email' value={editStudent?.personalInformation.email} onChange={handlePersonalInfoChange}/>
+                <Input className='h-7' name='email' type='email' value={editStudent?.profile.email} onChange={handlePersonalInfoChange}/>
                 <div className="text-muted-foreground">Phone:</div>
-                <Input className='h-7' name='phone' value={editStudent?.personalInformation.phone} onChange={handlePersonalInfoChange}/>
+                <Input className='h-7' name='phone' value={editStudent?.profile.phone} onChange={handlePersonalInfoChange}/>
             </div>
         </div>
 
@@ -63,28 +63,28 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
             <div className="text-sm font-medium">Academic Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">School:</div>
-                <Input className='h-7' name='currentSchool' value={editStudent?.academicInformation.currentSchool} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='currentSchool' value={editStudent?.academics.currentSchool} onChange={handleAcademicInfoChange}/>
                 
                 <div className="text-muted-foreground">Grade:</div>
-                <Input className='h-7' name='grade' value={safeValue(editStudent?.academicInformation.grade)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' name='grade' value={safeValue(editStudent?.academics.grade)} onChange={handleAcademicInfoChange}/>
                 
                 <div className="text-muted-foreground">GPA:</div>
-                <Input className='h-7' step="any" name='gpa' value={safeValue(editStudent?.academicInformation.gpa)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' step="any" name='gpa' value={safeValue(editStudent?.academics.gpa)} onChange={handleAcademicInfoChange}/>
                 
                 <div className="text-muted-foreground">SAT Score:</div>
-                <Input className='h-7' step="any" name='sat' value={safeValue(editStudent?.academicInformation.sat)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' step="any" name='sat' value={safeValue(editStudent?.academics.sat)} onChange={handleAcademicInfoChange}/>
                 
                 <div className="text-muted-foreground">ACT Score:</div>
-                <Input className='h-7' step="any" name='act' value={safeValue(editStudent?.academicInformation.act)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' step="any" name='act' value={safeValue(editStudent?.academics.act)} onChange={handleAcademicInfoChange}/>
                 
                 <div className="text-muted-foreground">TOEFL Score:</div>
-                <Input className='h-7' step="any" name='toefl' value={safeValue(editStudent?.academicInformation?.toefl)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' step="any" name='toefl' value={safeValue(editStudent?.academics?.toefl)} onChange={handleAcademicInfoChange}/>
 
                 <div className="text-muted-foreground">IELTS Score:</div>
-                <Input className='h-7' step="any" name='ielts' value={safeValue(editStudent?.academicInformation?.ielts)} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' step="any" name='ielts' value={safeValue(editStudent?.academics?.ielts)} onChange={handleAcademicInfoChange}/>
 
                 <div className="text-muted-foreground">Intended Major:</div>
-                <Input className='h-7' step="any" name='intendedMajor' value={editStudent?.academicInformation?.intendedMajor} onChange={handleAcademicInfoChange}/>
+                <Input className='h-7' step="any" name='intendedMajor' value={editStudent?.academics?.intendedMajor} onChange={handleAcademicInfoChange}/>
             </div>
         </div>
 
@@ -111,7 +111,7 @@ function EditStudentCardContent({editStudent, setEditStudent}: EditStudentCardCo
         {/* <Separator /> */}
 
         <div className="space-y-2">
-            <Textarea name='notes' className="text-sm font-medium" value={editStudent?.personalInformation.notes} onChange={handlePersonalInfoChange}/>
+            <Textarea name='notes' className="text-sm font-medium" value={editStudent?.profile.notes} onChange={handlePersonalInfoChange}/>
         </div>
     </CardContent>
   )

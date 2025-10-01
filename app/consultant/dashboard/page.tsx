@@ -36,12 +36,10 @@ const page = () => {
 
     }, [userId])
 
-    // const filteredStudents = (students ?? []).filter((student) => 
-    //     `${student.profile.firstName} ${student.profile.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
-    // )
-    const filteredStudents = (students ?? []).filter((student) => student != null).filter((student) => 
+    const filteredStudents = (students ?? []).filter((student) => 
         `${student.profile.firstName} ${student.profile.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
     )
+
     
     return (
         <div className="flex min-h-screen">

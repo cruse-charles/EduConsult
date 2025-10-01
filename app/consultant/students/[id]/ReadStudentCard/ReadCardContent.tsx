@@ -10,9 +10,9 @@ function StudentCardContent({student}: {student: Student}) {
             <div className="text-sm font-medium">Contact Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">Email:</div>
-                <div>{student?.personalInformation?.email}</div>
+                <div>{student?.profile?.email}</div>
                 <div className="text-muted-foreground">Phone:</div>
-                <div>{student?.personalInformation?.phone}</div>
+                <div>{student?.profile?.phone}</div>
             </div>
         </div>
 
@@ -22,28 +22,28 @@ function StudentCardContent({student}: {student: Student}) {
             <div className="text-sm font-medium">Academic Information</div>
             <div className="grid grid-cols-[1fr_2fr] gap-1 text-sm">
                 <div className="text-muted-foreground">School:</div>
-                <div>{student?.academicInformation?.currentSchool}</div>
+                <div>{student?.academics?.currentSchool}</div>
 
                 <div className="text-muted-foreground">Grade:</div>
-                <div>{student?.academicInformation?.grade}</div>
+                <div>{student?.academics?.grade}</div>
 
                 <div className="text-muted-foreground">GPA: </div>
-                <div>{student?.academicInformation?.gpa}</div>
+                <div>{student?.academics?.gpa}</div>
 
                 <div className="text-muted-foreground">SAT: </div>
-                <div>{student?.academicInformation?.sat}</div>
+                <div>{student?.academics?.sat}</div>
 
                 <div className="text-muted-foreground">ACT: </div>
-                <div>{student?.academicInformation?.act}</div>
+                <div>{student?.academics?.act}</div>
 
                 <div className="text-muted-foreground">TOEFL: </div>
-                <div>{student?.academicInformation?.toefl}</div>
+                <div>{student?.academics?.toefl}</div>
 
                 <div className="text-muted-foreground">IELTS: </div>
-                <div>{student?.academicInformation?.ielts}</div>
+                <div>{student?.academics?.ielts}</div>
 
                 <div className="text-muted-foreground">Intended Major: </div>
-                <div>{student?.academicInformation?.intendedMajor}</div>
+                <div>{student?.academics?.intendedMajor}</div>
             </div>
         </div>
 
@@ -71,7 +71,7 @@ function StudentCardContent({student}: {student: Student}) {
 
         <div className="space-y-2">
             <div className="text-sm font-medium">Notes</div>
-            <p className="text-sm text-muted-foreground">{student?.personalInformation?.notes}</p>
+            <p className="text-sm text-muted-foreground">{student?.profile?.notes}</p>
         </div>
     </CardContent>
   )
