@@ -49,7 +49,8 @@ export const countOfInProgressStudents = async (consultantId: string) => {
 
     const q = query(
         collection(db, 'studentUsers'),
-        where('consultant', '==', consultantId),
+        // where('consultant', '==', consultantId),
+        where('system.consultantId', '==', consultantId),
         where('stats.inProgressAssignmentsCount', '>', 0)
     )
 
