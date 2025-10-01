@@ -5,6 +5,10 @@ import { db } from "@/lib/firebaseConfig";
 import { Timestamp } from "firebase/firestore";
 import { Assignment } from '../types/types';
 
+/* =========================================================
+ QUERIES FOR ASSIGNMENTS
+ ========================================================= */
+
 // Function to count tasks due this week for a consultant view
 export const getTasksDueThisWeekConsultantDashboard = async (consultantId: string) => {
 
@@ -42,20 +46,6 @@ export const getTasksDueThisWeekStudentDashboard = async (studentId: string) => 
 
     const snapshot = await getDocs(q);
     return snapshot;
-}
-
-// Function to count students in progress (has In-Progress assighnemnts) for a consultant view
-export const countOfInProgressStudents = async (consultantId: string) => {
-
-    const q = query(
-        collection(db, 'studentUsers'),
-        // where('consultant', '==', consultantId),
-        where('system.consultantId', '==', consultantId),
-        where('stats.inProgressAssignmentsCount', '>', 0)
-    )
-
-    const snapshot = await getDocs(q);
-    return snapshot.size;
 }
 
 // Function to count overdue assignments for a consultant view
@@ -133,4 +123,22 @@ export const findNextAssignmentDeadlineConsultantDashboard = async (consultantId
     }
 
     return undefined
+}
+
+
+/* =========================================================
+ QUERIES FOR ASSIGNMENTS
+ ========================================================= */
+
+// Function to count students in progress (has In-Progress assighnemnts) for a consultant view
+export const countOfInProgressStudents = async (consultantId: string) => {
+
+    const q = query(
+        collection(db, 'studentUsers'),
+        where('system.consultantId', '==', consultantId),
+        where('stats.inProgressAssignmentsCount', '>', 0)
+    )
+
+    const snapshot = await getDocs(q);
+    return snapshot.size;
 }
