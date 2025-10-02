@@ -142,7 +142,7 @@ function AssignmentDetails() {
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
                     <h4 className="font-medium">Assignment Overview</h4>
-                    { user.role === 'consultant' && (
+                    { user.system.role === 'consultant' && (
                         !edit ? (
                             <Button variant="outline" size="sm" onClick={() => setEdit(true)} className="gap-2">
                                 <Pencil className="h-4 w-4" />

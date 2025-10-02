@@ -26,7 +26,7 @@ const page = () => {
 
     // Retreive user from redux store
     const user = useSelector((state: RootState) => state.user);
-    const [profileData, setProfileData] = useState({firstName: user?.personalInformation?.firstName, lastName: user?.personalInformation?.lastName, email: user.email})
+    const [profileData, setProfileData] = useState({firstName: user?.profile?.firstName, lastName: user?.profile?.lastName, email: user.profile.email})
 
     const handlePasswordChange = async () => {
         const auth = getAuth();
@@ -94,7 +94,7 @@ const page = () => {
     // Handle cancel, return to view mode and restore user's info
     const handleCancel = () => {
         setEdit(false)
-        setProfileData({firstName: user?.personalInformation?.firstName, lastName: user?.personalInformation?.lastName, email: user.email})
+        setProfileData({firstName: user?.profile?.firstName, lastName: user?.profile?.lastName, email: user.profile.email})
     }
 
     return (

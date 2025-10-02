@@ -44,14 +44,16 @@ export const fetchUser = createAsyncThunk(
 
 const initialState: UserState = {
     id: '',
-    personalInformation: {
+    profile: {
+        email: '',
         firstName: '',
         lastName: '',
     },
-    email: '',
-    role: '',
     assignmentDocIds: [],
-    folders: [],
+    system: {
+        folders: [],
+        role: ''
+    },
     assignmentsMetaData: {}
 }
 
