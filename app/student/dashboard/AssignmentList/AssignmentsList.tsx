@@ -19,7 +19,7 @@ function AssignmentsList() {
     const dispatch = useDispatch<AppDispatch>()
     const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
     const user = useSelector((state: RootState) => state.user)
-    const folders = useSelector((state: RootState) => state.user.folders) || []
+    const folders = useSelector((state: RootState) => state.user.system.folders) || []
 
     const {folderSort, assignmentSort, setFolderSort, setAssignmentSort,
         getFilteredAssignments, sortedFolders, getCompletedCount

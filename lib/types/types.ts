@@ -127,15 +127,17 @@ export interface FirebaseUserInfo {
 
 export interface UserState {
     id: string;
-    personalInformation: {
+    profile: {
         firstName: string;
         lastName: string;
+        email: string;
     }
-    email: string;
-    role: string;
     assignmentsMetaData: Record<string, AssignmentMetaData>;
     assignmentDocIds: string[];
-    folders: string[];
+    system: {
+        folders: string[];
+        role: string;
+    }
 }
 
 export type AssignmentMetaData = {
