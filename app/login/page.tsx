@@ -95,7 +95,7 @@ const page = () => {
         // Add user info from token to Redux state
         dispatch(setUser({
           id: token.claims.user_id,
-          role: role,
+          system: {role: role},
         }))
         
         // If the user is a student then set their data in student slice and redirect to student profile

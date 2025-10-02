@@ -30,11 +30,11 @@ const page = () => {
 
     // State to manage form input data for email and password
     const [userData, setUserData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
     })
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<{email?: string; password?: string; confirmPassword?: string; firstName?: string; lastName?: string; }>({})
