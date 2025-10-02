@@ -14,7 +14,7 @@ function StudentProfileHeader() {
     return (
         <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" asChild>
-                <Link href={`/${user.role}/dashboard/`}>
+                <Link href={`/${user.system.role}/dashboard/`}>
                     <ArrowLeft className="h-4 w-4" />
                 </Link>
             </Button>

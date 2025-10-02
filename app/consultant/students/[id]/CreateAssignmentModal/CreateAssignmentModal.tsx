@@ -63,8 +63,8 @@ function CreateAssignmentModal() {
         studentFirstName: student?.profile?.firstName,
         studentLastName: student?.profile?.lastName,
         consultantId: user.id,
-        consultantFirstName: user?.personalInformation?.firstName,
-        consultantLastName: user?.personalInformation?.lastName,
+        consultantFirstName: user?.profile?.firstName,
+        consultantLastName: user?.profile?.lastName,
         dueDate: undefined,
         note: "",
         files: [],
@@ -86,8 +86,8 @@ function CreateAssignmentModal() {
             studentFirstName: student?.profile?.firstName,
             studentLastName: student?.profile?.lastName,
             consultantId: user.id,
-            consultantFirstName: user?.personalInformation?.firstName,
-            consultantLastName: user?.personalInformation?.lastName,
+            consultantFirstName: user?.profile?.firstName,
+            consultantLastName: user?.profile?.lastName,
             dueDate: undefined,
             note: "",
             files: [],
@@ -159,14 +159,14 @@ function CreateAssignmentModal() {
                 studentId: studentId,
                 studentFirstName: student?.profile?.firstName,
                 studentLastName: student?.profile?.lastName,
-                consultantFirstName: user?.personalInformation?.firstName,
-                consultantLastName: user?.personalInformation?.lastName,
+                consultantFirstName: user?.profile?.firstName,
+                consultantLastName: user?.profile?.lastName,
                 consultantId: user.id,
                 timeline: [{
                     files: [] as AssignmentFile[],
                     type: 'Assignment Created',
                     uploadedAt: Timestamp.fromDate(new Date()),
-                    uploadedByName: `${user?.personalInformation?.firstName} ${user?.personalInformation?.lastName}`,
+                    uploadedByName: `${user?.profile?.firstName} ${user?.profile?.lastName}`,
                     uploadedById: user.id,
                     note: 'Assignment created and assigned to student.'
                 }]
@@ -179,7 +179,7 @@ function CreateAssignmentModal() {
             assignmentData.timeline[0].files = filesData
             
             // Create Assignment
-            if (!user.role) return
+            if (!user.system.role) return
             const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
 
             // Create assignment with ID to add to redux for proper ordering

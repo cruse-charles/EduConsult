@@ -72,7 +72,7 @@ const page = () => {
         const userCredential = await signInWithEmailAndPassword(auth, userData.email, userData.password)
         // console.log('UserCrednetial', userCredential)
         // Check if account has been verified
-        // if (!userCredential.user.emailVerified && user.role === 'consultant') {
+        // if (!userCredential.user.emailVerified && user.system.role === 'consultant') {
         //   toast(<CustomToast title="Please verify your email before logging in." description="" status="error"/>)
         //   return
         // }

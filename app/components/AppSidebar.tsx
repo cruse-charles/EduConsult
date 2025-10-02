@@ -98,7 +98,7 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems(user.role).map((item) => (
+              {menuItems(user.system.role).map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton className={item.className} asChild isActive={pathname === item.url}>
                     <Link href={item.url}>

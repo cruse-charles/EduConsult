@@ -22,7 +22,7 @@ const Highlights = () => {
         // Function to load highlights based on user role
         const loadHighlights = async () => {
             setLoading(true)
-            if (user.role === 'consultant') {
+            if (user.system.role === 'consultant') {
                 const [tasksDueThisWeek, studentsInProgress, overDueAssignments, nextAssignment] = await Promise.all([
                     getTasksDueThisWeekConsultantDashboard(user.id),
                     countOfInProgressStudents(user.id),
@@ -36,7 +36,7 @@ const Highlights = () => {
                     nextAssignment: nextAssignment,
                     overDueAssignments: overDueAssignments
                 })
-            } else if (user.role === 'student') {
+            } else if (user.system.role === 'student') {
                 const [tasksDueThisWeek, completedAssignments, reviewedAssignments, totalAssignments] = await Promise.all([
                     getTasksDueThisWeekStudentDashboard(user.id),
                     countCompletedAssignmentsStudentDashboard(user.id),
@@ -59,7 +59,7 @@ const Highlights = () => {
     }, [user.id])
 
 
-    const highlightConfig = user.role === 'consultant' ? getConsultantHighlightConfig(data) : getStudentHighlightConfig(data);
+    const highlightConfig = user.system.role === 'consultant' ? getConsultantHighlightConfig(data) : getStudentHighlightConfig(data);
 
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

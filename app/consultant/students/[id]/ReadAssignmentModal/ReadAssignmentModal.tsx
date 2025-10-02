@@ -63,16 +63,16 @@ function ReadAssignmentModal() {
             const entryData = {
                 files: [] as AssignmentFile[],
                 note: formData.note,
-                type: user.role === 'consultant' ? 'Feedback' : 'Submission',
+                type: user.system.role === 'consultant' ? 'Feedback' : 'Submission',
                 uploadedAt: new Date(),
                 uploadedById: user.id,
-                uploadedByName: user?.personalInformation?.firstName + ' ' + user?.personalInformation?.lastName
+                uploadedByName: user?.profile?.firstName + ' ' + user?.profile?.lastName
             }
     
             // TODO: Make this a red inline error
             // Error handling
             if (entryData.note.trim() === '') {
-                if (user.role === 'consultant') {
+                if (user.system.role === 'consultant') {
                     alert('Please add a note to submit feedback.')
                 } else {
                     alert('Please add a note to submit submission   .')
@@ -100,7 +100,7 @@ function ReadAssignmentModal() {
             const updatedAssignment = {
                 ...assignment,
                 timeline: [...(assignment.timeline || []), entryData],
-                status: user.role === 'student' ? 'Submitted' : assignment.status
+                status: user.system.role === 'student' ? 'Submitted' : assignment.status
             };
     
             // setCurrentAssignment(updatedAssignment);
@@ -129,7 +129,7 @@ function ReadAssignmentModal() {
     }
 
     // Dynamic button label based on user role and loading state
-    const baseButtonLabel = user.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';
+    const baseButtonLabel = user.system.role === 'consultant' ? 'Send Feedback' : 'Submit Assignment';
     const buttonLabel = isLoading ? 'Submitting...' : baseButtonLabel;
 
     return (

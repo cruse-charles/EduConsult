@@ -67,7 +67,7 @@ function ViewStudentCard() {
             setIsLoading(false)
 
             // Redirect to dashboard
-            router.push(`/${user.role}/dashboard`);
+            router.push(`/${user.system.role}/dashboard`);
         } catch (error) {
             setIsLoading(false)
             console.error("Error deleting student:", error);

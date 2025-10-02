@@ -27,7 +27,7 @@ const page = () => {
     // Fetch user's assignments 
     useEffect(() => {
         const fetchAssignments = async () => {
-            const assignmentData = user.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
+            const assignmentData = user.system.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
             setAssignments(assignmentData)
         }
 
@@ -48,7 +48,7 @@ const page = () => {
                         <TableHeader>
                         <TableRow>
                             <TableHead>Assignment</TableHead>
-                            <TableHead>{user.role === 'consultant' ? 'Student' : 'Consultant'}</TableHead>
+                            <TableHead>{user.system.role === 'consultant' ? 'Student' : 'Consultant'}</TableHead>
                             <TableHead>Type</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Due Date</TableHead>
@@ -61,7 +61,7 @@ const page = () => {
                             <TableCell className="font-medium">{assignment.title}</TableCell>
                             {/* TODO: Change student to an object with id, firstName, lastName */}
                             {/* <TableCell>{assignment.studentFirstName} {assignment.studentLastName}</TableCell> */}
-                            <TableCell>{user.role === 'consultant' ? `${assignment.studentFirstName} ${assignment.studentLastName}` : `${assignment.consultantFirstName} ${assignment.consultantLastName}`}</TableCell>
+                            <TableCell>{user.system.role === 'consultant' ? `${assignment.studentFirstName} ${assignment.studentLastName}` : `${assignment.consultantFirstName} ${assignment.consultantLastName}`}</TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-2">
                                     {assignment.type === "Essay" && <FileText className="h-4 w-4 text-blue-500" />}
