@@ -110,12 +110,14 @@ const page = () => {
 
         // Create a new document with user's UID in Firestore database
         await setDoc(doc(db, "consultantUsers", user.uid), {
-            personalInformation: {
+            profile: {
               email: user.email,
               firstName: userData.firstName,
               lastName: userData.lastName,
             },
-            role: 'consultant',
+            system: {
+              role: 'consultant',
+            },
             students: [],
             createdAt: new Date(),
             signInMethod: 'email',

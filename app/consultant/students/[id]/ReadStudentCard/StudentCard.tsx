@@ -82,8 +82,8 @@ function ViewStudentCard() {
             // Update the student document in Firestore with the edited data
             const studentRef = doc(db, "studentUsers", student.id);
             await updateDoc(studentRef, {
-                personalInformation: editStudent.profile,
-                academicInformation: editStudent.profile,
+                profile: editStudent.profile,
+                academics: editStudent.profile,
             })
 
             // Update Redux

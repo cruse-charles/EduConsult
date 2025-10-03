@@ -60,7 +60,7 @@ function ViewAssignmentModal() {
                 files: [] as AssignmentFile[],
                 note: formData.note,
                 uploadedAt: new Date(),
-                uploadedByName: user?.personalInformation?.firstName + ' ' + user?.personalInformation?.lastName,
+                uploadedByName: user?.profile?.firstName + ' ' + user?.profile?.lastName,
                 uploadedById: user.id,
                 type: 'Submission'
             }
