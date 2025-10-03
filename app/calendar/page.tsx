@@ -117,7 +117,7 @@ const page = () => {
                                     // <div key={assignment.id} onClick={() => handleAssignmentClick(assignment)} className="p-1 mb-1 cursor-pointer rounded-md border border-blue-200 bg-blue-50" >
                                     <div key={assignment.id} onClick={() => handleAssignmentClick(assignment)} className="p-1 mb-1 cursor-pointer rounded-md border" style={{backgroundColor: assignment.color, borderColor: assignment.color}}>
                                         <div className="text-xs font-medium truncate">
-                                            {assignment.title}
+                                            {assignment.title} - {assignment.studentFirstName}
                                         </div>
                                     </div>
                                 ))
