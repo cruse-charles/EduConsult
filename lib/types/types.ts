@@ -91,6 +91,7 @@ export interface Assignment extends AssignmentBase {
     hasRead?: boolean;
     studentId: string;
     consultantId: string;
+    color: string;
 }
 
 // Structure for timeline entries
