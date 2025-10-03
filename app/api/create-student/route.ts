@@ -5,7 +5,7 @@ import { adminAuth, adminDb, admin } from '@/lib/firebaseAdmin';
 export async function POST(request: NextRequest) {
   try {
     // Parse request body
-    const { email, password, profile, academics, system, onboarding, stats } = await request.json();
+    const { email, password, profile, academics, system, onboarding, stats, ui } = await request.json();
 
     console.log('Received data - ', { email, password, profile, academics, system, onboarding, stats })
 
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
       // email,
       onboarding,
       stats,
+      ui,
       createdAt: new Date().toISOString(),
       // TODO: TAKE OUT PASSWORD AFTER DEBUGGING
       // password
