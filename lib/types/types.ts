@@ -62,10 +62,10 @@ export interface AssignmentBase {
     dueDate: Date | undefined | Timestamp;
     note: string;
     createdAt: Date | null | Timestamp;
-    // studentId: string;
+    // studentId?: string;
     studentFirstName?: string;
     studentLastName?: string;
-    // consultantId: string;
+    // consultantId?: string;
     consultantFirstName?: string;
     consultantLastName?: string;
     folder: string;
@@ -89,6 +89,8 @@ export interface Assignment extends AssignmentBase {
     id: string;
     timeline: Entry[];
     hasRead?: boolean;
+    studentId: string;
+    consultantId: string;
 }
 
 // Structure for timeline entries
