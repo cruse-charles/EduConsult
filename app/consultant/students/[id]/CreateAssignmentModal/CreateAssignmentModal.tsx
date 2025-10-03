@@ -55,14 +55,15 @@ function CreateAssignmentModal() {
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [formData, setFormData] = useState<AssignmentFormData>({
+        // TOOOOOOOOOODOOOOOOOOOOOOOOOOOOO: THIS IS RED CUZ I COMMENTED OUT IDS FOR FORMDATA, IT'S NOT NEEDED THOUGH RIGHT? JUST WHEN WE SEND IT
         title: "",
         type: "",
         priority: "",
         folder: "",
-        studentId: studentId,
+        // studentId: studentId,
         studentFirstName: student?.profile?.firstName,
         studentLastName: student?.profile?.lastName,
-        consultantId: user.id,
+        // consultantId: user.id,
         consultantFirstName: user?.profile?.firstName,
         consultantLastName: user?.profile?.lastName,
         dueDate: undefined,
@@ -82,17 +83,17 @@ function CreateAssignmentModal() {
             type: "",
             priority: "",
             folder: "",
-            studentId: studentId,
+            // studentId: studentId,
             studentFirstName: student?.profile?.firstName,
             studentLastName: student?.profile?.lastName,
-            consultantId: user.id,
+            // consultantId: user.id,
             consultantFirstName: user?.profile?.firstName,
             consultantLastName: user?.profile?.lastName,
             dueDate: undefined,
             note: "",
             files: [],
             createdAt: null,
-            status: 'In-Progress'
+            status: 'In-Progress',
         });
         clearFiles()
         setDueDate(undefined);
@@ -162,6 +163,7 @@ function CreateAssignmentModal() {
                 consultantFirstName: user?.profile?.firstName,
                 consultantLastName: user?.profile?.lastName,
                 consultantId: user.id,
+                color: student.ui?.color,
                 timeline: [{
                     files: [] as AssignmentFile[],
                     type: 'Assignment Created',

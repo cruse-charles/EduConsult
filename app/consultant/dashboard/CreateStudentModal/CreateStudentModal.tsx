@@ -98,7 +98,7 @@ function CreateStudentModal() {
                 nextDeadline: undefined,
             },
             ui: {
-                color: '#3b82f6'
+                color: '#edadf7'
             },
             system: {
                 consultantId: user.id,

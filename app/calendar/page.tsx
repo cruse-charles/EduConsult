@@ -107,7 +107,7 @@ const page = () => {
                             !isCurrentMonth ? "text-muted-foreground bg-muted/20" : ""
                         } ${isToday ? "bg-primary/10 border-primary" : ""}`}
                     >
-                        <div className="text-sm font-medium mb-1">{day.getDate()}</div>
+                        <div className="text-sm font-medium mb-1 ">{day.getDate()}</div>
                         <ScrollArea>
                             {assignments
                                 .filter(assignment => (
