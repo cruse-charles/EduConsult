@@ -22,9 +22,9 @@ const studentSlice = createSlice({
   initialState,
   reducers: {
     updateFolders(state, action) {
-      if (!state.folders) return
-      if (!state.folders.includes(action.payload)) {
-        state.folders = [...state.folders, action.payload];
+      if (!state.system) return
+      if (!state.system.folders.includes(action.payload)) {
+        state.system.folders = [...state.system.folders, action.payload];
       }
     },
     // TODO: Rename this to addAssignmentDocId, this doesn't account for deletion
