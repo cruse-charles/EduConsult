@@ -30,6 +30,7 @@ import CustomToast from "@/app/components/CustomToast"
 import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
+import { set } from "date-fns"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -219,6 +220,7 @@ function CreateAssignmentModal() {
             toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="success"/>)
         } catch (error) {
             console.error("Error creating assignment:", error);
+            setIsLoading(false)
             toast(<CustomToast title="Failed to Create Assignment" description="Please refresh and try again." status="error"/>)
         }
     }
