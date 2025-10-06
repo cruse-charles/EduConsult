@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import CreateStudentModal from "./CreateStudentModal/CreateStudentModal";
 import Highlights from "../../components/Highlights/Highlights";
 import StudentTable from "./StudentTable/StudentTable";
-import DashboardAssignmentList from "./DashboardAssignmentList";
+import DashboardAssignmentCalendar from "./DashboardAssignmentCalendar";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -98,7 +98,7 @@ const page = () => {
                                 <StudentTable />
                             </TabsContent>
                             <TabsContent value="calendar" className="space-y-4">
-                                <DashboardAssignmentList />
+                                <DashboardAssignmentCalendar />
                             </TabsContent>
                         </Tabs>
                     </div>

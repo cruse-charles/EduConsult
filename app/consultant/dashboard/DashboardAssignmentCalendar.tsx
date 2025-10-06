@@ -12,11 +12,11 @@ import { Assignment } from '@/lib/types/types'
 
 import { fetchConsultantDashboardAssignments } from '@/redux/slices/consultantAssignmentSlice'
 import { RootState } from '@/redux/store'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
-const DashboardAssignmentList = () => {
+const DashboardAssignmentCalendar = () => {
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
     const [dashboardAssignments, setDashboardAssignments] = useState<Assignment[]>([])
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
@@ -139,4 +139,4 @@ const DashboardAssignmentList = () => {
     )
 }
 
-export default DashboardAssignmentList
+export default DashboardAssignmentCalendar
