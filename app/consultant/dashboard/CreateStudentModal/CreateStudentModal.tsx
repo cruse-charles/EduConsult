@@ -25,6 +25,7 @@ import { completeStep } from "@/redux/slices/onboardingSlice";
 import { nextStep } from "@/lib/onBoardingUtils";
 import { addStudent } from "@/redux/slices/studentsSlice";
 import { onboardingSteps } from "@/lib/onboardingSteps";
+import { getRandomColor } from "@/lib/utils";
 
 function CreateStudentModal() {
     let auth = getAuth(app);
@@ -67,7 +68,7 @@ function CreateStudentModal() {
             role: 'student'
         },
         ui: {
-            color: '#3b82f6'
+            color: getRandomColor()
         },
         password: '',
     });
@@ -98,7 +99,7 @@ function CreateStudentModal() {
                 nextDeadline: undefined,
             },
             ui: {
-                color: '#edadf7'
+                color: getRandomColor()
             },
             system: {
                 consultantId: user.id,

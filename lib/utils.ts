@@ -77,3 +77,20 @@ export const evaluateNextDeadline = (nextDeadline: Date | Timestamp | undefined)
     return formatNextDeadline(nextDeadline)
   }
 }
+
+export const STUDENT_COLORS = [
+  "#DBEAFE", // light blue
+  "#DCFCE7", // light green
+  "#FEF3C7", // light yellow
+  "#FEE2E2", // light red
+  "#EDE9FE", // light purple
+  "#CFFAFE", // light cyan
+  "#FCE7F3", // light pink
+  "#ECFCCB", // light lime
+  "#FFEDD5", // light orange
+  "#CCFBF1", // light teal
+];
+
+export const getRandomColor = () => {
+  return STUDENT_COLORS[Math.floor(Math.random() * STUDENT_COLORS.length)];
+};

@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     // Parse request body
     const { email, password, profile, academics, system, onboarding, stats, ui } = await request.json();
 
-    console.log('Received data - ', { email, password, profile, academics, system, onboarding, stats })
+    console.log('Received data - ', { email, password, profile, academics, system, onboarding, stats, ui })
 
     // Verify consultant token from request headers
     const authHeader = request.headers.get('authorization');
