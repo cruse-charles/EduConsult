@@ -17,23 +17,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 
 const DashboardAssignmentCalendar = () => {
+    // State for current date and assignments
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
-    // const [dashboardAssignments, setDashboardAssignments] = useState<Assignment[]>([])
-    const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
-
     const { assignments, loadedThrough, loadedFrom } = useSelector((state: RootState) => state.consultantDashboardAssignments)
 
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch();
     
-    // useEffect(() => {
-    //     const fetchAssignments = async () => {
-    //         const assignmentData = await getConsultantDashboardAssignments(user.id)
-    //         setDashboardAssignments(assignmentData)
-    //     }
-    //     fetchAssignments()
-    // }, [])
-
     // TODO: Adjust all queries to return data itself, not the snapshot
     useEffect(() => {
         // Start of fetch will be two days before today up to 10 days later
@@ -76,12 +66,6 @@ const DashboardAssignmentCalendar = () => {
     }
 
     // Navigate by single day
-    // const navigate = (direction: "prev" | "next") => {
-    //     const newDate = new Date(currentStartDate)
-    //     newDate.setDate(currentStartDate.getDate() + (direction === "next" ? 1 : -1))
-    //     setCurrentStartDate(newDate)
-    // }
-
     const CHUNK_DAYS = 10
     const PREFETCH_THRESHOLD = 6
 
@@ -176,9 +160,6 @@ const DashboardAssignmentCalendar = () => {
                                                     <div className="text-sm font-medium truncate">
                                                         {assignment.title}
                                                     </div>
-                                                    {/* <div className="text-xs text-muted-foreground truncate" title={assignment.student}>
-                                                        {assignment.student}
-                                                    </div> */}
                                                     <div className="text-xs text-muted-foreground truncate" title={assignment.studentFirstName}>
                                                         {assignment.studentFirstName} {assignment.studentLastName}
                                                     </div>
