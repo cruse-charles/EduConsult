@@ -57,7 +57,43 @@ export const nextDeadlineForStudent = async (studentId: string, consultantId: st
 
 // TODO: I have this copy/pasted in some other redux slice function, reduce
 // Function to retrieve all assignments within 7 days
-export const getConsultantDashboardAssignments = async (consultantId: string) => {
+// export const getConsultantDashboardAssignments = async (consultantId: string) => {
+    
+//     // Find today and six days later, encompasing a week
+//     // const today = new Date()
+//     // today.setDate(today.getDate())
+//     // const sixDaysLater = new Date()
+//     // sixDaysLater.setDate(today.getDate() + 6);
+
+//     // Find assignments from two last month, this month, and next month
+//     const today = new Date();
+//     const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+//     const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); 
+
+//     // Count assignments with dueDates within current week
+//     const q = query(
+//           collection(db, 'assignments'),
+//           where('consultantId', '==', consultantId),
+//           where('dueDate', '>=', Timestamp.fromDate(startDate)),
+//           where('dueDate', '<=', Timestamp.fromDate(endDate)),
+
+//         //   7 days this week calendar
+//           // where('dueDate', '>=', Timestamp.fromDate(today)),
+//           // where('dueDate', '<=', Timestamp.fromDate(sixDaysLater)),
+//           // where('status', '==', 'In-Progress')
+//     )
+
+//     const snapshot = await getDocs(q);
+//     return snapshot.docs.map((doc) => {
+//         return {
+//             id: doc.id,
+//             ...doc.data()
+//         } as Assignment
+//     })
+// }
+
+// Function to retrieve all assignments within 7 days
+export const getConsultantDashboardAssignments = async (consultantId: string, startDate: Date, endDate: Date) => {
     
     // Find today and six days later, encompasing a week
     // const today = new Date()
@@ -66,9 +102,9 @@ export const getConsultantDashboardAssignments = async (consultantId: string) =>
     // sixDaysLater.setDate(today.getDate() + 6);
 
     // Find assignments from two last month, this month, and next month
-    const today = new Date();
-    const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); 
+    // const today = new Date();
+    // const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+    // const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); 
 
     // Count assignments with dueDates within current week
     const q = query(

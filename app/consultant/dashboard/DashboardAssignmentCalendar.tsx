@@ -24,18 +24,25 @@ const DashboardAssignmentCalendar = () => {
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch();
     
-    useEffect(() => {
-        const fetchAssignments = async () => {
-            const assignmentData = await getConsultantDashboardAssignments(user.id)
-            setDashboardAssignments(assignmentData)
-        }
-        fetchAssignments()
-    }, [])
+    // useEffect(() => {
+    //     const fetchAssignments = async () => {
+    //         const assignmentData = await getConsultantDashboardAssignments(user.id)
+    //         setDashboardAssignments(assignmentData)
+    //     }
+    //     fetchAssignments()
+    // }, [])
 
     // TODO: Adjust all queries to return data itself, not the snapshot
     useEffect(() => {
+        // Start of fetch will be two days before today up to 10 days later
+        const start = new Date()
+        start.setDate(start.getDate() - 2)
+
+        const end = new Date()
+        end.setDate(end.getDate() + 9)
+
         // @ts-ignore
-        dispatch(fetchConsultantDashboardAssignments(user.id))
+        dispatch(fetchConsultantDashboardAssignments({consultantId: user.id, startDate: start, endDate: end}))
     }, [])
 
     const handleAssignmentClick = (assignment: Assignment) => {
