@@ -18,8 +18,10 @@ import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices
 
 const DashboardAssignmentCalendar = () => {
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
-    const [dashboardAssignments, setDashboardAssignments] = useState<Assignment[]>([])
+    // const [dashboardAssignments, setDashboardAssignments] = useState<Assignment[]>([])
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
+
+    const { assignments, loadedThrough, loadedFrom } = useSelector((state: RootState) => state.consultantDashboardAssignments)
 
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch();
@@ -39,7 +41,7 @@ const DashboardAssignmentCalendar = () => {
         start.setDate(start.getDate() - 2)
 
         const end = new Date()
-        end.setDate(end.getDate() + 9)
+        end.setDate(end.getDate() + 12)
 
         // @ts-ignore
         dispatch(fetchConsultantDashboardAssignments({consultantId: user.id, startDate: start, endDate: end}))
@@ -74,10 +76,59 @@ const DashboardAssignmentCalendar = () => {
     }
 
     // Navigate by single day
+    // const navigate = (direction: "prev" | "next") => {
+    //     const newDate = new Date(currentStartDate)
+    //     newDate.setDate(currentStartDate.getDate() + (direction === "next" ? 1 : -1))
+    //     setCurrentStartDate(newDate)
+    // }
+
+    const CHUNK_DAYS = 10
+    const PREFETCH_THRESHOLD = 6
+
     const navigate = (direction: "prev" | "next") => {
         const newDate = new Date(currentStartDate)
         newDate.setDate(currentStartDate.getDate() + (direction === "next" ? 1 : -1))
         setCurrentStartDate(newDate)
+
+        if (direction === "next") {
+            const threshold = new Date(loadedThrough!)
+            threshold.setDate(threshold.getDate() - PREFETCH_THRESHOLD)
+
+            if (newDate >= threshold) {
+                const fetchStart = new Date(loadedThrough!)
+                fetchStart.setDate(fetchStart.getDate() + 1)
+
+                const fetchEnd = new Date(loadedThrough!)
+                fetchEnd.setDate(fetchEnd.getDate() + CHUNK_DAYS)
+
+                // @ts-ignore
+                dispatch(fetchConsultantDashboardAssignments({
+                    consultantId: user.id,
+                    startDate: fetchStart,
+                    endDate: fetchEnd
+                }))
+            }
+        }
+
+        if (direction === "prev") {
+            const threshold = new Date(loadedFrom!)
+            threshold.setDate(threshold.getDate() + PREFETCH_THRESHOLD)
+
+            if (newDate <= threshold) {
+                const fetchEnd = new Date(loadedFrom!)
+                fetchEnd.setDate(fetchEnd.getDate() - 1)
+
+                const fetchStart = new Date(loadedFrom!)
+                fetchStart.setDate(fetchStart.getDate() - CHUNK_DAYS)
+
+                // @ts-ignore
+                dispatch(fetchConsultantDashboardAssignments({
+                    consultantId: user.id,
+                    startDate: fetchStart,
+                    endDate: fetchEnd
+                }))
+            }
+        }    
     }
     
     return (
@@ -116,7 +167,8 @@ const DashboardAssignmentCalendar = () => {
 
                                 {/* Event List */}
                                 <ScrollArea className="h-[225px]">
-                                    {dashboardAssignments
+                                    {/* {dashboardAssignments */}
+                                    {assignments
                                         .filter(assignment => formatNextDeadline(day) === formatNextDeadline(assignment.dueDate))
                                         .map((assignment) => (
                                             <div key={assignment.id} onClick={()=> handleAssignmentClick(assignment)} className="p-2 rounded-md border cursor-pointer hover:bg-muted/50 transition-colors border-blue-200 bg-blue-50">

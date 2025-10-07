@@ -26,7 +26,7 @@ export const fetchConsultantDashboardAssignments = createAsyncThunk(
   async ({consultantId, startDate, endDate}: {consultantId: string, startDate: Date, endDate: Date}) => {
     try {
       const snapshot = await getConsultantDashboardAssignments(consultantId, startDate, endDate);
-      return {assignments: snapshot, loadedThrough: endDate};
+      return {assignments: snapshot, loadedFrom: startDate, loadedThrough: endDate};
     } catch (error) {
       console.error("Error fetching consultant dashboard assignments:", error);
       throw error;
@@ -37,11 +37,13 @@ export const fetchConsultantDashboardAssignments = createAsyncThunk(
 interface ConsultantAssignmentsState {
   assignments: Assignment[]
   loadedThrough: Date | null  // furthest date we've fetched
+  loadedFrom: Date | null  // earliest date we've fetched
 }
 
 const initialState: ConsultantAssignmentsState = {
   assignments: [],
-  loadedThrough: null
+  loadedThrough: null,
+  loadedFrom: null
 }
 
 // Create a slice for assignments
@@ -127,8 +129,13 @@ const consultantAssignmentsSlice = createSlice({
     //   return action.payload as Assignment[];
     // })
     .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
-      state.assignments.push(...action.payload.assignments)
-      state.loadedThrough = action.payload.loadedThrough
+        state.assignments.push(...action.payload.assignments)
+        if (!state.loadedThrough || action.payload.loadedThrough > state.loadedThrough) {
+            state.loadedThrough = action.payload.loadedThrough
+        }
+        if (!state.loadedFrom || action.payload.loadedFrom < state.loadedFrom) {
+            state.loadedFrom = action.payload.loadedFrom
+        }
     })
     .addCase(fetchConsultantDashboardAssignments.rejected, (state, action) => {
       console.error("fetchConsultantAssignments rejected:", action.payload);
