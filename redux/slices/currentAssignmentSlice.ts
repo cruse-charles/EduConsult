@@ -17,7 +17,8 @@ const assignment: Assignment = {
     consultantLastName: '',
     folder: '',
     status: '',
-    timeline: []
+    timeline: [],
+    color: '',
 }
 
 const initialState = {
