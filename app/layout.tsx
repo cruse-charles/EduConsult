@@ -19,7 +19,7 @@ import AppSidebar from "./components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 
 import { Toaster } from "sonner"
-import OnboardingManager from "./components/OnboardingManager";
+import OnboardingManager from "./components/onboardingManager";
 
 
 
