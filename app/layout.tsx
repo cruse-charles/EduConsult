@@ -15,11 +15,13 @@ import "./globals.css";
 import { Provider } from 'react-redux'
 import { store } from "@/redux/store";
 import ClientProviders from "./ClientProviders";
+
 import AppSidebar from "./components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-
 import { Toaster } from "sonner"
-import OnboardingManager from "./components/onboardingManager";
+import ManageOnboarding from "./components/ManageOnboarding";
+
+// import OnboardingManager from "./components/OnboardingManager";
 
 
 
@@ -43,7 +45,8 @@ export default function RootLayout({
             <main className="flex-1">
               <SidebarTrigger />
               {children}
-              <OnboardingManager />
+              {/* <OnboardingManager /> */}
+              <ManageOnboarding />
               <Toaster richColors position="top-right" />
             </main>
           </SidebarProvider>
