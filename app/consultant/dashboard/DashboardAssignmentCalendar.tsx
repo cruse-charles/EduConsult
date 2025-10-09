@@ -19,7 +19,7 @@ import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices
 const DashboardAssignmentCalendar = () => {
     // State for current date and assignments
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
-    const { assignments, loadedThrough, loadedFrom } = useSelector((state: RootState) => state.consultantDashboardAssignments)
+    const { data: assignments, loadedThrough, loadedFrom } = useSelector((state: RootState) => state.consultantDashboardAssignments)
 
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch();

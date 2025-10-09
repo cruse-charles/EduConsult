@@ -18,15 +18,19 @@ export const fetchConsultantDashboardAssignments = createAsyncThunk(
 )
 
 interface ConsultantAssignmentsState {
-  assignments: Assignment[]
+  data: Assignment[]
   loadedThrough: Date | null  // furthest date we've fetched
   loadedFrom: Date | null  // earliest date we've fetched
+  loading: boolean
+  error: string | null
 }
 
 const initialState: ConsultantAssignmentsState = {
-  assignments: [],
+  data: [],
   loadedThrough: null,
-  loadedFrom: null
+  loadedFrom: null,
+  loading: false,
+  error: null
 }
 
 // Create a slice for assignments
@@ -36,44 +40,44 @@ const consultantAssignmentsSlice = createSlice({
     reducers: {
     // Replaces state with a new list of assignments
     setAssignments(state, action) {
-      state.assignments = action.payload;
+      state.data = action.payload;
     },
     // Adds a new assignment to the state
     addAssignment(state, action) {
-      state.assignments.push(action.payload);
+      state.data.push(action.payload);
     },
     // Adds a new entry to the timeline of a specific assignment
     addEntry(state, action) {
       const { entryData, assignmentId } = action.payload;
-      const assignmentIndex = state.assignments.findIndex(assignment => assignment.id === assignmentId);
+      const assignmentIndex = state.data.findIndex(assignment => assignment.id === assignmentId);
       
       if (assignmentIndex !== -1) {
         // Add the new entry to the timeline array
-        state.assignments[assignmentIndex].timeline.push(entryData);
+        state.data[assignmentIndex].timeline.push(entryData);
       }
     },
     // Updates a specific assignment in the state
     updateAssignmentSlice(state, action) {
       const { assignmentId, updateData } = action.payload;
-      const assignmentIndex = state.assignments.findIndex(assignment => assignment.id === assignmentId);
+      const assignmentIndex = state.data.findIndex(assignment => assignment.id === assignmentId);
     
       if (assignmentIndex !== -1) {
-          state.assignments[assignmentIndex] = { ...state.assignments[assignmentIndex], ...updateData };
+          state.data[assignmentIndex] = { ...state.data[assignmentIndex], ...updateData };
       }
     },
     // Deletes an assignment from the state by its ID
     deleteDashboardAssignment(state, action) {
       const assignmentId = action.payload;
-      if (state.assignments.length === 0) return state
+      if (state.data.length === 0) return state
 
-      state.assignments = state.assignments.filter((assignment) => assignment.id !== assignmentId)
+      state.data = state.data.filter((assignment) => assignment.id !== assignmentId)
     }
   },
   // Handle async actions using extraReducers for Inprogress, fulfilled, and rejected states
   extraReducers: (builder) => {
     builder
     .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
-        state.assignments.push(...action.payload.assignments)
+        state.data.push(...action.payload.assignments)
         if (!state.loadedThrough || action.payload.loadedThrough > state.loadedThrough) {
             state.loadedThrough = action.payload.loadedThrough
         }
