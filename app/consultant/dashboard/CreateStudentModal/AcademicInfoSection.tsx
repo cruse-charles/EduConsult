@@ -1,15 +1,19 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StudentFormData } from '@/lib/types/types';
 
 interface AcademicInfoSectionProps {
     formData: StudentFormData;
     handleAcademicInfoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleAcademicInfoSelectChange: (name: string, value: string) => void;
 }
 
-function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoSectionProps) {
+function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademicInfoSelectChange}: AcademicInfoSectionProps) {
 
     const safeValue = (value: number | null) => (value === null || isNaN(value) ? '' : value);
+
+    const grades = [ "6", "7", "8", "9", "10", "11", "12", "Freshman", "Sophomore", "Junior", "Senior" ]
 
     return (
         <>
@@ -22,12 +26,30 @@ function AcademicInfoSection({formData, handleAcademicInfoChange}: AcademicInfoS
                         </Label>
                         <Input id="currentSchool" placeholder="Lincoln High School" value={formData.academics.currentSchool} name="currentSchool" onChange={handleAcademicInfoChange} required />
                     </div>
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <Label htmlFor="grade">
                             Grade Level <span className="text-red-500">*</span>
                         </Label>
                         <Input id="grade" placeholder="12" value={safeValue(formData.academics.grade)} name="grade" onChange={handleAcademicInfoChange} required />
-                    </div>
+                    </div> */}
+                    <div className="space-y-2">
+                        <Label>
+                            Grade Level <span className="text-red-500">*</span>
+                        </Label>
+                            <Select value={formData.academics.grade?.toString()} onValueChange={(value) => handleAcademicInfoSelectChange("grade", value)} >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select grade" />
+                            </SelectTrigger>
+
+                            <SelectContent className="max-h-60 overflow-y-auto">
+                                {grades.map((g) => (
+                                    <SelectItem key={g} value={g}>
+                                    {g}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        </div>
                     <div className="space-y-2">
                         <Label htmlFor="intendedMajor">
                             Intended Major

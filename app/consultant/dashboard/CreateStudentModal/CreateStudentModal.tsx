@@ -202,6 +202,16 @@ function CreateStudentModal() {
         }))
     }
 
+    const handleAcademicInfoSelectChange = (name: string, value: string) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            academics: {
+            ...prevData.academics,
+            [name]: value,
+            },
+        }))
+    }
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
         setFormData((prev) => ({
@@ -249,7 +259,7 @@ function CreateStudentModal() {
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <StudentAccountForm formData={formData} handleInputChange={handleInputChange}/>
                         <PersonalInfoSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} />
-                        <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} />
+                        <AcademicInfoSection formData={formData} handleAcademicInfoChange={handleAcademicInfoChange} handleAcademicInfoSelectChange={handleAcademicInfoSelectChange}/>
                         <GoalsAndNotesSection formData={formData} handlePersonalInfoChange={handlePersonalInfoChange} handleAcademicInfoChange={handleAcademicInfoChange} />
                         <Button type='submit' disabled={isLoading}>{isLoading ? 'Submiting...' : 'Submit'}</Button>
                     </form>
