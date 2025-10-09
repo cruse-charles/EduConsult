@@ -21,6 +21,9 @@ const studentSlice = createSlice({
   name: 'currentStudent',
   initialState,
   reducers: {
+    clearCurrentStudent() {
+      return initialState
+    },
     updateFolders(state, action) {
       if (!state.system) return
       if (!state.system.folders.includes(action.payload)) {
@@ -122,5 +125,5 @@ const studentSlice = createSlice({
 });
 
 
-export const { updateFolders, updateAssignmentDocIds, removeAssignmentDocId, updateReduxInProgressCount, updateStudentInformation, removeFolder, renameFolderInStudentSlice, checkReduxNextDeadline } = studentSlice.actions;
+export const { updateFolders, updateAssignmentDocIds, removeAssignmentDocId, updateReduxInProgressCount, updateStudentInformation, removeFolder, renameFolderInStudentSlice, checkReduxNextDeadline, clearCurrentStudent } = studentSlice.actions;
 export default studentSlice.reducer;

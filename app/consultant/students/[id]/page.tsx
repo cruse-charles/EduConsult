@@ -8,7 +8,7 @@ import SelectViewTabs from "./SelectViewTabs";
 import StudentProfileHeader from "./StudentProfileHeader";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudent } from "@/redux/slices/currentStudentSlice";
+import { clearCurrentStudent, fetchStudent } from "@/redux/slices/currentStudentSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { clearAssignments, fetchAssignments } from "@/redux/slices/currentStudentAssignmentsSlice";
 
@@ -20,10 +20,14 @@ function page() {
 
     // TODO: Check if we want to combine these useEffects, and if we want to make a clearStudent
     useEffect(() => {
-        // Clear previous student data and assignments
-        // dispatch(clearStudent()) // TODO: create this action
-        dispatch(clearAssignments())
+        // Fetch student Data
         dispatch(fetchStudent(studentId))
+        
+        // Clear previous student data and assignments
+        return () => {
+            dispatch(clearCurrentStudent())
+            dispatch(clearAssignments())
+        }
     }, [studentId, dispatch])
 
     // Then fetch assignments when student data loads
