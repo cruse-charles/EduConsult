@@ -27,8 +27,10 @@ type AppState = ReturnType<typeof appReducer>;
 
 // Define a root reducer that listens for the resetStore action to clear all state
 const rootReducer = (state: AppState | undefined, action: UnknownAction): AppState => {
-  if (action.type === resetStore.type) {
-    state = undefined;
+  // if (action.type === resetStore.type) {
+  if (action.type === 'RESET_STORE') {
+    // state = undefined;
+    return appReducer(undefined, action);
   }
   return appReducer(state, action);
 }

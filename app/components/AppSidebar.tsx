@@ -71,18 +71,35 @@ const AppSidebar = () => {
     return null
   }
     
-  // Handle user sign out and purge redux persistence
-  const handleLogout = async () => {
-      try {
-          await persistor.purge()
-          await signOut(auth)
-          router.push('/')
-          setTimeout(() => dispatch(resetStore()), 400); // Delay Redux clear to prevent authgaurd redirect
 
-      } catch (error) {
-          console.error("Error logging out: ", error);
-      }
-  }
+  // const handleLogout = async () => {
+  //     try {
+  //         await persistor.purge()
+  //         dispatch({type: 'RESET_STORE'})
+  //         await signOut(auth)
+  //         router.push('/')
+  //         setTimeout(() => dispatch(resetStore()), 400); // Delay Redux clear to prevent authgaurd redirect
+
+  //     } catch (error) {
+  //         console.error("Error logging out: ", error);
+  //     }
+  // }
+
+  // Handle user sign out and purge redux persistence
+  // TODO: Add migrations to handle future changes to store shape without breaking user
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+
+      dispatch({ type: 'RESET_STORE' });   // 1. Reset in-memory Redux state
+      await persistor.purge();              // 2. Clear persisted storage
+      await persistor.flush();             // 3. Flush any pending writes so purge wins
+
+      router.push('/');
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   // TODO: Make sidebar not have the trigger on certain pages, it does make some headers bigger
   return (
