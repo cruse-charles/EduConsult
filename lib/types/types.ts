@@ -20,6 +20,7 @@ export interface StudentBase {
         ielts: number | null;
         act: number | null;
         intendedMajor: string;
+        applyingFor: string;
     };
     stats: {
         inProgressAssignmentsCount: number;

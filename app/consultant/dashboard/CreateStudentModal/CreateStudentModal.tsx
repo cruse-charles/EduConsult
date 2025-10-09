@@ -57,6 +57,7 @@ function CreateStudentModal() {
             intendedMajor: '',
             act: null,
             ielts: null,
+            applyingFor: '',
         },
         stats: {
             inProgressAssignmentsCount: 0,
@@ -93,6 +94,7 @@ function CreateStudentModal() {
                 targetSchools: '',
                 act: null,
                 ielts: null,
+                applyingFor: '',
             },
             stats: {
                 inProgressAssignmentsCount: 0,
