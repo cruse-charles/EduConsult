@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 // TODO: Use HighlightCard component to DRY this
 function AssignmentsHighlights() {
     // Retrieve student and user from redux
-    const student = useSelector((state: RootState) => state.currentStudent)
+    const student = useSelector((state: RootState) => state.currentStudent.data)
     const user = useSelector((state: RootState) => state.user)
     const assignments = useSelector((state: RootState) => state.currentStudentAssignments)
 

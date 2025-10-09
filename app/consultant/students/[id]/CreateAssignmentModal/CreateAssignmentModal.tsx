@@ -45,7 +45,7 @@ function CreateAssignmentModal() {
     // Retrieve student and consultant
     const { id: studentId } = useParams<{id:string}>()
     const user = useSelector((state: RootState) => state.user);
-    const student = useSelector((state: RootState) => state.currentStudent)
+    const student = useSelector((state: RootState) => state.currentStudent.data)
     const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 
     // State to manage assignment details

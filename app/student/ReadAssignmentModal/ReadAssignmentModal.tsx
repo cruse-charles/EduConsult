@@ -28,7 +28,7 @@ function ViewAssignmentModal() {
     const dispatch = useDispatch();
     
     const user = useSelector((state: RootState) => state.user)
-    const student = useSelector((state: RootState) => state.currentStudent)
+    const student = useSelector((state: RootState) => state.currentStudent.data)
     const {assignment, isModalOpen} = useSelector((state: RootState) => state.currentAssignment)
 
     // Form data for user to submit feedback 
