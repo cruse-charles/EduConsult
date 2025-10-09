@@ -49,14 +49,37 @@ function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademic
                                 ))}
                             </SelectContent>
                         </Select>
-                        </div>
+                    </div>
+
                     <div className="space-y-2">
+                        <Label>
+                            Applying For <span className="text-red-500">*</span>
+                        </Label>
+
+                        <Select
+                            value={formData.academics.applyingFor || ""}
+                            onValueChange={(value) => handleAcademicInfoSelectChange("applyingFor", value)}>
+                            
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select program" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectItem value="highschool">High School</SelectItem>
+                                <SelectItem value="college">College</SelectItem>
+                                <SelectItem value="graduate">Graduate School</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* <div className="space-y-2">
                         <Label htmlFor="intendedMajor">
                             Intended Major
                         </Label>
                         <Input id="intendedMajor" placeholder="Computer Science" value={formData.academics.intendedMajor} name="intendedMajor" onChange={handleAcademicInfoChange} />
-                    </div>
+                    </div> */}
                 </div>
+                
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="gpa">GPA</Label>
