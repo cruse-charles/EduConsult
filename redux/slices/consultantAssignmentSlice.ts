@@ -76,7 +76,11 @@ const consultantAssignmentsSlice = createSlice({
   // Handle async actions using extraReducers for Inprogress, fulfilled, and rejected states
   extraReducers: (builder) => {
     builder
-    .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
+      .addCase(fetchConsultantDashboardAssignments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
         state.data.push(...action.payload.assignments)
         if (!state.loadedThrough || action.payload.loadedThrough > state.loadedThrough) {
             state.loadedThrough = action.payload.loadedThrough
@@ -84,11 +88,13 @@ const consultantAssignmentsSlice = createSlice({
         if (!state.loadedFrom || action.payload.loadedFrom < state.loadedFrom) {
             state.loadedFrom = action.payload.loadedFrom
         }
-    })
-    .addCase(fetchConsultantDashboardAssignments.rejected, (state, action) => {
-      console.error("fetchConsultantAssignments rejected:", action.payload);
-      return state;
-    })
+        state.loading = false
+        state.error = null
+      })
+      .addCase(fetchConsultantDashboardAssignments.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message || 'Failed to fetch assignments'
+      })
   },
 });
 
