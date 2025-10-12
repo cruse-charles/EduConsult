@@ -15,6 +15,8 @@ function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademic
 
     const grades = [ "6", "7", "8", "9", "10", "11", "12", "Freshman", "Sophomore", "Junior", "Senior" ]
 
+    const type = formData.academics.applyingFor
+
     return (
         <>
             <div className="space-y-4">
@@ -81,26 +83,77 @@ function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademic
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="gpa">GPA</Label>
-                        <Input id="gpa" step="any" placeholder="3.85" value={safeValue(formData.academics.gpa)} name="gpa" onChange={handleAcademicInfoChange} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="satScore">SAT Score</Label>
-                        <Input id="satScore" placeholder="1450" value={safeValue(formData.academics.sat)} name="sat" onChange={handleAcademicInfoChange} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="actScore">ACT Score</Label>
-                        <Input id="actScore" placeholder="30" value={safeValue(formData.academics.act)} name="act" onChange={handleAcademicInfoChange} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="toeflScore">TOEFL Score</Label>
-                        <Input id="toeflScore" placeholder="105" value={safeValue(formData.academics.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="ieltsScore">IELTS Score</Label>
-                        <Input id="ieltsScore" placeholder="6.5" value={safeValue(formData.academics.ielts)} name="ielts" onChange={handleAcademicInfoChange} />
-                    </div>
+
+                    {/* HIGH SCHOOL */}
+                    {type === "highschool" && (
+                        <>
+                            <div className="space-y-2">
+                                <Label>GPA</Label>
+                                <Input name="gpa" placeholder='3.85' value={safeValue(formData.academics.gpa)} onChange={handleAcademicInfoChange} />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label>Vericant Score</Label>
+                                <Input name="vericant" placeholder="5.5" onChange={handleAcademicInfoChange} />
+                            </div>
+                        </>
+                    )}
+
+                    {/* COLLEGE */}
+                    {type === "college" && (
+                        <>
+                            <div className="space-y-2">
+                                <Label htmlFor="gpa">GPA</Label>
+                                <Input id="gpa" step="any" placeholder="3.85" value={safeValue(formData.academics.gpa)} name="gpa" onChange={handleAcademicInfoChange} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="satScore">SAT Score</Label>
+                                <Input id="satScore" placeholder="1450" value={safeValue(formData.academics.sat)} name="sat" onChange={handleAcademicInfoChange} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="actScore">ACT Score</Label>
+                                <Input id="actScore" placeholder="30" value={safeValue(formData.academics.act)} name="act" onChange={handleAcademicInfoChange} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="toeflScore">TOEFL Score</Label>
+                                <Input id="toeflScore" placeholder="105" value={safeValue(formData.academics.toefl)} name="toefl" onChange={handleAcademicInfoChange} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="ieltsScore">IELTS Score</Label>
+                                <Input id="ieltsScore" placeholder="6.5" value={safeValue(formData.academics.ielts)} name="ielts" onChange={handleAcademicInfoChange} />
+                            </div>
+                        </>
+                    )}
+
+                    {/* GRADUATE */}
+                    {type === "graduate" && (
+                        <>
+                        <div className="space-y-2">
+                            <Label>GPA</Label>
+                            <Input name="gpa"  placeholder="3.85" value={safeValue(formData.academics.gpa)} onChange={handleAcademicInfoChange} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Current Major</Label>
+                            <Input name="major" placeholder="Computer Science" onChange={handleAcademicInfoChange} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Intended Master's Major</Label>
+                            <Input name="intendedMajor" placeholder="Mechanical Engineering" value={formData.academics.intendedMajor} onChange={handleAcademicInfoChange} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>IELTS Score</Label>
+                            <Input name="ielts" placeholder="8.5" value={safeValue(formData.academics.ielts)} onChange={handleAcademicInfoChange} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>TOEFL Score</Label>
+                            <Input name="toefl" placeholder="110" value={safeValue(formData.academics.toefl)} onChange={handleAcademicInfoChange} />
+                        </div>
+                        </>
+                    )}
                 </div>
             </div>
         </>
