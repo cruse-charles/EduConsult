@@ -21,6 +21,8 @@ function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademic
         <>
             <div className="space-y-4">
                 <h3 className="text-md font-medium text-muted-foreground">Academic Information</h3>
+
+                {/* Current School */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="currentSchool">
@@ -28,12 +30,8 @@ function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademic
                         </Label>
                         <Input id="currentSchool" placeholder="Lincoln High School" value={formData.academics.currentSchool} name="currentSchool" onChange={handleAcademicInfoChange} required />
                     </div>
-                    {/* <div className="space-y-2">
-                        <Label htmlFor="grade">
-                            Grade Level <span className="text-red-500">*</span>
-                        </Label>
-                        <Input id="grade" placeholder="12" value={safeValue(formData.academics.grade)} name="grade" onChange={handleAcademicInfoChange} required />
-                    </div> */}
+
+                    {/* Grade Level */}
                     <div className="space-y-2">
                         <Label>
                             Grade Level <span className="text-red-500">*</span>
@@ -53,6 +51,7 @@ function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademic
                         </Select>
                     </div>
 
+                    {/* School Type */}
                     <div className="space-y-2">
                         <Label>
                             Applying For <span className="text-red-500">*</span>
@@ -73,15 +72,9 @@ function AcademicInfoSection({formData, handleAcademicInfoChange, handleAcademic
                             </SelectContent>
                         </Select>
                     </div>
-
-                    {/* <div className="space-y-2">
-                        <Label htmlFor="intendedMajor">
-                            Intended Major
-                        </Label>
-                        <Input id="intendedMajor" placeholder="Computer Science" value={formData.academics.intendedMajor} name="intendedMajor" onChange={handleAcademicInfoChange} />
-                    </div> */}
                 </div>
                 
+                {/* Academic Details */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                     {/* HIGH SCHOOL */}
