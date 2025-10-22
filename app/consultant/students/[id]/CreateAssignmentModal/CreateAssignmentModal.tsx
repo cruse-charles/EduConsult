@@ -36,12 +36,8 @@ import { useAssignmentValidation } from "@/lib/validateAssignment"
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
 function CreateAssignmentModal() {
 
-    const dispatch = useDispatch()
-    
-    // Extract functions for file uploads
-    const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
-    
     // Retrieve student and consultant
+    const dispatch = useDispatch()
     const { id: studentId } = useParams<{id:string}>()
     const user = useSelector((state: RootState) => state.user);
     const student = useSelector((state: RootState) => state.currentStudent.data)
@@ -70,10 +66,11 @@ function CreateAssignmentModal() {
         status: 'In-Progress',
     })
 
-
-    // const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;}>({})
     // Validate form inputs and set error messages
     const { errors, validate, setErrors } = useAssignmentValidation()
+    
+    // Extract functions for file uploads
+    const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     
     // Reset the form data
     const resetForm = () => {
@@ -84,43 +81,12 @@ function CreateAssignmentModal() {
         setNewFolder(false);
     };
 
-    // Validate form inputs and set error messages
-    // const { isValid, errors, setErrors } = useAssignmentValidation(formData, dueDate, newFolder, student)
-    // const validateForm = () => {
-    //     const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;} = {}
-
-    //     if (!formData.title) {
-    //         newErrors.title = 'A title is required.'
-    //     }
-
-    //     if (!formData.type) {
-    //         newErrors.type = 'A type is required.'
-    //     }
-
-    //     if (!formData.folder) {
-    //         newErrors.folder = 'Please select a folder or input a new folder name.'
-    //     }
-
-    //     if (!dueDate) {
-    //         newErrors.dueDate = 'Please select a due date.'
-    //     }
-        
-    //     // Only validate folder name if user is creating a new folder
-    //     if (newFolder && student.system?.folders?.includes(formData.folder)) {
-    //         newErrors.folderName = 'Folder name already used.'
-    //     }
-
-
-    //     setErrors(newErrors)
-    //     return Object.keys(newErrors).length === 0
-    // }
-
-    // TODO: This needs to be a try/catch for errors
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         try {
             e.preventDefault()
             setIsLoading(true)
     
+            // Validate form inputs and set error messages
             const isValid = validate(formData, dueDate, newFolder, student);
             if (!isValid) {
                 setIsLoading(false);
@@ -204,7 +170,6 @@ function CreateAssignmentModal() {
             if (!isOpen) resetForm()
         }}>
             <DialogTrigger asChild>
-                {/* <Button onClick={() => setOpen(true)} className="create-assignment"> */}
                 <Button onClick={handleNewAssignmentClick} className="create-assignment-btn">
                     <Plus className="mr-2 h-4 w-4" />
                     New Assignment

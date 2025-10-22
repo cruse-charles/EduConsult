@@ -2,9 +2,6 @@ import { useState } from "react";
 
 // Validate form inputs and set error messages
 export const useAssignmentValidation  = () => {
-    // const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;}>({})
-        
-    // const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;} = {}
 
     const [errors, setErrors] = useState({})
 
