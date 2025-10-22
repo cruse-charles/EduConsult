@@ -30,6 +30,8 @@ import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
 import { getEmptyFormData, buildAssignmentData } from "@/lib/buildAssignmentData"
 
+import { useAssignmentValidation } from "@/lib/validateAssignment"
+
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
 function CreateAssignmentModal() {
@@ -69,8 +71,10 @@ function CreateAssignmentModal() {
     })
 
 
-    const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;}>({})
-
+    // const [errors, setErrors] = useState<{title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;}>({})
+    // Validate form inputs and set error messages
+    const { errors, validate, setErrors } = useAssignmentValidation()
+    
     // Reset the form data
     const resetForm = () => {
         // Reset form data to initial state, clear files, reset due date and new folder state
@@ -81,34 +85,35 @@ function CreateAssignmentModal() {
     };
 
     // Validate form inputs and set error messages
-    const validateForm = () => {
-        const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;} = {}
+    // const { isValid, errors, setErrors } = useAssignmentValidation(formData, dueDate, newFolder, student)
+    // const validateForm = () => {
+    //     const newErrors: { title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;} = {}
 
-        if (!formData.title) {
-            newErrors.title = 'A title is required.'
-        }
+    //     if (!formData.title) {
+    //         newErrors.title = 'A title is required.'
+    //     }
 
-        if (!formData.type) {
-            newErrors.type = 'A type is required.'
-        }
+    //     if (!formData.type) {
+    //         newErrors.type = 'A type is required.'
+    //     }
 
-        if (!formData.folder) {
-            newErrors.folder = 'Please select a folder or input a new folder name.'
-        }
+    //     if (!formData.folder) {
+    //         newErrors.folder = 'Please select a folder or input a new folder name.'
+    //     }
 
-        if (!dueDate) {
-            newErrors.dueDate = 'Please select a due date.'
-        }
+    //     if (!dueDate) {
+    //         newErrors.dueDate = 'Please select a due date.'
+    //     }
         
-        // Only validate folder name if user is creating a new folder
-        if (newFolder && student.system?.folders?.includes(formData.folder)) {
-            newErrors.folderName = 'Folder name already used.'
-        }
+    //     // Only validate folder name if user is creating a new folder
+    //     if (newFolder && student.system?.folders?.includes(formData.folder)) {
+    //         newErrors.folderName = 'Folder name already used.'
+    //     }
 
 
-        setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
-    }
+    //     setErrors(newErrors)
+    //     return Object.keys(newErrors).length === 0
+    // }
 
     // TODO: This needs to be a try/catch for errors
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -116,7 +121,7 @@ function CreateAssignmentModal() {
             e.preventDefault()
             setIsLoading(true)
     
-            const isValid = validateForm();
+            const isValid = validate(formData, dueDate, newFolder, student);
             if (!isValid) {
                 setIsLoading(false);
                 return;
