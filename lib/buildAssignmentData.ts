@@ -24,6 +24,7 @@ export const buildAssignmentData = ({
   studentId,
   student,
   user,
+//   @ts-ignore
 }: BuildAssignmentDataParams) => {
   const dueDateAt1159pm = new Date(dueDate)
   dueDateAt1159pm.setHours(23, 59, 0, 0)

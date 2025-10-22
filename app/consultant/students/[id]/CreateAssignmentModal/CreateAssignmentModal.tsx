@@ -13,24 +13,21 @@ import Notes from "./Notes"
 import { useState } from "react"
 import { useParams } from "next/navigation"
 
-import { AssignmentFile, AssignmentFormData } from "@/lib/types/types"
+import { AssignmentFormData } from "@/lib/types/types"
 import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
 import { updateFolders, updateAssignmentDocIds, updateReduxInProgressCount, checkReduxNextDeadline } from "@/redux/slices/currentStudentSlice"
 import { RootState } from "@/redux/store";
-import { addAssignment, fetchAssignments } from "@/redux/slices/currentStudentAssignmentsSlice"
-import { Timestamp } from "firebase/firestore";
+import { addAssignment } from "@/redux/slices/currentStudentAssignmentsSlice"
 import { useFiles } from "@/hooks/useFiles"
 import { updateInProgressCount } from "@/lib/statsUtils"
-
 
 import { toast } from "sonner"
 import CustomToast from "@/app/components/CustomToast"
 import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
-import { set } from "date-fns"
 import { getEmptyFormData, buildAssignmentData } from "@/lib/buildAssignmentData"
 
 
@@ -41,7 +38,6 @@ function CreateAssignmentModal() {
     
     // Extract functions for file uploads
     const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
-
     
     // Retrieve student and consultant
     const { id: studentId } = useParams<{id:string}>()
@@ -57,15 +53,12 @@ function CreateAssignmentModal() {
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [formData, setFormData] = useState<AssignmentFormData>({
-        // TOOOOOOOOOODOOOOOOOOOOOOOOOOOOO: THIS IS RED CUZ I COMMENTED OUT IDS FOR FORMDATA, IT'S NOT NEEDED THOUGH RIGHT? JUST WHEN WE SEND IT
         title: "",
         type: "",
         priority: "",
         folder: "",
-        // studentId: studentId,
         studentFirstName: student?.profile?.firstName,
         studentLastName: student?.profile?.lastName,
-        // consultantId: user.id,
         consultantFirstName: user?.profile?.firstName,
         consultantLastName: user?.profile?.lastName,
         dueDate: undefined,
@@ -129,41 +122,8 @@ function CreateAssignmentModal() {
                 return;
             }
     
-            // set dueDate to 11:59pm of the day selected
-            // @ts-ignore
-            // const dueDateAt1159pm = new Date(dueDate);
-            // dueDateAt1159pm.setHours(23, 59, 0, 0); 
-    
-            // // Data to create a new assignment
-            // const assignmentData = {
-            //     title: formData.title,
-            //     type: formData.type,
-            //     priority: formData.priority,
-            //     note: formData.note,
-            //     folder: formData.folder,
-            //     status: formData.status,
-            //     dueDate: Timestamp.fromDate(dueDateAt1159pm),
-            //     createdAt: Timestamp.fromDate(new Date()),
-            //     studentId: studentId,
-            //     studentFirstName: student?.profile?.firstName,
-            //     studentLastName: student?.profile?.lastName,
-            //     consultantFirstName: user?.profile?.firstName,
-            //     consultantLastName: user?.profile?.lastName,
-            //     consultantId: user.id,
-            //     color: student.ui?.color,
-            //     timeline: [{
-            //         files: [] as AssignmentFile[],
-            //         type: 'Assignment Created',
-            //         uploadedAt: Timestamp.fromDate(new Date()),
-            //         uploadedByName: `${user?.profile?.firstName} ${user?.profile?.lastName}`,
-            //         uploadedById: user.id,
-            //         note: 'Assignment created and assigned to student.'
-            //     }]
-            // }
-
+            // Build assignment data to send to Firestore
             const assignmentData = buildAssignmentData({formData, dueDate, studentId, student, user})
-
-            // console.log('assignmentData - ', assignmentData)
     
             // Upload files to Firebase Storage
             const filesData = await fileUpload(files, studentId)
