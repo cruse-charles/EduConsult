@@ -31,7 +31,7 @@ import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
 import { set } from "date-fns"
-import { getEmptyFormData } from "@/lib/buildAssignmentData"
+import { getEmptyFormData, buildAssignmentData } from "@/lib/buildAssignmentData"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -131,35 +131,37 @@ function CreateAssignmentModal() {
     
             // set dueDate to 11:59pm of the day selected
             // @ts-ignore
-            const dueDateAt1159pm = new Date(dueDate);
-            dueDateAt1159pm.setHours(23, 59, 0, 0); 
+            // const dueDateAt1159pm = new Date(dueDate);
+            // dueDateAt1159pm.setHours(23, 59, 0, 0); 
     
-            // Data to create a new assignment
-            const assignmentData = {
-                title: formData.title,
-                type: formData.type,
-                priority: formData.priority,
-                note: formData.note,
-                folder: formData.folder,
-                status: formData.status,
-                dueDate: Timestamp.fromDate(dueDateAt1159pm),
-                createdAt: Timestamp.fromDate(new Date()),
-                studentId: studentId,
-                studentFirstName: student?.profile?.firstName,
-                studentLastName: student?.profile?.lastName,
-                consultantFirstName: user?.profile?.firstName,
-                consultantLastName: user?.profile?.lastName,
-                consultantId: user.id,
-                color: student.ui?.color,
-                timeline: [{
-                    files: [] as AssignmentFile[],
-                    type: 'Assignment Created',
-                    uploadedAt: Timestamp.fromDate(new Date()),
-                    uploadedByName: `${user?.profile?.firstName} ${user?.profile?.lastName}`,
-                    uploadedById: user.id,
-                    note: 'Assignment created and assigned to student.'
-                }]
-            }
+            // // Data to create a new assignment
+            // const assignmentData = {
+            //     title: formData.title,
+            //     type: formData.type,
+            //     priority: formData.priority,
+            //     note: formData.note,
+            //     folder: formData.folder,
+            //     status: formData.status,
+            //     dueDate: Timestamp.fromDate(dueDateAt1159pm),
+            //     createdAt: Timestamp.fromDate(new Date()),
+            //     studentId: studentId,
+            //     studentFirstName: student?.profile?.firstName,
+            //     studentLastName: student?.profile?.lastName,
+            //     consultantFirstName: user?.profile?.firstName,
+            //     consultantLastName: user?.profile?.lastName,
+            //     consultantId: user.id,
+            //     color: student.ui?.color,
+            //     timeline: [{
+            //         files: [] as AssignmentFile[],
+            //         type: 'Assignment Created',
+            //         uploadedAt: Timestamp.fromDate(new Date()),
+            //         uploadedByName: `${user?.profile?.firstName} ${user?.profile?.lastName}`,
+            //         uploadedById: user.id,
+            //         note: 'Assignment created and assigned to student.'
+            //     }]
+            // }
+
+            const assignmentData = buildAssignmentData({formData, dueDate, studentId, student, user})
 
             // console.log('assignmentData - ', assignmentData)
     

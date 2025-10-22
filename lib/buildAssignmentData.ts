@@ -24,7 +24,6 @@ export const buildAssignmentData = ({
   studentId,
   student,
   user,
-  filesData,
 }: BuildAssignmentDataParams) => {
   const dueDateAt1159pm = new Date(dueDate)
   dueDateAt1159pm.setHours(23, 59, 0, 0)
@@ -41,7 +40,7 @@ export const buildAssignmentData = ({
     consultantId: user.id,
     color: student.ui?.color,
     timeline: [{
-      files: filesData as AssignmentFile[],
+      files: [] as AssignmentFile[],
       type: 'Assignment Created',
       uploadedAt: Timestamp.fromDate(new Date()),
       uploadedByName: `${user?.profile?.firstName} ${user?.profile?.lastName}`,
