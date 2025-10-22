@@ -1,8 +1,8 @@
 // lib/assignmentDefaults.ts
 import { Timestamp } from "firebase/firestore"
-import { AssignmentFormData, AssignmentFile } from "@/lib/types/types"
+import { AssignmentFormData, AssignmentFile, Student, StudentBase, UserState } from "@/lib/types/types"
 
-export const getEmptyFormData = (student, user): AssignmentFormData => ({
+export const getEmptyFormData = (student: Partial<Student>, user: UserState ): AssignmentFormData => ({
   title: "",
   type: "",
   priority: "",

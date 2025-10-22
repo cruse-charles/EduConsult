@@ -80,26 +80,8 @@ function CreateAssignmentModal() {
 
     // Reset the form data
     const resetForm = () => {
-        // setFormData({
-        //     title: "",
-        //     type: "",
-        //     priority: "",
-        //     folder: "",
-        //     // studentId: studentId,
-        //     studentFirstName: student?.profile?.firstName,
-        //     studentLastName: student?.profile?.lastName,
-        //     // consultantId: user.id,
-        //     consultantFirstName: user?.profile?.firstName,
-        //     consultantLastName: user?.profile?.lastName,
-        //     dueDate: undefined,
-        //     note: "",
-        //     files: [],
-        //     createdAt: null,
-        //     status: 'In-Progress',
-        // });
-
+        // Reset form data to initial state, clear files, reset due date and new folder state
         setFormData(getEmptyFormData(student, user));
-
         clearFiles()
         setDueDate(undefined);
         setNewFolder(false);
