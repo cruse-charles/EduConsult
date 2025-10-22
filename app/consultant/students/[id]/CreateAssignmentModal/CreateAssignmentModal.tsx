@@ -31,6 +31,7 @@ import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
 import { set } from "date-fns"
+import { getEmptyFormData } from "@/lib/buildAssignmentData"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -79,23 +80,26 @@ function CreateAssignmentModal() {
 
     // Reset the form data
     const resetForm = () => {
-        setFormData({
-            title: "",
-            type: "",
-            priority: "",
-            folder: "",
-            // studentId: studentId,
-            studentFirstName: student?.profile?.firstName,
-            studentLastName: student?.profile?.lastName,
-            // consultantId: user.id,
-            consultantFirstName: user?.profile?.firstName,
-            consultantLastName: user?.profile?.lastName,
-            dueDate: undefined,
-            note: "",
-            files: [],
-            createdAt: null,
-            status: 'In-Progress',
-        });
+        // setFormData({
+        //     title: "",
+        //     type: "",
+        //     priority: "",
+        //     folder: "",
+        //     // studentId: studentId,
+        //     studentFirstName: student?.profile?.firstName,
+        //     studentLastName: student?.profile?.lastName,
+        //     // consultantId: user.id,
+        //     consultantFirstName: user?.profile?.firstName,
+        //     consultantLastName: user?.profile?.lastName,
+        //     dueDate: undefined,
+        //     note: "",
+        //     files: [],
+        //     createdAt: null,
+        //     status: 'In-Progress',
+        // });
+
+        setFormData(getEmptyFormData(student, user));
+
         clearFiles()
         setDueDate(undefined);
         setNewFolder(false);

@@ -15,6 +15,8 @@ import { Assignment } from '@/lib/types/types'
 import StatusBadge from '../components/StatusBadge'
 import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
 import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal/ReadAssignmentModal'
+import { Button } from '@/components/ui/button'
+import CreateAssignmentModal from '../consultant/students/[id]/CreateAssignmentModal/CreateAssignmentModal'
 
 // TODO: Add loading state
 const page = () => {
@@ -39,10 +41,15 @@ const page = () => {
         dispatch(setCurrentAssignment(assignment))
     }
 
+    const handleCreateAssignment = () => {
+
+    }
+
     return (
         <div className="flex min-h-screen flex-col">
             <main className="container flex-1 p-4 md:p-6 space-y-6">
                 <h1>Manage Assignments</h1>
+                <CreateAssignmentModal/>
                     <div className="rounded-md border">
                     <Table>
                         <TableHeader>
@@ -59,7 +66,6 @@ const page = () => {
                         {assignments.map((assignment) => (
                             <TableRow key={assignment.id} onClick={() => handleAssignmentClick(assignment)} className='cursor-pointer'>
                             <TableCell className="font-medium">{assignment.title}</TableCell>
-                            {/* TODO: Change student to an object with id, firstName, lastName */}
                             {/* <TableCell>{assignment.studentFirstName} {assignment.studentLastName}</TableCell> */}
                             <TableCell>{user.system.role === 'consultant' ? `${assignment.studentFirstName} ${assignment.studentLastName}` : `${assignment.consultantFirstName} ${assignment.consultantLastName}`}</TableCell>
                             <TableCell>
