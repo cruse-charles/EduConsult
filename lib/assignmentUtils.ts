@@ -99,20 +99,20 @@ import { nanoid } from "@reduxjs/toolkit";
 //     }
 // }
 
-// update Assignment status when student submits
-export const updateAssignmentStatus = async (assignmentId: string, status: string, updatedAssignment: Assignment) => {
-    try {
-        // Get reference to the assignment document
-        const assignmentDocRef = doc(db, "assignments", assignmentId);
+// // update Assignment status when student submits
+// export const updateAssignmentStatus = async (assignmentId: string, status: string, updatedAssignment: Assignment) => {
+//     try {
+//         // Get reference to the assignment document
+//         const assignmentDocRef = doc(db, "assignments", assignmentId);
 
-        // Update doc
-        // @ts-ignore
-        await updateDoc(assignmentDocRef, {status});
-    } catch (error) {
-        console.log('Error updating assignment in updateAssignment', error)
-        throw error
-    }
-}
+//         // Update doc
+//         // @ts-ignore
+//         await updateDoc(assignmentDocRef, {status});
+//     } catch (error) {
+//         console.log('Error updating assignment in updateAssignment', error)
+//         throw error
+//     }
+// }
 
 // // Adding an entry to an assignment's timeline
 // // TODO: This function needs permissions for the student to update the assignmentMetaData in consultantUsers 

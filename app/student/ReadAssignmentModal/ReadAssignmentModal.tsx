@@ -9,7 +9,9 @@ import FileUploadView from '../../consultant/students/[id]/CreateAssignmentModal
 import AssignmentDetails from './AssignmentDetails'
 
 
-import { fileUpload, uploadEntry, updateAssignmentStatus } from '@/lib/assignmentUtils'
+import { fileUpload } from '@/repositories/storageRepository'
+import { uploadEntry, updateAssignmentStatus } from '@/repositories/assignmentRepository'
+
 import { AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/assignments/useFiles'
 

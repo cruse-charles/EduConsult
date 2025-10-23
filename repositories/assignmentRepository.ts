@@ -1,7 +1,7 @@
 import { db } from "@/lib/firebaseConfig";
 import { arrayRemove, arrayUnion, deleteDoc, doc, getDoc, increment, setDoc, Timestamp, updateDoc } from "firebase/firestore";
 
-import { AssignmentUpload, Entry, UpdateAssignment } from "../lib/types/types"
+import { Assignment, AssignmentUpload, Entry, UpdateAssignment } from "../lib/types/types"
 import { updateNextDeadlineForStudent } from "../lib/statsUtils";
 
 import { nanoid } from "@reduxjs/toolkit";
@@ -143,5 +143,20 @@ export const readAssignment = async(assignmentId: string, database: string, user
         })
     } catch (error) {
         console.log("Error updating assignment metadata in readAssignment", error)
+    }
+}
+
+// update Assignment status when student submits
+export const updateAssignmentStatus = async (assignmentId: string, status: string, updatedAssignment: Assignment) => {
+    try {
+        // Get reference to the assignment document
+        const assignmentDocRef = doc(db, "assignments", assignmentId);
+
+        // Update doc
+        // @ts-ignore
+        await updateDoc(assignmentDocRef, {status});
+    } catch (error) {
+        console.log('Error updating assignment in updateAssignment', error)
+        throw error
     }
 }

@@ -7,7 +7,8 @@ import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, MoreHorizontal, Tr
 
 import { Assignment } from '@/lib/types/types'
 import { useContext, useState } from 'react'
-import { deleteFolder } from '@/lib/assignmentUtils'
+import { deleteFolder } from '@/repositories/folderRepository'
+
 import { removeAssignmentDocId, removeFolder } from '@/redux/slices/currentStudentSlice'
 import { deleteAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { deleteDashboardAssignment } from '@/redux/slices/consultantAssignmentSlice'

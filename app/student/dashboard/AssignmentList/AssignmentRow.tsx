@@ -7,10 +7,10 @@ import { formatDueDate } from '@/lib/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
 import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices/currentAssignmentSlice'
-import { readAssignment } from '@/lib/assignmentUtils'
+import { readAssignment } from '@/repositories/assignmentRepository'
 import { readAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { readAssignmentUserSlice } from '@/redux/slices/userSlice'
-import { onboardingSteps } from '@/lib/onboardingSteps'
+
 
 interface AssignmentRowProps {
     assignment: Assignment

@@ -11,7 +11,7 @@ import { CalendarIcon, Clock, FileText, Pencil, Save, Trash, User, X } from 'luc
 
 import CustomToast from '@/app/components/CustomToast'
 
-import { deleteAssignment, updateAssignment } from '@/lib/assignmentUtils'
+import { deleteAssignment, updateAssignment } from '@/repositories/assignmentRepository'
 import { cn, formatDueDate } from '@/lib/utils'
 import { updateInProgressCount } from '@/lib/statsUtils'
 
