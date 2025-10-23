@@ -1,4 +1,5 @@
-import { fileUpload, uploadAssignment } from "../assignmentUtils"
+import { uploadAssignment } from "../../repositories/assignmentRepository"
+import { fileUpload } from "../../repositories/storageRepository"
 import { buildAssignmentData } from "../buildAssignmentData"
 
 // @ts-ignore
