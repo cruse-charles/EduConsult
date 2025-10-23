@@ -18,14 +18,8 @@ export const getEmptyFormData = (student: Partial<Student>, user: UserState ): A
   status: 'In-Progress',
 })
 
-export const buildAssignmentData = ({
-  formData,
-  dueDate,
-  studentId,
-  student,
-  user,
-//   @ts-ignore
-}: BuildAssignmentDataParams) => {
+// @ts-ignore
+export const buildAssignmentData = ({ formData, dueDate, studentId, student, user, }: BuildAssignmentDataParams) => {
   const dueDateAt1159pm = new Date(dueDate)
   dueDateAt1159pm.setHours(23, 59, 0, 0)
 

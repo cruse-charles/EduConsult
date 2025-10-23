@@ -14,7 +14,6 @@ import { useState } from "react"
 import { useParams } from "next/navigation"
 
 import { AssignmentFormData } from "@/lib/types/types"
-import { fileUpload, uploadAssignment } from "@/lib/assignmentUtils"
 
 import { useDispatch, useSelector } from "react-redux"
 import { updateFolders, updateAssignmentDocIds, updateReduxInProgressCount, checkReduxNextDeadline } from "@/redux/slices/currentStudentSlice"
@@ -28,7 +27,7 @@ import CustomToast from "@/app/components/CustomToast"
 import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
-import { getEmptyFormData, buildAssignmentData } from "@/lib/buildAssignmentData"
+import { getEmptyFormData } from "@/lib/buildAssignmentData"
 
 import { useAssignmentValidation } from "@/lib/validateAssignment"
 import { createAssignment } from "@/lib/service/createAssignment"
@@ -94,19 +93,8 @@ function CreateAssignmentModal() {
                 return;
             }
     
-            // Create assignment
+            // Create assignment by building data, uploading files, and adding to Firestore
             const { assignmentData, assignmentDocId } = await createAssignment({ formData, dueDate, files, studentId, student, user })
-
-            // Build assignment data to send to Firestore
-            // const assignmentData = buildAssignmentData({formData, dueDate, studentId, student, user})
-    
-            // Upload files to Firebase Storage
-            // const filesData = await fileUpload(files, studentId)
-            // assignmentData.timeline[0].files = filesData
-            
-            // Create Assignment
-            // if (!user.system.role) return
-            // const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
 
             // Create assignment with ID to add to redux for proper ordering
             const assignmentWithId = {
