@@ -8,7 +8,7 @@ import FolderRow from "./FolderRow";
 import SortControls from "./SortControls";
 
 import { RootState } from "@/redux/store";
-import { useSortedAssignments } from "@/hooks/useSortedAssignments";
+import { useSortedAssignments } from "@/hooks/assignments/useSortedAssignments";
 
 import { createContext, useState } from "react"
 import { useSelector } from "react-redux";

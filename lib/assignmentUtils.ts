@@ -289,6 +289,6 @@ export const readAssignment = async(assignmentId: string, database: string, user
             lastSeenAt: Timestamp.now()
         })
     } catch (error) {
-        console.log("Error updataing assignment metadata in readAssignment", error)
+        console.log("Error updating assignment metadata in readAssignment", error)
     }
 }

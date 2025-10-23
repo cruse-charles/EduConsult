@@ -11,7 +11,7 @@ import AssignmentDetails from './AssignmentDetails'
 
 import { fileUpload, uploadEntry, updateAssignmentStatus } from '@/lib/assignmentUtils'
 import { AssignmentFile } from '@/lib/types/types'
-import { useFiles } from '@/hooks/useFiles'
+import { useFiles } from '@/hooks/assignments/useFiles'
 
 import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
 import { RootState } from '@/redux/store'

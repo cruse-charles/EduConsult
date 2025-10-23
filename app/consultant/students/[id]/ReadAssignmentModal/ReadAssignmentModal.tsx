@@ -11,7 +11,7 @@ import CustomToast from '@/app/components/CustomToast'
 
 import { fileUpload, uploadEntry, updateAssignment } from '@/lib/assignmentUtils'
 import { AssignmentFile } from '@/lib/types/types'
-import { useFiles } from '@/hooks/useFiles'
+import { useFiles } from '@/hooks/assignments/useFiles'
 import { nextStep } from '@/lib/onBoardingUtils'
 
 import { addEntry, updateAssignmentsSlice } from '@/redux/slices/currentStudentAssignmentsSlice'

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import { fetchAssignments } from "@/redux/slices/currentStudentAssignmentsSlice";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useSortedAssignments } from "@/hooks/useSortedAssignments";
+import { useSortedAssignments } from "@/hooks/assignments/useSortedAssignments";
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";

@@ -25,8 +25,8 @@ import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
 
-import { createAssignment } from "@/lib/service/createAssignment"
-import { useAssignmentForm } from "@/lib/hooks/useAssignmentForm"
+import { createAssignment } from "@/lib/services/createAssignment"
+import { useAssignmentForm } from "@/hooks/assignments/useAssignmentForm"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student

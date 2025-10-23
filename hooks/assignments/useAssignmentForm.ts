@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { getEmptyFormData } from "../buildAssignmentData"
-import { useAssignmentValidation } from "../useAssignmentValidation"
-import { useFiles } from "@/hooks/useFiles"
+import { getEmptyFormData } from "../../lib/buildAssignmentData"
+import { useAssignmentValidation } from "./useAssignmentValidation"
+import { useFiles } from "@/hooks/assignments/useFiles"
 
 // @ts-ignore
 export const useAssignmentForm = (student, user) => {
