@@ -29,8 +29,9 @@ import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
 import { getEmptyFormData } from "@/lib/buildAssignmentData"
 
-import { useAssignmentValidation } from "@/lib/validateAssignment"
+import { useAssignmentValidation } from "@/lib/useAssignmentValidation"
 import { createAssignment } from "@/lib/service/createAssignment"
+import { useAssignmentForm } from "@/lib/hooks/useAssignmentForm"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -44,42 +45,44 @@ function CreateAssignmentModal() {
     const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 
     // State to manage assignment details
-    const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
-    const [newFolder, setNewFolder] = useState(false)
+    // const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
+    // const [newFolder, setNewFolder] = useState(false)
 
     // State to manage loading state, formData for form submission, and errors
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
-    const [formData, setFormData] = useState<AssignmentFormData>({
-        title: "",
-        type: "",
-        priority: "",
-        folder: "",
-        studentFirstName: student?.profile?.firstName,
-        studentLastName: student?.profile?.lastName,
-        consultantFirstName: user?.profile?.firstName,
-        consultantLastName: user?.profile?.lastName,
-        dueDate: undefined,
-        note: "",
-        files: [],
-        createdAt: null,
-        status: 'In-Progress',
-    })
+    // const [formData, setFormData] = useState<AssignmentFormData>({
+    //     title: "",
+    //     type: "",
+    //     priority: "",
+    //     folder: "",
+    //     studentFirstName: student?.profile?.firstName,
+    //     studentLastName: student?.profile?.lastName,
+    //     consultantFirstName: user?.profile?.firstName,
+    //     consultantLastName: user?.profile?.lastName,
+    //     dueDate: undefined,
+    //     note: "",
+    //     files: [],
+    //     createdAt: null,
+    //     status: 'In-Progress',
+    // })
+
+    const { formData, setFormData, handleInputChange, resetForm, dueDate, setDueDate, newFolder, setNewFolder, validate, errors, setErrors, files, handleFileUpload, removeFile, } = useAssignmentForm(student, user)
 
     // Validate form inputs and set error messages
-    const { errors, validate, setErrors } = useAssignmentValidation()
+    // const { errors, validate, setErrors } = useAssignmentValidation()
     
     // Extract functions for file uploads
-    const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
+    // const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
     
     // Reset the form data
-    const resetForm = () => {
-        // Reset form data to initial state, clear files, reset due date and new folder state
-        setFormData(getEmptyFormData(student, user));
-        clearFiles()
-        setDueDate(undefined);
-        setNewFolder(false);
-    };
+    // const resetForm = () => {
+    //     // Reset form data to initial state, clear files, reset due date and new folder state
+    //     setFormData(getEmptyFormData(student, user));
+    //     clearFiles()
+    //     setDueDate(undefined);
+    //     setNewFolder(false);
+    // };
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         try {
@@ -89,7 +92,7 @@ function CreateAssignmentModal() {
             // Validate form inputs and set error messages
             const isValid = validate(formData, dueDate, newFolder, student);
             if (!isValid) {
-                setIsLoading(false);
+                // setIsLoading(false);
                 return;
             }
     
@@ -133,17 +136,19 @@ function CreateAssignmentModal() {
             console.error("Error creating assignment:", error);
             setIsLoading(false)
             toast(<CustomToast title="Failed to Create Assignment" description="Please refresh and try again." status="error"/>)
+        } finally {
+            setIsLoading(false)
         }
     }
 
-    const handleInputChange = (name: string, value: string) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }))
+    // const handleInputChange = (name: string, value: string) => {
+    //     setFormData((prevData) => ({
+    //         ...prevData,
+    //         [name]: value,
+    //     }))
 
-        setErrors({})
-    }
+    //     setErrors({})
+    // }
 
     const handleNewAssignmentClick = () => {
         setOpen(true)
