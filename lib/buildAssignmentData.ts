@@ -29,7 +29,7 @@ export const buildAssignmentData = ({
   const dueDateAt1159pm = new Date(dueDate)
   dueDateAt1159pm.setHours(23, 59, 0, 0)
 
-  return {
+  let assignmentData = {
     ...formData,
     dueDate: Timestamp.fromDate(dueDateAt1159pm),
     createdAt: Timestamp.fromDate(new Date()),
@@ -49,4 +49,7 @@ export const buildAssignmentData = ({
       note: 'Assignment created and assigned to student.',
     }],
   }
+
+
+  return assignmentData
 }

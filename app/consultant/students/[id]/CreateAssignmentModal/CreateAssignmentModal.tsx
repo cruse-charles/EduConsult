@@ -31,6 +31,7 @@ import { onboardingSteps } from "@/lib/onboardingSteps"
 import { getEmptyFormData, buildAssignmentData } from "@/lib/buildAssignmentData"
 
 import { useAssignmentValidation } from "@/lib/validateAssignment"
+import { createAssignment } from "@/lib/service/createAssignment"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -93,16 +94,19 @@ function CreateAssignmentModal() {
                 return;
             }
     
+            // Create assignment
+            const { assignmentData, assignmentDocId } = await createAssignment({ formData, dueDate, files, studentId, student, user })
+
             // Build assignment data to send to Firestore
-            const assignmentData = buildAssignmentData({formData, dueDate, studentId, student, user})
+            // const assignmentData = buildAssignmentData({formData, dueDate, studentId, student, user})
     
             // Upload files to Firebase Storage
-            const filesData = await fileUpload(files, studentId)
-            assignmentData.timeline[0].files = filesData
+            // const filesData = await fileUpload(files, studentId)
+            // assignmentData.timeline[0].files = filesData
             
             // Create Assignment
-            if (!user.system.role) return
-            const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
+            // if (!user.system.role) return
+            // const assignmentDocId = await uploadAssignment(assignmentData, studentId, user.id)
 
             // Create assignment with ID to add to redux for proper ordering
             const assignmentWithId = {
