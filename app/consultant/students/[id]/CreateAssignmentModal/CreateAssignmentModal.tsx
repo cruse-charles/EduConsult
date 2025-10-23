@@ -13,13 +13,10 @@ import Notes from "./Notes"
 import { useState } from "react"
 import { useParams } from "next/navigation"
 
-import { AssignmentFormData } from "@/lib/types/types"
-
 import { useDispatch, useSelector } from "react-redux"
 import { updateFolders, updateAssignmentDocIds, updateReduxInProgressCount, checkReduxNextDeadline } from "@/redux/slices/currentStudentSlice"
 import { RootState } from "@/redux/store";
 import { addAssignment } from "@/redux/slices/currentStudentAssignmentsSlice"
-import { useFiles } from "@/hooks/useFiles"
 import { updateInProgressCount } from "@/lib/statsUtils"
 
 import { toast } from "sonner"
@@ -27,9 +24,7 @@ import CustomToast from "@/app/components/CustomToast"
 import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
-import { getEmptyFormData } from "@/lib/buildAssignmentData"
 
-import { useAssignmentValidation } from "@/lib/useAssignmentValidation"
 import { createAssignment } from "@/lib/service/createAssignment"
 import { useAssignmentForm } from "@/lib/hooks/useAssignmentForm"
 
@@ -44,45 +39,15 @@ function CreateAssignmentModal() {
     const student = useSelector((state: RootState) => state.currentStudent.data)
     const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 
-    // State to manage assignment details
-    // const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
-    // const [newFolder, setNewFolder] = useState(false)
-
     // State to manage loading state, formData for form submission, and errors
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
-    // const [formData, setFormData] = useState<AssignmentFormData>({
-    //     title: "",
-    //     type: "",
-    //     priority: "",
-    //     folder: "",
-    //     studentFirstName: student?.profile?.firstName,
-    //     studentLastName: student?.profile?.lastName,
-    //     consultantFirstName: user?.profile?.firstName,
-    //     consultantLastName: user?.profile?.lastName,
-    //     dueDate: undefined,
-    //     note: "",
-    //     files: [],
-    //     createdAt: null,
-    //     status: 'In-Progress',
-    // })
 
-    const { formData, setFormData, handleInputChange, resetForm, dueDate, setDueDate, newFolder, setNewFolder, validate, errors, setErrors, files, handleFileUpload, removeFile, } = useAssignmentForm(student, user)
 
-    // Validate form inputs and set error messages
-    // const { errors, validate, setErrors } = useAssignmentValidation()
-    
-    // Extract functions for file uploads
-    // const { files, handleFileUpload, removeFile, clearFiles} = useFiles();
-    
-    // Reset the form data
-    // const resetForm = () => {
-    //     // Reset form data to initial state, clear files, reset due date and new folder state
-    //     setFormData(getEmptyFormData(student, user));
-    //     clearFiles()
-    //     setDueDate(undefined);
-    //     setNewFolder(false);
-    // };
+    const { formData, setFormData, handleInputChange, resetForm, dueDate, setDueDate, 
+        newFolder, setNewFolder, validate, errors, setErrors, files, handleFileUpload, removeFile, 
+    } = useAssignmentForm(student, user)
+
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         try {
@@ -92,7 +57,6 @@ function CreateAssignmentModal() {
             // Validate form inputs and set error messages
             const isValid = validate(formData, dueDate, newFolder, student);
             if (!isValid) {
-                // setIsLoading(false);
                 return;
             }
     
@@ -140,15 +104,6 @@ function CreateAssignmentModal() {
             setIsLoading(false)
         }
     }
-
-    // const handleInputChange = (name: string, value: string) => {
-    //     setFormData((prevData) => ({
-    //         ...prevData,
-    //         [name]: value,
-    //     }))
-
-    //     setErrors({})
-    // }
 
     const handleNewAssignmentClick = () => {
         setOpen(true)
