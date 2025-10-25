@@ -25,7 +25,7 @@ import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
 
-import { createAssignment } from "@/lib/services/createAssignment"
+import { createAssignment, dispatchAssignmentUpdates } from "@/lib/services/createAssignment"
 import { useAssignmentForm } from "@/hooks/assignments/useAssignmentForm"
 
 
@@ -60,7 +60,7 @@ function CreateAssignmentModal() {
                 return;
             }
     
-            // Create assignment by building data, uploading files, and adding to Firestore
+            // 1. Persist to DB
             const { assignmentData, assignmentDocId } = await createAssignment({ formData, dueDate, files, studentId, student, user })
 
             // Create assignment with ID to add to redux for proper ordering
@@ -70,22 +70,29 @@ function CreateAssignmentModal() {
                 hasRead: true
             }
 
-            // Add assignment to StudentAssignmentSlice
-            dispatch(addAssignment(assignmentWithId))
+            // 2. Sync Redux
+            dispatchAssignmentUpdates(dispatch, {
+                assignmentDocId, assignmentData, folder: formData.folder,
+                studentId, isComplete, userId: user.id
+            })
 
+            
             // Clean up UI
             setIsLoading(false)
             setOpen(false)
             resetForm()
+            
+            // // Add assignment to StudentAssignmentSlice
+            // dispatch(addAssignment(assignmentWithId))
 
-            // Update redux to include new folder if any and add assignment to student's profile
-            dispatch(updateFolders(formData.folder))
-            dispatch(updateAssignmentDocIds(assignmentDocId))
+            // // Update redux to include new folder if any and add assignment to student's profile
+            // dispatch(updateFolders(formData.folder))
+            // dispatch(updateAssignmentDocIds(assignmentDocId))
 
-            // Increase In-Progress count on addition of new assignment and nextDeadline check
-            updateInProgressCount(studentId, 'In-Progress')
-            dispatch(updateReduxInProgressCount({newStatus: assignmentData.status}))
-            dispatch(checkReduxNextDeadline(assignmentData.dueDate))
+            // // Increase In-Progress count on addition of new assignment and nextDeadline check
+            // updateInProgressCount(studentId, 'In-Progress')
+            // dispatch(updateReduxInProgressCount({newStatus: assignmentData.status}))
+            // dispatch(checkReduxNextDeadline(assignmentData.dueDate))
 
             // TODO FIX THIS TO BE MORE COMPLETE
             // Updating onboarding if necessary
