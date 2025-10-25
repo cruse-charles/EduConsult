@@ -14,10 +14,7 @@ import { useState } from "react"
 import { useParams } from "next/navigation"
 
 import { useDispatch, useSelector } from "react-redux"
-import { updateFolders, updateAssignmentDocIds, updateReduxInProgressCount, checkReduxNextDeadline } from "@/redux/slices/currentStudentSlice"
 import { RootState } from "@/redux/store";
-import { addAssignment } from "@/redux/slices/currentStudentAssignmentsSlice"
-import { updateInProgressCount } from "@/lib/statsUtils"
 
 import { toast } from "sonner"
 import CustomToast from "@/app/components/CustomToast"
@@ -81,18 +78,6 @@ function CreateAssignmentModal() {
             setIsLoading(false)
             setOpen(false)
             resetForm()
-            
-            // // Add assignment to StudentAssignmentSlice
-            // dispatch(addAssignment(assignmentWithId))
-
-            // // Update redux to include new folder if any and add assignment to student's profile
-            // dispatch(updateFolders(formData.folder))
-            // dispatch(updateAssignmentDocIds(assignmentDocId))
-
-            // // Increase In-Progress count on addition of new assignment and nextDeadline check
-            // updateInProgressCount(studentId, 'In-Progress')
-            // dispatch(updateReduxInProgressCount({newStatus: assignmentData.status}))
-            // dispatch(checkReduxNextDeadline(assignmentData.dueDate))
 
             // TODO FIX THIS TO BE MORE COMPLETE
             // Updating onboarding if necessary
