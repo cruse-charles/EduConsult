@@ -24,6 +24,29 @@ function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, 
     // Retrieve student state from redux
     const student = useSelector((state: RootState) => state.currentStudent.data)
 
+    // Bulk mode — just a text input, no dropdown
+    if (isBulkMode) {
+        return (
+            <div className="space-y-2">
+                <Label htmlFor="folder">Folder <span className="text-red-500">*</span></Label>
+                <Input
+                    id="folder"
+                    placeholder="Enter folder name, e.g., Stanford Essays"
+                    value={formData.folder}
+                    onChange={(e) => handleInputChange("folder", e.target.value)}
+                />
+                <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
+                    <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                    <p>
+                        If a student already has a folder with this name, the assignment will be added to 
+                        their existing folder. Otherwise, a new folder will be created for them.
+                    </p>
+                </div>
+                {errors?.folder && <p className="text-sm text-red-500">{errors.folder}</p>}
+            </div>
+        )
+    }
+
     return (
         <>
             <div className="space-y-2">
