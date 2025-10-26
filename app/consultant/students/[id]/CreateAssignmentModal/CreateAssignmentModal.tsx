@@ -11,7 +11,7 @@ import FolderSelection from "./FolderSelection"
 import Notes from "./Notes"
 
 import { useState } from "react"
-import { useParams } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/store";
@@ -24,6 +24,7 @@ import { onboardingSteps } from "@/lib/onboardingSteps"
 
 import { createAssignment, dispatchAssignmentUpdates } from "@/lib/services/createAssignment"
 import { useAssignmentForm } from "@/hooks/assignments/useAssignmentForm"
+import { StudentSelector } from "./StudentSelector"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -44,6 +45,12 @@ function CreateAssignmentModal() {
     const { formData, setFormData, handleInputChange, resetForm, dueDate, setDueDate, 
         newFolder, setNewFolder, validate, errors, setErrors, files, handleFileUpload, removeFile, 
     } = useAssignmentForm(student, user)
+
+
+    // NEW
+    const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
+    const pathname = usePathname()
+    const isBulkMode = pathname === '/assignments'
 
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -134,11 +141,32 @@ function CreateAssignmentModal() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Form Container */}
                     <div className="space-y-4">
+
+
+                        {isBulkMode && (
+                            <div className="space-y-2">
+                                {/* <label className="text-sm font-medium">Students</label> */}
+                                <StudentSelector
+                                    selectedStudentIds={selectedStudentIds}
+                                    onChange={setSelectedStudentIds}
+                                    // error={errors.students}
+                                />
+                                {/* Folder conflict warning */}
+                                {/* {studentsWithExistingFolder.length > 0 && formData.folder && (
+                                    <p className="text-sm text-amber-600">
+                                        {studentsWithExistingFolder.map(s => s.profile.firstName).join(', ')} already
+                                        have a folder named "{formData.folder}" — assignments will be added to their existing folder.
+                                    </p>
+                                )} */}
+                            </div>
+                        )}
+
+
                         {/* Type, Title, Priority Input Container */}
                         <TypeTitlePriority formData={formData} handleInputChange={handleInputChange} setErrors={setErrors} errors={errors}/>
                             
                         {/* Folder Selection Container */}
-                        <FolderSelection newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData} setErrors={setErrors} errors={errors}/>
+                        <FolderSelection isBulkMode={isBulkMode} newFolder={newFolder} handleInputChange={handleInputChange} setNewFolder={setNewFolder} formData={formData} setErrors={setErrors} errors={errors}/>
 
                         {/* Calendar Due Date Container */}
                         <AssignmentCalendar dueDate={dueDate} setDueDate={setDueDate} setErrors={setErrors} errors={errors}/>

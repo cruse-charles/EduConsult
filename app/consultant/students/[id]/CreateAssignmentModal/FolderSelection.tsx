@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 import { AssignmentFormData } from '@/lib/types/types';
 import { RootState } from '@/redux/store';
+import { Info } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -15,9 +16,10 @@ interface FolderSelectionProps {
     newFolder: boolean;
     setErrors: Dispatch<SetStateAction<{ title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string; }>>;
     errors: {title?: string; type?: string; priority?: string; folder?: string; dueDate?: string; folderName?: string;};
+    isBulkMode: boolean;
 }
 
-function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, setErrors, errors}: FolderSelectionProps) {
+function FolderSelection({formData, handleInputChange, setNewFolder, newFolder, setErrors, errors, isBulkMode}: FolderSelectionProps) {
     
     // Retrieve student state from redux
     const student = useSelector((state: RootState) => state.currentStudent.data)
