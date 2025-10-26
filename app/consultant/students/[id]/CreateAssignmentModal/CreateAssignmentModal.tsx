@@ -22,7 +22,7 @@ import { completeStep } from "@/redux/slices/onboardingSlice"
 import { nextStep } from "@/lib/onBoardingUtils"
 import { onboardingSteps } from "@/lib/onboardingSteps"
 
-import { createAssignment, dispatchAssignmentUpdates } from "@/lib/services/createAssignment"
+import { createAssignment, createAssignmentForStudents, dispatchAssignmentUpdates } from "@/lib/services/createAssignment"
 import { useAssignmentForm } from "@/hooks/assignments/useAssignmentForm"
 import { StudentSelector } from "./StudentSelector"
 
@@ -35,6 +35,7 @@ function CreateAssignmentModal() {
     const { id: studentId } = useParams<{id:string}>()
     const user = useSelector((state: RootState) => state.user);
     const student = useSelector((state: RootState) => state.currentStudent.data)
+    const students = useSelector((state: RootState) => state.students.studentList)
     const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 
     // State to manage loading state, formData for form submission, and errors
@@ -64,25 +65,32 @@ function CreateAssignmentModal() {
                 return;
             }
     
-            // 1. Persist to DB
-            const { assignmentData, assignmentDocId } = await createAssignment({ formData, dueDate, files, studentId, student, user })
+            if (isBulkMode) {
+                // 1. Persist to DB
+                const selectedStudents = students.filter(s => selectedStudentIds.includes(s.id))
 
-            // Create assignment with ID to add to redux for proper ordering
-            const assignmentWithId = {
-                id: assignmentDocId,
-                ...assignmentData,
-                hasRead: true
+                const { succeeded, failed } = await createAssignmentForStudents({
+                    formData, dueDate, files, students: selectedStudents, user
+                })
+            } else {
+                // 1. Persist to DB
+                const { assignmentData, assignmentDocId } = await createAssignment({ formData, dueDate, files, studentId, student, user })
+
+                // Create assignment with ID to add to redux for proper ordering
+                const assignmentWithId = {
+                    id: assignmentDocId,
+                    ...assignmentData,
+                    hasRead: true
+                }
+    
+                // 2. Sync Redux
+                dispatchAssignmentUpdates(dispatch, {
+                    assignmentDocId, assignmentData, folder: formData.folder,
+                    studentId, isComplete, userId: user.id
+                })
             }
 
-            // 2. Sync Redux
-            dispatchAssignmentUpdates(dispatch, {
-                assignmentDocId, assignmentData, folder: formData.folder,
-                studentId, isComplete, userId: user.id
-            })
-
-            
             // Clean up UI
-            setIsLoading(false)
             setOpen(false)
             resetForm()
 
@@ -97,7 +105,6 @@ function CreateAssignmentModal() {
             toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="success"/>)
         } catch (error) {
             console.error("Error creating assignment:", error);
-            setIsLoading(false)
             toast(<CustomToast title="Failed to Create Assignment" description="Please refresh and try again." status="error"/>)
         } finally {
             setIsLoading(false)

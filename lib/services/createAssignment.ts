@@ -25,6 +25,44 @@ export const createAssignment = async ({ formData, dueDate, files, studentId, st
 }
 
 // @ts-ignore
+export const createAssignmentForStudents = async ({ formData, dueDate, files, students, user }) => {
+
+  // Run all assignment creations in parallel for multiple students, capturing all results
+  const results = await Promise.allSettled(
+
+    // @ts-ignore
+    // Map each student to an async assignment creation task
+    students.map(async (student) => {
+      try {
+        // Build assignment data specific to each student
+        const assignmentData = buildAssignmentData({ formData, dueDate, studentId: student.id, student, user})
+  
+        // Upload files for each student
+        assignmentData.timeline[0].files = files.length > 0
+            ? await fileUpload(files, student.id)
+            : []
+  
+        // Create the assignment document in Firestore
+        const assignmentDocId = await uploadAssignment(assignmentData, student.id, user.id)
+  
+        // Return relevant data for success tracking
+        return { status: "fulfilled", student, assignmentData, assignmentDocId }
+
+      } catch (error) {
+        return { status: "rejected", student, error }
+      }
+    })
+  )
+
+  // Extract results
+  const succeeded = results.filter(response => response.status === "fulfilled")
+  const failed = results.filter(response => response.status === "rejected")
+  
+  // Return both success and failure so UI can handle partial success cases
+  return { succeeded, failed }
+}
+
+// @ts-ignore
 export const dispatchAssignmentUpdates = (dispatch, { assignmentDocId, assignmentData, folder, studentId, isComplete, userId }) => {
   // Add assignment to StudentAssignmentSlice
   dispatch(addAssignment({ id: assignmentDocId, ...assignmentData, hasRead: true }))
