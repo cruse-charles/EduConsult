@@ -50,41 +50,6 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
 
 }
 
-// @ts-ignore
-export const createAssignmentForStudents = async ({ formData, dueDate, files, students, user }) => {
-
-    const results = await Promise.allSettled(
-        // @ts-ignore
-        students.map(async (student) => {
-            const assignmentData = buildAssignmentData({
-                formData,
-                dueDate,
-                studentId: student.id,
-                student,
-                user,
-            })
-
-            // Upload a separate copy of files per student so edits are independent
-            assignmentData.timeline[0].files = files.length > 0
-                ? await fileUpload(files, student.id)
-                : []
-
-            const assignmentDocId = await uploadAssignment(assignmentData, student.id, user.id)
-            return { assignmentData, assignmentDocId, student }
-        })
-    )
-
-    const succeeded = results
-        .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
-        .map(r => r.value)
-
-    const failed = results
-        .filter((r): r is PromiseRejectedResult => r.status === 'rejected')
-        .map((r, i) => ({ student: students[i], reason: r.reason }))
-
-    return { succeeded, failed }
-}
-
 
 // Update an assignment from consultant view
 // TODO: This function needs to update the AssignmentMeta for student

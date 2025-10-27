@@ -35,7 +35,7 @@ function CreateAssignmentModal() {
     const { id: studentId } = useParams<{id:string}>()
     const user = useSelector((state: RootState) => state.user);
     const student = useSelector((state: RootState) => state.currentStudent.data)
-    const students = useSelector((state: RootState) => state.students.studentList)
+    const students = useSelector((state: RootState) => state.students.data)
     const {isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 
     // State to manage loading state, formData for form submission, and errors

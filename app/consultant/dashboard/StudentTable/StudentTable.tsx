@@ -19,7 +19,7 @@ const StudentTable = () => {
     const router = useRouter();
     const dispatch = useDispatch()
 
-    const {studentList: students, loading} = useSelector((state: RootState) => state.students)
+    const {data: students, loading} = useSelector((state: RootState) => state.students)
     const user = useSelector((state: RootState) => state.user)
     const { isComplete, onboardingStep } = useSelector((state: RootState) => state.onboarding)
 

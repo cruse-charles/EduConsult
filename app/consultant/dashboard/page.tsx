@@ -25,7 +25,7 @@ const page = () => {
 
     // Retrieve state variables
     const userId = useSelector((state: RootState) => state.user.id);
-    const students = useSelector((state: RootState) => state.students.studentList)
+    const students = useSelector((state: RootState) => state.students.data)
 
     // Fetch user and user's student info
     useEffect(() => {
