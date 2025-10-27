@@ -13,7 +13,7 @@ interface StudentSelectorProps {
 }
 
 export function StudentSelector({ selectedStudentIds, onChange, error }: StudentSelectorProps) {
-    const students = useSelector((state: RootState) => state.students.studentList)
+    const students = useSelector((state: RootState) => state.students.data)
 
     const sortedStudents = [...students].sort((a, b) => {
         const lastNameCompare = a.profile.lastName.localeCompare(b.profile.lastName)

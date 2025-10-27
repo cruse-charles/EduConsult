@@ -47,11 +47,11 @@ export const fetchStudents = createAsyncThunk("consultantDashboard/fetchStudents
 
 // const initialState: Student[] = []
 interface StudentsState {
-  studentList: Student[];
+  data: Student[];
   loading: boolean;
   error: string | null;
 }
-const initialState: StudentsState = {studentList: [], loading: true, error: null};
+const initialState: StudentsState = {data: [], loading: true, error: null};
 
 // Create a slice for assignments
 const studentsSlice = createSlice({
@@ -61,12 +61,12 @@ const studentsSlice = createSlice({
     setStudents(state, action) {
     //   state.students = action.payload;
         // return action.payload
-        state.studentList = action.payload
+        state.data = action.payload
         return state
     },
     addStudent(state, action) {
         // state.push(action.payload);
-        state.studentList.push(action.payload);
+        state.data.push(action.payload);
         return state;
     }
   },
@@ -78,7 +78,7 @@ const studentsSlice = createSlice({
       })
       .addCase(fetchStudents.fulfilled, (state, action) => {
         state.loading = false;
-        state.studentList = action.payload || [];
+        state.data = action.payload || [];
         // return action.payload;
       })
       .addCase(fetchStudents.rejected, (state, action) => {
