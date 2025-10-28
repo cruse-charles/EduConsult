@@ -10,7 +10,7 @@ import { getConsultantDashboardAssignments } from '@/lib/queries/querys'
 import { formatNextDeadline } from '@/lib/utils'
 import { Assignment } from '@/lib/types/types'
 
-import { fetchConsultantDashboardAssignments } from '@/redux/slices/consultantAssignmentSlice'
+import { fetchConsultantDashboardAssignments } from '@/redux/slices/consultantDashboardAssignmentsSlice'
 import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,7 +19,7 @@ import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices
 const DashboardAssignmentCalendar = () => {
     // State for current date and assignments
     const [currentStartDate, setCurrentStartDate] = useState(new Date())
-    const { data: assignments, loadedThrough, loadedFrom } = useSelector((state: RootState) => state.consultantDashboardAssignments)
+    const { data: assignments, query: { loadedThrough, loadedFrom } } = useSelector((state: RootState) => state.consultantDashboardAssignments)
 
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch();
@@ -152,6 +152,7 @@ const DashboardAssignmentCalendar = () => {
                                 {/* Event List */}
                                 <ScrollArea className="h-[225px]">
                                     {/* {dashboardAssignments */}
+                                    {/* @ts-ignore */}
                                     {assignments
                                         .filter(assignment => formatNextDeadline(day) === formatNextDeadline(assignment.dueDate))
                                         .map((assignment) => (

@@ -11,7 +11,7 @@ import { deleteFolder } from '@/repositories/folderRepository'
 
 import { removeAssignmentDocId, removeFolder } from '@/redux/slices/currentStudentSlice'
 import { deleteAssignmentSlice } from '@/redux/slices/currentStudentAssignmentsSlice'
-import { deleteDashboardAssignment } from '@/redux/slices/consultantAssignmentSlice'
+import { deleteDashboardAssignment } from '@/redux/slices/consultantDashboardAssignmentsSlice'
 import { toast } from 'sonner'
 import CustomToast from '@/app/components/CustomToast'
 import { useDispatch, useSelector } from 'react-redux'

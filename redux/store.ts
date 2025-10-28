@@ -6,7 +6,7 @@ import type { UnknownAction } from 'redux';
 import currentStudentReducer from './slices/currentStudentSlice';
 import currentStudentAssignmentReducer from './slices/currentStudentAssignmentsSlice';
 import userReducer from './slices/userSlice';
-import consultantAssignmentReducer from './slices/consultantAssignmentSlice';
+import consultantDashboardAssignmentsReducer from './slices/consultantDashboardAssignmentsSlice';
 import onboardingReducer from './slices/onboardingSlice';
 import currentAssignmentReducer from './slices/currentAssignmentSlice';
 import studentsReducer from './slices/studentsSlice';
@@ -16,7 +16,7 @@ import { resetStore } from './slices/resetSlice';
 const appReducer = combineReducers({
   currentStudent: currentStudentReducer,
   currentStudentAssignments: currentStudentAssignmentReducer,
-  consultantDashboardAssignments: consultantAssignmentReducer,
+  consultantDashboardAssignments: consultantDashboardAssignmentsReducer,
   user: userReducer,
   onboarding: onboardingReducer,
   currentAssignment: currentAssignmentReducer,

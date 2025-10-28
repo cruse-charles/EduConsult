@@ -17,24 +17,28 @@ export const fetchConsultantDashboardAssignments = createAsyncThunk(
   }
 )
 
-interface ConsultantAssignmentsState {
+interface consultantDashboardAssignments {
   data: Assignment[]
-  loadedThrough: Date | null  // furthest date we've fetched
-  loadedFrom: Date | null  // earliest date we've fetched
+  query: {
+    loadedThrough: Date | null  // furthest date we've fetched
+    loadedFrom: Date | null  // earliest date we've fetched
+  }
   loading: boolean
   error: string | null
 }
 
-const initialState: ConsultantAssignmentsState = {
+const initialState: consultantDashboardAssignments = {
   data: [],
-  loadedThrough: null,
-  loadedFrom: null,
+  query: {
+    loadedThrough: null,
+    loadedFrom: null,
+  },
   loading: false,
   error: null
 }
 
 // Create a slice for assignments
-const consultantAssignmentsSlice = createSlice({
+const consultantDashboardAssignmentsSlice = createSlice({
   name: 'consultantDashboardAssignments',
   initialState,
     reducers: {
@@ -82,11 +86,11 @@ const consultantAssignmentsSlice = createSlice({
       })
       .addCase(fetchConsultantDashboardAssignments.fulfilled, (state, action) => {
         state.data.push(...action.payload.assignments)
-        if (!state.loadedThrough || action.payload.loadedThrough > state.loadedThrough) {
-            state.loadedThrough = action.payload.loadedThrough
+        if (!state.query.loadedThrough || action.payload.loadedThrough > state.query.loadedThrough) {
+            state.query.loadedThrough = action.payload.loadedThrough
         }
-        if (!state.loadedFrom || action.payload.loadedFrom < state.loadedFrom) {
-            state.loadedFrom = action.payload.loadedFrom
+        if (!state.query.loadedFrom || action.payload.loadedFrom < state.query.loadedFrom) {
+            state.query.loadedFrom = action.payload.loadedFrom
         }
         state.loading = false
         state.error = null
@@ -98,5 +102,5 @@ const consultantAssignmentsSlice = createSlice({
   },
 });
 
-export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteDashboardAssignment } = consultantAssignmentsSlice.actions;
-export default consultantAssignmentsSlice.reducer;
+export const { setAssignments, addAssignment, addEntry, updateAssignmentSlice, deleteDashboardAssignment } = consultantDashboardAssignmentsSlice.actions;
+export default consultantDashboardAssignmentsSlice.reducer;

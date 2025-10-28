@@ -1,4 +1,4 @@
-import { addAssignment } from "@/redux/slices/consultantAssignmentSlice"
+import { addAssignment } from "@/redux/slices/consultantDashboardAssignmentsSlice"
 import { uploadAssignment } from "../../repositories/assignmentRepository"
 import { fileUpload } from "../../repositories/storageRepository"
 import { buildAssignmentData } from "../buildAssignmentData"
