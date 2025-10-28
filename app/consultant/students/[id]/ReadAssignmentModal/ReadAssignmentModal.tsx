@@ -9,7 +9,7 @@ import AssignmentDetails from './AssignmentDetails'
 import AssignmentTimeline from './AssignmentTimeline'
 import CustomToast from '@/app/components/CustomToast'
 
-import { uploadEntry, updateAssignmentStatus } from '@/repositories/assignmentRepository'
+import { uploadEntry, updateAssignment } from '@/repositories/assignmentRepository'
 import { fileUpload } from '@/repositories/storageRepository'
 import { AssignmentFile } from '@/lib/types/types'
 import { useFiles } from '@/hooks/assignments/useFiles'
@@ -124,6 +124,7 @@ function ReadAssignmentModal() {
 
         } catch (error) {
             setIsLoading(false)
+            console.log("Error submitting entry:", error)
             toast(<CustomToast title='Entry Not Added' description='' status='error'/>)
         }
 

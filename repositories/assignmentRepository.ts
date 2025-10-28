@@ -5,6 +5,8 @@ import { Assignment, AssignmentUpload, Entry, UpdateAssignment } from "../lib/ty
 import { updateNextDeadlineForStudent } from "../lib/statsUtils";
 
 import { nanoid } from "@reduxjs/toolkit";
+import { fileUpload } from "./storageRepository";
+import { buildAssignmentData } from "@/lib/buildAssignmentData";
 
 
 // TODO: We are currently doing four separate writes, batch them to safegaurd against partial updates and improve performance
@@ -48,9 +50,11 @@ export const uploadAssignment = async (assignmentData: AssignmentUpload, student
 
 }
 
+// @ts-ignore
 export const createAssignmentForStudents = async ({ formData, dueDate, files, students, user }) => {
 
     const results = await Promise.allSettled(
+        // @ts-ignore
         students.map(async (student) => {
             const assignmentData = buildAssignmentData({
                 formData,

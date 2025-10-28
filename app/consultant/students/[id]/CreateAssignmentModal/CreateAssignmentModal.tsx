@@ -68,11 +68,11 @@ function CreateAssignmentModal() {
             if (isBulkMode) {
                 // 1. Persist to DB
                 const selectedStudents = students.filter(s => selectedStudentIds.includes(s.id))
-
                 const { succeeded, failed } = await createAssignmentForStudents({
                     formData, dueDate, files, students: selectedStudents, user
                 })
 
+                // Display success and or failure toast messages based on results
                 if (failed.length > 0) {
                     const failedNames = failed.map(f => f.student.profile.firstName).join(', ')
                     toast(<CustomToast
@@ -92,13 +92,6 @@ function CreateAssignmentModal() {
                 // 1. Persist to DB
                 const { assignmentData, assignmentDocId } = await createAssignment({ formData, dueDate, files, studentId, student, user })
 
-                // Create assignment with ID to add to redux for proper ordering
-                // const assignmentWithId = {
-                //     id: assignmentDocId,
-                //     ...assignmentData,
-                //     hasRead: true
-                // }
-    
                 // 2. Sync Redux
                 dispatchAssignmentUpdates(dispatch, {
                     assignmentDocId, assignmentData, folder: formData.folder,
@@ -119,9 +112,8 @@ function CreateAssignmentModal() {
                 dispatch(completeStep("createAssignment"))
                 await nextStep(user.id)
             }
-            
-            // // Display confirmation email
-            // toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="success"/>)
+        
+        // Catch for single assignment failure or system failure
         } catch (error) {
             console.error("Error creating assignment:", error);
             toast(<CustomToast title="Failed to Create Assignment" description="Please refresh and try again." status="error"/>)
