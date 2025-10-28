@@ -33,30 +33,30 @@ export const createAssignmentForStudents = async ({ formData, dueDate, files, st
     // @ts-ignore
     // Map each student to an async assignment creation task
     students.map(async (student) => {
-      try {
-        // Build assignment data specific to each student
-        const assignmentData = buildAssignmentData({ formData, dueDate, studentId: student.id, student, user})
+      // Build assignment data specific to each student
+      const assignmentData = buildAssignmentData({ formData, dueDate, studentId: student.id, student, user})
   
-        // Upload files for each student
-        assignmentData.timeline[0].files = files.length > 0
-            ? await fileUpload(files, student.id)
-            : []
+      // Upload files for each student
+      assignmentData.timeline[0].files = files.length > 0
+          ? await fileUpload(files, student.id)
+          : []
   
-        // Create the assignment document in Firestore
-        const assignmentDocId = await uploadAssignment(assignmentData, student.id, user.id)
+      // Create the assignment document in Firestore
+      const assignmentDocId = await uploadAssignment(assignmentData, student.id, user.id)
   
-        // Return relevant data for success tracking
-        return { status: "fulfilled", student, assignmentData, assignmentDocId }
-
-      } catch (error) {
-        return { status: "rejected", student, error }
-      }
+      // Return relevant data for tracking
+      return { student, assignmentData, assignmentDocId }
     })
   )
 
   // Extract results
-  const succeeded = results.filter(response => response.status === "fulfilled")
-  const failed = results.filter(response => response.status === "rejected")
+  const succeeded = results
+    .filter((response) => response.status === "fulfilled")
+    .map(response => response.value)
+
+  const failed = results
+    .filter((response) => response.status === "rejected")
+    .map((response, i) => ({ student: students[i], reason: response.reason }))
   
   // Return both success and failure so UI can handle partial success cases
   return { succeeded, failed }

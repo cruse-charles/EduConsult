@@ -72,22 +72,41 @@ function CreateAssignmentModal() {
                 const { succeeded, failed } = await createAssignmentForStudents({
                     formData, dueDate, files, students: selectedStudents, user
                 })
+
+                if (failed.length > 0) {
+                    const failedNames = failed.map(f => f.student.profile.firstName).join(', ')
+                    toast(<CustomToast
+                        title={`Created ${succeeded.length}/${selectedStudents.length}`}
+                        description={`Failed for: ${failedNames}. Please try again for these students.`}
+                        status="error"
+                    />)
+                } else {
+                    const succeededNames = succeeded.map(s => s.student.profile.firstName).join(', ')
+                    toast(<CustomToast
+                        title="Assignments Created"
+                        description={`Successfully created assignments for ${succeeded.length} students. ${succeededNames}.`}
+                        status="success"
+                    />)
+                }
             } else {
                 // 1. Persist to DB
                 const { assignmentData, assignmentDocId } = await createAssignment({ formData, dueDate, files, studentId, student, user })
 
                 // Create assignment with ID to add to redux for proper ordering
-                const assignmentWithId = {
-                    id: assignmentDocId,
-                    ...assignmentData,
-                    hasRead: true
-                }
+                // const assignmentWithId = {
+                //     id: assignmentDocId,
+                //     ...assignmentData,
+                //     hasRead: true
+                // }
     
                 // 2. Sync Redux
                 dispatchAssignmentUpdates(dispatch, {
                     assignmentDocId, assignmentData, folder: formData.folder,
                     studentId, isComplete, userId: user.id
                 })
+
+                // Display confirmation email
+                toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="success"/>)
             }
 
             // Clean up UI
@@ -101,8 +120,8 @@ function CreateAssignmentModal() {
                 await nextStep(user.id)
             }
             
-            // Display confirmation email
-            toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="success"/>)
+            // // Display confirmation email
+            // toast(<CustomToast title="Assignment Created" description="The assignment has been successfully created." status="success"/>)
         } catch (error) {
             console.error("Error creating assignment:", error);
             toast(<CustomToast title="Failed to Create Assignment" description="Please refresh and try again." status="error"/>)
