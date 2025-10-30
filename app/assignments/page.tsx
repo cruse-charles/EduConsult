@@ -17,6 +17,7 @@ import { openCurrentAssignmentModal, setCurrentAssignment } from '@/redux/slices
 import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal/ReadAssignmentModal'
 import { Button } from '@/components/ui/button'
 import CreateAssignmentModal from '../consultant/students/[id]/CreateAssignmentModal/CreateAssignmentModal'
+import { fetchAssignments } from '@/redux/slices/assignmentsSlice'
 
 // TODO: Add loading state
 const page = () => {
@@ -27,14 +28,18 @@ const page = () => {
     const [assignments, setAssignments] = useState<Assignment[]>([])
 
     // Fetch user's assignments 
-    useEffect(() => {
-        const fetchAssignments = async () => {
-            const assignmentData = user.system.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
-            setAssignments(assignmentData)
-        }
+    // useEffect(() => {
+    //     const fetchAssignments = async () => {
+    //         const assignmentData = user.system.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
+    //         setAssignments(assignmentData)
+    //     }
 
-        fetchAssignments()
-    },[user.id])
+    //     fetchAssignments()
+    // },[user.id])
+
+    useEffect(() => {
+        dispatch(fetchAssignments({ userId: user.id, loadMore: true, role: user.system.role }))
+    }, [dispatch, user.id])
 
     const handleAssignmentClick = (assignment: Assignment) => {
         dispatch(openCurrentAssignmentModal())

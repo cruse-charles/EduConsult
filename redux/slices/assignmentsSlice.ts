@@ -7,12 +7,12 @@ import { Assignment } from "@/lib/types/types"
 
 export const fetchAssignments = createAsyncThunk(
   'assignments/fetchAssignments',
-  async ({ consultantId, loadMore }, { getState }) => {
+  async ({ userId, loadMore, role }, { getState }) => {
     const state = getState() as RootState
 
-    const cursor = loadMore ? state.assignments.cursor : null
+    const cursor = loadMore ? state.assignments.pagination.cursor : null
 
-    const result = await getConsultantAssignmentsPaginated(consultantId, cursor)
+    const result = role === 'consultant' ? await getConsultantAssignmentsPaginated(userId, cursor) : await getStudentAssignmentsPaginated(userId, cursor)
 
     return {
       assignments: result.assignments,

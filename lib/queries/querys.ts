@@ -205,7 +205,41 @@ export const getConsultantAssignmentsPaginated = async ( consultantId: string, c
   }
 }
 
+export const getStudentAssignmentsPaginated = async ( studentId: string, cursor: any = null ) => {
 
+  let q = query(
+    collection(db, 'assignments'),
+    where('studentId', '==', studentId),
+    orderBy('createdAt', 'desc'),
+    limit(10)
+  )
+
+  // If we already have a cursor, fetch next page
+  if (cursor) {
+    q = query(
+      collection(db, 'assignments'),
+      where('studentId', '==', studentId),
+      orderBy('createdAt', 'desc'),
+      startAfter(cursor),
+      limit(10)
+    )
+  }
+
+  const snapshot = await getDocs(q)
+
+  const assignments = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  })) as Assignment[]
+
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1] || null
+
+  return {
+    assignments,
+    cursor: lastVisible,
+    hasMore: snapshot.docs.length === 10
+  }
+}
 
 
 // TODO: Adjust all queries to return data itself, not the snapshot, also leave comment on them to explain what they do

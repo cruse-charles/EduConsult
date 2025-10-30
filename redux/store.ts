@@ -10,6 +10,7 @@ import consultantDashboardAssignmentsReducer from './slices/consultantDashboardA
 import onboardingReducer from './slices/onboardingSlice';
 import currentAssignmentReducer from './slices/currentAssignmentSlice';
 import studentsReducer from './slices/studentsSlice';
+import assignmentsReducer from './slices/assignmentsSlice';
 import { resetStore } from './slices/resetSlice';
 
 // Combine all  individual slice reducers into a single app-level reducer
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   onboarding: onboardingReducer,
   currentAssignment: currentAssignmentReducer,
   students: studentsReducer,
+  assignments: assignmentsReducer
 })
 
 type AppState = ReturnType<typeof appReducer>;
