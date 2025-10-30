@@ -1,4 +1,4 @@
-import { query, where, getDocs, collection, doc, orderBy, limit } from 'firebase/firestore';
+import { query, where, getDocs, collection, doc, orderBy, limit, startAfter } from 'firebase/firestore';
 import { db } from "@/lib/firebaseConfig";
 import { Timestamp } from "firebase/firestore";
 import { Assignment } from '../types/types';
@@ -166,5 +166,46 @@ export const getConsultantAssignments = async (consultantId: string) => {
         } as Assignment
     })
 }
+
+
+
+export const getConsultantAssignmentsPaginated = async ( consultantId: string, cursor: any = null ) => {
+
+  let q = query(
+    collection(db, 'assignments'),
+    where('consultantId', '==', consultantId),
+    orderBy('createdAt', 'desc'),
+    limit(10)
+  )
+
+  // If we already have a cursor, fetch next page
+  if (cursor) {
+    q = query(
+      collection(db, 'assignments'),
+      where('consultantId', '==', consultantId),
+      orderBy('createdAt', 'desc'),
+      startAfter(cursor),
+      limit(10)
+    )
+  }
+
+  const snapshot = await getDocs(q)
+
+  const assignments = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  })) as Assignment[]
+
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1] || null
+
+  return {
+    assignments,
+    cursor: lastVisible,
+    hasMore: snapshot.docs.length === 10
+  }
+}
+
+
+
 
 // TODO: Adjust all queries to return data itself, not the snapshot, also leave comment on them to explain what they do
