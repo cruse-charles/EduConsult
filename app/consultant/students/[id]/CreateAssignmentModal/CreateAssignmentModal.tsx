@@ -25,6 +25,7 @@ import { onboardingSteps } from "@/lib/onboardingSteps"
 import { createAssignment, createAssignmentForStudents, dispatchAssignmentUpdates } from "@/lib/services/createAssignment"
 import { useAssignmentForm } from "@/hooks/assignments/useAssignmentForm"
 import { StudentSelector } from "./StudentSelector"
+import { addManyAssignments } from "@/redux/slices/assignmentsSlice"
 
 
 // TODO: Error when adding a doc ref to redux, which is the consultant ref in student
@@ -71,6 +72,9 @@ function CreateAssignmentModal() {
                 const { succeeded, failed } = await createAssignmentForStudents({
                     formData, dueDate, files, students: selectedStudents, user
                 })
+
+                // 2. Sync Redux for successful creations
+                dispatch(addManyAssignments(succeeded.map(s => ({ id: s.assignmentDocId, ...s.assignmentData, hasRead: true }))))
 
                 // Display success and or failure toast messages based on results
                 if (failed.length > 0) {

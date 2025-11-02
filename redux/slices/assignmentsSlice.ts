@@ -1,13 +1,13 @@
 // assignmentsSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { RootState } from "../store"
-import { getConsultantAssignmentsPaginated } from "@/lib/queries/querys"
+import { getConsultantAssignmentsPaginated, getStudentAssignmentsPaginated } from "@/lib/queries/querys"
 import { Assignment } from "@/lib/types/types"
 
 
 export const fetchAssignments = createAsyncThunk(
   'assignments/fetchAssignments',
-  async ({ userId, loadMore, role }, { getState }) => {
+  async ({ userId, loadMore, role }: {userId: string, loadMore: boolean, role: string}, { getState }) => {
     const state = getState() as RootState
 
     const cursor = loadMore ? state.assignments.pagination.cursor : null
@@ -28,7 +28,7 @@ interface AssignmentsState {
     loading: boolean,
     error: string | null,
     pagination: {
-        cursor: Assignment | null,
+        cursor: any | null,
         hasMore: boolean
     }
 }
@@ -76,32 +76,39 @@ const assignmentsSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAssignments.pending, (state) => {
+    .addCase(fetchAssignments.pending, (state) => {
         state.loading = true
       })
-      .addCase(fetchAssignments.fulfilled, (state, action) => {
+    .addCase(fetchAssignments.fulfilled, (state, action) => {
         state.loading = false
 
-        const { assignments, cursor, hasMore } = action.payload
+        const { assignments, cursor, hasMore, loadMore } = action.payload
 
-        assignments.forEach((a: any) => {
-          if (!state.data.some((assignment) => assignment.id === a.id)) {
-            state.data.push(a)
-          }
-        })
+        if (!loadMore) {
+            // fresh load → replace
+            state.data = assignments
+        } else {
+            // pagination → append (dedupe optional)
+            assignments.forEach((a: any) => {
+            if (!state.data.some((assignment) => assignment.id === a.id)) {
+                state.data.push(a)
+            }
+            })
+        }
 
         state.pagination.cursor = cursor
         state.pagination.hasMore = hasMore
       })
-      .addCase(fetchAssignments.rejected, (state, action) => {
+    .addCase(fetchAssignments.rejected, (state, action) => {
         state.loading = false
+        console.log(action.error.message)
         state.error = action.error.message || "Failed to fetch"
       })
   }
 })
 
 export const {
-
+    addManyAssignments, addAssignment, removeAssignment, updateAssignment
 } = assignmentsSlice.actions
 
 export default assignmentsSlice.reducer

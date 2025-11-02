@@ -1,7 +1,7 @@
 'use client'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { BookOpen, Download, FileText, Upload } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronUp, Download, FileText, MoreHorizontal, Trash2, Upload } from 'lucide-react'
 
 import { formatNextDeadline } from '@/lib/utils'
 
@@ -18,6 +18,7 @@ import ReadAssignmentModal from '../consultant/students/[id]/ReadAssignmentModal
 import { Button } from '@/components/ui/button'
 import CreateAssignmentModal from '../consultant/students/[id]/CreateAssignmentModal/CreateAssignmentModal'
 import { fetchAssignments } from '@/redux/slices/assignmentsSlice'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 // TODO: Add loading state
 const page = () => {
@@ -25,7 +26,11 @@ const page = () => {
 
     // Retrieve user details and assignment state
     const user = useSelector((state: RootState) => state.user)
-    const [assignments, setAssignments] = useState<Assignment[]>([])
+    // const [assignments, setAssignments] = useState<Assignment[]>([])
+    const assignments = useSelector((state: RootState) => state.assignments.data)
+    const {loading, error} = useSelector((state: RootState) => state.assignments)
+    const hasMore = useSelector((state: RootState) => state.assignments.pagination.hasMore)
+    const [loadMore, setLoadMore] = useState(false)
 
     // Fetch user's assignments 
     // useEffect(() => {
@@ -38,7 +43,8 @@ const page = () => {
     // },[user.id])
 
     useEffect(() => {
-        dispatch(fetchAssignments({ userId: user.id, loadMore: true, role: user.system.role }))
+        // @ts-ignore
+        dispatch(fetchAssignments({ userId: user.id, loadMore: false, role: user.system.role }))
     }, [dispatch, user.id])
 
     const handleAssignmentClick = (assignment: Assignment) => {
@@ -46,61 +52,121 @@ const page = () => {
         dispatch(setCurrentAssignment(assignment))
     }
 
-    const handleCreateAssignment = () => {
-
+    const handleLoadMore = () => {
+        if (!hasMore) return
+        // @ts-ignore
+        dispatch(fetchAssignments({ userId: user.id, loadMore: true, role: user.system.role }))
     }
 
-    return (
-        <div className="flex min-h-screen flex-col">
-            <main className="container flex-1 p-4 md:p-6 space-y-6">
-                <h1>Manage Assignments</h1>
-                <CreateAssignmentModal/>
-                    <div className="rounded-md border">
-                    <Table>
-                        <TableHeader>
-                        <TableRow>
-                            <TableHead>Assignment</TableHead>
-                            <TableHead>{user.system.role === 'consultant' ? 'Student' : 'Consultant'}</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Due Date</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                        {assignments.map((assignment) => (
-                            <TableRow key={assignment.id} onClick={() => handleAssignmentClick(assignment)} className='cursor-pointer'>
-                            <TableCell className="font-medium">{assignment.title}</TableCell>
-                            {/* <TableCell>{assignment.studentFirstName} {assignment.studentLastName}</TableCell> */}
-                            <TableCell>{user.system.role === 'consultant' ? `${assignment.studentFirstName} ${assignment.studentLastName}` : `${assignment.consultantFirstName} ${assignment.consultantLastName}`}</TableCell>
-                            <TableCell>
-                                <div className="flex items-center gap-2">
-                                    {assignment.type === "Essay" && <FileText className="h-4 w-4 text-blue-500" />}
-                                    {assignment.type === "Document" && <BookOpen className="h-4 w-4 text-green-500" />}
-                                    {assignment.type === "Portfolio" && <Upload className="h-4 w-4 text-purple-500" />}
-                                    {assignment.type === "Payment" && <Download className="h-4 w-4 text-red-500" />}
-                                    {assignment.type === "Application" && <FileText className="h-4 w-4 text-orange-500" />}
-                                {assignment.type}
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                {StatusBadge(assignment.status, assignment.dueDate)}
-                            </TableCell>
-                            <TableCell>{formatNextDeadline(assignment.dueDate)}</TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                    {assignments.length === 0 && (
-                        <div className="flex flex-col items-center justify-center py-12">
-                        <p className="text-muted-foreground">No assignments found.</p>
-                        </div>
-                    )}
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <main className="container flex-1 p-4 md:p-6 space-y-6">
+        <h1>Manage Assignments</h1>
+        <CreateAssignmentModal />
+
+        {/* {error && (
+          <p className="text-sm text-destructive">Error: {error}</p>
+        )} */}
+
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead
+                  className="cursor-pointer select-none"
+                >
+                  Assignment 
+                </TableHead>
+                <TableHead>
+                  {user.system.role === 'consultant' ? 'Student' : 'Consultant'}
+                </TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead
+                  className="cursor-pointer select-none"
+                >
+                  Status 
+                </TableHead>
+                <TableHead
+                  className="cursor-pointer select-none"
+                >
+                  Due Date
+                </TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    Loading…
+                  </TableCell>
+                </TableRow>
+              ) : assignments.map((assignment) => (
+                <TableRow
+                  key={assignment.id}
+                  onClick={() => handleAssignmentClick(assignment)}
+                  className="cursor-pointer"
+                >
+                  <TableCell className="font-medium">{assignment.title}</TableCell>
+                  <TableCell>
+                    {user.system.role === 'consultant'
+                      ? `${assignment.studentFirstName} ${assignment.studentLastName}`
+                      : `${assignment.consultantFirstName} ${assignment.consultantLastName}`}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {assignment.type}
                     </div>
-            </main>
-            <ReadAssignmentModal />
+                  </TableCell>
+                  <TableCell>
+                    {StatusBadge(assignment.status, assignment.dueDate)}
+                  </TableCell>
+                  <TableCell>{formatNextDeadline(assignment.dueDate)}</TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          className="text-destructive"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+          {!loading && assignments.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-12">
+              <p className="text-muted-foreground">No assignments found.</p>
+            </div>
+          )}
         </div>
-    )
+
+        {hasMore && (
+          <div className="flex justify-center pt-2">
+            <Button
+              variant="outline"
+              onClick={handleLoadMore}
+              disabled={loadMore}
+            >
+              {loadMore ? 'Loading…' : 'Load more'}
+            </Button>
+          </div>
+        )}
+      </main>
+      <ReadAssignmentModal />
+    </div>
+  )
 }
 
 export default page
