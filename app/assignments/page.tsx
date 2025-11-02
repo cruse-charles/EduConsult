@@ -1,7 +1,7 @@
 'use client'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { BookOpen, ChevronDown, ChevronUp, Download, FileText, MoreHorizontal, Trash2, Upload } from 'lucide-react'
+import { MoreHorizontal, Trash2 } from 'lucide-react'
 
 import { formatNextDeadline } from '@/lib/utils'
 
@@ -9,7 +9,6 @@ import { RootState } from '@/redux/store'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getConsultantAssignments, getStudentAssignments } from '@/lib/queries/querys'
 import { Assignment } from '@/lib/types/types'
 
 import StatusBadge from '../components/StatusBadge'
@@ -21,26 +20,16 @@ import { fetchAssignments } from '@/redux/slices/assignmentsSlice'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 // TODO: Add loading state
+// TOOOOOOOOOODOOOOOOOOOOOOOOOOOOOOOOOOOO: clean up comments and stuff, and double check loading more logic
 const page = () => {
     const dispatch = useDispatch()
 
     // Retrieve user details and assignment state
     const user = useSelector((state: RootState) => state.user)
-    // const [assignments, setAssignments] = useState<Assignment[]>([])
     const assignments = useSelector((state: RootState) => state.assignments.data)
     const {loading, error} = useSelector((state: RootState) => state.assignments)
     const hasMore = useSelector((state: RootState) => state.assignments.pagination.hasMore)
     const [loadMore, setLoadMore] = useState(false)
-
-    // Fetch user's assignments 
-    // useEffect(() => {
-    //     const fetchAssignments = async () => {
-    //         const assignmentData = user.system.role === 'consultant' ? await getConsultantAssignments(user.id) : await getStudentAssignments(user.id)
-    //         setAssignments(assignmentData)
-    //     }
-
-    //     fetchAssignments()
-    // },[user.id])
 
     useEffect(() => {
         // @ts-ignore
@@ -64,11 +53,7 @@ const page = () => {
       <main className="container flex-1 p-4 md:p-6 space-y-6">
         <h1>Manage Assignments</h1>
         <CreateAssignmentModal />
-
-        {/* {error && (
-          <p className="text-sm text-destructive">Error: {error}</p>
-        )} */}
-
+        
         <div className="rounded-md border">
           <Table>
             <TableHeader>
